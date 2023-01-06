@@ -82,7 +82,7 @@ function sendResponse($data, $httpHeaders = array())
             header($httpHeader);
         }
     }
-    
+    header("Content-Type: application/json");
     echo json_encode($data);
     exit;
 }
