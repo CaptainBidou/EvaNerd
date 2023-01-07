@@ -1,7 +1,7 @@
 
 
 <link rel="stylesheet" href="Bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="Bootstrap/css/style.css">
+<link rel="stylesheet" href="Bootstrap/css/bootstrap.css">
 <link href="Jquery/jquery-ui.min.css" rel="stylesheet">
 <link rel="stylesheet" href="biblio_composants.css">
 <script src="Bootstrap/js/bootstrap.min.js"> </script>
@@ -23,12 +23,27 @@
                  'like':'1',//boolean
                  'reaction':'smiley',//null si aucune réaction
                  'profile':'Ressources/Test/profile.jpg',
-                 'description':'Aujourd hui je fais un concert ça va être génial venez nombreux !!',
+                 'description':'Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                 'membre':'1',
+                'CA':'1',
+
     
              };
 
 $(document).ready(function(){
+
+    JcreerHeader(Reponse);
+    JcreerFooter(Reponse);
+
 JcreerPost(Reponse);
+/*JcreerPost(Reponse);
+JcreerPost(Reponse);
+JcreerPost(Reponse);
+JcreerPost(Reponse);
+JcreerPost(Reponse);
+JcreerPost(Reponse);
+JcreerPost(Reponse);*/
+
 });
 
 
@@ -38,7 +53,11 @@ JcreerPost(Reponse);
 
 
 <body>
-<h1>Exemple d'éléments</h1>
+
+
+<span id="header"></span>
+<span id="footer"></span>
+<span id="page"></span>
 
 
 
