@@ -19,6 +19,10 @@ switch($action) {
         listUsers($data, $queryString);
         break;
 
+    case "POST /users":
+        postUser($data, $queryString);
+        break;
+
     default:
         notAction($data);
         break;
