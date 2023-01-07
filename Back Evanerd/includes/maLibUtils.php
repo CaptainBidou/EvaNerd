@@ -15,8 +15,16 @@
  * @param string $type
  * @return string|boolean
  */
-function valider($nom,$type="REQUEST")
-{	
+function valider($nom,$type="REQUEST") {
+	
+	// Fonctionnnement généralisé
+	if(is_array($type)) {
+		if(isset($type[$nom]) && !($type[$nom] == "")) 	
+			return proteger($type[$nom]);
+		
+		else return false;
+	}
+
 	switch($type)
 	{
 		case 'REQUEST': 
