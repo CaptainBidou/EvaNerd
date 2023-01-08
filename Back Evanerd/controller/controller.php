@@ -22,6 +22,26 @@ function listUsers($data, $queryString) {
 
     sendResponse($data, [getStatusHeader(201)]);
 }
+/**
+ * Renvoie l'utilisateur sous format JSON dans le flux STDIN
+ */
+function sendUser($data, $idTabs, $authKey) {
+    $me = false;
+
+    if($authKey)
+    if(authToId($authKey) == $idTabs[0]) {
+        $me = true;
+    }
+    $user = getUser($idTabs[0], $me);
+    if(count($user) == 0) {
+        sendError("Aucun enregistrement trouvé : id invalide !", 400);
+        return;
+    }
+    
+    $data["user"] = $user[0];
+    sendResponse($data, [getStatusHeader(200)]);
+    return;
+}
 
 /**
  * Créer un utilisateur est renvoie la réponses sous format JSON dans le flux STDIN
