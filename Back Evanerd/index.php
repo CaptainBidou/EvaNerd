@@ -19,6 +19,9 @@ switch($action) {
         listUsers($data, $queryString);
         break;
 
+    case "GET /users/ID":
+        sendUser($data, $idTabs, $authKey);
+        break;
     case "POST /users":
         postUser($data, $queryString);
         break;
