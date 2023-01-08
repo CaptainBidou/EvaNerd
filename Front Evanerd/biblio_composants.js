@@ -27,7 +27,7 @@ var JPostCommentaire= $("<img>").data("type","post_commentaire").attr('src','Res
 
 
 //variables pour le footer
-var JFooter =$("<nav>").addClass("navbar").css("background-color","red").data("type","footer").css('height','10%').css('padding','1%').css('position','sticky').css('top','91%').css('z-index','10').css('box-shadow','0px -2px 10px darkred').on("click",function(context){JClickFooter(context);});
+var JFooter =$("<nav>").addClass("navbar").css("background-color","red").data("type","footer").css('height','10%').css('padding','1%').css('position','sticky').css('top','92%').css('z-index','10').css('box-shadow','0px -2px 10px darkred').on("click",function(context){JClickFooter(context);});
 var JFooterAccueil= $("<img>").data("type","footer_accueil").css('float','left').attr('src','Ressources/Footer/accueilGris.png').css('height','60%').attr('id','Accueil'); //TODO :rajouter des données pour quand on clique 
 var JFooterAppel=$("<img>").data("type","footer_appel").css('float','left').attr('src','Ressources/Footer/appel.png').css('height','60%').attr('id','Appel');//TODO :rajouter des données pour quand on clique
 var JFooterCreer=$("<img>").data("type","footer_creer").css('float','left').attr('src','Ressources/Footer/creer.png').css('height','60%').attr('id','Creer');//TODO :rajouter des données pour quand on clique
@@ -45,12 +45,17 @@ var JHeaderLogo = $("<img>").addClass("rounded-circle").data("type","header_logo
 var JHeaderProfile=$("<img>").addClass("rounded-circle").data("type","header_profile").css('float','right').css('height','90%');//TODO :rajouter des données pour quand on clique 
 
 
+var JHeaderTag=$("<button>").data("type","header_tag").attr("type","button").addClass("btn btn-primary dropdown-toggle").val("Categorie").css("background",'darkred').html("Categorie").css('height','50%').css("width","20%").css("font-size","200%");
+var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu');
+var JHeaderItem=$("<input>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").attr("type","checkbox").data("type",'header_item');
+var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control").attr("placeholder","Rechercher").css("width","35%").css('height','50%').css("font-size","200%");
 
 
 
 
 
-
+//.css('position','absolute').css('bottom','30%').css('left','20%')
+//.css("margin-right","39%")
 
 
 
@@ -155,6 +160,8 @@ var JCloneFooterCreer=JFooterCreer.clone('true','true');
 var JCloneFooterAgenda=JFooterAgenda.clone('true','true');
 var JCloneFooterMail=JFooterMail.clone('true','true');
 
+
+
 if(Reponse.membre==1){
 JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);}
 $("#footer").append(JCloneFooter);
@@ -187,6 +194,14 @@ if(Reponse.membre==0)
 function JcreerHeader(Reponse){
 var JCloneHeader=JHeader.clone(true,true);
 var JCloneHeaderLogo=JHeaderLogo.clone(true,true);
+var JCloneHeaderSearch=JHeaderSearch.clone(true,true);
+var JCloneHeaderTag=JHeaderTag.clone(true,true);
+var JCloneHeaderMenu=JHeaderMenu.clone(true,true);
+var JCloneHeaderItem=JHeaderItem.clone(true,true);
+
+JCloneHeaderMenu.append(JHeaderItem);
+
+
 if(Reponse.profile!=null){
     var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.profile);
 }
@@ -194,7 +209,7 @@ else{
     var JCloneHeaderProfile=null;
 }
 
-JCloneHeader.append(JCloneHeaderLogo).append(JCloneHeaderProfile);
+JCloneHeader.append(JCloneHeaderLogo).append(JCloneHeaderTag).append(JCloneHeaderMenu).append(JCloneHeaderSearch).append(JCloneHeaderProfile);
 $("#header").append(JCloneHeader);
 
 }
