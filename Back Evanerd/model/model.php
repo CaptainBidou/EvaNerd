@@ -2,26 +2,61 @@
 
 include_once("includes/Config.php");
 
+/**
+ * Retourne l'id de l'utilisateur en fonction de son token d'identification
+ * @param string $authToken
+ * @return int|false
+ */
+function authToId($authToken) {
+    $db = Config::getDatabase();
+    $sql = "SELECT Users.id FROM Users WHERE Users.authToken = ?";
+
+    return $db->SQLGetChamp($sql,[$authToken]);
+}
+
+/**
+ * Récupère les logins et l'info d'activation du compte en fonction du numéro de téléphone
+ * @param string $tel
+ * @return array 
+ */
+function getUserCredentials($tel) {
+    $db = Config::getDatabase();
+    $sql= "SELECT id, tel, activation, password FROM users WHERE tel = ?;";
+    
+    return Database::parcoursRs($db->SQLSelect($sql, [$tel]));
+}
+
 // Requete sur les users
+/**
+ * Récupère la listes de utilisateurs
+ * @param int $idRole permet de filtrer par role
+ * @return array
+ */
 function getUsers($idRole=null){
     $db = Config::getDatabase();
+    $sql = "SELECT U.id, U.firstName, U.lastName, U.sex, U.age, U.studies, U.photo, U.activation FROM Users AS U";
     if ($idRole != null) {
-        $sql = "SELECT * 
-        FROM Users AS U JOIN User_Roles AS UR ON U.id = UR.uid
-        WHERE UR.rid = ? ";
+        $sql .= " JOIN User_Roles AS UR ON U.id = UR.uid WHERE UR.rid = ? ";
         $params = [$idRole];
         return Database::ParcoursRs($db->SQLSelect($sql, $params));
     } else {
-        $sql = "SELECT * FROM Users";
         return Database::ParcoursRs($db->SQLSelect($sql));
     }
 }
-
-function getUser($idUser){
+/**
+ * Récupère un utilisateur spécifique
+ * @param int $idUser l'identifiant de l'utilisateur
+ * @param bool $me permet de savoir si la demande provient de l'utilisateur connecté
+ */
+function getUser($idUser, $me){
     $db = Config::getDatabase();
-    $sql = "SELECT * 
-    FROM Users AS U 
-    WHERE U.Id = ? ";
+    $publicInfo = "U.id, U.firstName, U.lastName, U.sex, U.age, U.studies, U.photo, U.activation ";
+    $privateInfo = ", U.tel, U.mail ";
+    $sql = "SELECT " . $publicInfo;
+
+    if($me) $sql .= $privateInfo;
+
+    $sql .= "FROM Users AS U WHERE U.id = ?;";
     $params = [$idUser];
     return Database::parcoursRs($db->SQLSelect($sql, $params));
 }
