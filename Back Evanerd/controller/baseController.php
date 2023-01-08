@@ -50,7 +50,7 @@ function getAction($request, $type, &$idTabs) {
     $action = "$type ";
     $requestSegments = explode("/", $request);
     foreach($requestSegments as $segment) {
-        if(is_id($segment)) {
+        if(is_id($segment) || $segment == "0") {
             $action .= "/ID";
             $idTabs[] = intval($segment);
         }
