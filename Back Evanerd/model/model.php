@@ -199,6 +199,16 @@ function getGroups($uid){
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
+function getGroupsPerm($gid){
+
+    $db = Config::getDatabase();
+    $params = [$gid];
+    $sql = "SELECT GP.rid, R.label INTO Groups_Perms AS GP 
+    JOIN  Roles AS R ON  GP.rid = R.id
+    WHERE gid = ?";
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+}
+
 function getMessages($gid){
     $db = Config::getDatabase();
     $params = [$gid];
@@ -206,6 +216,31 @@ function getMessages($gid){
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
+
+function getMessagesReactions($mid){
+    $db = Config::getDatabase();
+    $params = [$mid];
+    $sql = "SELECT * INTO Group_Message_Reactions WHERE mid = ?";
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+}
+
+function insertGroup($uid,$image=null,$title=null){
+    $User = getUser($uid);
+    $db = Config::getDatabase();
+    if ($title == null)
+        $title = $User[0]["firstName"] . " " . $User[0]["LastName"];
+    $params = [$title,$image];
+    $sql = "INSERT INTO Groups(titre,image) VALUES(?,?)";
+    $gid = $db->SQLInsert($sql, $params);
+    addToGroup($uid, $gid);
+}
+
+function addToGroup($uid,$gid){
+    $db = Config::getDatabase();
+    $params = [$uid,$gid];
+    $sql = "INSERT INTO User_Groups(uid,gid) VALUES (?,?) ";
+    return Database::parcoursRs(($db->SQLInsert($sql, $params)));
+}
 
 
 ?>
