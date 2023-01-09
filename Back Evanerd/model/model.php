@@ -1,6 +1,18 @@
 <?php
 
 include_once("includes/Config.php");
+/**
+ * Change le token d'authentification de l'utilisateur
+ * @param int $idUser
+ * @param string $authToken
+ */
+function updateAuthToken($idUser, $authToken) {
+    $db = Config::getDatabase();
+    $sql = "UPDATE Users SET authToken = ? WHERE id = ?";
+    $db->SQLUpdate($sql, [$authToken, $idUser]);
+
+    return getUser($idUser, 1);
+}
 
 /**
  * Retourne l'id de l'utilisateur en fonction de son token d'identification
@@ -64,7 +76,7 @@ function getUser($idUser, $me){
 function modifUser($idUser,$mail = null,$tel = null,$age = null,$studies = null,$password=null){
     $db = Config::getDatabase();
     $params = [];
-    $sql = "UPDATE table SET";
+    $sql = "UPDATE Users SET";
     if ($mail != null){
         $sql = $sql . ",mail = ?";
         array_push($params, $mail);
