@@ -1,6 +1,26 @@
 <?php
 include_once "baseController.php";
 include_once "model/model.php";
+include_once "includes/maLibSecurisation.php";
+
+/**
+ * Permet à un utilisateur de s'identifier
+ */
+function authUser($data, $queryString) {
+    if($tel = valider("tel", $queryString))
+    if($password = valider("password", $queryString)) {
+        if($idUser = checkUser($tel, $password)) {
+            $data["authToken"] = generateAuthToken($tel);
+            $data["user"] = updateAuthToken($idUser, $data["authToken"]);
+            sendResponse($data, [getStatusHeader(200)]);
+            return;
+        }
+
+        sendError("identifiant invalide !", [getStatusHeader(403)]);
+    }
+
+    return sendError("Paramètres invalide !", [getStatusHeader(401)]);
+}
 
 /**
  * Liste les utilisateur et renvoie la réponse sous format JSON dans le flux STDIN
