@@ -11,7 +11,6 @@ include_once "model/model.php";
  */
 function checkUser($tel,$password) {
 	$userCredentials = getUserCredentials($tel);
-    print_r($userCredentials);
 	if (!$userCredentials) return false;
 	if(!password_verify($password, $userCredentials[0]["password"])) return false;
     if(!$userCredentials[0]["activation"]) return false;
