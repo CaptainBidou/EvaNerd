@@ -60,7 +60,7 @@ function getUsers($idRole=null){
  * @param int $idUser l'identifiant de l'utilisateur
  * @param bool $me permet de savoir si la demande provient de l'utilisateur connecté
  */
-function getUser($idUser, $me){
+function getUser($idUser, $me = 0){
     $db = Config::getDatabase();
     $publicInfo = "U.id, U.firstName, U.lastName, U.sex, U.age, U.studies, U.photo, U.activation ";
     $privateInfo = ", U.tel, U.mail ";
@@ -148,30 +148,13 @@ function deleteUser($idUser){
     /* Suppression des posts concernant l'utilisateur et des commentaires et réaction de ces posts 
 }*/
 
-function createUser($firstname,$lastname,$mail,$tel,$password,$age,$studies = null , $sexe = null, $image = "default.png"){
+function createUser($firstname,$lastname,$mail,$tel,$password,$age,$studies = "" , $sex = 0, $image = "default.png"){
     $db = Config::getDatabase();
-    $params = [$firstname,$lastname,$mail,$tel,$password,$age];
-    $sql = "INSERT INTO Users (firstname,lastname,mail,tel,age";
-    if ($studies != null){
-        $sql = $sql . ",studies";
-        array_push($params, $studies);
-    }
-    if ($studies != null){
-        $sql = $sql . ",sexe";
-        array_push($params, $sexe);
-    }
-
-    $sql = $sql . ",images";
-    array_push($params, $studies);
-
-    $sql = $sql . "VALUES(";
-
-    foreach ($params as $Val)
-        $sql = $sql .",?";
+    $params = [$firstname,$lastname,$mail,$tel,$password,$age, $studies, $sex, $image, generateEmailConfirmToken($tel)];
+    $sql = "INSERT INTO Users (firstname, lastname, mail, tel, password, age, studies, sex, photo, activation, confirmToken) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)";
     
-    $sql = $sql . ")";
-    
-    return Database::parcoursRs($db->SQLInsert($sql, $params));
+    return $db->SQLInsert($sql, $params);
 }
 
 
@@ -240,7 +223,7 @@ function insertGroup($uid,$image=null,$title=null){
     $User = getUser($uid);
     $db = Config::getDatabase();
     if ($title == null)
-        $title = $User[0]["firstName"] . " " . $User[0]["LastName"];
+        $title = $User[0]["firstName"] . " " . $User[0]["lastName"];
     $params = [$title,$image];
     $sql = "INSERT INTO Groups(titre,image) VALUES(?,?)";
     $gid = $db->SQLInsert($sql, $params);
