@@ -15,6 +15,9 @@ else $request = false;
 $action = getAction($request, $requestType, $idTabs);
 
 switch($action) {
+    case "POST /auth":
+        authUser($data, $queryString);
+        break;
     case "GET /users":
         listUsers($data, $queryString);
         break;
