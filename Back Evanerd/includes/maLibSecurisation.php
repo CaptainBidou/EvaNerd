@@ -27,3 +27,10 @@ function generateAuthToken($tel) {
     $plainToken = $tel . date("H:i:s");
     return md5($plainToken);
 }
+
+/**
+ * Génére un token de confirmation de mail
+ */
+function generateEmailConfirmToken($tel) {
+    return md5($tel . bin2hex(random_bytes(5)));
+}
