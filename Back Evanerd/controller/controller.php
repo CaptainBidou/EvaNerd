@@ -70,7 +70,45 @@ function sendUser($data, $idTabs, $authKey) {
  * @return void
  */
 function postUser($data, $queryString) {
-    sendError("NOT IMPLEMENTED YET", 404);
+    $image = "default.png";
+
+    if($firstName = htmlspecialchars(valider("firstName", $queryString)))
+    if($lastName = htmlspecialchars(valider("lastName", $queryString)))
+    if($mail = htmlspecialchars(valider("mail", $queryString)))
+    if($tel = valider("tel", $queryString));
+    if($plainPassword = valider("password", $queryString))
+    if($age = valider("age", $queryString)) {
+        ($studies = htmlspecialchars(valider("studies", $queryString))) ? : $studies = "";
+        ($sex = valider("sex", $queryString)) ? : $sex = 0;
+        ($imageData = valider("image", $queryString)) ? : $imageData = null;
+        // TODO :
+            // firstname :
+                // ->> must be between 3 and 30 characters
+            // lastName :
+                // -> must be between 3 and 30 characters
+            // mail :
+                // -> must be a valide email adress
+            // tel :
+                // -> must not belong to an other account
+            // age :
+                // -> must be a int
+            // studies
+                // -> must not exceed 50 characters
+            // sex
+                // -> must be 0, 1, 2
+            // imageData
+                // -> must be an image
+            // -> size not exceed ? mb
+        $password = password_hash($plainPassword, PASSWORD_BCRYPT, ["cost"=>10]);
+        if($imageData != null) $image = "image.png";
+
+        $idUser = createUser($firstName, $lastName, $mail, $tel, $password, $age, $studies, $sex, $image);
+        $data["user"] = getUser($idUser)[0];
+        sendResponse($data, [getStatusHeader(201)]);
+    }
+    sendError("Requête Invalide",400);
+
+
 }
 
 function notAction($data) {
