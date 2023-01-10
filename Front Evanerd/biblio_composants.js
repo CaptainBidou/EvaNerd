@@ -54,11 +54,10 @@ var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").
 
 
 
-//.css('position','absolute').css('bottom','30%').css('left','20%')
-//.css("margin-right","39%")
-
-
-
+//variables pour les Convs
+var JConv =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","conv").css('height','10%').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
+var JConvImg = $("<img>").addClass("rounded-circle").data("type","conv_img").css('position','absolute').css('height','80%');//TODO :rajouter des données pour quand on clique 
+var JConvp=$("<p>").addClass("navbar-text").data("type","conv_p").css("font-size","3em").css("float","left").css("margin-left","20%").css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
 
 
 
@@ -119,11 +118,30 @@ var jClonePostComm=JPostCommentaire.clone(true,true);
 var jClonePostLike=JPostLike.clone(true,true);
 var jClonePostReact=JPostReaction.clone(true,true);
 
-//.append(jClonePostProfile)
-jClonePostBody2.append(jClonePostProfile).append(jClonePostTitre).css("vertical-align","middle").append(jClonePostEpingle);
-jClonePost2.append(jClonePostBody2).css("width","100%").css("background-color","lightgray").css("border-radius","5px 5px 0 0");
 
-jClonePostBody.append(jClonePostImage).append(jClonePostDescription).append(jClonePostComm).append(jClonePostLike).append(jClonePostReact);
+
+
+
+//.append(jClonePostProfile)
+jClonePostBody2.append(jClonePostProfile).append(jClonePostTitre).css("vertical-align","middle");
+
+
+
+
+
+jClonePost2.append(jClonePostBody2).css("width","100%").css("background-color","lightgray").css("border-radius","5px 5px 0 0");
+jClonePostBody.append(jClonePostImage).append(jClonePostDescription);
+if(Reponse.membre==1)
+{
+jClonePostBody2.append(jClonePostEpingle);
+jClonePostBody.append(jClonePostComm).append(jClonePostLike).append(jClonePostReact);
+}
+
+if(Reponse.membre==0){
+
+}
+
+
 jClonePost.append(jClonePost2).append(jClonePostBody).css('margin-top','5%');
 
 
@@ -268,4 +286,54 @@ $("#Mail").attr("src",'Ressources/Footer/email.png');
 
 
 
+
+
+/**
+ * 
+ * @param {*} Reponse 
+ * Reponse est de la forme 
+ * 
+ * si nom="sdgfpksjf" c le titre de la Conv sinon si c'est null on met le nom de tout les participants
+ * si image="qdsqds" c le lien de l'image sinon si c null il 'ny a pas d'image
+ *Reponse=
+    {id:2,participants=[{id:5,nom:Jean,prenom:Pierre},{id:8,nom:michelmichel,prenom:kubiak},{id:18,nom:Monticul,prenom:Maurice}],nom:"conv des fous",image:"Ressources/Test/image.jpg",}
+    Reponse=
+    {id:2,participants=[{id:5,nom:Jean,prenom:Pierre},{id:18,nom:Monticul,prenom:Maurice}],nom:null,image:"Ressources/Test/image.jpg"}
+}
+ * 
+ * 
+ * 
+ */
+function JCreerConv(Reponse){
+var JCloneConv =JConv.clone(true,true).attr("type_id",Reponse.id);
+var JCloneConvImage = JConvImg.clone(true,true);
+if(Reponse.image!=null)
+{JCloneConvImage.attr("src",Reponse.image);}
+var JCloneConvp=JConvp.clone(true,true);
+if(Reponse.nom==null){
+    var i =0;
+    for(i=0;i<Reponse.participants.length;i++)
+    {
+        JCloneConvp.text(JCloneConvp.text()+" "+Reponse.participants[i].nom+" "+Reponse.participants[i].prenom);
+    }
+}
+else
+{
+    JCloneConvp.text(Reponse.nom);
+    
+}
+
+
+
+
+
+
+JCloneConv.append(JCloneConvImage).append(JCloneConvp);
+$("body").append(JCloneConv);
+
+
+
+
+
+}
 

@@ -16,26 +16,36 @@
 
 <script>
     var Reponse={
-                 'nom':'Michel',
-                 'prenom':'Jean',
+                 'nom':'Salvado Robalo',
+                 'prenom':' jean-marie-paul-christine-cunegonde',
                  'epingle':1, // boolean
                  'image':'Ressources/Test/image.jpg',
                  'like':'1',//boolean
                  'reaction':'smiley',//null si aucune réaction
-                 'profile':'Ressources/Test/profile.jpg',
+                 'profile':'Ressources/Test/profile2.jpg',
                  'description':'Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                  'membre':'1',
                 'CA':'1',
 
     
              };
+123456789123456789123456789123
+
+var conv={id:2,participants:[{id:5,nom:'Jean',prenom:'Pierre'},{id:8,nom:'michelmichel',prenom:'kubiak'},{id:18,nom:'Monticul',prenom:'Maurice'}],nom:null,image:"Ressources/Test/profile3.jpg",};
+
 
 $(document).ready(function(){
 
     JcreerHeader(Reponse);
     JcreerFooter(Reponse);
 
-JcreerPost(Reponse);
+JCreerConv(conv);
+JCreerConv(conv);
+JCreerConv(conv);
+JCreerConv(conv);
+JCreerConv(conv);
+
+//JcreerPost(Reponse);
 /*JcreerPost(Reponse);
 JcreerPost(Reponse);
 JcreerPost(Reponse);
