@@ -190,7 +190,11 @@ function addUserRole($uid,$rid){
 function getGroups($uid){
     $db = Config::getDatabase();
     $params = [$uid];
-    $sql = "SELECT * INTO User_Groups WHERE uid = ?";
+    $sql = "SELECT Groups.id, Groups.titre 
+            FROM User_Groups
+            JOIN Groups ON Groups.id = User_Groups.gid; 
+            WHERE uid = ?";
+            
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
@@ -207,7 +211,7 @@ function getGroupsPerm($gid){
 function getMessages($gid){
     $db = Config::getDatabase();
     $params = [$gid];
-    $sql = "SELECT * INTO Group_Messages WHERE gid = ?";
+    $sql = "SELECT * FROM Group_Messages WHERE gid = ?";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
@@ -215,7 +219,7 @@ function getMessages($gid){
 function getMessagesReactions($mid){
     $db = Config::getDatabase();
     $params = [$mid];
-    $sql = "SELECT * INTO Group_Message_Reactions WHERE mid = ?";
+    $sql = "SELECT * FROM Group_Message_Reactions WHERE mid = ?";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
