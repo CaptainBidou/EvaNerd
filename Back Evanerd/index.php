@@ -29,6 +29,10 @@ switch($action) {
         postUser($data, $queryString);
         break;
 
+    case "GET /groups":
+        listGroups($data, $queryString, $authKey);
+        break;
+
     default:
         notAction($data);
         break;
