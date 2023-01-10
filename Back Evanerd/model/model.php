@@ -192,6 +192,31 @@ function verifyMail($code){
 
 }
 
+function deleteUserInstrument($uid){
+    $db = Config::getDatabase();
+    $params = [$uid];
+    $sql = "DELETE * FROM User_Instruments WHERE uid = ?";
+    $db->SQLDelete($sql, $params);
+}
+
+function deleteUserAchievement($uid){
+    $db = Config::getDatabase();
+    $params = [$uid];
+    $sql = "UPDATE Users SET achivid = null WHERE id = ?";
+    $db->SQLUpdate ($sql, $params);
+    $sql = "DELETE * FROM User_Achievement WHERE uid = ?";
+    $db->SQLDelete($sql, $params);
+}
+
+function deleteUserRole($uid){
+    $db = Config::getDatabase();
+    $params = [$uid];
+    $sql = "DELETE * FROM User_RolesWHERE uid = ?";
+    $db->SQLDelete($sql, $params);
+}
+
+
+
 function getRoles(){
     $db = Config::getDatabase();
     $params = [];
