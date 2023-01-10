@@ -157,7 +157,12 @@ function createUser($firstname,$lastname,$mail,$tel,$password,$age,$studies = ""
     return $db->SQLInsert($sql, $params);
 }
 
-
+function addUserInstrument($iid,$uid){
+    $db = Config::getDatabase();
+    $params = [$iid, $uid];
+    $sql = "INSERT INTO User_Instruments(iid,uid) VALUES(?,?)";
+    return ($db->SQLInsert($sql, $params));
+}
 
 
 function updateUserAchievement($uid,$aid){
@@ -177,6 +182,103 @@ function addUserRole($uid,$rid){
     $params = [$rid, $uid];
     $sql = "INSERT INTO User_Roles (rid,uid) VALUES(?,?)";
     return ($db->SQLInsert($sql, $params));
+}
+
+function verifyMail($code){
+    $db = Config::getDatabase();
+    $params = [$code];
+    $sql = "SELECT * FROM Users WHERE confirmToken = ?";
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+
+}
+
+function getRoles(){
+    $db = Config::getDatabase();
+    $params = [];
+    $sql = "SELECT * FROM Roles ";
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+}
+
+function modifRole($rid,$label = null,$active = null){
+    $db = Config::getDatabase();
+    $params = [];
+    $sql = "UPDATE Roles SET ";
+    if ($label != null){
+        $sql = $sql . ",label = ?";
+        array_push($params, $label);
+    }
+    if ($active != null){
+        $sql = $sql . ",active = ?";
+        array_push($params, $active);
+    }
+    array_push($params, $rid);
+    $sql = "WHERE id = ?";
+    return $db->SQLUpdate($sql, $params);
+}
+
+function createRole($label,$active=1){
+    $db = Config::getDatabase();
+    $params = [$label,$active];
+    $sql = "INSERT INTO Roles(label,active) VALUES (?,?) ";
+    return Database::parcoursRs(($db->SQLInsert($sql, $params)));
+
+}
+
+
+function getInstruments(){
+    $db = Config::getDatabase();
+    $params = [];
+    $sql = "SELECT * FROM Instruments ";
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+}
+
+function modifInstruments($rid,$label = null){
+    $db = Config::getDatabase();
+    $params = [];
+    $sql = "UPDATE Instruments SET ";
+    if ($label != null){
+        $sql = $sql . ",label = ?";
+        array_push($params, $label);
+    }
+    array_push($params, $rid);
+    $sql = "WHERE id = ?";
+    return $db->SQLUpdate($sql, $params);
+}
+
+function createInstruments($label){
+    $db = Config::getDatabase();
+    $params = [$label];
+    $sql = "INSERT INTO Roles(label) VALUES (?) ";
+    return Database::parcoursRs(($db->SQLInsert($sql, $params)));
+
+}
+
+function getAchievements(){
+    $db = Config::getDatabase();
+    $params = [];
+    $sql = "SELECT * FROM Achievements ";
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+}
+
+function modifAchievements($aid,$label = null){
+    $db = Config::getDatabase();
+    $params = [];
+    $sql = "UPDATE Achievements SET ";
+    if ($label != null){
+        $sql = $sql . ",label = ?";
+        array_push($params, $label);
+    }
+    array_push($params, $aid);
+    $sql = "WHERE id = ?";
+    return $db->SQLUpdate($sql, $params);
+}
+
+function createAchievement($label){
+    $db = Config::getDatabase();
+    $params = [$label];
+    $sql = "INSERT INTO Achievements(label) VALUES (?) ";
+    return Database::parcoursRs(($db->SQLInsert($sql, $params)));
+
 }
 
 /*function getPostIds($idUser){
@@ -239,6 +341,57 @@ function addToGroup($uid,$gid){
     $params = [$uid,$gid];
     $sql = "INSERT INTO User_Groups(uid,gid) VALUES (?,?) ";
     return Database::parcoursRs(($db->SQLInsert($sql, $params)));
+}
+
+
+function addMessage($uid,$gid,$content,$answerTo = null){
+    $db = Config::getDatabase();
+    $params = [$uid,$gid,$content,$answerTo];
+    $sql = "INSERT INTO Group_Messages(uid,gid,content,answerTo,pinned) VALUES (?,?,?,?,null) ";
+    return Database::parcoursRs(($db->SQLInsert($sql, $params)));
+}
+
+
+function getPosts(){
+    $db = Config::getDatabase();
+    $params = [];
+    $sql = "SELECT * FROM Posts ";
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+}
+
+function getPostReactions($pid){
+    $db = Config::getDatabase();
+    $params = [$pid];
+    $sql = "SELECT * FROM Post_Reactions WHERE pid = ? ";
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+}
+
+function getPostMessages($pid){
+    $db = Config::getDatabase();
+    $params = [$pid];
+    $sql = "SELECT * FROM Post_Comments WHERE pid = ? ";
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+}
+
+function getCalendar(){
+    $db = Config::getDatabase();
+    $params = [];
+    $sql = "SELECT * FROM Agendas ";
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+}
+
+function getEvents($aid){
+    $db = Config::getDatabase();
+    $params = [$aid];
+    $sql = "SELECT * FROM Agendas WHERE aid = ? ";
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+}
+
+function getCallMembers($aeid){
+    $db = Config::getDatabase();
+    $params = [$aeid];
+    $sql = "SELECT * FROM Posts WHERE aeid = ? ";
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
 
