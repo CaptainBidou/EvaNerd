@@ -1,6 +1,15 @@
 <?php
 include_once "includes/maLibUtils.php";
 
+DEFINE("HTTP_OK", 200);
+DEFINE("HTTP_CREATED", 201);
+DEFINE("HTTP_ACCEPTED", 202);
+DEFINE("HTTP_NO_CONTENT", 204);
+DEFINE("HTTP_BAD_REQUEST", 400);
+DEFINE("HTTP_UNAUTHORIZED", 401);
+DEFINE("HTTP_FORBIDDEN", 403);
+DEFINE("HTTP_NOT_FOUND", 404);
+
 DEFINE("API_NAME", "EVANERD API");
 DEFINE("VERSION", "1.0");
 
@@ -109,14 +118,15 @@ function sendError($message, $status) {
  */
 function getStatusHeader($status = 200) {
     switch($status) {
-        case 200: return "HTTP/1.0 200 OK";
-        case 201: return "HTTP/1.0 201 Created";
-        case 202: return "HTTP/1.0 202 Accepted";
-        case 204: return "HTTP/1.0 204 No Content";
-        case 400: return "HTTP/1.0 400 Bad Request";
-        case 401: return "HTTP/1.0 401 Unauthorized";
-        case 403: return "HTTP/1.0 403 Forbidden";
-        case 404: return "HTTP/1.0 404 Not Found";
+        case HTTP_OK: return "HTTP/1.0 200 OK";
+        case HTTP_CREATED: return "HTTP/1.0 201 Created";
+        case HTTP_ACCEPTED: return "HTTP/1.0 202 Accepted";
+        case HTTP_NO_CONTENT: return "HTTP/1.0 204 No Content";
+        case HTTP_BAD_REQUEST: return "HTTP/1.0 400 Bad Request";
+        case HTTP_UNAUTHORIZED: return "HTTP/1.0 401 Unauthorized";
+        case HTTP_FORBIDDEN: return "HTTP/1.0 403 Forbidden";
+        case HTTP_NOT_FOUND: return "HTTP/1.0 404 Not Found";
+        
         default: return "HTTP/1.0 200 OK";
             
     }
