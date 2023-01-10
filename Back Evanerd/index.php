@@ -39,11 +39,11 @@ switch($action) {
         break;
 
     case "POST /users/instruments":
-        postInstrument($data, $idTabs, $authKey, $queryString);
+        postUserInstrument($data, $idTabs, $authKey, $queryString);
         break;
 
     case "POST /users/achievement":
-        postAchievement($data, $idTabs, $authKey, $queryString);
+        postUserAchievement($data, $idTabs, $authKey, $queryString);
         break;
 
     case "POST /users/ID/roles":
@@ -55,15 +55,15 @@ switch($action) {
         break;
 
     case "DEL /users/instruments":
-        delInstrument($data, $idTabs, $authKey, $queryString);
+        delUserInstrument($data, $idTabs, $authKey, $queryString);
         break;
     
     case "DEL /users/achievements":
-        delAchievement($data, $idTabs, $authKey, $queryString);
+        delUserAchievement($data, $idTabs, $authKey, $queryString);
         break;
     
     case "DEL /users/roles":
-        delRole($data, $idTabs, $authKey, $queryString);
+        delUserRole($data, $idTabs, $authKey, $queryString);
         break;
 
     /* Roles */
@@ -149,15 +149,15 @@ switch($action) {
     /* Agendas */
 
     case "GET /agendas":
-        listCalendriers($data, $authKey);
+        listAgendas($data, $authKey);
         break;
     
-    case "GET /agendas/ID":
-        listEventsCalendriers($data, $idTabs, $authKey);
+    case "GET /agendas/ID/event":
+        listAgendaEvents($data, $idTabs, $authKey);
         break;
 
     case "GET /agendas/ID/event/ID/calls":
-        listAppels($data, $idTabs, $authKey);
+        listAgendaEventCalls($data, $idTabs, $authKey);
         break;
 
     default:
