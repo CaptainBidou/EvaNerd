@@ -46,7 +46,7 @@ function GETUserbyID($id){
  * Exemple de JSON : $Infos{[firstName]:Prénom,[lastName]:Nom,[age]:20,[sex]:1,[mail]:monMail@gmail.com,[tel]:0601020304,[studies]:Ingénieur,[password]:mpLabX}
  */
 
-function GETUserbyID($id,$informations){
+function POSTUser($informations){
     $.ajax({
         type: "POST",
         url: api + "/users",
