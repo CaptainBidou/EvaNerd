@@ -14,7 +14,7 @@ src="Jquery/jquery-ui.min.js";
 
 //variables pour les posts
 var JPost =$("<div>").addClass("card").data('type','post').css('width','90%').css('background-color','WhiteSmoke').css('margin-left','auto').css('margin-right','auto');
-var JPostTitre=$("<h2>").addClass("card-title").data('type','post_titre').css("float","left").css("margin-left","15%").css("margin-top","4%").css('font-size','400%');//TODO :rajouter des données pour quand on clique
+var JPostTitre=$("<h2>").addClass("card-title").data('type','post_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%');//TODO :rajouter des données pour quand on clique
 var JPostBody=$("<div>").addClass("card-body").data('type','post_body');
 var JPostImage=$("<img>").addClass("card-img-top").data('type','post_image');
 var JPostDescription=$("<p>").addClass("card-text").data('type','post_text').css('font-size','300%').css("margin-top","2%");
@@ -27,7 +27,7 @@ var JPostCommentaire= $("<img>").data("type","post_commentaire").attr('src','Res
 
 
 //variables pour le footer
-var JFooter =$("<nav>").addClass("navbar").css("background-color","red").data("type","footer").css('height','10%').css('padding','1%').css('position','sticky').css('top','92%').css('z-index','10').css('box-shadow','0px -2px 10px darkred').on("click",function(context){JClickFooter(context);});
+var JFooter =$("<nav>").addClass("navbar").css("background-color","red").data("type","footer").css('height','10%').css('padding','1%').css('position','fixed').css('top','91%').css('z-index','10').css('box-shadow','0px -2px 10px darkred').on("click",function(context){JClickFooter(context);}).css("width","100%");
 var JFooterAccueil= $("<img>").data("type","footer_accueil").css('float','left').attr('src','Ressources/Footer/accueilGris.png').css('height','60%').attr('id','Accueil'); //TODO :rajouter des données pour quand on clique 
 var JFooterAppel=$("<img>").data("type","footer_appel").css('float','left').attr('src','Ressources/Footer/appel.png').css('height','60%').attr('id','Appel');//TODO :rajouter des données pour quand on clique
 var JFooterCreer=$("<img>").data("type","footer_creer").css('float','left').attr('src','Ressources/Footer/creer.png').css('height','60%').attr('id','Creer');//TODO :rajouter des données pour quand on clique
@@ -40,11 +40,9 @@ var JFooterMail=$("<img>").data("type","footer_mail").css('float','right').attr(
 
 
 //variables pour le header
-var JHeader =$("<nav>").addClass("navbar").css("background-color","red").data("type","header").css('height','10%').css('padding','1%').css('position','sticky').css('top','0px').css('z-index','10').css('box-shadow','0px 2px 10px darkred').css("margin","0");
+var JHeader =$("<nav>").addClass("navbar").css("background-color","red").data("type","header").css('height','10%').css('padding','1%').css('position','sticky').css('top','0px').css('z-index','10').css('box-shadow','0px 2px 10px darkred').css("margin-bottom","2%");
 var JHeaderLogo = $("<img>").addClass("rounded-circle").data("type","header_logo").css('float','left').attr('src','Ressources/Header/logo.png').css('height','90%');//TODO :rajouter des données pour quand on clique 
 var JHeaderProfile=$("<img>").addClass("rounded-circle").data("type","header_profile").css('float','right').css('height','90%');//TODO :rajouter des données pour quand on clique 
-
-
 var JHeaderTag=$("<button>").data("type","header_tag").attr("type","button").addClass("btn btn-primary dropdown-toggle").val("Categorie").css("background",'darkred').html("Categorie").css('height','50%').css("width","20%").css("font-size","200%");
 var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu');
 var JHeaderItem=$("<input>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").attr("type","checkbox").data("type",'header_item');
@@ -103,7 +101,7 @@ var JConvp=$("<p>").addClass("navbar-text").data("type","conv_p").css("font-size
 
 function JcreerPost(Reponse){
 var jClonePost=JPost.clone(true,true);
-var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.prenom+" "+Reponse.nom);
+var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.prenom+" "+Reponse.nom).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
 var jClonePostBody=JPostBody.clone(true,true);
 var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.image);
 var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.description);
@@ -312,9 +310,10 @@ if(Reponse.image!=null)
 var JCloneConvp=JConvp.clone(true,true);
 if(Reponse.nom==null){
     var i =0;
-    for(i=0;i<Reponse.participants.length;i++)
+    JCloneConvp.text(Reponse.participants[i].nom+" "+Reponse.participants[i].prenom);
+    for(i=1;i<Reponse.participants.length;i++)
     {
-        JCloneConvp.text(JCloneConvp.text()+" "+Reponse.participants[i].nom+" "+Reponse.participants[i].prenom);
+        JCloneConvp.text(JCloneConvp.text()+", "+Reponse.participants[i].nom+" "+Reponse.participants[i].prenom);
     }
 }
 else
@@ -329,7 +328,7 @@ else
 
 
 JCloneConv.append(JCloneConvImage).append(JCloneConvp);
-$("body").append(JCloneConv);
+$("#page").append(JCloneConv);
 
 
 

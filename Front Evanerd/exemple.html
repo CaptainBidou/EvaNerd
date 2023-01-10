@@ -8,10 +8,7 @@
 <script src="Jquery/jquery-3.6.2.min.js"></script>
 <script src="Jquery/jquery-ui.min.js"></script>
 <script src="biblio_composants.js"></script>
-<style>
 
-
-</style>
 
 
 <script>
@@ -37,7 +34,7 @@ var conv={id:2,participants:[{id:5,nom:'Jean',prenom:'Pierre'},{id:8,nom:'michel
 $(document).ready(function(){
 
     JcreerHeader(Reponse);
-    JcreerFooter(Reponse);
+    
 
 JCreerConv(conv);
 JCreerConv(conv);
@@ -45,14 +42,16 @@ JCreerConv(conv);
 JCreerConv(conv);
 JCreerConv(conv);
 
-//JcreerPost(Reponse);
-/*JcreerPost(Reponse);
 JcreerPost(Reponse);
 JcreerPost(Reponse);
 JcreerPost(Reponse);
 JcreerPost(Reponse);
 JcreerPost(Reponse);
-JcreerPost(Reponse);*/
+JcreerPost(Reponse);
+JcreerPost(Reponse);
+JcreerPost(Reponse);
+
+JcreerFooter(Reponse);
 
 });
 
@@ -66,10 +65,13 @@ JcreerPost(Reponse);*/
 
 
 <span id="header"></span>
+
+<span id="page">
+</span>
 <span id="footer"></span>
-<span id="page"></span>
 
 
 
 
 </body>
+
