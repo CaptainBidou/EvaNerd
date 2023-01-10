@@ -12,14 +12,14 @@ function authUser($data, $queryString) {
         if($idUser = checkUser($tel, $password)) {
             $data["authToken"] = generateAuthToken($tel);
             $data["user"] = updateAuthToken($idUser, $data["authToken"]);
-            sendResponse($data, [getStatusHeader(200)]);
+            sendResponse($data, [getStatusHeader()]);
             return;
         }
 
-        sendError("identifiant invalide !", [getStatusHeader(403)]);
+        sendError("identifiant invalide !", [getStatusHeader(HTTP_FORBIDDEN)]);
     }
 
-    return sendError("Paramètres invalide !", [getStatusHeader(401)]);
+    return sendError("Paramètres invalide !", [getStatusHeader(HTTP_BAD_REQUEST)]);
 }
 
 /**
@@ -30,17 +30,17 @@ function listUsers($data, $queryString) {
 
     if($idRole = valider("idRole", $queryString)) {
         if(!is_id($idRole)) {
-            sendError("identifiant role attendu !", 400);
+            sendError("identifiant role attendu !", HTTP_BAD_REQUEST);
             return;
         }
     }
     $data["users"] = getUsers($idRole);
     if(count($data["users"]) == 0) {
-        sendError("Aucun enregistrement trouvé : idRole invalide !", 400);
+        sendError("Aucun enregistrement trouvé : idRole invalide !", HTTP_NOT_FOUND);
         return;
     }
 
-    sendResponse($data, [getStatusHeader(201)]);
+    sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
 }
 /**
  * Renvoie l'utilisateur sous format JSON dans le flux STDIN
@@ -54,12 +54,12 @@ function sendUser($data, $idTabs, $authKey) {
     }
     $user = getUser($idTabs[0], $me);
     if(count($user) == 0) {
-        sendError("Aucun enregistrement trouvé : id invalide !", 400);
+        sendError("Aucun enregistrement trouvé : id invalide !", HTTP_NOT_FOUND);
         return;
     }
     
     $data["user"] = $user[0];
-    sendResponse($data, [getStatusHeader(200)]);
+    sendResponse($data, [getStatusHeader(HTTP_OK)]);
     return;
 }
 
@@ -104,13 +104,20 @@ function postUser($data, $queryString) {
 
         $idUser = createUser($firstName, $lastName, $mail, $tel, $password, $age, $studies, $sex, $image);
         $data["user"] = getUser($idUser)[0];
-        sendResponse($data, [getStatusHeader(201)]);
+        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
     }
     sendError("Requête Invalide",400);
+}
 
-
+function listGroups($data, $queryString, $authKey) {
+    if($authKey) {
+        $idUser = authToId($authKey);
+        $data["groups"] = getGroups($idUser);
+        sendResponse($data, [getStatusHeader(HTTP_OK)]);
+    }
+    sendError("Vous devez être connecté !", HTTP_FORBIDDEN);
 }
 
 function notAction($data) {
-    sendResponse($data, [getStatusHeader(200)]);
+    sendResponse($data, [getStatusHeader(HTTP_OK)]);
 }
