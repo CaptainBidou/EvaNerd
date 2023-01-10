@@ -32,6 +32,9 @@ switch($action) {
     case "GET /groups":
         listGroups($data, $queryString, $authKey);
         break;
+    case "GET /groups/ID/messages":
+        listGroupMessage($data, $queryStringn, $authKey, $idTabs);
+        break;
 
     default:
         notAction($data);
