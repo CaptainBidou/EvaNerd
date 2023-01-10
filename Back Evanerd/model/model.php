@@ -1,6 +1,7 @@
 <?php
 
 include_once("includes/Config.php");
+
 /**
  * Change le token d'authentification de l'utilisateur
  * @param int $idUser
@@ -12,6 +13,29 @@ function updateAuthToken($idUser, $authToken) {
     $db->SQLUpdate($sql, [$authToken, $idUser]);
 
     return selectUser($idUser, 1);
+}
+
+
+function isInGroup($idUser, $idGroup) {
+    $db = Config::getDatabase();
+    $sql = "SELECT User_Groups.uid FROM User_Groups 
+            WHERE User_Groups.gid = ? AND User_Groups.uid = ?";
+    
+    return $db->SQLGetChamp($sql, [$idGroup, $idUser]);
+}
+
+function haveGroupPermission($idUser, $idGroup) {
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM Roles 
+            JOIN Groups_Perms
+                ON Groups_Perms.rid = Roles.id
+            JOIN User_groups
+                ON User_Groups.gid = Groups_Perms.gid
+            JOIN Users
+                ON Users.id = User_Groups.uid;
+            WHERE Users.id = ? AND User_Groups.gid = ?";
+
+    return Database::parcoursRs($db->SQLSelect($sql, [$idUser, $idGroup]));
 }
 
 /**
