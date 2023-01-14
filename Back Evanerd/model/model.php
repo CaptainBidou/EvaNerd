@@ -341,7 +341,7 @@ function insertAchievement($label){
 function selectGroups($uid){
     $db = Config::getDatabase();
     $params = [$uid];
-    $sql = "SELECT Groups.id, Groups.titre 
+    $sql = "SELECT DISTINCT Groups.id, Groups.titre 
             FROM User_Groups
             JOIN Groups ON Groups.id = User_Groups.gid; 
             WHERE uid = ?";
@@ -362,16 +362,30 @@ function selectGroupsPerm($gid){
 function selectGroupMessages($gid){
     $db = Config::getDatabase();
     $params = [$gid];
-    $sql = "SELECT * FROM Group_Messages WHERE gid = ?";
+    $sql = "SELECT Group_Messages.*, Users.firstName, Users.lastName FROM `Group_Messages` JOIN Users ON Users.id = Group_Messages.uid WHERE Group_Messages.gid = ?;";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
 
-function selectGroupReactions($mid){
+function selectGroupReaction($mid){
     $db = Config::getDatabase();
     $params = [$mid];
     $sql = "SELECT * FROM Group_Message_Reactions WHERE mid = ?";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+}
+
+function selectGroupReactions($gid) {
+    $db = Config::getDatabase();
+    $params = [$gid];
+    $sql = "SELECT Group_Message_Reactions.emoji, Group_Message_Reactions.mid, Users.id AS uid, Users.firstName, Users.lastName
+            FROM Group_Messages
+            JOIN Group_Message_Reactions
+                ON Group_Message_Reactions.mid = Group_Messages.id
+            JOIN users
+                ON Group_Message_Reactions.uid = Users.id
+            WHERE Group_Messages.gid = ?;";
+
+    return Database::parcoursRs($db->SQLSelect($sql, $params));
 }
 
 function insertGroup($uid,$image=null,$title=null){
