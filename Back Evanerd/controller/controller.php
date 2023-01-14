@@ -138,6 +138,7 @@ function listGroupMessages($data, $idTabs, $authKey) {
         $gid  = $idTabs[0]; 
         $idUser = authToId($authKey);
         if(isInGroup($idUser, $gid) || count(haveGroupPermission($idUser, $gid))) {
+            echo "coucou";
             $i = 0;
             $data["groupId"] = $gid;
             $data["messages"] = array();
@@ -335,8 +336,38 @@ function listGroupsReacts($data, $idTabs, $authKey) {
 function createUserGroups($data, $authKey, $queryString) {
 
 }
+/**
+ * Ajoute un utilisateur dans un groupe
+ * @param array $data tableau à completer et envoyé
+ * @param array $queryString paramètre de requête
+ * @param string $authKey Token d'identification de l'utilisateur
+ */
+function addUsersGroups($data, $idTabs, $authKey) {
+    if($authKey)
+    if(count($idTabs) == 2) {
+        $uidConn = authToId($authKey); // uid de l'utilisateur connecté
+        $uidToAdd = $idTabs[1]; // uid de l'utilisateur à ajouter
+        $gid = $idTabs[0];
+        $user = selectUser($uidToAdd);
+        
+        if(count($user)) {
+            if(isInGroup($uidConn, $gid) || count(haveGroupPermission($uidConn, $gid))){
+                if(!isInGroup($uidToAdd, $gid)) {
+                    insertIntoGroup($uidToAdd, $gid);
+                    $data["user"] = $user[0];
+                    sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+                }
+                else
+                    sendError("Cet utilisateur est déjà dans ce groupe", HTTP_UNAUTHORIZED);
+            }
+            else
+                sendError("Vous ne pouvez pas ajouter un membre dans ce groupe !" , HTTP_FORBIDDEN);
+        }
+        else
+            sendError("Cet utilisateur n'existe pas" , HTTP_BAD_REQUEST);
+    }
+    sendError("Vous devez vous identifier !", HTTP_FORBIDDEN);
 
-function addUsersGroups($data, $authKey) {
 
 }
 
