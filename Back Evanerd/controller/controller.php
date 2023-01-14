@@ -247,7 +247,10 @@ function delUserRole($data, $idTabs, $authKey, $queryString) {
 
 
 function listRoles($data, $queryString) {
-
+    ($active = valider("active", $queryString) !== false) ? : $active = "both";
+    $rolesData = selectRoles($active);
+    $data["roles"] = $rolesData;
+    sendResponse($data, [getStatusHeader()]);
 }
 
 
