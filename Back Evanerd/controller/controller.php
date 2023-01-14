@@ -187,7 +187,28 @@ function putUser($data, $idTabs, $authKey) {
  * @param array $queryString paramètre de requête
  * @param string $authKey Token d'identification de l'utilisateur
  */
-function postUserInstrument($data, $idTabs, $authKey, $queryString) {
+function postUserInstrument($data, $authKey, $queryString) {
+    if($authKey) {
+        $idUser = authToId($authKey);
+        if($iid = valider("iid", $queryString))
+        if(is_id($iid)) {
+            $instrument = selectInstruments($iid);
+            if(count($instrument)) {
+                if(!count(haveInstrument($idUser, $iid))) {
+                    insertUserInstrument($iid, $idUser);
+                    $data["instrument"] = $instrument;
+                    sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+                    return;
+                }
+                sendError("L'utilisateur a déjà l'instrument", HTTP_UNAUTHORIZED);
+                return;
+            }
+
+        }
+        sendError("Il faut un envoyé l'id d'un instrument valide", HTTP_BAD_REQUEST);
+        return;
+    }
+    sendError("Il faut être identifié", HTTP_FORBIDDEN);
 
 }
 
@@ -217,7 +238,7 @@ function verifMail($data, $idTabs, $authKey) {
  * @param array $queryString paramètre de requête
  * @param string $authKey Token d'identification de l'utilisateur
  */
-function delUserInstrument($data, $idTabs, $authKey, $queryString) {
+function delUserInstrument($data, $authKey, $queryString) {
 
 }
 
@@ -229,7 +250,7 @@ function notAction($data) {
 }
 
 
-function postUserAchievement($data, $idTabs, $authKey, $queryString) {
+function postUserAchievement($data, $authKey, $queryString) {
 
 }
 
@@ -237,11 +258,11 @@ function postRole($data, $idTabs, $authKey, $queryString) {
 
 }
 
-function delUserAchievement($data, $idTabs, $authKey, $queryString) {
+function delUserAchievement($data, $authKey, $queryString) {
 
 }
 
-function delUserRole($data, $idTabs, $authKey, $queryString) {
+function delUserRole($data, $authKey, $queryString) {
 
 }
 
@@ -284,6 +305,10 @@ function postInstruments($data, $authKey, $queryString) {
 
 }
 
+/**
+ * Liste les instruments disponible dans la base de donnée
+ * @param array $data tableau à completer et envoyé
+ */
 function listAchievements($data) {
     $achievementsData = selectAchievements();
     $data["achievements"] = $achievementsData;
