@@ -38,6 +38,13 @@ function haveGroupPermission($idUser, $idGroup) {
     return Database::parcoursRs($db->SQLSelect($sql, [$idUser, $idGroup]));
 }
 
+function haveInstrument($idUser, $idInstrument) {
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM User_Instruments WHERE uid= ? AND iid = ?;";
+    $params = [$idUser, $idInstrument];
+    return Database::parcoursRs($db->SQLSelect($sql, $params));
+}
+
 /**
  * Retourne l'id de l'utilisateur en fonction de son token d'identification
  * @param string $authToken
@@ -283,10 +290,17 @@ function insertRole($label,$active=1){
 }
 
 
-function selectInstruments(){
+function selectInstruments($idInstrument = null){
     $db = Config::getDatabase();
-    $params = [];
     $sql = "SELECT * FROM Instruments ";
+    $params = [];
+    $whereStm = " WHERE id = ?";
+
+    if($idInstrument) {
+        $sql .= $whereStm;
+        array_push($params, $idInstrument);
+    }
+
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
