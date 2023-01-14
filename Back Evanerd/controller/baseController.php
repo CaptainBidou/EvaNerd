@@ -126,7 +126,7 @@ function getStatusHeader($status = 200) {
         case HTTP_UNAUTHORIZED: return "HTTP/1.0 401 Unauthorized";
         case HTTP_FORBIDDEN: return "HTTP/1.0 403 Forbidden";
         case HTTP_NOT_FOUND: return "HTTP/1.0 404 Not Found";
-        
+
         default: return "HTTP/1.0 200 OK";
             
     }
