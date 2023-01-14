@@ -126,7 +126,7 @@ switch($action) {
         break;
     
     case "POST /groups/ID/users/ID":
-        addUsersGroups($data, $authKey);
+        addUsersGroups($data, $idTabs,$authKey);
         break;
     
     case "POST /groups/ID/messages":
