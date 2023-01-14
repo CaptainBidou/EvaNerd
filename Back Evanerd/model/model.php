@@ -38,6 +38,13 @@ function haveGroupPermission($idUser, $idGroup) {
     return Database::parcoursRs($db->SQLSelect($sql, [$idUser, $idGroup]));
 }
 
+function selectGroupMessage($mid, $gid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM Group_Messages WHERE id = ? AND gid = ?";
+
+    return Database::parcoursRs($db->SQLSelect($sql, [$mid, $gid]));
+}
+
 function haveInstrument($idUser, $idInstrument) {
     $db = Config::getDatabase();
     $sql = "SELECT * FROM User_Instruments WHERE uid= ? AND iid = ?;";
@@ -285,7 +292,7 @@ function insertRole($label,$active=1){
     $db = Config::getDatabase();
     $params = [$label,$active];
     $sql = "INSERT INTO Roles(label,active) VALUES (?,?) ";
-    return Database::parcoursRs(($db->SQLInsert($sql, $params)));
+    return $db->SQLInsert($sql, $params);
 
 }
 
@@ -321,7 +328,7 @@ function insertInstruments($label){
     $db = Config::getDatabase();
     $params = [$label];
     $sql = "INSERT INTO Roles(label) VALUES (?) ";
-    return Database::parcoursRs(($db->SQLInsert($sql, $params)));
+    return $db->SQLInsert($sql, $params);
 
 }
 
@@ -349,7 +356,7 @@ function insertAchievement($label){
     $db = Config::getDatabase();
     $params = [$label];
     $sql = "INSERT INTO Achievements(label) VALUES (?) ";
-    return Database::parcoursRs(($db->SQLInsert($sql, $params)));
+    return $db->SQLInsert($sql, $params);
 
 }
 
@@ -426,15 +433,15 @@ function insertIntoGroup($uid,$gid){
     $db = Config::getDatabase();
     $params = [$uid,$gid];
     $sql = "INSERT INTO User_Groups(uid,gid) VALUES (?,?) ";
-    return Database::parcoursRs(($db->SQLInsert($sql, $params)));
+    return $db->SQLInsert($sql, $params);
 }
 
 
 function insertGroupMessage($uid,$gid,$content,$answerTo = null){
     $db = Config::getDatabase();
     $params = [$uid,$gid,$content,$answerTo];
-    $sql = "INSERT INTO Group_Messages(uid,gid,content,answerTo,pinned) VALUES (?,?,?,?,null) ";
-    return Database::parcoursRs(($db->SQLInsert($sql, $params)));
+    $sql = "INSERT INTO Group_Messages(uid,gid,content,answerTo,pinned) VALUES (?,?,?,?,0) ";
+    return $db->SQLInsert($sql, $params);
 }
 
 
