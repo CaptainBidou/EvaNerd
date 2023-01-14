@@ -39,11 +39,11 @@ switch($action) {
         break;
 
     case "POST /users/instruments":
-        postUserInstrument($data, $idTabs, $authKey, $queryString);
+        postUserInstrument($data, $authKey, $queryString);
         break;
 
     case "POST /users/achievement":
-        postUserAchievement($data, $idTabs, $authKey, $queryString);
+        postUserAchievement($data, $authKey, $queryString);
         break;
 
     case "POST /users/ID/roles":
@@ -55,15 +55,15 @@ switch($action) {
         break;
 
     case "DEL /users/instruments":
-        delUserInstrument($data, $idTabs, $authKey, $queryString);
+        delUserInstrument($data, $authKey, $queryString);
         break;
     
     case "DEL /users/achievements":
-        delUserAchievement($data, $idTabs, $authKey, $queryString);
+        delUserAchievement($data, $authKey, $queryString);
         break;
     
     case "DEL /users/roles":
-        delUserRole($data, $idTabs, $authKey, $queryString);
+        delUserRole($data, $authKey, $queryString);
         break;
 
     /* Roles */
