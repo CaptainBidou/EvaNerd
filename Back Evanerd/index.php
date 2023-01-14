@@ -81,7 +81,7 @@ switch($action) {
     
     /* Instruments */
     case "GET /instruments":
-        listInstruments($data, $queryString);
+        listInstruments($data);
         break;
 
     case "PUT /instruments/ID":
