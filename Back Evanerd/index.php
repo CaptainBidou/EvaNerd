@@ -114,7 +114,7 @@ switch($action) {
         break;
 
     case "GET /groups/ID/messages":
-        listGroupsMessages($data, $idTabs, $authKey);
+        listGroupMessages($data, $idTabs, $authKey);
         break;
     
     case "GET /groups/ID/messages/ID":
