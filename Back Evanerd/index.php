@@ -94,7 +94,7 @@ switch($action) {
 
     /* Achievements */
     case "GET /achievements":
-        listAchievements($data, $queryString);
+        listAchievements($data);
         break;
     
     case "PUT /achievements/ID":
