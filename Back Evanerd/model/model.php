@@ -32,7 +32,7 @@ function haveGroupPermission($idUser, $idGroup) {
             JOIN User_groups
                 ON User_Groups.gid = Groups_Perms.gid
             JOIN Users
-                ON Users.id = User_Groups.uid;
+                ON Users.id = User_Groups.uid
             WHERE Users.id = ? AND User_Groups.gid = ?";
 
     return Database::parcoursRs($db->SQLSelect($sql, [$idUser, $idGroup]));
