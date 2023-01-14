@@ -241,10 +241,19 @@ function deleteUserRole($uid){
 
 
 
-function selectRoles(){
+function selectRoles($active = "both"){
     $db = Config::getDatabase();
+    $whereStm = " WHERE active = ?;";
+    $sql = "SELECT * FROM Roles";
     $params = [];
-    $sql = "SELECT * FROM Roles ";
+
+    if($active == "0" || $active === "1") {
+        $params = [$active];
+        $sql .= $whereStm;
+    }
+    else {
+        $sql .= ";";
+    }
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
