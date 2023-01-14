@@ -372,6 +372,24 @@ function addUsersGroups($data, $idTabs, $authKey) {
 }
 
 function postMessagesGroups($data, $idTabs, $authKey, $queryString) {
+    if($authKey)
+    if(count($idTabs)) {
+        $gid = $idTabs[0];
+        $uidConn = authToId($authKey);
+        if(isInGroup($uidConn, $gid) || count(haveGroupPermission($uidConn, $gid))){
+            if($message = htmlspecialchars(valider("content", $queryString))) 
+            if(strlen($message) <= 300 ) {
+                $answerTo = valider("answerTo", $queryString);
+                count(selectGroupMessage($answerTo, $gid)) ? : $answerTo = null;
+                $mid = insertGroupMessage($uidConn, $gid, $message, $answerTo);
+                $data["message"] = ["id" => $mid, "content" => $message, "pinned" => 0, "answerTo" => $answerTo];
+                sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+            }
+            sendError("Vous ne pouvez pas envoyé un message vide ", HTTP_UNAUTHORIZED);
+        }
+        sendError("Vous devez être dans le groupe pour pouvoir envoyé un message", HTTP_BAD_REQUEST);
+    }
+    sendError("Vous devez être identifié pour envoyer un message", HTTP_FORBIDDEN);
 
 }
 
