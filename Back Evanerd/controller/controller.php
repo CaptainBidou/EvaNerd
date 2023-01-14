@@ -132,18 +132,39 @@ function listGroups($data, $queryString, $authKey) {
 /**
  * Renvoie la liste des message d'un groupe
  */
-function listGroupMessage($data, $authKey, $idTabs) {
+function listGroupMessages($data, $idTabs, $authKey) {
     if($authKey)
     if(count($idTabs) == 1) {
-        $gid  = $idTabs[0];
+        $gid  = $idTabs[0]; 
         $idUser = authToId($authKey);
         if(isInGroup($idUser, $gid) || count(haveGroupPermission($idUser, $gid))) {
+            $i = 0;
             $data["groupId"] = $gid;
-            $data["messages"] = selectGroupMessages($gid);
+            $data["messages"] = array();
+
+            $reactionData = groupby(selectGroupReactions($gid), "mid");
+            foreach($reactionData as $mid => $reactionstab) {
+                $reactionData[$mid] = groupby($reactionstab, "emoji");
+            }
+
+            $messagesData = selectGroupMessages($gid);
+            foreach($messagesData as $message) {
+                $data["messages"][$i]["id"] = $message["id"];
+                $data["messages"][$i]["author"] = ["id" => $message["uid"], "firstName" => $message["firstName"], "lastName" => $message["lastName"]];
+                $data["messages"][$i]["content"] = $message["content"];
+                $data["messages"][$i]["pinned"] = $message["pinned"];
+                $data["messages"][$i]["answerTo"] = $message["answerTo"];
+                if(isset($reactionData[$message["id"]])) {
+                    $data["messages"][$i]["reactions"] = $reactionData[$message["id"]];
+                }
+
+                $i++;
+
+            }
             sendResponse($data, [getStatusHeader(HTTP_OK)]);
         }
-        // TODO : error messages
-        
+        sendError("Vous devez être identifié !", HTTP_FORBIDDEN);
+
         return;
     }
 
@@ -263,10 +284,6 @@ function postAchievements($data, $authKey, $queryString) {
 }
 
 function listGroupsPerms($data, $idTabs, $authKey) {
-
-}
-
-function listGroupsMessages($data, $idTabs, $authKey) {
 
 }
 
