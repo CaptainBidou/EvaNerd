@@ -148,7 +148,24 @@ function is_check($i) {
 	return ( ($i==0) || ($i==1)); 
 }
 
+function groupby($tab, $id){
+    // Regourpe tout les tableaux associatifs de tab avec une même valeur de clé
+    $res = array();
+    // on parcours le tableau
+    foreach($tab as $tabData) {
+        // si on a aucun tableau à la clé id
+        if(!isset($res[$tabData[$id]])){
+            // on en crée un
+            $res[$tabData[$id]] = array();
+        }
+        // on ajoute dans ce tableau l'enregistrement avec le même id
+		$key = $tabData[$id];
+		unset($tabData[$id]);
+        array_push($res[$key], $tabData);
+    }
 
+    return $res;
+}
 
 
 ?>
