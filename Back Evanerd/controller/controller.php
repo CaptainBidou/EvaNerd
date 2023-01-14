@@ -245,7 +245,11 @@ function delUserRole($data, $idTabs, $authKey, $queryString) {
 
 }
 
-
+/**
+ * Liste les roles présent dans la base de donnée
+ * @param array $data tableau à completer et envoyé
+ * @param array $queryString paramètre de requête
+ */
 function listRoles($data, $queryString) {
     ($active = valider("active", $queryString) !== false) ? : $active = "both";
     $rolesData = selectRoles($active);
@@ -261,8 +265,14 @@ function putRoles($data, $idTabs, $authKey, $queryString) {
 function postRoles($data, $authKey, $queryString) {
 
 }
-
-function listInstruments($data, $queryString) {
+/**
+ * Liste les instruments disponible dans la base de donnée
+ * @param array $data tableau à completer et envoyé
+ */
+function listInstruments($data) {
+    $instrumentsData = selectInstruments();
+    $data["instruments"] = $instrumentsData;
+    sendResponse($data, [getStatusHeader()]);
 
 }
 
