@@ -284,7 +284,10 @@ function postInstruments($data, $authKey, $queryString) {
 
 }
 
-function listAchievements($data, $queryString) {
+function listAchievements($data) {
+    $achievementsData = selectAchievements();
+    $data["achievements"] = $achievementsData;
+    sendResponse($data, [getStatusHeader()]);
 
 }
 
