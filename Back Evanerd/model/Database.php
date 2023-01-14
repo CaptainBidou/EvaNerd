@@ -36,7 +36,7 @@ class Database {
     * Méthode privé (accessible que dans la définition de la classe) qui exécute une requête préparée
     * @return PDOStatement|false
     * @param string $query la requete SQL préparée ou non
-    * @param string $params les paramètres passés à la requete préparée
+    * @param array $params les paramètres passés à la requete préparée
     * Note : En cas d'erreur, la méthode retourne false
     */
     private function query($query, $params = []) {
