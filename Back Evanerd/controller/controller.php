@@ -124,6 +124,11 @@ function listGroups($data, $queryString, $authKey) {
     if($authKey) {
         // TODO : list group where user have permission
         $idUser = authToId($authKey);
+        if($idUser === false) {
+            sendError("Token invalide !", HTTP_FORBIDDEN);
+            return;
+        }
+
         $data["groups"] = selectGroups($idUser);
         sendResponse($data, [getStatusHeader(HTTP_OK)]);
     }
@@ -137,6 +142,11 @@ function listGroupMessages($data, $idTabs, $authKey) {
     if(count($idTabs) == 1) {
         $gid  = $idTabs[0]; 
         $idUser = authToId($authKey);
+        if($idUser === false) {
+            sendError("Token invalide !", HTTP_FORBIDDEN);
+            return;
+        }
+
         if(isInGroup($idUser, $gid) || count(haveGroupPermission($idUser, $gid))) {
             echo "coucou";
             $i = 0;
@@ -191,6 +201,11 @@ function putUser($data, $idTabs, $authKey) {
 function postUserInstrument($data, $authKey, $queryString) {
     if($authKey) {
         $idUser = authToId($authKey);
+        if($idUser === false) {
+            sendError("Token invalide !", HTTP_FORBIDDEN);
+            return;
+        }
+
         if($iid = valider("iid", $queryString))
         if(is_id($iid)) {
             $instrument = selectInstruments($iid);
@@ -346,6 +361,11 @@ function addUsersGroups($data, $idTabs, $authKey) {
     if($authKey)
     if(count($idTabs) == 2) {
         $uidConn = authToId($authKey); // uid de l'utilisateur connecté
+        if($uidConn === false) {
+            sendError("Token invalide !", HTTP_FORBIDDEN);
+            return;
+        }
+
         $uidToAdd = $idTabs[1]; // uid de l'utilisateur à ajouter
         $gid = $idTabs[0];
         $user = selectUser($uidToAdd);
@@ -376,6 +396,11 @@ function postMessagesGroups($data, $idTabs, $authKey, $queryString) {
     if(count($idTabs)) {
         $gid = $idTabs[0];
         $uidConn = authToId($authKey);
+        if($uidConn === false) {
+            sendError("Token invalide !", HTTP_FORBIDDEN);
+            return;
+        }
+
         if(isInGroup($uidConn, $gid) || count(haveGroupPermission($uidConn, $gid))){
             if($message = htmlspecialchars(valider("content", $queryString))) 
             if(strlen($message) <= 300 ) {
@@ -394,6 +419,20 @@ function postMessagesGroups($data, $idTabs, $authKey, $queryString) {
 }
 
 function listPosts($data, $authKey) {
+    if($authKey) {
+        $uidConn = authToId($authKey);
+        if($uidConn === false) {
+            sendError("Token invalide !", HTTP_FORBIDDEN);
+            return;
+        }
+        $role = selectUserRoles($uidConn);
+        $notAMember = (array_search("Non Membre", array_column($role, "label")) !== false) ? 1 : 0;
+        $data["posts"] = selectPosts($notAMember);
+        sendResponse($data, getStatusHeader());
+    }
+    else {
+        sendError("Vous devez être identifié !", HTTP_FORBIDDEN);
+    }
 
 }
 
