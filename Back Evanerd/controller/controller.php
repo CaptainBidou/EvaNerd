@@ -15,13 +15,10 @@ function authUser($data, $queryString) {
             $data["authToken"] = generateAuthToken($tel);
             $data["user"] = updateAuthToken($idUser, $data["authToken"]);
             sendResponse($data, [getStatusHeader()]);
-            return;
         }
-
         sendError("identifiant invalide !", [getStatusHeader(HTTP_FORBIDDEN)]);
     }
-
-    return sendError("Paramètres invalide !", [getStatusHeader(HTTP_BAD_REQUEST)]);
+    sendError("Paramètres invalide !", [getStatusHeader(HTTP_BAD_REQUEST)]);
 }
 
 /**
@@ -33,16 +30,11 @@ function listUsers($data, $queryString) {
     $idRole = null;
 
     if($idRole = valider("idRole", $queryString)) {
-        if(!is_id($idRole)) {
-            sendError("identifiant role attendu !", HTTP_BAD_REQUEST);
-            return;
-        }
+        if(!is_id($idRole)) sendError("identifiant role attendu !", HTTP_BAD_REQUEST);
     }
     $data["users"] = selectUsers($idRole);
-    if(count($data["users"]) == 0) {
+    if(count($data["users"]) == 0) 
         sendError("Aucun enregistrement trouvé : idRole invalide !", HTTP_NOT_FOUND);
-        return;
-    }
 
     sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
 }
@@ -58,14 +50,11 @@ function sendUser($data, $idTabs, $authKey) {
         $me = true;
     }
     $user = selectUser($idTabs[0], $me);
-    if(count($user) == 0) {
+    if(count($user) == 0)
         sendError("Aucun enregistrement trouvé : id invalide !", HTTP_NOT_FOUND);
-        return;
-    }
-    
+
     $data["user"] = $user[0];
     sendResponse($data, [getStatusHeader(HTTP_OK)]);
-    return;
 }
 
 /**
@@ -124,10 +113,7 @@ function listGroups($data, $queryString, $authKey) {
     if($authKey) {
         // TODO : list group where user have permission
         $idUser = authToId($authKey);
-        if($idUser === false) {
-            sendError("Token invalide !", HTTP_FORBIDDEN);
-            return;
-        }
+        if($idUser === false) sendError("Token invalide !", HTTP_FORBIDDEN);
 
         $data["groups"] = selectGroups($idUser);
         sendResponse($data, [getStatusHeader(HTTP_OK)]);
@@ -142,10 +128,7 @@ function listGroupMessages($data, $idTabs, $authKey) {
     if(count($idTabs) == 1) {
         $gid  = $idTabs[0]; 
         $idUser = authToId($authKey);
-        if($idUser === false) {
-            sendError("Token invalide !", HTTP_FORBIDDEN);
-            return;
-        }
+        if($idUser === false) sendError("Token invalide !", HTTP_FORBIDDEN);
 
         if(isInGroup($idUser, $gid) || count(haveGroupPermission($idUser, $gid))) {
             echo "coucou";
@@ -175,10 +158,7 @@ function listGroupMessages($data, $idTabs, $authKey) {
             sendResponse($data, [getStatusHeader(HTTP_OK)]);
         }
         sendError("Vous devez être identifié !", HTTP_FORBIDDEN);
-
-        return;
     }
-
     sendError("Il faut vous identifié !", HTTP_FORBIDDEN);
 }
 
@@ -201,10 +181,7 @@ function putUser($data, $idTabs, $authKey) {
 function postUserInstrument($data, $authKey, $queryString) {
     if($authKey) {
         $idUser = authToId($authKey);
-        if($idUser === false) {
-            sendError("Token invalide !", HTTP_FORBIDDEN);
-            return;
-        }
+        if($idUser === false) sendError("Token invalide !", HTTP_FORBIDDEN);
 
         if($iid = valider("iid", $queryString))
         if(is_id($iid)) {
@@ -214,18 +191,13 @@ function postUserInstrument($data, $authKey, $queryString) {
                     insertUserInstrument($iid, $idUser);
                     $data["instrument"] = $instrument;
                     sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
-                    return;
                 }
                 sendError("L'utilisateur a déjà l'instrument", HTTP_UNAUTHORIZED);
-                return;
             }
-
         }
         sendError("Il faut un envoyé l'id d'un instrument valide", HTTP_BAD_REQUEST);
-        return;
     }
     sendError("Il faut être identifié", HTTP_FORBIDDEN);
-
 }
 
 /**
@@ -354,17 +326,13 @@ function createUserGroups($data, $authKey, $queryString) {
 /**
  * Ajoute un utilisateur dans un groupe
  * @param array $data tableau à completer et envoyé
- * @param array $queryString paramètre de requête
  * @param string $authKey Token d'identification de l'utilisateur
  */
 function addUsersGroups($data, $idTabs, $authKey) {
     if($authKey)
     if(count($idTabs) == 2) {
         $uidConn = authToId($authKey); // uid de l'utilisateur connecté
-        if($uidConn === false) {
-            sendError("Token invalide !", HTTP_FORBIDDEN);
-            return;
-        }
+        if($uidConn === false) sendError("Token invalide !", HTTP_FORBIDDEN);
 
         $uidToAdd = $idTabs[1]; // uid de l'utilisateur à ajouter
         $gid = $idTabs[0];
@@ -377,29 +345,31 @@ function addUsersGroups($data, $idTabs, $authKey) {
                     $data["user"] = $user[0];
                     sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
                 }
-                else
-                    sendError("Cet utilisateur est déjà dans ce groupe", HTTP_UNAUTHORIZED);
+                sendError("Cet utilisateur est déjà dans ce groupe", HTTP_UNAUTHORIZED);
             }
-            else
-                sendError("Vous ne pouvez pas ajouter un membre dans ce groupe !" , HTTP_FORBIDDEN);
+            sendError("Vous ne pouvez pas ajouter un membre dans ce groupe !" , HTTP_FORBIDDEN);
         }
-        else
-            sendError("Cet utilisateur n'existe pas" , HTTP_BAD_REQUEST);
+        sendError("Cet utilisateur n'existe pas" , HTTP_BAD_REQUEST);
     }
     sendError("Vous devez vous identifier !", HTTP_FORBIDDEN);
 
 
 }
 
+/**
+ * Permet d'envoyer un message dans le groupe
+ * @param array $data tableau à completer et envoyé
+ * @param string $authKey Token d'identification de l'utilisateur
+ * @param array $idTabs paramètre d'url 
+ * @param array $queryString paramètre de requête
+ * @param 
+*/
 function postMessagesGroups($data, $idTabs, $authKey, $queryString) {
     if($authKey)
     if(count($idTabs)) {
         $gid = $idTabs[0];
         $uidConn = authToId($authKey);
-        if($uidConn === false) {
-            sendError("Token invalide !", HTTP_FORBIDDEN);
-            return;
-        }
+        if($uidConn === false) sendError("Token invalide !", HTTP_FORBIDDEN);
 
         if(isInGroup($uidConn, $gid) || count(haveGroupPermission($uidConn, $gid))){
             if($message = htmlspecialchars(valider("content", $queryString))) 
@@ -418,29 +388,65 @@ function postMessagesGroups($data, $idTabs, $authKey, $queryString) {
 
 }
 
+/**
+ * Permet de lister les posts visible par l'utilisateur connecté
+ * @param array $data tableau à completer et envoyé
+ * @param string $authKey Token d'identification de l'utilisateur
+ */
 function listPosts($data, $authKey) {
     if($authKey) {
         $uidConn = authToId($authKey);
-        if($uidConn === false) {
-            sendError("Token invalide !", HTTP_FORBIDDEN);
-            return;
-        }
+        if($uidConn === false) sendError("Token invalide !", HTTP_FORBIDDEN);
         $role = selectUserRoles($uidConn);
         $notAMember = (array_search("Non Membre", array_column($role, "label")) !== false) ? 1 : 0;
         $data["posts"] = selectPosts($notAMember);
         sendResponse($data, getStatusHeader());
-    }
-    else {
-        sendError("Vous devez être identifié !", HTTP_FORBIDDEN);
-    }
 
+    }
+    sendError("Vous devez être identifié !", HTTP_FORBIDDEN);
 }
 
 function listPostsReacts($data, $idTabs, $authKey) {
 
 }
 
+/**
+ * Permet d'envoyer un commentaire sous un post
+ * @param array $data tableau à completer et envoyé
+ * @param string $authKey Token d'identification de l'utilisateur
+ * @param array $idTabs paramètre d'url 
+ * 
+ */
 function listPostsMessages($data, $idTabs, $authKey) {
+    if($authKey) {
+        $i = 0;
+        $pid = $idTabs[0];
+        $data["idPost"] = $pid;
+        $uidConn = authToId($authKey);
+        if($uidConn === false) sendError("Token invalide !", HTTP_FORBIDDEN);
+        // Récupération des infos sur le post et l'utilisateur connecté
+        $post = selectPost($pid);
+        $role = selectUserRoles($uidConn);
+        $notAMember = (array_search("Non Membre", array_column($role, "label")) !== false) ? 1 : 0;
+        // Vérification si le post existe et que l'utilisateur connecté peut le voir
+        if(!count($post)) sendError("Ce post n'existe pas !", HTTP_BAD_REQUEST);
+        if($notAMember && $post[0]["visible"] != 1) sendError("Vous ne pouvez pas accéder à ce post", HTTP_FORBIDDEN);
+
+        $messagesData = selectPostMessages($pid);
+        $data["comments"] = array();
+        // Creation de la réponse
+        foreach($messagesData as $message) {
+            $data["comments"][$i]["id"] = $message["id"];
+            $data["comments"][$i]["author"] = ["id" => $message["uid"], "firstName" => $message["firstName"], "lastName" => $message["lastName"]];
+            $data["comments"][$i]["content"] = $message["content"];
+            $data["comments"][$i]["pinned"] = $message["pinned"];
+            $data["comments"][$i]["answerTo"] = $message["answerTo"];
+            $i++;
+
+        }
+        sendResponse($data, getStatusHeader());
+    }
+    sendError("Vous devez être identifié !", HTTP_FORBIDDEN);
 
 }
 
