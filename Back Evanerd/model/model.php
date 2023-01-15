@@ -271,6 +271,17 @@ function selectRoles($active = "both"){
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
+function selectUserRoles($uid){
+    $db = Config::getDatabase();
+    $sql = "SELECT Roles.*
+            FROM Roles
+            JOIN User_Roles
+                ON User_Roles.rid = Roles.id
+            WHERE User_Roles.uid = ?";
+
+    return Database::parcoursRs(($db->SQLSelect($sql,[$uid])));
+}
+
 function updateRole($rid,$label = null,$active = null){
     $db = Config::getDatabase();
     $params = [];
@@ -445,11 +456,14 @@ function insertGroupMessage($uid,$gid,$content,$answerTo = null){
 }
 
 
-function selectPosts(){
+function selectPosts($notAMember){
     $db = Config::getDatabase();
-    $params = [];
-    $sql = "SELECT * FROM Posts ";
-    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
+    $sql = "SELECT * FROM Posts";
+    $whereStm = " WHERE Posts.visible = 1";
+
+    if($notAMember) $sql .= $whereStm;
+
+    return Database::parcoursRs(($db->SQLSelect($sql)));
 }
 
 function selectPostReactions($pid){
