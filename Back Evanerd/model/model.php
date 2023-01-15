@@ -15,7 +15,12 @@ function updateAuthToken($idUser, $authToken) {
     return selectUser($idUser, 1);
 }
 
-
+/**
+ * Vérifie si l'utilisateur est dans le groupe
+ * @param int $idUser id de l'utilisateur
+ * @param int $idGroup l'id du groupe
+ * @return int|false L'id de l'utilisateur ou false
+ */
 function isInGroup($idUser, $idGroup) {
     $db = Config::getDatabase();
     $sql = "SELECT User_Groups.uid FROM User_Groups 
@@ -23,7 +28,12 @@ function isInGroup($idUser, $idGroup) {
     
     return $db->SQLGetChamp($sql, [$idGroup, $idUser]);
 }
-
+/**
+ * Vérifie si un utilisateur a les permission pour accèder à un groupe
+ * @param int $idUser id de l'utilisateur
+ * @param int $idGroup l'id du groupe
+ * @return array retourne un tableau vide si il n'y pas les permissions
+ */
 function haveGroupPermission($idUser, $idGroup) {
     $db = Config::getDatabase();
     $sql = "SELECT * FROM Roles 
@@ -466,6 +476,13 @@ function selectPosts($notAMember){
     return Database::parcoursRs(($db->SQLSelect($sql)));
 }
 
+function selectPost($pid){
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM Posts WHERE id = ?";
+
+    return Database::parcoursRs(($db->SQLSelect($sql, [$pid])));
+}
+
 function selectPostReactions($pid){
     $db = Config::getDatabase();
     $params = [$pid];
@@ -476,7 +493,7 @@ function selectPostReactions($pid){
 function selectPostMessages($pid){
     $db = Config::getDatabase();
     $params = [$pid];
-    $sql = "SELECT * FROM Post_Comments WHERE pid = ? ";
+    $sql = "SELECT Post_Comments.*, Users.firstName, Users.lastName FROM `Post_Comments` JOIN Users ON Users.id = Post_Comments.uid WHERE Post_Comments.pid = ?;";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
