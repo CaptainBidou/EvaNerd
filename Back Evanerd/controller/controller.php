@@ -7,6 +7,7 @@ include_once "includes/maLibSecurisation.php";
  *  - Vérification que l'utilisateur a accès à un groupe
  *  - Vérification que le token d'authentification est valide
  *  - Vérification des champs pour postUser et putUser
+ *  - Vérification a le role de "Non Membre", "Membre du CA" ...
 */
 
 /**
@@ -320,6 +321,19 @@ function putInstruments($data, $idTabs, $authKey, $queryString) {
 }
 
 function postInstruments($data, $authKey, $queryString) {
+    if($authKey) {
+        $uidConn = validUser(authToId($authKey));
+        $rolesConn = selectUserRoles($uidConn);
+        $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
+        if(!$admin) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
+
+        if($label = htmlspecialchars(valider("label", $queryString))) {
+            $data["instrument"] = array("id" => insertInstruments($label), "label" => $label);
+            sendResponse($data, [getStatusHeader(201)]);
+        }
+        sendError("Il faut spécifier le nom de l'instrument", HTTP_FORBIDDEN);
+    }
+    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
 
 }
 
@@ -335,10 +349,6 @@ function listAchievements($data) {
 }
 
 function putAchievements($data, $idTabs, $authKey, $queryString) {
-
-}
-
-function postAchievements($data, $authKey, $queryString) {
 
 }
 
