@@ -133,6 +133,7 @@ function is_check($i) {
 
 function validUser($id) {
 	if($id == false) sendError("Token invalide !", HTTP_BAD_REQUEST);
+	else return $id;
 }
 
 function groupby($tab, $id){
