@@ -101,9 +101,6 @@ switch($action) {
         putAchievements($data, $idTabs, $authKey, $queryString);
         break;
     
-    case "POST /achievements":
-        postAchievements($data, $authKey, $queryString);
-
     /* Groups */
     case "GET /groups":
         listGroups($data, $queryString, $authKey);
