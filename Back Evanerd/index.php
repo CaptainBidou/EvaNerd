@@ -47,7 +47,7 @@ switch($action) {
         break;
 
     case "POST /users/ID/roles":
-        postRole($data, $idTabs, $authKey, $queryString);
+        postUserRole($data, $idTabs, $authKey, $queryString);
         break;
 
     case "POST /users/verify":

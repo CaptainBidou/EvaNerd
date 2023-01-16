@@ -1,11 +1,5 @@
 <?php
 
-
-/**
- * @file maLibUtils.php
- * Ce fichier définit des fonctions d'accés ou d'affichage pour les tableaux superglobaux
- */
-
 /**
  * Vérifie l'existence (isset) et la taille (non vide) d'un paramétre dans un des tableaux GET, POST, COOKIES, SESSION
  * Renvoie false si le paramétre est vide ou absent
@@ -108,17 +102,6 @@ function tprint($tab)
 	print_r($tab);
 	echo "</pre>\n";	
 }
-/*
-function debug($nom,$val) {
-	global $data;
-
-	if (isset($_REQUEST["debug-data"])) {
-		$data["debug"][$nom] = $val;
-	}
-	if (isset($_REQUEST["debug"])) {
-		echo "$nom: $val\n<br/>\n";
-	}
-}*/
 
 function debug($nom,$val) {
 	global $data;
@@ -146,6 +129,10 @@ function is_id($i) {
 function is_check($i) {
 	$i = intval($i);
 	return ( ($i==0) || ($i==1)); 
+}
+
+function validUser($id) {
+	if($id == false) sendError("Token invalide !", HTTP_BAD_REQUEST);
 }
 
 function groupby($tab, $id){
