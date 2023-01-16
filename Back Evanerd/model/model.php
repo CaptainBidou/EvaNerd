@@ -281,6 +281,13 @@ function selectRoles($active = "both"){
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
+function selectRole($rid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT label FROM Roles WHERE id = ?";
+
+    return $db->SQLGetChamp($sql, [$rid]);
+}
+
 function selectUserRoles($uid){
     $db = Config::getDatabase();
     $sql = "SELECT Roles.*
