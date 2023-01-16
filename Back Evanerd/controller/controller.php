@@ -2,6 +2,12 @@
 include_once "baseController.php";
 include_once "model/model.php";
 include_once "includes/maLibSecurisation.php";
+/**
+ * TODO : Refacto code redondant
+ *  - Vérification que l'utilisateur a accès à un groupe
+ *  - Vérification que le token d'authentification est valide
+ *  - Vérification des champs pour postUser et putUser
+*/
 
 /**
  * Permet à un utilisateur de s'identifier
@@ -16,7 +22,7 @@ function authUser($data, $queryString) {
             $data["user"] = updateAuthToken($idUser, $data["authToken"]);
             sendResponse($data, [getStatusHeader()]);
         }
-        sendError("identifiant invalide !", [getStatusHeader(HTTP_FORBIDDEN)]);
+        sendError("identifiant invalide !", [getStatusHeader(HTTP_UNAUTHORIZED)]);
     }
     sendError("Paramètres invalide !", [getStatusHeader(HTTP_BAD_REQUEST)]);
 }
@@ -100,7 +106,7 @@ function postUser($data, $queryString) {
         $data["user"] = selectUser($idUser)[0];
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
     }
-    sendError("Requête Invalide",400);
+    sendError("Requête Invalide",HTTP_BAD_REQUEST);
 }
 
 /**
@@ -113,22 +119,25 @@ function listGroups($data, $queryString, $authKey) {
     if($authKey) {
         // TODO : list group where user have permission
         $idUser = authToId($authKey);
-        if($idUser === false) sendError("Token invalide !", HTTP_FORBIDDEN);
+        if($idUser === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
 
         $data["groups"] = selectGroups($idUser);
         sendResponse($data, [getStatusHeader(HTTP_OK)]);
     }
-    sendError("Vous devez être connecté !", HTTP_FORBIDDEN);
+    sendError("Vous devez être connecté !", HTTP_UNAUTHORIZED);
 }
 /**
  * Renvoie la liste des message d'un groupe
+ * @param array $data tableau à completer et envoyé
+ * @param array $idTabs 
+ * @param string $authKey Token d'identification de l'utilisateur
  */
 function listGroupMessages($data, $idTabs, $authKey) {
     if($authKey)
     if(count($idTabs) == 1) {
         $gid  = $idTabs[0]; 
         $idUser = authToId($authKey);
-        if($idUser === false) sendError("Token invalide !", HTTP_FORBIDDEN);
+        if($idUser === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
 
         if(isInGroup($idUser, $gid) || count(haveGroupPermission($idUser, $gid))) {
             echo "coucou";
@@ -157,7 +166,7 @@ function listGroupMessages($data, $idTabs, $authKey) {
             }
             sendResponse($data, [getStatusHeader(HTTP_OK)]);
         }
-        sendError("Vous devez être identifié !", HTTP_FORBIDDEN);
+        sendError("Vous devez être dans le groupe !", HTTP_FORBIDDEN);
     }
     sendError("Il faut vous identifié !", HTTP_FORBIDDEN);
 }
@@ -181,7 +190,7 @@ function putUser($data, $idTabs, $authKey) {
 function postUserInstrument($data, $authKey, $queryString) {
     if($authKey) {
         $idUser = authToId($authKey);
-        if($idUser === false) sendError("Token invalide !", HTTP_FORBIDDEN);
+        if($idUser === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
 
         if($iid = valider("iid", $queryString))
         if(is_id($iid)) {
@@ -192,22 +201,43 @@ function postUserInstrument($data, $authKey, $queryString) {
                     $data["instrument"] = $instrument;
                     sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
                 }
-                sendError("L'utilisateur a déjà l'instrument", HTTP_UNAUTHORIZED);
+                sendError("L'utilisateur a déjà l'instrument", HTTP_FORBIDDEN);
             }
         }
         sendError("Il faut un envoyé l'id d'un instrument valide", HTTP_BAD_REQUEST);
     }
-    sendError("Il faut être identifié", HTTP_FORBIDDEN);
+    sendError("Il faut être identifié", HTTP_UNAUTHORIZED);
 }
 
 /**
  * Ajout un role à l'utilisateur connecté
  * @param array $data tableau à completer et envoyé
+ * @param array $idTabs paramètre d'url
  * @param array $queryString paramètre de requête
  * @param string $authKey Token d'identification de l'utilisateur
  */
 function postUserRole($data, $idTabs, $authKey, $queryString) {
+    if($authKey) {
+        $uidConn = authToId($authKey);
+        $user = selectUser($idTabs[0]);
+        if(!count($user)) sendError("Cet utilisateur n'existe pas !", HTTP_BAD_REQUEST);
+        $uid = $user[0]["id"];
+        $rid = valider("rid", $queryString);
+        $rolesConn = selectUserRoles($uidConn);
+        $roles = selectUserRoles($uid);
+        $role = selectRole($rid);
 
+        $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
+        if($uidConn === false) sendError("Token invalide", HTTP_UNAUTHORIZED);
+        if(!$admin) sendError("Vous ne pouvez pas faire cette action", HTTP_FORBIDDEN);
+        if(array_search($role, array_column($roles, "label")) !== false) 
+            sendError("Cet utilisateur a déjà ce role", HTTP_FORBIDDEN);
+        
+        $data["user"] = $user[0];
+        $data["role"] = array("id" => $rid, "label" => $role);
+        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+    }
+    sendError("Il faut être identifié !", HTTP_UNAUTHORIZED);
 }
 
 /**
@@ -323,6 +353,7 @@ function listGroupsReacts($data, $idTabs, $authKey) {
 function createUserGroups($data, $authKey, $queryString) {
 
 }
+
 /**
  * Ajoute un utilisateur dans un groupe
  * @param array $data tableau à completer et envoyé
@@ -332,7 +363,7 @@ function addUsersGroups($data, $idTabs, $authKey) {
     if($authKey)
     if(count($idTabs) == 2) {
         $uidConn = authToId($authKey); // uid de l'utilisateur connecté
-        if($uidConn === false) sendError("Token invalide !", HTTP_FORBIDDEN);
+        if($uidConn === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
 
         $uidToAdd = $idTabs[1]; // uid de l'utilisateur à ajouter
         $gid = $idTabs[0];
@@ -347,11 +378,11 @@ function addUsersGroups($data, $idTabs, $authKey) {
                 }
                 sendError("Cet utilisateur est déjà dans ce groupe", HTTP_UNAUTHORIZED);
             }
-            sendError("Vous ne pouvez pas ajouter un membre dans ce groupe !" , HTTP_FORBIDDEN);
+            sendError("Vous ne pouvez pas ajouter un membre dans ce groupe !" , HTTP_UNAUTHORIZED);
         }
         sendError("Cet utilisateur n'existe pas" , HTTP_BAD_REQUEST);
     }
-    sendError("Vous devez vous identifier !", HTTP_FORBIDDEN);
+    sendError("Vous devez vous identifier !", HTTP_UNAUTHORIZED);
 
 
 }
@@ -369,7 +400,7 @@ function postMessagesGroups($data, $idTabs, $authKey, $queryString) {
     if(count($idTabs)) {
         $gid = $idTabs[0];
         $uidConn = authToId($authKey);
-        if($uidConn === false) sendError("Token invalide !", HTTP_FORBIDDEN);
+        if($uidConn === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
 
         if(isInGroup($uidConn, $gid) || count(haveGroupPermission($uidConn, $gid))){
             if($message = htmlspecialchars(valider("content", $queryString))) 
@@ -380,11 +411,11 @@ function postMessagesGroups($data, $idTabs, $authKey, $queryString) {
                 $data["message"] = ["id" => $mid, "content" => $message, "pinned" => 0, "answerTo" => $answerTo];
                 sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
             }
-            sendError("Vous ne pouvez pas envoyé un message vide ", HTTP_UNAUTHORIZED);
+            sendError("Vous ne pouvez pas envoyé un message vide ", HTTP_BAD_REQUEST);
         }
         sendError("Vous devez être dans le groupe pour pouvoir envoyé un message", HTTP_BAD_REQUEST);
     }
-    sendError("Vous devez être identifié pour envoyer un message", HTTP_FORBIDDEN);
+    sendError("Vous devez être identifié pour envoyer un message", HTTP_UNAUTHORIZED);
 
 }
 
