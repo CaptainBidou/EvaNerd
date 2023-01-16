@@ -355,7 +355,7 @@ function updateInstruments($rid,$label = null){
 function insertInstruments($label){
     $db = Config::getDatabase();
     $params = [$label];
-    $sql = "INSERT INTO Roles(label) VALUES (?) ";
+    $sql = "INSERT INTO Instruments(label) VALUES (?) ";
     return $db->SQLInsert($sql, $params);
 
 }
