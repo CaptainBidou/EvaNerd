@@ -61,9 +61,14 @@ var JConvp=$("<p>").addClass("navbar-text").data("type","conv_p").css("font-size
 
 
 
-
-
-
+//variables pour les concerts 
+var JConv =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","concert").css('height','10%').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
+var JCouleur="Coral";
+var JTitre =$("<h2>").addClass("card-title").data('type','concert_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%');
+var JCommentaire=$("<p>").addClass("navbar-text").data("type","concert_comm").css("font-size","3em").css("float","left").css("margin-left","20%");
+var JJeviens=$("<button>").data("type","header_tag").attr("type","concert_jeviens").addClass("btn btn-primary dropdown-toggle").val("jeviens").css("background",'green').html("Je viens").css('height','50%').css("width","20%").css("font-size","200%");
+var JJevienspas=$("<button>").data("type","header_tag").attr("type","concert_jevienspas").addClass("btn btn-primary dropdown-toggle").val("jevienspas").css("background",'darkred').html("Je viens pas").css('height','50%').css("width","20%").css("font-size","200%");
+var JJevienspeutetre=$("<button>").data("type","header_tag").attr("type","concert_jevienspe").addClass("btn btn-primary dropdown-toggle").val("Categoriepe").css("background",'darkred').html("Je viens peut être").css('height','50%').css("width","20%").css("font-size","200%");
 
 
 
@@ -336,3 +341,40 @@ $("#page").append(JCloneConv);
 
 }
 
+/**
+ * 
+ * @param {*} Reponse est un json contenant un tableau "message " de json dans lesquels il y a le nom de celui qui a envoyé le message, sa couleur son message sa pdp cette liste va donc du plus ancien message au plus récent 
+ * 
+ * 
+ * Reponse = {'message':[
+ * {nom:Mathieu,prenom:Somet,message:"salut les geeks",profile:"Ressources/Test/profile2.jpg"},
+ * {nom:Norman,prenom;Thavaux,message"moi aussi jaime les enfants",profile:"Ressources/Test/profile3.jpg"}
+ * 
+ * 
+ * 
+ * ]}
+ * 
+ * 
+ * 
+ * 
+ */
+function JAfficherMessageConv(Reponse){
+
+
+
+
+
+}
+
+
+
+/**
+ * 
+ * @param {*} Reponse est un json avec comme attribut le nom du concert, la date, la durée le nombre de personnes qui viennent, le commentaire le nombre de personne sur l'appli et si la personne a déjà voté ou non 
+ */
+function JConcert(Reponse){
+
+
+
+
+}
