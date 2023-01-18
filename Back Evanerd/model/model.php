@@ -518,10 +518,17 @@ function selectCalendar($uid){
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
-function selectEvents($aid){
+// TODO : eventuellement rendre uid optionnelle
+function selectEvents($aid, $uid){
     $db = Config::getDatabase();
-    $params = [$aid];
-    $sql = "SELECT * FROM Agendas WHERE aid = ? ";
+    $params = [$aid, $uid];
+    $sql = "SELECT Agenda_Events.*
+            FROM Agenda_Events
+            JOIN Agenda_Perms 
+            ON Agenda_Events.aid = Agenda_Perms.aid
+            JOIN User_Roles
+            ON User_Roles.rid = Agenda_Perms.rid
+            WHERE Agenda_Perms.read = 1 AND Agenda_Events.aid = ? AND User_Roles.uid = ?;";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
