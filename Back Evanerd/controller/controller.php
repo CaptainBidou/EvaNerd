@@ -370,8 +370,7 @@ function createUserGroups($data, $authKey, $queryString) {
  * @param string $authKey Token d'identification de l'utilisateur
  */
 function addUsersGroups($data, $idTabs, $authKey) {
-    if($authKey)
-    if(count($idTabs) == 2) {
+    if($authKey) {
         $uidConn = authToId($authKey); // uid de l'utilisateur connecté
         if($uidConn === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
 
@@ -393,8 +392,6 @@ function addUsersGroups($data, $idTabs, $authKey) {
         sendError("Cet utilisateur n'existe pas" , HTTP_BAD_REQUEST);
     }
     sendError("Vous devez vous identifier !", HTTP_UNAUTHORIZED);
-
-
 }
 
 /**
@@ -444,7 +441,7 @@ function listPosts($data, $authKey) {
         sendResponse($data, getStatusHeader());
 
     }
-    sendError("Vous devez être identifié !", HTTP_FORBIDDEN);
+    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
 
 function listPostsReacts($data, $idTabs, $authKey) {
@@ -487,12 +484,18 @@ function listPostsMessages($data, $idTabs, $authKey) {
         }
         sendResponse($data, getStatusHeader());
     }
-    sendError("Vous devez être identifié !", HTTP_FORBIDDEN);
+    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 
 }
 
 function listAgendas($data, $authKey) {
-
+    if($authKey) {
+        $uidConn = validUser(authToId($authKey));
+        $agendas = selectCalendar($uidConn);
+        $data["agendas"] = $agendas;
+        sendResponse($data, [getStatusHeader()]);
+    }
+    sendError("Vous devez vous identifier", HTTP_UNAUTHORIZED);
 }
 
 function listAgendaEvents($data, $idTabs, $authKey) {
