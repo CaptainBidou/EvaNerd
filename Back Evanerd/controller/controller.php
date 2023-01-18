@@ -503,7 +503,7 @@ function listAgendaEvents($data, $idTabs, $authKey) {
         $uidConn = validUser(authToId($authKey));
         $aid = $idTabs[0];
         $agendaEvents = selectEvents($aid, $uidConn);
-        $data["idAgendas"] = $aid;
+        $data["agendaId"] = $aid;
         $data["events"] = $agendaEvents;
         sendResponse($data, [getStatusHeader()]);
     }
@@ -511,5 +511,30 @@ function listAgendaEvents($data, $idTabs, $authKey) {
 }
 
 function listAgendaEventCalls($data, $idTabs, $authKey) {
+    if($authKey) {
+        $i = 0;
+        $uidConn = validUser(authToId($authKey));
+        $aid = $idTabs[0];
+        $eid = $idTabs[1];
+        $rolesConn = selectUserRoles($uidConn);
+        $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
+        if(!$admin) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
 
+        $data["agendasId"] = $aid;
+        $data["eventId"] = $eid;
+        $data["calls"] = array();
+        $callsData = selectCallMembers($eid);
+        foreach($callsData as $calls) {
+            $data["calls"][$i]["user"] = array("uid" => $calls["uid"], "firstName" => $calls["firstName"], "lastName" => $calls["lastName"]);
+            $data["calls"][$i]["present"] = $calls["present"];
+            if(!$calls["present"]) {
+                $data["calls"][$i]["reason_title"] = $calls["reason_title"];
+                $data["calls"][$i]["reason_desc"] = $calls["reason_desc"];
+            }
+            $i++;
+
+        }
+        sendResponse($data, [getStatusHeader()]);
+    }
+    sendError("Il faut vous identifier", HTTP_UNAUTHORIZED);
 }
