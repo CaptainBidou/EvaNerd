@@ -499,7 +499,15 @@ function listAgendas($data, $authKey) {
 }
 
 function listAgendaEvents($data, $idTabs, $authKey) {
-
+    if($authKey) {
+        $uidConn = validUser(authToId($authKey));
+        $aid = $idTabs[0];
+        $agendaEvents = selectEvents($aid, $uidConn);
+        $data["idAgendas"] = $aid;
+        $data["events"] = $agendaEvents;
+        sendResponse($data, [getStatusHeader()]);
+    }
+    sendError("Vous devez vous identifier", HTTP_UNAUTHORIZED);
 }
 
 function listAgendaEventCalls($data, $idTabs, $authKey) {
