@@ -339,7 +339,7 @@ function selectInstruments($idInstrument = null){
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
-function updateInstruments($rid,$label = null){
+function updateInstruments($iid,$label = null){
     $db = Config::getDatabase();
     $params = [];
     $sql = "UPDATE Instruments SET ";
@@ -347,7 +347,7 @@ function updateInstruments($rid,$label = null){
         $sql = $sql . ",label = ?";
         array_push($params, $label);
     }
-    array_push($params, $rid);
+    array_push($params, $iid);
     $sql = "WHERE id = ?";
     return $db->SQLUpdate($sql, $params);
 }
