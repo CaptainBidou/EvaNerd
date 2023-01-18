@@ -153,7 +153,7 @@ switch($action) {
         listAgendaEvents($data, $idTabs, $authKey);
         break;
 
-    case "GET /agendas/ID/event/ID/calls":
+    case "GET /agendas/ID/events/ID/calls":
         listAgendaEventCalls($data, $idTabs, $authKey);
         break;
 
