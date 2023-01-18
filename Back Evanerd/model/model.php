@@ -504,10 +504,17 @@ function selectPostMessages($pid){
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
-function selectCalendar(){
+// TODO : eventuellement modif pour rendre l'uid optionnelle
+function selectCalendar($uid){
     $db = Config::getDatabase();
-    $params = [];
-    $sql = "SELECT * FROM Agendas ";
+    $params = [$uid];
+    $sql = "SELECT Agendas.* 
+            FROM Agendas
+            JOIN Agenda_Perms 
+                ON Agendas.id = Agenda_Perms.aid
+            JOIN User_Roles
+                ON User_Roles.rid = Agenda_Perms.rid
+            WHERE Agenda_Perms.read = 1 AND User_Roles.uid = ?;";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
