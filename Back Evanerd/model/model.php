@@ -535,7 +535,10 @@ function selectEvents($aid, $uid){
 function selectCallMembers($aeid){
     $db = Config::getDatabase();
     $params = [$aeid];
-    $sql = "SELECT * FROM Posts WHERE aeid = ? ";
+    $sql = "SELECT Agenda_Event_Calls.*, Users.id, Users.firstName, Users.lastName
+            FROM Agenda_Event_Calls
+            JOIN Users ON Users.id = Agenda_Event_Calls.uid
+            WHERE Agenda_Event_Calls.aeid = ?;";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
