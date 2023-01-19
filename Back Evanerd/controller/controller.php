@@ -178,7 +178,7 @@ function listGroupMessages($data, $idTabs, $authKey) {
  * @param array $queryString paramètre de requête
  * @param string $authKey Token d'identification de l'utilisateur
  */
-function putUser($data, $idTabs, $authKey) {
+function putUser($data, $idTabs, $authKey,$queryString) {
 
 }
 
@@ -258,7 +258,11 @@ function verifMail($data, $idTabs, $authKey) {
  * @param string $authKey Token d'identification de l'utilisateur
  */
 function delUserInstrument($data, $authKey, $queryString) {
+    if ($authKey){
+        $uidConn = authToId($authKey);
+        if ($instrument = )
 
+    }
 }
 
 /**
@@ -452,7 +456,11 @@ function listGroupsReacts($data, $idTabs, $authKey) {
 
 function createUserGroups($data, $authKey, $queryString) {
     if($authKey) {
-        }
+        $idUser = authToId($authKey);
+        if (htmlspecialchars(valider("image")))
+            $image = addslashes(valider("image"));
+        
+    }
     sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
 }
 
