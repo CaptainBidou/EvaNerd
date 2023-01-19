@@ -401,6 +401,25 @@ function listAchievements($data) {
 }
 
 function putAchievements($data, $idTabs, $authKey, $queryString) {
+    if($authKey){
+        $uidConn = validUser(authToId($authKey));
+        $rolesConn = selectUserRoles($uidConn);
+        $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
+        if(!$admin) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
+
+        if($label = htmlspecialchars(valider("label", $queryString))) {
+            if(insertAchievement($label)) {
+                $data["achievements"] = array("id" => insertInstruments($label), "label" => $label);
+                sendResponse($data, [getStatusHeader(201)]);
+            }
+            else
+                sendError("Erreur lors de la modification", HTTP_FORBIDDEN);
+        }
+        sendError("Il faut spécifier le nom de l'instrument", HTTP_FORBIDDEN);
+
+
+    }
+    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);   
 
 }
 
