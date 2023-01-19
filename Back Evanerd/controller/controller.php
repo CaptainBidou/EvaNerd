@@ -317,7 +317,26 @@ function listInstruments($data) {
 }
 
 function putInstruments($data, $idTabs, $authKey, $queryString) {
+    if($authKey){
+        $uidConn = validUser(authToId($authKey));
+        $rolesConn = selectUserRoles($uidConn);
+        $instrument = $idTabs[0];
+        $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
+        if(!$admin) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
 
+        if($label = htmlspecialchars(valider("label", $queryString))) {
+            if(updateInstruments($instrument,$label)) {
+                $data["instrument"] = array("id" => insertInstruments($label), "label" => $label);
+                sendResponse($data, [getStatusHeader(201)]);
+            }
+            else
+                sendError("Erreur lors de la modification", HTTP_FORBIDDEN);
+        }
+        sendError("Il faut spécifier le nom de l'instrument", HTTP_FORBIDDEN);
+
+
+    }
+    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
 }
 
 function postInstruments($data, $authKey, $queryString) {
