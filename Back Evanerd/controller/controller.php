@@ -443,7 +443,6 @@ function listGroupsReacts($data, $idTabs, $authKey) {
         if(isInGroup($idUser, $gid) || count(haveGroupPermission($idUser, $gid))) {
             $groupsReactsData = selectGroupsReactions($idTabs);
             $data["reactions"] = $groupsReactsData;
-            // ahah le test mdr
             sendResponse($data, [getStatusHeader()]);
         }
     }
