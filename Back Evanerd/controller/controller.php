@@ -178,7 +178,7 @@ function listGroupMessages($data, $idTabs, $authKey) {
  * @param array $queryString paramètre de requête
  * @param string $authKey Token d'identification de l'utilisateur
  */
-function putUser($data, $idTabs, $authKey) {
+function putUser($data, $idTabs, $authKey,$queryString) {
 
 }
 
@@ -452,7 +452,11 @@ function listGroupsReacts($data, $idTabs, $authKey) {
 
 function createUserGroups($data, $authKey, $queryString) {
     if($authKey) {
-        }
+        $idUser = authToId($authKey);
+        if (addslashes(valider("image")))
+            $image = addslashes(valider("image"));
+        
+    }
     sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
 }
 
