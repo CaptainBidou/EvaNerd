@@ -277,8 +277,11 @@ function notAction($data) {
 
 function postUserAchievement($data, $authKey, $queryString) {
     if($authKey){
-        if ($instrument = htmlspecialchars(valider("instrument", $queryString))){
-
+        $uidConn = authToId($authKey);
+        if ($aid= htmlspecialchars(valider("achievement", $queryString))){
+            updateUserAchievement($uidConn, $aid);
+            $data["achivement"] = $aid;
+            sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
         }
 
     }
