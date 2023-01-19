@@ -256,14 +256,16 @@ function verifMail($data, $idTabs, $authKey) {
  * @param array $data tableau à completer et envoyé
  * @param array $queryString paramètre de requête
  * @param string $authKey Token d'identification de l'utilisateur
- */
-function delUserInstrument($data, $authKey, $queryString) {
-    if ($authKey){
-        $uidConn = authToId($authKey);
-        if ($instrument = )
+ 
+*function delUserInstrument($data, $authKey, $queryString) {
+*    if ($authKey){
+*       $uidConn = authToId($authKey);
+*       if ($instrument = htmlspecialchars(valider("instrument", $queryString))){
 
-    }
-}
+*       }
+
+*   }
+*}*/
 
 /**
  * 
@@ -274,7 +276,12 @@ function notAction($data) {
 
 
 function postUserAchievement($data, $authKey, $queryString) {
+    if($authKey){
+        if ($instrument = htmlspecialchars(valider("instrument", $queryString))){
 
+        }
+
+    }
 }
 
 function postRole($data, $idTabs, $authKey, $queryString) {
@@ -445,7 +452,7 @@ function listGroupsReacts($data, $idTabs, $authKey) {
         $gid  = $idTabs[0]; 
         $idUser = authToId($authKey);
         if(isInGroup($idUser, $gid) || count(haveGroupPermission($idUser, $gid))) {
-            $groupsReactsData = selectGroupsReactions($idTabs);
+            $groupsReactsData = selectGroupReaction($idTabs);
             $data["reactions"] = $groupsReactsData;
             sendResponse($data, [getStatusHeader()]);
         }
