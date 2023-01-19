@@ -451,7 +451,9 @@ function listGroupsReacts($data, $idTabs, $authKey) {
 }
 
 function createUserGroups($data, $authKey, $queryString) {
-
+    if($authKey) {
+        }
+    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
 }
 
 /**
