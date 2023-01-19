@@ -344,11 +344,12 @@ function updateInstruments($iid,$label = null){
     $params = [];
     $sql = "UPDATE Instruments SET ";
     if ($label != null){
-        $sql = $sql . ",label = ?";
+        $sql = $sql . "label = ?";
         array_push($params, $label);
     }
     array_push($params, $iid);
-    $sql = "WHERE id = ?";
+    $sql .= " WHERE id = ?";
+
     return $db->SQLUpdate($sql, $params);
 }
 
