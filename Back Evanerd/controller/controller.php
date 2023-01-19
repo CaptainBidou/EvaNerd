@@ -424,10 +424,29 @@ function putAchievements($data, $idTabs, $authKey, $queryString) {
 }
 
 function listGroupsPerms($data, $idTabs, $authKey) {
-
+    if($authKey) {
+        $gid  = $idTabs[0]; 
+        $idUser = authToId($authKey);
+        if(isInGroup($idUser, $gid) || count(haveGroupPermission($idUser, $gid))) {
+            $groupsPermsData = selectGroupsPerm($idTabs);
+            $data["permissions"] = $groupsPermsData;
+            sendResponse($data, [getStatusHeader()]);
+        }
+    }
+    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
 }
 
 function listGroupsReacts($data, $idTabs, $authKey) {
+    if($authKey) {
+        $gid  = $idTabs[0]; 
+        $idUser = authToId($authKey);
+        if(isInGroup($idUser, $gid) || count(haveGroupPermission($idUser, $gid))) {
+            $groupsReactsData = selectGroupsReactions($idTabs);
+            $data["reactions"] = $groupsReactsData;
+            sendResponse($data, [getStatusHeader()]);
+        }
+    }
+    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
 
 }
 
