@@ -258,7 +258,11 @@ function verifMail($data, $idTabs, $authKey) {
  * @param string $authKey Token d'identification de l'utilisateur
  */
 function delUserInstrument($data, $authKey, $queryString) {
+    if ($authKey){
+        $uidConn = authToId($authKey);
+        if ($instrument = )
 
+    }
 }
 
 /**
@@ -453,7 +457,7 @@ function listGroupsReacts($data, $idTabs, $authKey) {
 function createUserGroups($data, $authKey, $queryString) {
     if($authKey) {
         $idUser = authToId($authKey);
-        if (addslashes(valider("image")))
+        if (htmlspecialchars(valider("image")))
             $image = addslashes(valider("image"));
         
     }
