@@ -256,16 +256,10 @@ function verifMail($data, $idTabs, $authKey) {
  * @param array $data tableau à completer et envoyé
  * @param array $queryString paramètre de requête
  * @param string $authKey Token d'identification de l'utilisateur
- 
-*function delUserInstrument($data, $authKey, $queryString) {
-*    if ($authKey){
-*       $uidConn = authToId($authKey);
-*       if ($instrument = htmlspecialchars(valider("instrument", $queryString))){
-
-*       }
-
-*   }
-*}*/
+*/ 
+function delUserInstrument($data, $authKey, $queryString) {
+    return $data;
+}
 
 /**
  * 
@@ -279,12 +273,16 @@ function postUserAchievement($data, $authKey, $queryString) {
     if($authKey){
         $uidConn = authToId($authKey);
         if ($aid= htmlspecialchars(valider("achievement", $queryString))){
-            updateUserAchievement($uidConn, $aid);
-            $data["achivement"] = $aid;
-            sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+            if (updateUserAchievement($uidConn, $aid)) {
+                $data["achivement"] = $aid;
+                sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+            } else {
+                sendError("L'utilisateur a déjà l'achievement", HTTP_FORBIDDEN);
+            }
         }
-
+        sendError("Aucun achievement a été fourni", HTTP_FORBIDDEN);
     }
+    sendError("Il faut être identifié !", HTTP_UNAUTHORIZED);
 }
 
 function postRole($data, $idTabs, $authKey, $queryString) {
