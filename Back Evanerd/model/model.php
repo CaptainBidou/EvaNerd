@@ -283,9 +283,9 @@ function selectRoles($active = "both"){
 
 function selectRole($rid) {
     $db = Config::getDatabase();
-    $sql = "SELECT label FROM Roles WHERE id = ?";
+    $sql = "SELECT * FROM Roles WHERE id = ?";
 
-    return $db->SQLGetChamp($sql, [$rid]);
+    return Database::parcoursRs($db->SQLSelect($sql, [$rid]));
 }
 
 function selectUserRoles($uid){
@@ -295,24 +295,26 @@ function selectUserRoles($uid){
             JOIN User_Roles
                 ON User_Roles.rid = Roles.id
             WHERE User_Roles.uid = ?";
-
     return Database::parcoursRs(($db->SQLSelect($sql,[$uid])));
 }
 
 function updateRole($rid,$label = null,$active = null){
     $db = Config::getDatabase();
+
+    $sqlLabel = $label !== null ? "?" : "label"; 
+    $sqlActive = $active !== null ? "?" : "active";
     $params = [];
-    $sql = "UPDATE Roles SET ";
-    if ($label != null){
-        $sql = $sql . ",label = ?";
+    $sql = "UPDATE Roles SET label=$sqlLabel, active=$sqlActive ";
+    if ($sqlLabel == "?"){
         array_push($params, $label);
     }
-    if ($active != null){
-        $sql = $sql . ",active = ?";
+    if ($sqlActive == "?"){
         array_push($params, $active);
     }
+
     array_push($params, $rid);
-    $sql = "WHERE id = ?";
+    $sql .= " WHERE id = ?";
+    echo $sql;
     return $db->SQLUpdate($sql, $params);
 }
 
