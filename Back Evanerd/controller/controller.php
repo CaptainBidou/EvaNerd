@@ -40,7 +40,7 @@ function listUsers($data, $queryString) {
         if(!is_id($idRole)) sendError("identifiant role attendu !", HTTP_BAD_REQUEST);
     }
     $data["users"] = selectUsers($idRole);
-    if(count($data["users"]) == 0) 
+    if(!$data["users"]) 
         sendError("Aucun enregistrement trouvé : idRole invalide !", HTTP_NOT_FOUND);
 
     sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
@@ -57,7 +57,7 @@ function sendUser($data, $idTabs, $authKey) {
         $me = true;
     }
     $user = selectUser($idTabs[0], $me);
-    if(count($user) == 0)
+    if(!$user)
         sendError("Aucun enregistrement trouvé : id invalide !", HTTP_NOT_FOUND);
 
     $data["user"] = $user[0];
@@ -134,13 +134,12 @@ function listGroups($data, $queryString, $authKey) {
  * @param string $authKey Token d'identification de l'utilisateur
  */
 function listGroupMessages($data, $idTabs, $authKey) {
-    if($authKey)
-    if(count($idTabs) == 1) {
+    if($authKey) {
         $gid  = $idTabs[0]; 
         $idUser = authToId($authKey);
         if($idUser === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
 
-        if(isInGroup($idUser, $gid) || count(haveGroupPermission($idUser, $gid))) {
+        if(isInGroup($idUser, $gid) || haveGroupPermission($idUser, $gid)) {
             echo "coucou";
             $i = 0;
             $data["groupId"] = $gid;
@@ -196,8 +195,8 @@ function postUserInstrument($data, $authKey, $queryString) {
         if($iid = valider("iid", $queryString))
         if(is_id($iid)) {
             $instrument = selectInstruments($iid);
-            if(count($instrument)) {
-                if(!count(haveInstrument($idUser, $iid))) {
+            if($instrument) {
+                if(!haveInstrument($idUser, $iid)) {
                     insertUserInstrument($iid, $idUser);
                     $data["instrument"] = $instrument;
                     sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
@@ -221,21 +220,22 @@ function postUserRole($data, $idTabs, $authKey, $queryString) {
     if($authKey) {
         $uidConn = authToId($authKey);
         $user = selectUser($idTabs[0]);
-        if(!count($user)) sendError("Cet utilisateur n'existe pas !", HTTP_BAD_REQUEST);
+        if(!$user) sendError("Cet utilisateur n'existe pas !", HTTP_BAD_REQUEST);
         $uid = $user[0]["id"];
         $rid = valider("rid", $queryString);
         $rolesConn = selectUserRoles($uidConn);
         $roles = selectUserRoles($uid);
-        $role = selectRole($rid);
+        $roleToAdd = selectRole($rid);
+        if(!$roleToAdd) sendError("Ce role n'existe pas !", HTTP_BAD_REQUEST);
 
         $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
         if($uidConn === false) sendError("Token invalide", HTTP_UNAUTHORIZED);
         if(!$admin) sendError("Vous ne pouvez pas faire cette action", HTTP_FORBIDDEN);
-        if(array_search($role, array_column($roles, "label")) !== false) 
+        if(array_search($roleToAdd[0]["label"], array_column($roles, "label")) !== false) 
             sendError("Cet utilisateur a déjà ce role", HTTP_FORBIDDEN);
         
         $data["user"] = $user[0];
-        $data["role"] = array("id" => $rid, "label" => $role);
+        $data["role"] = $roleToAdd[0];
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
     }
     sendError("Il faut être identifié !", HTTP_UNAUTHORIZED);
@@ -317,18 +317,17 @@ function putRoles($data, $idTabs, $authKey, $queryString) {
         $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
         if(!$admin) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
 
-        if($active = htmlspecialchars(valider("active", $queryString))
-           || $label = htmlspecialchars(valider("label", $queryString))) {
-            if(updateRole($roleAModif, $label, $active)) {
-                sendResponse($roleAModif, [getStatusHeader(201)]);
-                $data["instrument"] = array("id" => insertInstruments($label), "label" => $label);
-                sendResponse($data, [getStatusHeader(201)]);
-            }
-            else
-                sendError("Erreur lors de la modification", HTTP_FORBIDDEN);
+        (($active = valider("active", $queryString)) !== false) ? : $active = null;
+        ($label = htmlspecialchars(valider("label", $queryString))) != "" ? : $label = null;
+        if($active === null && $label === null) sendError("Il faut modifier au moins 1 paramètre", HTTP_BAD_REQUEST);
+        if(updateRole($roleAModif, $label, $active)) {
+            $data["role"] = selectRole($roleAModif)[0];
+            sendResponse($data, [getStatusHeader(201)]);
         }
-    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
+        else
+            sendError("Erreur lors de la modification", HTTP_FORBIDDEN);
     }
+    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
 }
 
 
@@ -343,7 +342,7 @@ function postRoles($data, $authKey, $queryString) {
     if($active = htmlspecialchars(valider("active", $queryString)) 
        || $label = htmlspecialchars(valider("label", $queryString))){
         if(insertRole($label, $active)){
-            $data["instrument"] = array("id" => insertInstruments($label), "label" => $label);
+            $data["instrument"] = array("id" => insertRole($label), "label" => $label);
             sendResponse($data, [getStatusHeader(201)]);
         } else
             sendError("Erreur lors de la modification", HTTP_FORBIDDEN);
@@ -438,7 +437,7 @@ function listGroupsPerms($data, $idTabs, $authKey) {
     if($authKey) {
         $gid  = $idTabs[0]; 
         $idUser = authToId($authKey);
-        if(isInGroup($idUser, $gid) || count(haveGroupPermission($idUser, $gid))) {
+        if(isInGroup($idUser, $gid) || haveGroupPermission($idUser, $gid)) {
             $groupsPermsData = selectGroupsPerm($idTabs);
             $data["permissions"] = $groupsPermsData;
             sendResponse($data, [getStatusHeader()]);
@@ -451,7 +450,7 @@ function listGroupsReacts($data, $idTabs, $authKey) {
     if($authKey) {
         $gid  = $idTabs[0]; 
         $idUser = authToId($authKey);
-        if(isInGroup($idUser, $gid) || count(haveGroupPermission($idUser, $gid))) {
+        if(isInGroup($idUser, $gid) || haveGroupPermission($idUser, $gid)) {
             $groupsReactsData = selectGroupReaction($idTabs);
             $data["reactions"] = $groupsReactsData;
             sendResponse($data, [getStatusHeader()]);
@@ -485,8 +484,8 @@ function addUsersGroups($data, $idTabs, $authKey) {
         $gid = $idTabs[0];
         $user = selectUser($uidToAdd);
         
-        if(count($user)) {
-            if(isInGroup($uidConn, $gid) || count(haveGroupPermission($uidConn, $gid))){
+        if($user) {
+            if(isInGroup($uidConn, $gid) || haveGroupPermission($uidConn, $gid)){
                 if(!isInGroup($uidToAdd, $gid)) {
                     insertIntoGroup($uidToAdd, $gid);
                     $data["user"] = $user[0];
@@ -510,17 +509,16 @@ function addUsersGroups($data, $idTabs, $authKey) {
  * @param 
 */
 function postMessagesGroups($data, $idTabs, $authKey, $queryString) {
-    if($authKey)
-    if(count($idTabs)) {
+    if($authKey) {
         $gid = $idTabs[0];
         $uidConn = authToId($authKey);
         if($uidConn === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
 
-        if(isInGroup($uidConn, $gid) || count(haveGroupPermission($uidConn, $gid))){
+        if(isInGroup($uidConn, $gid) || haveGroupPermission($uidConn, $gid)){
             if($message = htmlspecialchars(valider("content", $queryString))) 
             if(strlen($message) <= 300 ) {
                 $answerTo = valider("answerTo", $queryString);
-                count(selectGroupMessage($answerTo, $gid)) ? : $answerTo = null;
+                selectGroupMessage($answerTo, $gid) ? : $answerTo = null;
                 $mid = insertGroupMessage($uidConn, $gid, $message, $answerTo);
                 $data["message"] = ["id" => $mid, "content" => $message, "pinned" => 0, "answerTo" => $answerTo];
                 sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
@@ -574,7 +572,7 @@ function listPostsMessages($data, $idTabs, $authKey) {
         $role = selectUserRoles($uidConn);
         $notAMember = (array_search("Non Membre", array_column($role, "label")) !== false) ? 1 : 0;
         // Vérification si le post existe et que l'utilisateur connecté peut le voir
-        if(!count($post)) sendError("Ce post n'existe pas !", HTTP_BAD_REQUEST);
+        if(!$post) sendError("Ce post n'existe pas !", HTTP_BAD_REQUEST);
         if($notAMember && $post[0]["visible"] != 1) sendError("Vous ne pouvez pas accéder à ce post", HTTP_FORBIDDEN);
 
         $messagesData = selectPostMessages($pid);
