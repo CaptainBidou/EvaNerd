@@ -247,7 +247,14 @@ function postUserRole($data, $idTabs, $authKey, $queryString) {
  * @param array $queryString paramètre de requête
  * @param string $authKey Token d'identification de l'utilisateur
  */
-function verifMail($data, $idTabs, $authKey) {
+function verifMail($data, $queryString) {
+    if($token = valider("token", $queryString)) {
+        if(!($uid = confirmToUser($token))) sendError("Aucun compte associé à ce token !", HTTP_FORBIDDEN);
+        activateUser($uid);
+        $data["users"] = selectUser($uid);
+        sendResponse($data, [getStatusHeader(HTTP_OK)]);
+    }
+    sendError("Pas de token !", HTTP_UNAUTHORIZED);
 
 }
 
