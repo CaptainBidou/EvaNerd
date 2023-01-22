@@ -2,6 +2,18 @@
 
 include_once("includes/Config.php");
 
+function confirmToUser($confirmToken) {
+    $db = Config::getDatabase();
+    $sql = "SELECT Users.id FROM Users WHERE Users.confirmToken = ?";
+    return $db->SQLGetChamp($sql,[$confirmToken]);
+}
+
+function activateUser($uid) {
+    $db = Config::getDatabase();
+    $sql = "UPDATE Users SET activation=1, confirmToken=null WHERE id= ?";
+    return $db->SQLUpdate($sql, [$uid]);
+}
+
 /**
  * Change le token d'authentification de l'utilisateur
  * @param int $idUser
