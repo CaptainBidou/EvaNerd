@@ -1,5 +1,12 @@
 <?php
 
+define("IMAGE_MAXSIZE", 250*250); // TODO : à modifier
+define("IMAGE_ERR_NOTIMAGE", -1);
+define("IMAGE_ERR_SIZE", -2);
+define("IMAGE_ERR_BADEXTENSION", -3);
+define("IMAGE_ERR_UPLOAD", -4);
+
+
 /**
  * Vérifie l'existence (isset) et la taille (non vide) d'un paramétre dans un des tableaux GET, POST, COOKIES, SESSION
  * Renvoie false si le paramétre est vide ou absent
@@ -155,5 +162,73 @@ function groupby($tab, $id){
     return $res;
 }
 
+/**
+ * Fonction qui convertie une image sous format base64 en un fichier image
+ * @param string $base64 l'image sous format base64
+ * @param string $output le chemins de l'image
+ */
+function base64ToImage($base64, $output, $maxSize) {
+    $data = base64_decode($base64);
+	// On utilise la fonction strlen pour vérifier la taille des données décodées
+	if(strlen($data) > $maxSize) {
+		return false;
+	}
+
+    // On utilise la fonction finfo_buffer pour vérifier le type MIME des données décodées
+    $finfo = finfo_open();
+    $mimeType = finfo_buffer($finfo, $data, FILEINFO_MIME_TYPE);
+	$extension = finfo_buffer($finfo, $data, FILEINFO_EXTENSION);
+    finfo_close($finfo);
+    // On vérifie si le type MIME est celui d'une image
+    if (strpos($mimeType, 'image') === 0) {
+		// on récupère l'extension approprié de l'image 
+        $output = str_replace(pathinfo($output, PATHINFO_EXTENSION), $extension, $output);
+
+        // On utilise la fonction file_put_contents pour écrire les données décodées dans un fichier
+        file_put_contents($output, $data);
+        return $output;
+    } else {
+        return false;
+    }
+}
+
+function uploadImage($filename, $imageData) {
+    // RETOURNE : 1 si succès
+    // CODE ERREUR :
+    // -1 type de fichier pas bon
+    // -2 taile du fichier pas bon
+    // -3 extension du fichier pas correct
+    // -4 erreur survenu lors de l'upload
+    
+    $imageFileType = strtolower(pathinfo($imageData["name"],PATHINFO_EXTENSION)); // extension du fichier
+    $file = $filename . ".$imageFileType"; // le chemin du fichier
+    $finfo = finfo_open();
+	$mime_type = finfo_file($finfo, $imageData["tmp_name"], FILEINFO_MIME_TYPE);
+	finfo_close($finfo);
+    $returnInfo["FILENAME"] = $filename . ".$imageFileType";
+
+    // Vérification du type : on ne voudrais pas que l'utilisateur upload un fichier php par exemple
+    if(strpos($mime_type, 'image') !== 0) {
+        $returnInfo["CODE"] = IMAGE_ERR_NOTIMAGE;
+    }
+    // Vérification de la taille
+    if ($imageData["size"] > IMAGE_MAXSIZE) {// on récupère l'info de la taille dans la superglobale $_FILES
+        $returnInfo["CODE"] = IMAGE_ERR_SIZE;
+    }
+    // Vérification de l'extension
+    if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "gif" ) {
+        $returnInfo["CODE"] = IMAGE_ERR_BADEXTENSION;
+    }
+
+    // Tout est bon
+    if (move_uploaded_file($imageData["tmp_name"], $file)) {
+        $returnInfo["CODE"] = 1;
+
+    }
+    else {
+        $returnInfo["CODE"] = IMAGE_ERR_UPLOAD;
+	}
+	return $returnInfo;
+}
 
 ?>
