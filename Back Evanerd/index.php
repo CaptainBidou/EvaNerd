@@ -51,7 +51,7 @@ switch($action) {
         break;
 
     case "POST /users/verify":
-        verifMail($data, $idTabs, $authKey);
+        verifMail($data, $queryString);
         break;
 
     case "DEL /users/instruments":
