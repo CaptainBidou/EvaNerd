@@ -76,7 +76,7 @@ switch($action) {
         break;
     
     case "POST /roles":
-        postRoles($data, $authKey, $queryString);
+        postRole($data, $authKey, $queryString);
         break;
     
     /* Instruments */
@@ -155,6 +155,17 @@ switch($action) {
 
     case "GET /agendas/ID/events/ID/calls":
         listAgendaEventCalls($data, $idTabs, $authKey);
+        break;
+    
+    case "POST /agendas":
+        postAgenda($data, $queryString, $authKey);
+        break;
+    case "POST /agendas/ID/events":
+        postAgendasEvent($data, $idTabs, $queryString, $authKey);
+        break;
+
+    case "GET /agendas/ID/events/participations":
+        listAgendaEventParticipation($data, $idTabs, $authKey);
         break;
 
     default:
