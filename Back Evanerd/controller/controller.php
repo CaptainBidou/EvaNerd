@@ -72,13 +72,14 @@ function sendUser($data, $idTabs, $authKey) {
  */
 function postUser($data, $queryString) {
     $image = "default.png";
-
+    // on récupère tous les champs obligatoire sinon on renvoie une erreur
     if($firstName = htmlspecialchars(valider("firstName", $queryString)))
     if($lastName = htmlspecialchars(valider("lastName", $queryString)))
     if($mail = htmlspecialchars(valider("mail", $queryString)))
     if($tel = valider("tel", $queryString));
     if($plainPassword = valider("password", $queryString))
     if($age = valider("age", $queryString)) {
+        // Récupérations des champs optionnels 
         ($studies = htmlspecialchars(valider("studies", $queryString))) ? : $studies = "";
         ($sex = valider("sex", $queryString)) ? : $sex = 0;
         ($imageData = valider("image", $queryString)) ? : $imageData = null;
@@ -100,11 +101,14 @@ function postUser($data, $queryString) {
             // imageData
                 // -> must be an image
             // -> size not exceed ? mb
+        // On hash le mot de passe avec l'algo bcrypt2 et avec un cout de 10
         $password = password_hash($plainPassword, PASSWORD_BCRYPT, ["cost"=>10]);
+        // TODO : traitement des images
         if($imageData != null) $image = "image.png";
 
+        // Enfin si tout est bon alors on créer l'utilisateur en base et on le renvoie en réponse
         $idUser = insertUser($firstName, $lastName, $mail, $tel, $password, $age, $studies, $sex, $image);
-        $data["user"] = selectUser($idUser)[0];
+        $data["user"] = selectUser($idUser)[0]; 
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
     }
     sendError("Requête Invalide",HTTP_BAD_REQUEST);
@@ -119,10 +123,8 @@ function postUser($data, $queryString) {
 function listGroups($data, $queryString, $authKey) {
     if($authKey) {
         // TODO : list group where user have permission
-        $idUser = authToId($authKey);
-        if($idUser === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
-
-        $data["groups"] = selectGroups($idUser);
+        $uidConn = validUser(authToId($authKey));
+        $data["groups"] = selectGroups($uidConn);
         sendResponse($data, [getStatusHeader(HTTP_OK)]);
     }
     sendError("Vous devez être connecté !", HTTP_UNAUTHORIZED);
@@ -136,21 +138,21 @@ function listGroups($data, $queryString, $authKey) {
 function listGroupMessages($data, $idTabs, $authKey) {
     if($authKey) {
         $gid  = $idTabs[0]; 
-        $idUser = authToId($authKey);
-        if($idUser === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
-
-        if(isInGroup($idUser, $gid) || haveGroupPermission($idUser, $gid)) {
-            echo "coucou";
+        $uidConn = validUser(authToId($authKey));
+        // Si il est dans le groupe ou que son role permet d'acceder au groupe
+        // Alors il a le droit d'accéder au message du groupe
+        if(isInGroup($uidConn, $gid) || haveGroupPermission($uidConn, $gid)) {
             $i = 0;
             $data["groupId"] = $gid;
             $data["messages"] = array();
-
             $reactionData = groupby(selectGroupReactions($gid), "mid");
+            // On regoupe par emoji
             foreach($reactionData as $mid => $reactionstab) {
                 $reactionData[$mid] = groupby($reactionstab, "emoji");
             }
-
+            // on recupére les messages
             $messagesData = selectGroupMessages($gid);
+            // Pour chaque message on construit un json et on lui associe ses emojis
             foreach($messagesData as $message) {
                 $data["messages"][$i]["id"] = $message["id"];
                 $data["messages"][$i]["author"] = ["id" => $message["uid"], "firstName" => $message["firstName"], "lastName" => $message["lastName"]];
@@ -160,15 +162,13 @@ function listGroupMessages($data, $idTabs, $authKey) {
                 if(isset($reactionData[$message["id"]])) {
                     $data["messages"][$i]["reactions"] = $reactionData[$message["id"]];
                 }
-
                 $i++;
-
             }
             sendResponse($data, [getStatusHeader(HTTP_OK)]);
         }
         sendError("Vous devez être dans le groupe !", HTTP_FORBIDDEN);
     }
-    sendError("Il faut vous identifié !", HTTP_FORBIDDEN);
+    sendError("Il faut vous identifié !", HTTP_UNAUTHORIZED);
 }
 
 /**
@@ -189,15 +189,13 @@ function putUser($data, $idTabs, $authKey,$queryString) {
  */
 function postUserInstrument($data, $authKey, $queryString) {
     if($authKey) {
-        $idUser = authToId($authKey);
-        if($idUser === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
-
-        if($iid = valider("iid", $queryString))
-        if(is_id($iid)) {
+        $uidConn = validUser(authToId($authKey));
+        // Récupération et vérification de l'id de l'instrument
+        if($iid = valider("iid", $queryString)) {
             $instrument = selectInstruments($iid);
             if($instrument) {
-                if(!haveInstrument($idUser, $iid)) {
-                    insertUserInstrument($iid, $idUser);
+                if(!haveInstrument($uidConn, $iid)) {
+                    insertUserInstrument($iid, $uidConn);
                     $data["instrument"] = $instrument;
                     sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
                 }
@@ -218,22 +216,22 @@ function postUserInstrument($data, $authKey, $queryString) {
  */
 function postUserRole($data, $idTabs, $authKey, $queryString) {
     if($authKey) {
-        $uidConn = authToId($authKey);
+        $uidConn = validUser(authToId($authKey));
         $user = selectUser($idTabs[0]);
-        if(!$user) sendError("Cet utilisateur n'existe pas !", HTTP_BAD_REQUEST);
-        $uid = $user[0]["id"];
         $rid = valider("rid", $queryString);
         $rolesConn = selectUserRoles($uidConn);
-        $roles = selectUserRoles($uid);
         $roleToAdd = selectRole($rid);
-        if(!$roleToAdd) sendError("Ce role n'existe pas !", HTTP_BAD_REQUEST);
-
         $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
-        if($uidConn === false) sendError("Token invalide", HTTP_UNAUTHORIZED);
+        //Verification si l'user existe, que le role existe et que l'user connecté est membre du CA
+        if(!$roleToAdd) sendError("Ce role n'existe pas !", HTTP_BAD_REQUEST);
+        if(!$user) sendError("Cet utilisateur n'existe pas !", HTTP_BAD_REQUEST);
         if(!$admin) sendError("Vous ne pouvez pas faire cette action", HTTP_FORBIDDEN);
+        $uid = $user[0]["id"];
+        $roles = selectUserRoles($uid);
+        // On vérifie si l'utilisateur n'a pas déjà ce role
         if(array_search($roleToAdd[0]["label"], array_column($roles, "label")) !== false) 
             sendError("Cet utilisateur a déjà ce role", HTTP_FORBIDDEN);
-        
+        // Si tout est bon on ecrit la réponse et on l'envoie
         $data["user"] = $user[0];
         $data["role"] = $roleToAdd[0];
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
@@ -251,7 +249,7 @@ function verifMail($data, $queryString) {
     if($token = valider("token", $queryString)) {
         if(!($uid = confirmToUser($token))) sendError("Aucun compte associé à ce token !", HTTP_FORBIDDEN);
         activateUser($uid);
-        $data["users"] = selectUser($uid);
+        $data["user"] = selectUser($uid)[0];
         sendResponse($data, [getStatusHeader(HTTP_OK)]);
     }
     sendError("Pas de token !", HTTP_UNAUTHORIZED);
@@ -290,10 +288,6 @@ function postUserAchievement($data, $authKey, $queryString) {
         sendError("Aucun achievement a été fourni", HTTP_FORBIDDEN);
     }
     sendError("Il faut être identifié !", HTTP_UNAUTHORIZED);
-}
-
-function postRole($data, $idTabs, $authKey, $queryString) {
-
 }
 
 function delUserAchievement($data, $authKey, $queryString) {
@@ -339,7 +333,7 @@ function putRoles($data, $idTabs, $authKey, $queryString) {
 }
 
 
-function postRoles($data, $authKey, $queryString) {
+function postRole($data, $authKey, $queryString) {
 
     if($authKey) {
         $uidConn = validUser(authToId($authKey));
@@ -650,4 +644,17 @@ function listAgendaEventCalls($data, $idTabs, $authKey) {
         sendResponse($data, [getStatusHeader()]);
     }
     sendError("Il faut vous identifier", HTTP_UNAUTHORIZED);
+}
+
+function postAgenda($data, $queryString, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+}
+
+function postAgendasEvent($data, $idTabs, $queryString, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+}
+
+function listAgendaEventParticipation($data, $idTabs, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+
 }
