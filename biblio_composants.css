@@ -1,0 +1,15 @@
+#page
+{
+    padding-top:4%;
+    padding-bottom: 24%;
+    position:relative;
+    width:100%;
+    border:1px solid black;
+    
+}
+
+#body
+{
+    padding:0;
+}
+

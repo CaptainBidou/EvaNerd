@@ -1,0 +1,83 @@
+
+
+<link rel="stylesheet" href="Bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="Bootstrap/css/bootstrap.css">
+<link href="Jquery/jquery-ui.min.css" rel="stylesheet">
+<link rel="stylesheet" href="biblio_composants.css">
+<script src="Bootstrap/js/bootstrap.min.js"> </script>
+<script src="Jquery/jquery-3.6.2.min.js"></script>
+<script src="Jquery/jquery-ui.min.js"></script>
+<script src="biblio_composants.js"></script>
+
+
+
+<script>
+    var Reponse={
+                 'nom':'Salvado Robalo',
+                 'prenom':' jean-marie-paul-christine-cunegonde',
+                 'epingle':1, // boolean
+                 'image':'Ressources/Test/image.jpg',
+                 'like':'1',//boolean
+                 'reaction':'smiley',//null si aucune réaction
+                 'profile':'Ressources/Test/profile2.jpg',
+                 'description':'Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                 'membre':'1',
+                'CA':'1',
+
+    
+             };
+
+
+var conv={id:2,participants:[{id:5,nom:'Jean',prenom:'Pierre'},{id:8,nom:'michelmichel',prenom:'kubiak'},{id:18,nom:'Monticul',prenom:'Maurice'}],nom:null,image:"Ressources/Test/profile3.jpg",};
+var concert={'titre':'superconcert','commentaire':'génial concert pour bien s amuser entre bestiiiees','pourcentage':'90','date':' 01/09/2008',};
+
+$(document).ready(function(){
+
+
+/*JCreerConcert(concert);
+JCreerConcert(concert);
+JCreerConcert(concert);*/
+
+
+
+
+
+
+
+
+
+JcreerHeader(Reponse);
+/*JCreerConv(conv);
+JCreerConv(conv);
+JCreerConv(conv);
+JCreerConv(conv);
+JCreerConv(conv);
+
+JcreerPost(Reponse);
+JcreerPost(Reponse);
+JcreerPost(Reponse);
+JcreerPost(Reponse);
+JcreerPost(Reponse);
+JcreerPost(Reponse);
+JcreerPost(Reponse);
+JcreerPost(Reponse);*/
+JCreerConcert(concert);
+JCreerConcert(concert);
+JCreerConcert(concert);
+JcreerFooter(Reponse);
+
+});
+
+
+
+</script>
+
+
+
+<body>
+<span id="header"></span>
+<span id="page">
+</span>
+<span id="footer"></span>
+</body>
+
