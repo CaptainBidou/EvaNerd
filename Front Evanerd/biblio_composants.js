@@ -60,16 +60,16 @@ var JConvp=$("<p>").addClass("navbar-text").data("type","conv_p").css("font-size
 
 
 //variables pour les concerts 
-var JConcert =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","concert").css('height','30%').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
-var JCouleur="Coral";
-var JConcertTitre =$("<h2>").addClass("card-title").data('type','concert_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%');
+var JConcert =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","concert").css('height','auto').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
+var JCouleur="silver";
+var JConcertTitre =$("<h2>").addClass("card-title").data('type','concert_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%').css("text-decoration","underline");
 var JConcertCommentaire=$("<p>").addClass("navbar-text").data("type","concert_comm").css("font-size","3em").css("float","left").css("margin-left","3%");
 var JConcertJeviens=$("<button>").data("type","header_tag").attr("type","concert_jeviens").addClass("btn btn-primary ").val("jeviens").css("background",'darkred').html("Je viens").css('height','10%').css("font-size","200%").css("position","relative").css("margin-left","30%");
 var JConcertJevienspas=$("<button>").data("type","header_tag").attr("type","concert_jevienspas").addClass("btn btn-primary ").val("jevienspas").css("background",'darkred').html("Je viens pas").css('height','10%').css("font-size","200%").css("position","relative");
 var JConcertJevienspeutetre=$("<button>").data("type","header_tag").attr("type","concert_jevienspe").addClass("btn btn-primary ").val("jevienspe").css("background",'darkred').html("Je viens peut être").css('height','10%').css("font-size","200%").css("position","relative").css("left","0");
 var JConcertpourcentage=$("<div>").attr("type","concert_pourcentage").addClass("progress-bar progress-bar-striped progress-bar-animated").data("aria-valuemin","0").data("aria-valuemax","100").css("font-size","300%").css("background-color","red");
-var JConcertProgress = $("<div>").attr("type","concert_progress").addClass("progress").css("width","100%").css("height","5%");
-var JConcertDate=$("<p>").attr("type","concert_date").css("font-size","300%");
+var JConcertProgress = $("<div>").attr("type","concert_progress").addClass("progress").css("width","100%").css("height","8%").css("margin-top","5%");
+var JConcertDate=$("<p>").attr("type","concert_date").css("font-size","300%").css("color","Gray");
 
 
 //
@@ -109,7 +109,8 @@ var jClonePost=JPost.clone(true,true);
 var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.prenom+" "+Reponse.nom).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
 var jClonePostBody=JPostBody.clone(true,true);
 var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.image);
-var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.description);
+var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.description).on("click",function(context){afficherToutleText(context);});
+jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
 var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.profile);
 
 var jClonePost2=JPost.clone(true,true);
@@ -134,6 +135,7 @@ jClonePostBody2.append(jClonePostProfile).append(jClonePostTitre).css("vertical-
 
 jClonePost2.append(jClonePostBody2).css("width","100%").css("background-color","lightgray").css("border-radius","5px 5px 0 0");
 jClonePostBody.append(jClonePostImage).append(jClonePostDescription);
+
 if(Reponse.membre==1)
 {
 jClonePostBody2.append(jClonePostEpingle);
@@ -379,14 +381,16 @@ function JAfficherMessageConv(Reponse){
  */
 
 
-//Reponse={'titre':'superconcert','commentaire':'génial concert pour bien s amuser entre bestiiiees','pourcentage':'27','date':' 01/09/2008'};
+//Reponse={'titre':'superconcert','commentaire':'génial concert pour bien s amuser entre bestiiiees','pourcentage':'27','date':' 01/09/2008','vote':'1',};
 
 
 function JCreerConcert(Reponse){
 var JCloneconcert=JConcert.clone(true,true).css("background-color",JCouleur);
 var JClonedate=JConcertDate.clone(true,true).text(Reponse.date);
 var JCloneTitre= JConcertTitre.clone(true,true).text(Reponse.titre);
-var JCloneCommentaire= JConcertCommentaire.clone(true,true).text(Reponse.commentaire);
+var JCloneCommentaire= JConcertCommentaire.clone(true,true).text(Reponse.commentaire).css("max-height","20%");
+JCloneCommentaire= ajouterTextOverflow(JCloneCommentaire,80);
+JCloneCommentaire.on("click",function(context){afficherToutleText(context);})
 var JCloneJeviens=JConcertJeviens.clone(true,true);
 var JCloneJevienspas=JConcertJevienspas.clone(true,true);
 var JCloneJevienspeutetre =JConcertJevienspeutetre.clone(true,true);
@@ -409,17 +413,18 @@ else if(Reponse.pourcentage<100)
 
 
 
-if (JCouleur == 'Coral')
-JCouleur='crimson';
+if (JCouleur == 'silver')
+JCouleur='Lightgray';
 else
-JCouleur='Coral';
+JCouleur='silver';
 
 
 JCloneProgress.append(JClonepourcentage);
 
-
+if(Reponse.vote==0)
 JCloneconcert.append(JCloneTitre).append(JClonedate).append(JCloneCommentaire).append(JCloneJeviens).append(JCloneJevienspas).append(JCloneJevienspeutetre).append(JCloneProgress);
-
+else
+JCloneconcert.append(JCloneTitre).append(JClonedate).append(JCloneCommentaire).append(JCloneProgress);
 
 $('#page').append(JCloneconcert);
 
@@ -432,3 +437,20 @@ function JCreerAppel(Reponse){
 
 }
 
+function ajouterTextOverflow(objet,taille)
+{
+    objet.css("text-overflow","ellipsis").css("direction","ltr").css("width",taille+"%").css("white-space","nowrap").css("overflow","hidden");
+    return objet;
+}
+
+function afficherToutleText(context){
+if ($(context.target).css("text-overflow")=="ellipsis")
+{
+    $(context.target).css("text-overflow","").css("direction","").css("white-space","").css("overflow","");
+}
+else
+{
+    $(context.target).css("text-overflow","ellipsis").css("direction","ltr").css("white-space","nowrap").css("overflow","hidden");
+}
+
+}
