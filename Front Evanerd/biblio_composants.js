@@ -59,20 +59,20 @@ var JConvp=$("<p>").addClass("navbar-text").data("type","conv_p").css("font-size
 
 
 
-
-
 //variables pour les concerts 
-var JConv =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","concert").css('height','10%').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
+var JConcert =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","concert").css('height','30%').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
 var JCouleur="Coral";
-var JTitre =$("<h2>").addClass("card-title").data('type','concert_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%');
-var JCommentaire=$("<p>").addClass("navbar-text").data("type","concert_comm").css("font-size","3em").css("float","left").css("margin-left","20%");
-var JJeviens=$("<button>").data("type","header_tag").attr("type","concert_jeviens").addClass("btn btn-primary dropdown-toggle").val("jeviens").css("background",'green').html("Je viens").css('height','50%').css("width","20%").css("font-size","200%");
-var JJevienspas=$("<button>").data("type","header_tag").attr("type","concert_jevienspas").addClass("btn btn-primary dropdown-toggle").val("jevienspas").css("background",'darkred').html("Je viens pas").css('height','50%').css("width","20%").css("font-size","200%");
-var JJevienspeutetre=$("<button>").data("type","header_tag").attr("type","concert_jevienspe").addClass("btn btn-primary dropdown-toggle").val("Categoriepe").css("background",'darkred').html("Je viens peut être").css('height','50%').css("width","20%").css("font-size","200%");
+var JConcertTitre =$("<h2>").addClass("card-title").data('type','concert_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%');
+var JConcertCommentaire=$("<p>").addClass("navbar-text").data("type","concert_comm").css("font-size","3em").css("float","left").css("margin-left","3%");
+var JConcertJeviens=$("<button>").data("type","header_tag").attr("type","concert_jeviens").addClass("btn btn-primary ").val("jeviens").css("background",'darkred').html("Je viens").css('height','10%').css("font-size","200%").css("position","relative").css("margin-left","30%");
+var JConcertJevienspas=$("<button>").data("type","header_tag").attr("type","concert_jevienspas").addClass("btn btn-primary ").val("jevienspas").css("background",'darkred').html("Je viens pas").css('height','10%').css("font-size","200%").css("position","relative");
+var JConcertJevienspeutetre=$("<button>").data("type","header_tag").attr("type","concert_jevienspe").addClass("btn btn-primary ").val("jevienspe").css("background",'darkred').html("Je viens peut être").css('height','10%').css("font-size","200%").css("position","relative").css("left","0");
+var JConcertpourcentage=$("<div>").attr("type","concert_pourcentage").addClass("progress-bar progress-bar-striped progress-bar-animated").data("aria-valuemin","0").data("aria-valuemax","100").css("font-size","300%").css("background-color","red");
+var JConcertProgress = $("<div>").attr("type","concert_progress").addClass("progress").css("width","100%").css("height","5%");
+var JConcertDate=$("<p>").attr("type","concert_date").css("font-size","300%");
 
 
-
-
+//
 
 
 
@@ -368,13 +368,67 @@ function JAfficherMessageConv(Reponse){
 
 
 
+
+
+
+
 /**
  * 
- * @param {*} Reponse est un json avec comme attribut le nom du concert, la date, la durée le nombre de personnes qui viennent, le commentaire le nombre de personne sur l'appli et si la personne a déjà voté ou non 
+ * @param {*} Reponse est un json avec comme attribut le nom du concert, la date, 
+ * la durée le nombre de personnes qui viennent, le commentaire le nombre de personne sur l'appli et si la personne a déjà voté ou non 
  */
-function JConcert(Reponse){
 
+
+//Reponse={'titre':'superconcert','commentaire':'génial concert pour bien s amuser entre bestiiiees','pourcentage':'27','date':' 01/09/2008'};
+
+
+function JCreerConcert(Reponse){
+var JCloneconcert=JConcert.clone(true,true).css("background-color",JCouleur);
+var JClonedate=JConcertDate.clone(true,true).text(Reponse.date);
+var JCloneTitre= JConcertTitre.clone(true,true).text(Reponse.titre);
+var JCloneCommentaire= JConcertCommentaire.clone(true,true).text(Reponse.commentaire);
+var JCloneJeviens=JConcertJeviens.clone(true,true);
+var JCloneJevienspas=JConcertJevienspas.clone(true,true);
+var JCloneJevienspeutetre =JConcertJevienspeutetre.clone(true,true);
+
+var JCloneProgress=JConcertProgress.clone(true,true);
+var JClonepourcentage=JConcertpourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
+
+
+if(Reponse.pourcentage<33)
+JClonepourcentage.css('background-color','red');
+
+else if(Reponse.pourcentage<63)
+JClonepourcentage.css('background-color','orange');
+
+else if(Reponse.pourcentage<100)
+    JClonepourcentage.css('background-color','green');
+
+
+
+
+
+
+if (JCouleur == 'Coral')
+JCouleur='crimson';
+else
+JCouleur='Coral';
+
+
+JCloneProgress.append(JClonepourcentage);
+
+
+JCloneconcert.append(JCloneTitre).append(JClonedate).append(JCloneCommentaire).append(JCloneJeviens).append(JCloneJevienspas).append(JCloneJevienspeutetre).append(JCloneProgress);
+
+
+$('#page').append(JCloneconcert);
 
 
 
 }
+
+
+function JCreerAppel(Reponse){
+
+}
+
