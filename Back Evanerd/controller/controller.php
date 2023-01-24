@@ -540,11 +540,21 @@ function postMessagesGroups($data, $idTabs, $authKey, $queryString) {
  */
 function listPosts($data, $authKey) {
     if($authKey) {
+        $i = 0;
         $uidConn = authToId($authKey);
         if($uidConn === false) sendError("Token invalide !", HTTP_FORBIDDEN);
         $role = selectUserRoles($uidConn);
         $notAMember = (array_search("Non Membre", array_column($role, "label")) !== false) ? 1 : 0;
-        $data["posts"] = selectPosts($notAMember);
+        $postData = selectPosts($notAMember);
+        foreach($postData as $post) {
+            $data["posts"][$i]["id"] = $post["id"];
+            $data["posts"][$i]["author"] = ["id" => $post["uid"], "firstName" => $post["firstName"], "lastName" => $post["lastName"]];
+            $data["posts"][$i]["content"] = $post["content"];
+            $data["posts"][$i]["pinned"] = $post["pinned"];
+            $data["posts"][$i]["visible"] = $post["visible"];
+            $i++;
+
+        }
         sendResponse($data, getStatusHeader());
 
     }
@@ -669,5 +679,4 @@ function addParticipations($data, $idTabs, $queryString, $authKey) {
 
 function postParticipations($data, $idTabs, $queryString, $authKey) {
     sendError("Not implemented yet !", HTTP_NOT_FOUND);
-
 }
