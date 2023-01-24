@@ -85,10 +85,10 @@ var JRepetitionDate=$("<p>").attr("type","appel_date").css("font-size","300%").c
 var JRepetitionCommentaire=$("<p>").addClass("navbar-text").attr("type","appel_comm").css("font-size","3em").css("float","left").css("margin-left","3%").css("margin-right","20%");
 var JRepetitionPresent=$("<button>").data("type","button").addClass("btn btn-danger ").val("Present").css('height','10%').css("font-size","200%").css("float","right").css("margin-top","2%").css("margin-right","5%").attr("type","present").css("background",'darkred');
 var JRepetitionAbsent=$("<button>").data("type","button").addClass("btn btn-danger ").val("Absent").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").attr("type","absent").css("background",'darkred');
-var JRepetitionJustificationText=$("<textarea>").addClass("form-control").attr("placeholder","Motif de l'absence").attr("type","motif").css("font-size","200%");
+var JRepetitionJustificationText=$("<textarea>").addClass("form-control").attr("placeholder","Motif de l'absence").attr("type","motif").css("font-size","200%").css("margin-left","2%").css("width","90%");
 var JRepetitionEnvoyer=$("<button>").data("type","button").addClass("btn btn-danger ").val("Envoyer").html("Envoyer").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").css("background",'darkred').attr("type","envoyer");
 var JRepetitionDiv=$("<div>").css("width","100%");
-
+var JRepetitionRetour=$("<button>").data("type","button").addClass("btn btn-danger ").val("Retour").html("Retour").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").css("background",'darkred').attr("type","retour");
 
 
 /************************************************************************/
@@ -263,25 +263,37 @@ function JClickFooter(context){
     if($(context.target).data("type")=="footer_mail")
     {JSetFooterColorBlack();
         $("#Mail").attr("src",'Ressources/Footer/emailGris.png');
+
+        AfficherMessagerie();
     }
     if($(context.target).data("type")=="footer_agenda")
     {JSetFooterColorBlack();
         
         $("#Calendrier").attr("src",'Ressources/Footer/calendrierGris.png');
+        
+        
+        AfficherCalendrier();
     }
     if($(context.target).data("type")=="footer_creer")
     {JSetFooterColorBlack();
         
         $("#Creer").attr("src",'Ressources/Footer/creerGris.png');
+
+        AfficherCreer();
     }
     if($(context.target).data("type")=="footer_appel")
     {JSetFooterColorBlack();
         
         $("#Appel").attr("src",'Ressources/Footer/appelGris.png');
+
+        AfficherAppel();
     }
     if($(context.target).data("type")=="footer_accueil")
     {JSetFooterColorBlack();
         $("#Accueil").attr("src","Ressources/Footer/accueilGris.png");
+
+
+        AfficherAccueil();
     
     }
 
@@ -324,7 +336,15 @@ $("#Mail").attr("src",'Ressources/Footer/email.png');
  * 
  */
 function JCreerConv(Reponse){
-var JCloneConv =JConv.clone(true,true).attr("type_id",Reponse.id);
+var JCloneConv =JConv.clone(true,true).attr("type_id",Reponse.id).css("background-color",JCouleur);
+
+if (JCouleur == 'silver')
+JCouleur='Lightgray';
+else
+JCouleur='silver';
+
+
+
 var JCloneConvImage = JConvImg.clone(true,true);
 if(Reponse.image!=null)
 {JCloneConvImage.attr("src",Reponse.image);}
@@ -412,6 +432,22 @@ var JCloneJevienspeutetre =JConcertJevienspeutetre.clone(true,true);
 var JCloneProgress=JConcertProgress.clone(true,true);
 var JClonepourcentage=JConcertpourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
 
+JCloneJeviens.on("click",function(){
+    JCloneJeviens.fadeOut();
+    JCloneJevienspas.fadeOut();
+    JCloneJevienspeutetre.fadeOut();
+});
+JCloneJevienspeutetre.on("click",function(){
+    JCloneJeviens.fadeOut();
+    JCloneJevienspas.fadeOut();
+    JCloneJevienspeutetre.fadeOut();
+});
+JCloneJevienspas.on("click",function(){
+    JCloneJeviens.fadeOut();
+    JCloneJevienspas.fadeOut();
+    JCloneJevienspeutetre.fadeOut();
+});
+
 
 if(Reponse.pourcentage<33)
 JClonepourcentage.css('background-color','red');
@@ -457,9 +493,15 @@ $('#page').append(JCloneconcert);
  * 
  */
 function JCreerAppel(Reponse){
-var JCloneRepetition=JRepetition.clone(true,true);
-var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide();
+var JCloneRepetition=JRepetition.clone(true,true).css("background-color",JCouleur);
 
+if (JCouleur == 'silver')
+JCouleur='Lightgray';
+else
+JCouleur='silver';
+
+var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide();
+var JCloneRepetitionRetour=JRepetitionRetour.clone(true,true).hide();
 
 
 var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true);
@@ -481,6 +523,8 @@ if($(context.target).attr("type")=="present")
     JCloneRepetitionEnvoyer.show();
     JCloneRepetitionAbsent.hide();
     JCloneRepetitionPresent.hide();
+    JCloneRepetitionRetour.show();
+    JCloneRepetitionEnvoyer.data("valeur","present");
     
 }
 
@@ -490,6 +534,8 @@ if($(context.target).attr("type")=="absent")
     JCloneRepetitionEnvoyer.show();
     JCloneRepetitionAbsent.hide();
     JCloneRepetitionPresent.hide();
+    JCloneRepetitionRetour.show();
+    JCloneRepetitionEnvoyer.data("valeur","absent");
 }
 if($(context.target).attr("type")=="motif")
 {
@@ -497,13 +543,20 @@ if($(context.target).attr("type")=="motif")
 }
 
 if($(context.target).attr("type")=="envoyer"){
-    JCloneRepetitionEnvoyer.hide();
-    JCloneRepetitionJustification2.fadeOut();
-    JCloneRepetitionAbsent.hide();
-    JCloneRepetitionPresent.hide();
+    
+    //TODO placer la requete ici
+   
     JCloneRepetition.remove();
+   
 }
-
+if($(context.target).attr("type")=="retour"){
+    JCloneRepetitionEnvoyer.hide();
+    JCloneRepetitionAbsent.show();
+    JCloneRepetitionPresent.show();
+    JCloneRepetitionRetour.hide();
+    JCloneRepetitionJustification2.hide();
+    
+ }
 
 if($(context.target).attr("type")=="appel_comm"){
 
@@ -534,7 +587,7 @@ else
 
 
 
-JCloneRepetitionDiv.append(JCloneRepetitionPresent).append(JCloneRepetitionAbsent).append(JCloneRepetitionJustification2).append(JCloneRepetitionEnvoyer);
+JCloneRepetitionDiv.append(JCloneRepetitionPresent).append(JCloneRepetitionAbsent).append(JCloneRepetitionJustification2).append(JCloneRepetitionEnvoyer).append(JCloneRepetitionRetour);
 JCloneRepetition.append(JCloneRepetitionTitre).append(JCloneRepetitionDate).append(JCloneRepetitionCommentaire).append(JCloneRepetitionDiv);
 
 
@@ -565,3 +618,146 @@ else
 }
 
 }
+
+
+
+
+
+function JDropUpCreer(){
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function AfficherAccueil(){
+
+$("#page").html("");
+
+    //ici obtenir la réponse de la requête 
+
+    var Reponse={
+        'nom':'Salvado Robalo',
+        'prenom':' jean-marie-paul-christine-cunegonde',
+        'epingle':1, // boolean
+        'image':'Ressources/Test/image.jpg',
+        'like':'1',//boolean
+        'reaction':'smiley',//null si aucune réaction
+        'profile':'Ressources/Test/profile2.jpg',
+        'description':'Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        'membre':'1',
+       'CA':'1',
+
+
+    };
+
+    JcreerPost(Reponse);
+    JcreerPost(Reponse);
+    JcreerPost(Reponse);
+    JcreerPost(Reponse);
+    JcreerPost(Reponse);
+    JcreerPost(Reponse);
+    JcreerPost(Reponse);
+    JcreerPost(Reponse);
+
+
+
+
+
+
+}
+
+
+
+function AfficherMessagerie(){
+    $("#page").html("");
+    var conv={id:2,participants:[{id:5,nom:'Jean',prenom:'Pierre'},{id:8,nom:'michelmichel',prenom:'kubiak'},{id:18,nom:'Monticul',prenom:'Maurice'}],nom:null,image:"Ressources/Test/profile3.jpg",};
+
+    //ici obtenir la réponse de la requête 
+
+    JCreerConv(conv);
+JCreerConv(conv);
+JCreerConv(conv);
+JCreerConv(conv);
+JCreerConv(conv);
+
+}
+
+
+
+function AfficherAppel(){
+    $("#page").html("");
+    //ici obtenir la réponse de la requête 
+    var appel={"titre":"Répétition tutti","date":"01/12/2019","commentaire":"Répétitions au capitole à 18h c'est très important de venir","sex":"0"};
+    JCreerAppel(appel);
+JCreerAppel(appel);
+JCreerAppel(appel);
+JCreerAppel(appel);
+JCreerAppel(appel);
+JCreerAppel(appel);
+JCreerAppel(appel);
+JCreerAppel(appel);
+}
+
+function AfficherCalendrier(){
+    $("#page").html("");
+    //ici obtenir la réponse de la requête 
+    var concert={'titre':'superconcert','commentaire':'génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees   ','pourcentage':'90','date':' 01/09/2008',"vote":"0"};
+    JCreerConcert(concert);
+    JCreerConcert(concert);
+    JCreerConcert(concert);
+
+
+}
+
+
+function AfficherCreer(){
+
+
+    $("#page").html("");
+    //ici obtenir la réponse de la requête
+    JDropUpCreer();
+
+
+    
+}
+
+
+
+
