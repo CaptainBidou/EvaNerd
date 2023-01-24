@@ -490,7 +490,9 @@ function insertGroupMessage($uid,$gid,$content,$answerTo = null){
 
 function selectPosts($notAMember){
     $db = Config::getDatabase();
-    $sql = "SELECT * FROM Posts";
+    $sql = "SELECT Posts.*, Users.id AS uid, Users.firstName, Users.lastName 
+            FROM Posts
+            JOIN Users ON Users.id = Posts.author";
     $whereStm = " WHERE Posts.visible = 1";
 
     if($notAMember) $sql .= $whereStm;
