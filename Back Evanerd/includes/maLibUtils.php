@@ -255,11 +255,11 @@ function isEmail($string) {
 	return filter_var($string, FILTER_VALIDATE_EMAIL);
 }
 /**
- * Retourne la racine du site
+ * Retourne la racine des ressources du site
  */
 function getBaseLink() {
 	$url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https://" : "http://";   
-	$url.= $_SERVER['HTTP_HOST'];
+	$url.= $_SERVER['HTTP_HOST'] . "/ressources";
 	return $url;
 }
 
