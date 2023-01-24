@@ -121,10 +121,10 @@ function ListerPosts(){
 }
 
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
-function ListerConv($gid){
+function ListerConv(){
     $.ajax({
         type: "GET",
-        url: api + "GET /groups",
+        url: api + " /groups",
         headers: {"authToken":""}, // données dans les entetes 
         data: [],
         error : function(){
@@ -141,6 +141,28 @@ function ListerConv($gid){
         dataType: "json"
     });   
 }
+
+/** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
+function ListerAppel($aid,$eid){
+    $.ajax({
+        type: "GET",
+        url: api + "/agendas/"+$aid+"/event/"+$eid+"/calls",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            oRep["calls"].forEach(element => {
+                JCreerAppel(element);
+            });
+        },
+        dataType: "json"
+    }); 
+}
+  
+
 
 
 
