@@ -5,7 +5,7 @@
 src="Bootstrap/js/bootstrap.min.js";
 src="Jquery/jquery-3.6.2.min.js";
 src="Jquery/jquery-ui.min.js";
-
+src="evanerd.html";
 
 /************************************************************************/
 /*                 DECLARATION DES VARIABLES                           */
@@ -663,100 +663,6 @@ function JDropUpCreer(){
 
 
 
-
-
-
-function AfficherAccueil(){
-
-$("#page").html("");
-
-    //ici obtenir la réponse de la requête 
-
-    var Reponse={
-        'nom':'Salvado Robalo',
-        'prenom':' jean-marie-paul-christine-cunegonde',
-        'epingle':1, // boolean
-        'image':'Ressources/Test/image.jpg',
-        'like':'1',//boolean
-        'reaction':'smiley',//null si aucune réaction
-        'profile':'Ressources/Test/profile2.jpg',
-        'description':'Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.Aujourd hui je fais un concert ça va être génial venez nombreux !!Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        'membre':'1',
-       'CA':'1',
-
-
-    };
-
-    JcreerPost(Reponse);
-    JcreerPost(Reponse);
-    JcreerPost(Reponse);
-    JcreerPost(Reponse);
-    JcreerPost(Reponse);
-    JcreerPost(Reponse);
-    JcreerPost(Reponse);
-    JcreerPost(Reponse);
-
-
-
-
-
-
-}
-
-
-
-function AfficherMessagerie(){
-    $("#page").html("");
-    var conv={id:2,participants:[{id:5,nom:'Jean',prenom:'Pierre'},{id:8,nom:'michelmichel',prenom:'kubiak'},{id:18,nom:'Monticul',prenom:'Maurice'}],nom:null,image:"Ressources/Test/profile3.jpg",};
-
-    //ici obtenir la réponse de la requête 
-
-    JCreerConv(conv);
-JCreerConv(conv);
-JCreerConv(conv);
-JCreerConv(conv);
-JCreerConv(conv);
-
-}
-
-
-
-function AfficherAppel(){
-    $("#page").html("");
-    //ici obtenir la réponse de la requête 
-    var appel={"titre":"Répétition tutti","date":"01/12/2019","commentaire":"Répétitions au capitole à 18h c'est très important de venir","sex":"0"};
-    JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-}
-
-function AfficherCalendrier(){
-    $("#page").html("");
-    //ici obtenir la réponse de la requête 
-    var concert={'titre':'superconcert','commentaire':'génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees   ','pourcentage':'90','date':' 01/09/2008',"vote":"0"};
-    JCreerConcert(concert);
-    JCreerConcert(concert);
-    JCreerConcert(concert);
-
-
-}
-
-
-function AfficherCreer(){
-
-
-    $("#page").html("");
-    //ici obtenir la réponse de la requête
-    JDropUpCreer();
-
-
-    
-}
 
 
 
