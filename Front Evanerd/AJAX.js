@@ -32,7 +32,6 @@ function GETUserbyID($id){
         success: function(oRep){
             console.log(oRep); 
             return oRep;
-
         },
         dataType: "json"
     });
