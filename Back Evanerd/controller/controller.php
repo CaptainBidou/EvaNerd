@@ -658,3 +658,16 @@ function listAgendaEventParticipation($data, $idTabs, $authKey) {
     sendError("Not implemented yet !", HTTP_NOT_FOUND);
 
 }
+
+function listParticipations($data, $idTabs, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+}
+
+function addParticipations($data, $idTabs, $queryString, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+}
+
+function postParticipations($data, $idTabs, $queryString, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+
+}
