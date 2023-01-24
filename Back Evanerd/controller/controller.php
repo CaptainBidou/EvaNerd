@@ -147,7 +147,7 @@ function listGroupMessages($data, $idTabs, $authKey) {
             // Pour chaque message on construit un json et on lui associe ses emojis
             foreach($messagesData as $message) {
                 $data["messages"][$i]["id"] = $message["id"];
-                $data["messages"][$i]["author"] = ["id" => $message["uid"], "firstName" => $message["firstName"], "lastName" => $message["lastName"]];
+                $data["messages"][$i]["author"] = ["id" => $message["uid"], "firstName" => $message["firstName"], "lastName" => $message["lastName"], "photo" => $message["photo"]];
                 $data["messages"][$i]["content"] = $message["content"];
                 $data["messages"][$i]["pinned"] = $message["pinned"];
                 $data["messages"][$i]["answerTo"] = $message["answerTo"];
@@ -540,7 +540,7 @@ function listPosts($data, $authKey) {
         $postData = selectPosts($notAMember);
         foreach($postData as $post) {
             $data["posts"][$i]["id"] = $post["id"];
-            $data["posts"][$i]["author"] = ["id" => $post["uid"], "firstName" => $post["firstName"], "lastName" => $post["lastName"]];
+            $data["posts"][$i]["author"] = ["id" => $post["uid"], "firstName" => $post["firstName"], "lastName" => $post["lastName"], "photo" => $post["photo"]];
             $data["posts"][$i]["content"] = $post["content"];
             $data["posts"][$i]["pinned"] = $post["pinned"];
             $data["posts"][$i]["visible"] = $post["visible"];
@@ -584,7 +584,7 @@ function listPostsMessages($data, $idTabs, $authKey) {
         // Creation de la réponse
         foreach($messagesData as $message) {
             $data["comments"][$i]["id"] = $message["id"];
-            $data["comments"][$i]["author"] = ["id" => $message["uid"], "firstName" => $message["firstName"], "lastName" => $message["lastName"]];
+            $data["comments"][$i]["author"] = ["id" => $message["uid"], "firstName" => $message["firstName"], "lastName" => $message["lastName"], "photo" => $message["photo"]];
             $data["comments"][$i]["content"] = $message["content"];
             $data["comments"][$i]["pinned"] = $message["pinned"];
             $data["comments"][$i]["answerTo"] = $message["answerTo"];
