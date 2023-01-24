@@ -86,7 +86,7 @@ var JRepetitionCommentaire=$("<p>").addClass("navbar-text").attr("type","appel_c
 var JRepetitionPresent=$("<button>").data("type","button").addClass("btn btn-danger ").val("Present").css('height','10%').css("font-size","200%").css("float","right").css("margin-top","2%").css("margin-right","5%").attr("type","present").css("background",'darkred');
 var JRepetitionAbsent=$("<button>").data("type","button").addClass("btn btn-danger ").val("Absent").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").attr("type","absent").css("background",'darkred');
 var JRepetitionJustificationText=$("<textarea>").addClass("form-control").attr("placeholder","Motif de l'absence").attr("type","motif").css("font-size","200%");
-var JRepetitionEnvoyer=$("<button>").data("type","button").addClass("btn btn-danger ").val("Envoyer").html("Envoyer").css('height','10%').css("font-size","200%").css("float","right").css("margin-left","80%").css("margin-top","2%").css("background",'darkred').attr("type","envoyer");
+var JRepetitionEnvoyer=$("<button>").data("type","button").addClass("btn btn-danger ").val("Envoyer").html("Envoyer").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").css("background",'darkred').attr("type","envoyer");
 var JRepetitionDiv=$("<div>").css("width","100%");
 
 
@@ -501,6 +501,7 @@ if($(context.target).attr("type")=="envoyer"){
     JCloneRepetitionJustification2.fadeOut();
     JCloneRepetitionAbsent.hide();
     JCloneRepetitionPresent.hide();
+    JCloneRepetition.remove();
 }
 
 
