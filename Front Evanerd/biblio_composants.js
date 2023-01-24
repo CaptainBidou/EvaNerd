@@ -95,9 +95,9 @@ var JRepetitionRetour=$("<button>").data("type","button").addClass("btn btn-dang
 
 
 //variables pour le dropUpCreer
-var JDropUpCreer = $("<div>").css("width","30%").css("position","fixed").css("bottom","0%").css("left","35%");
-var JDropUpCreerPost=$("<button>").addClass("btn btn-danger ").text("Post").css("margin-bottom","0%").css("font-size","300%").css("width","100%").css("background",'darkred');
-var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenement").css("margin-bottom","0%").css("font-size","300%").css("width","100%").css("background",'darkred');
+var JDropUpCreer = $("<div>").css("width","30%").css("position","fixed").css("bottom","0%").css("left","35%").attr("id","popup").attr("existe","1");
+var JDropUpCreerPost=$("<button>").addClass("btn btn-danger ").text("Post").css("margin-bottom","0%").css("font-size","300%").css("width","100%").css("background",'darkred').on("click",function(){JCreerPostCreer();});
+var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenement").css("margin-bottom","0%").css("font-size","300%").css("width","100%").css("background",'darkred').on("click",function(){JCreerEvenementCreer();});
 
 
 
@@ -528,7 +528,7 @@ var JCloneRepetitionJustification2=JRepetitionJustificationText.clone(true,true)
 
 
 JCloneRepetition.on("click",function(context){
-    console.log($(context.target).prev().prop('tagName'));
+    
 //if($(context.target).prev().prop('tagName')=="INPUT" ||$(context.target).prev().prop('tagName')=="TEXTAREA"||$(context.target).prev().prop('tagName')=="LABEL")
 if($(context.target).attr("type")=="present")
 {
@@ -637,6 +637,24 @@ else
 
 
 function JCreerDropUpCreer(){
+if($("#popup").attr("existe")==1)
+{
+    $("#popup").attr("existe","0");
+    $("#popup").animate({bottom: '0%'});
+    //$("#popup").remove();
+  
+
+}
+
+else if($("#popup").attr("existe")==0)
+{
+    $("#popup").animate({bottom: '9.1%'});
+    $("#popup").attr("existe","1");
+}
+
+
+else
+{
 var JCloneDropUpCreer=JDropUpCreer.clone(true,true);
 var JCloneDropUpCreerPost=JDropUpCreerPost.clone(true,true);
 var JCloneDropUpCreerEvenement=JDropUpCreerEvenement.clone(true,true);
@@ -645,14 +663,32 @@ JCloneDropUpCreer.append(JCloneDropUpCreerPost).append(JCloneDropUpCreerEvenemen
 
 $("#page").append(JCloneDropUpCreer);
 
+}
+
+
+}
+
+
+function JCreerEvenementCreer(){
+
+
+
 
 
 
 }
 
 
+function JCreerPostCreer(){
 
 
+
+
+
+    
+
+
+}
 
 
 
