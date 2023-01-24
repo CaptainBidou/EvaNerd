@@ -73,29 +73,21 @@ function sendUser($data, $idTabs, $authKey) {
 function postUser($data, $queryString) {
     $image = "default.png";
     // on récupère tous les champs obligatoire sinon on renvoie une erreur
-    if($firstName = htmlspecialchars(valider("firstName", $queryString)))
-    if($lastName = htmlspecialchars(valider("lastName", $queryString)))
-    if($mail = htmlspecialchars(valider("mail", $queryString)))
-    if($tel = valider("tel", $queryString));
-    if($plainPassword = valider("password", $queryString))
+    if($firstName = validString(htmlspecialchars(valider("firstName", $queryString)), 30, 3))
+    if($lastName = validString(htmlspecialchars(valider("lastName", $queryString)), 30, 3))
+    if($mail = isEmail(htmlspecialchars(valider("mail", $queryString))))
+    if($tel = isPhoneNumber(valider("tel", $queryString)))
+    if($plainPassword = validString(valider("password", $queryString), 70, 5))
     if($age = valider("age", $queryString)) {
         // Récupérations des champs optionnels 
-        ($studies = htmlspecialchars(valider("studies", $queryString))) ? : $studies = "";
+        ($studies = validString(htmlspecialchars(valider("studies", $queryString)), 50, 0)) ? : $studies = "";
         ($sex = valider("sex", $queryString)) ? : $sex = 0;
         ($imageData = valider("image", $queryString)) ? : $imageData = null;
         // TODO :
-            // firstname :
-                // ->> must be between 3 and 30 characters
-            // lastName :
-                // -> must be between 3 and 30 characters
-            // mail :
-                // -> must be a valide email adress
-            // tel :
-                // -> must not belong to an other account
             // age :
                 // -> must be a int
-            // studies
-                // -> must not exceed 50 characters
+            // tel :
+                // -> must be unique
             // sex
                 // -> must be 0, 1, 2
             // imageData
