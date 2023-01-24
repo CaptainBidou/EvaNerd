@@ -96,7 +96,31 @@ function POSTUser($informations){
         },
         dataType: "json"
     });
-    
+}
+/**
+ * 
+ * @param $informations Un JSON contenant les différentes données nécessaires à la création d'un compte
+ * 
+ */
+
+function ListerPosts($informations){
+    $.ajax({
+        type: "GET",
+        url: api + "/posts",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            oRep["posts"].forEach(element => {
+                JcreerPost(element);
+            });
+
+        },
+        dataType: "json"
+    });   
 }
 
 
