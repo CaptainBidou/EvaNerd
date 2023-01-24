@@ -5,7 +5,7 @@
 src="Bootstrap/js/bootstrap.min.js";
 src="Jquery/jquery-3.6.2.min.js";
 src="Jquery/jquery-ui.min.js";
-
+src="evanerd.html";
 
 /************************************************************************/
 /*                 DECLARATION DES VARIABLES                           */
@@ -59,18 +59,45 @@ var JConvp=$("<p>").addClass("navbar-text").data("type","conv_p").css("font-size
 
 
 
-
-
 //variables pour les concerts 
-var JConv =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","concert").css('height','10%').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
-var JCouleur="Coral";
-var JTitre =$("<h2>").addClass("card-title").data('type','concert_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%');
-var JCommentaire=$("<p>").addClass("navbar-text").data("type","concert_comm").css("font-size","3em").css("float","left").css("margin-left","20%");
-var JJeviens=$("<button>").data("type","header_tag").attr("type","concert_jeviens").addClass("btn btn-primary dropdown-toggle").val("jeviens").css("background",'green').html("Je viens").css('height','50%').css("width","20%").css("font-size","200%");
-var JJevienspas=$("<button>").data("type","header_tag").attr("type","concert_jevienspas").addClass("btn btn-primary dropdown-toggle").val("jevienspas").css("background",'darkred').html("Je viens pas").css('height','50%').css("width","20%").css("font-size","200%");
-var JJevienspeutetre=$("<button>").data("type","header_tag").attr("type","concert_jevienspe").addClass("btn btn-primary dropdown-toggle").val("Categoriepe").css("background",'darkred').html("Je viens peut être").css('height','50%').css("width","20%").css("font-size","200%");
+var JConcert =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","concert").css('height','auto').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
+var JCouleur="silver";
+var JConcertTitre =$("<h2>").addClass("card-title").data('type','concert_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%').css("text-decoration","underline");
+var JConcertCommentaire=$("<p>").addClass("navbar-text").attr("type","concert_comm").css("font-size","3em").css("float","left").css("margin-left","3%");
+var JConcertJeviens=$("<button>").data("type","button").attr("type","concert_jeviens").addClass("btn btn-danger ").val("jeviens").html("Je viens").css('height','10%').css("font-size","200%").css("position","relative").css("margin-left","30%").css("background",'darkred');
+var JConcertJevienspas=$("<button>").data("type","button").attr("type","concert_jevienspas").addClass("btn btn-danger ").val("jevienspas").html("Je viens pas").css('height','10%').css("font-size","200%").css("position","relative").css("background",'darkred');
+var JConcertJevienspeutetre=$("<button>").data("type","button").attr("type","concert_jevienspe").addClass("btn btn-danger ").val("jevienspe").html("Je viens peut être").css('height','10%').css("font-size","200%").css("position","relative").css("left","0").css("background",'darkred');
+var JConcertpourcentage=$("<div>").attr("type","concert_pourcentage").addClass("progress-bar progress-bar-striped progress-bar-animated").data("aria-valuemin","0").data("aria-valuemax","100").css("font-size","300%").css("background-color","red");
+var JConcertProgress = $("<div>").attr("type","concert_progress").addClass("progress").css("width","100%").css("height","8%").css("margin-top","5%");
+var JConcertDate=$("<p>").attr("type","concert_date").css("font-size","300%").css("color","Gray");
 
 
+
+
+
+
+
+//variables pour les appels
+
+var JRepetition = $("<nav>").addClass("navbar").addClass("navbar").css("background-color","silver").data("type","appel").css('box-shadow','0px 2px 10px gray').css('padding','1%').css("margin-bottom","2%");
+var JRepetitionTitre = $("<h2>").addClass("card-title").data('type','appel_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%').css("text-decoration","underline");
+var JRepetitionDate=$("<p>").attr("type","appel_date").css("font-size","300%").css("color","Gray");
+var JRepetitionCommentaire=$("<p>").addClass("navbar-text").attr("type","appel_comm").css("font-size","3em").css("float","left").css("margin-left","3%").css("margin-right","20%");
+var JRepetitionPresent=$("<button>").data("type","button").addClass("btn btn-danger ").val("Present").css('height','10%').css("font-size","200%").css("float","right").css("margin-top","2%").css("margin-right","5%").attr("type","present").css("background",'darkred');
+var JRepetitionAbsent=$("<button>").data("type","button").addClass("btn btn-danger ").val("Absent").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").attr("type","absent").css("background",'darkred');
+var JRepetitionJustificationText=$("<textarea>").addClass("form-control").attr("placeholder","Motif de l'absence").attr("type","motif").css("font-size","200%").css("margin-left","2%").css("width","90%");
+var JRepetitionEnvoyer=$("<button>").data("type","button").addClass("btn btn-danger ").val("Envoyer").html("Envoyer").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").css("background",'darkred').attr("type","envoyer");
+var JRepetitionDiv=$("<div>").css("width","100%");
+var JRepetitionRetour=$("<button>").data("type","button").addClass("btn btn-danger ").val("Retour").html("Retour").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").css("background",'darkred').attr("type","retour");
+
+
+
+
+
+//variables pour le dropUpCreer
+var JDropUpCreer = $("<div>").css("width","30%").css("position","fixed").css("bottom","0%").css("left","35%");
+var JDropUpCreerPost=$("<button>").addClass("btn btn-danger ").text("Post").css("margin-bottom","0%").css("font-size","300%").css("width","100%").css("background",'darkred');
+var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenement").css("margin-bottom","0%").css("font-size","300%").css("width","100%").css("background",'darkred');
 
 
 
@@ -109,7 +136,8 @@ var jClonePost=JPost.clone(true,true);
 var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.prenom+" "+Reponse.nom).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
 var jClonePostBody=JPostBody.clone(true,true);
 var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.image);
-var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.description);
+var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.description).on("click",function(context){afficherToutleText(context);});
+jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
 var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.profile);
 
 var jClonePost2=JPost.clone(true,true);
@@ -134,6 +162,7 @@ jClonePostBody2.append(jClonePostProfile).append(jClonePostTitre).css("vertical-
 
 jClonePost2.append(jClonePostBody2).css("width","100%").css("background-color","lightgray").css("border-radius","5px 5px 0 0");
 jClonePostBody.append(jClonePostImage).append(jClonePostDescription);
+
 if(Reponse.membre==1)
 {
 jClonePostBody2.append(jClonePostEpingle);
@@ -247,25 +276,37 @@ function JClickFooter(context){
     if($(context.target).data("type")=="footer_mail")
     {JSetFooterColorBlack();
         $("#Mail").attr("src",'Ressources/Footer/emailGris.png');
+
+        AfficherMessagerie();
     }
     if($(context.target).data("type")=="footer_agenda")
     {JSetFooterColorBlack();
         
         $("#Calendrier").attr("src",'Ressources/Footer/calendrierGris.png');
+        
+        
+        AfficherCalendrier();
     }
     if($(context.target).data("type")=="footer_creer")
     {JSetFooterColorBlack();
         
         $("#Creer").attr("src",'Ressources/Footer/creerGris.png');
+
+        AfficherCreer();
     }
     if($(context.target).data("type")=="footer_appel")
     {JSetFooterColorBlack();
         
         $("#Appel").attr("src",'Ressources/Footer/appelGris.png');
+
+        AfficherAppel();
     }
     if($(context.target).data("type")=="footer_accueil")
     {JSetFooterColorBlack();
         $("#Accueil").attr("src","Ressources/Footer/accueilGris.png");
+
+
+        AfficherAccueil();
     
     }
 
@@ -308,7 +349,15 @@ $("#Mail").attr("src",'Ressources/Footer/email.png');
  * 
  */
 function JCreerConv(Reponse){
-var JCloneConv =JConv.clone(true,true).attr("type_id",Reponse.id);
+var JCloneConv =JConv.clone(true,true).attr("type_id",Reponse.id).css("background-color",JCouleur);
+
+if (JCouleur == 'silver')
+JCouleur='Lightgray';
+else
+JCouleur='silver';
+
+
+
 var JCloneConvImage = JConvImg.clone(true,true);
 if(Reponse.image!=null)
 {JCloneConvImage.attr("src",Reponse.image);}
@@ -368,13 +417,273 @@ function JAfficherMessageConv(Reponse){
 
 
 
+
+
+
+
 /**
  * 
- * @param {*} Reponse est un json avec comme attribut le nom du concert, la date, la durée le nombre de personnes qui viennent, le commentaire le nombre de personne sur l'appli et si la personne a déjà voté ou non 
+ * @param {*} Reponse est un json avec comme attribut le nom du concert, la date, 
+ * la durée le nombre de personnes qui viennent, le commentaire le nombre de personne sur l'appli et si la personne a déjà voté ou non 
  */
-function JConcert(Reponse){
+
+
+//Reponse={'titre':'superconcert','commentaire':'génial concert pour bien s amuser entre bestiiiees','pourcentage':'27','date':' 01/09/2008','vote':'1',};
+
+
+function JCreerConcert(Reponse){
+var JCloneconcert=JConcert.clone(true,true).css("background-color",JCouleur);
+var JClonedate=JConcertDate.clone(true,true).text(Reponse.date);
+var JCloneTitre= JConcertTitre.clone(true,true).text(Reponse.titre);
+var JCloneCommentaire= JConcertCommentaire.clone(true,true).text(Reponse.commentaire).css("max-height","20%");
+JCloneCommentaire= ajouterTextOverflow(JCloneCommentaire,80);
+JCloneCommentaire.on("click",function(context){afficherToutleText(context);})
+var JCloneJeviens=JConcertJeviens.clone(true,true);
+var JCloneJevienspas=JConcertJevienspas.clone(true,true);
+var JCloneJevienspeutetre =JConcertJevienspeutetre.clone(true,true);
+
+var JCloneProgress=JConcertProgress.clone(true,true);
+var JClonepourcentage=JConcertpourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
+
+JCloneJeviens.on("click",function(){
+    JCloneJeviens.fadeOut();
+    JCloneJevienspas.fadeOut();
+    JCloneJevienspeutetre.fadeOut();
+});
+JCloneJevienspeutetre.on("click",function(){
+    JCloneJeviens.fadeOut();
+    JCloneJevienspas.fadeOut();
+    JCloneJevienspeutetre.fadeOut();
+});
+JCloneJevienspas.on("click",function(){
+    JCloneJeviens.fadeOut();
+    JCloneJevienspas.fadeOut();
+    JCloneJevienspeutetre.fadeOut();
+});
+
+
+if(Reponse.pourcentage<33)
+JClonepourcentage.css('background-color','red');
+
+else if(Reponse.pourcentage<63)
+JClonepourcentage.css('background-color','orange');
+
+else if(Reponse.pourcentage<100)
+    JClonepourcentage.css('background-color','green');
+
+
+
+
+
+
+if (JCouleur == 'silver')
+JCouleur='Lightgray';
+else
+JCouleur='silver';
+
+
+JCloneProgress.append(JClonepourcentage);
+
+if(Reponse.vote==0)
+JCloneconcert.append(JCloneTitre).append(JClonedate).append(JCloneCommentaire).append(JCloneJeviens).append(JCloneJevienspas).append(JCloneJevienspeutetre).append(JCloneProgress);
+else
+JCloneconcert.append(JCloneTitre).append(JClonedate).append(JCloneCommentaire).append(JCloneProgress);
+
+$('#page').append(JCloneconcert);
+
+
+
+}
+
+/**
+ * 
+ * @param {*} Reponse 
+ * 
+ * 
+ * 
+ * Reponse est un json de la forme Reponse={"titre":"Répétition tutti","date":"01/12/2019","commentaire","Répétitions au capitole à 18h c'est très important de venir","sex":"0"}
+ * 
+ * 
+ */
+function JCreerAppel(Reponse){
+var JCloneRepetition=JRepetition.clone(true,true).css("background-color",JCouleur);
+
+if (JCouleur == 'silver')
+JCouleur='Lightgray';
+else
+JCouleur='silver';
+
+var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide();
+var JCloneRepetitionRetour=JRepetitionRetour.clone(true,true).hide();
+
+
+var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true);
+var JCloneRepetitionTitre = JRepetitionTitre.clone(true,true).text(Reponse.titre);
+var JCloneRepetitionDate= JRepetitionDate.clone(true,true).text(Reponse.date);
+var JCloneRepetitionCommentaire=JRepetitionCommentaire.clone(true,true).text(Reponse.commentaire);
+JCloneRepetitionCommentaire=ajouterTextOverflow(JCloneRepetitionCommentaire,80);
+var JCloneRepetitionPresent=JRepetitionPresent.clone(true,true);
+var JCloneRepetitionAbsent=JRepetitionAbsent.clone(true,true);
+var JCloneRepetitionJustification2=JRepetitionJustificationText.clone(true,true).hide();
+
+
+JCloneRepetition.on("click",function(context){
+    console.log($(context.target).prev().prop('tagName'));
+//if($(context.target).prev().prop('tagName')=="INPUT" ||$(context.target).prev().prop('tagName')=="TEXTAREA"||$(context.target).prev().prop('tagName')=="LABEL")
+if($(context.target).attr("type")=="present")
+{
+    
+    JCloneRepetitionEnvoyer.show();
+    JCloneRepetitionAbsent.hide();
+    JCloneRepetitionPresent.hide();
+    JCloneRepetitionRetour.show();
+    JCloneRepetitionEnvoyer.data("valeur","present");
+    
+}
+
+if($(context.target).attr("type")=="absent")
+{
+    JCloneRepetitionJustification2.fadeIn();
+    JCloneRepetitionEnvoyer.show();
+    JCloneRepetitionAbsent.hide();
+    JCloneRepetitionPresent.hide();
+    JCloneRepetitionRetour.show();
+    JCloneRepetitionEnvoyer.data("valeur","absent");
+}
+if($(context.target).attr("type")=="motif")
+{
+
+}
+
+if($(context.target).attr("type")=="envoyer"){
+    
+    //TODO placer la requete ici
+   
+    JCloneRepetition.remove();
+   
+}
+if($(context.target).attr("type")=="retour"){
+    JCloneRepetitionEnvoyer.hide();
+    JCloneRepetitionAbsent.show();
+    JCloneRepetitionPresent.show();
+    JCloneRepetitionRetour.hide();
+    JCloneRepetitionJustification2.hide();
+    
+ }
+
+if($(context.target).attr("type")=="appel_comm"){
+
+   afficherToutleText(context,100); 
+}
+/*if (JCloneRepetitionCommentaire.css("text-overflow")=="ellipsis")
+{
+    JCloneRepetitionCommentaire.css("text-overflow","").css("direction","").css("white-space","").css("overflow","");
+}
+else
+{
+    JCloneRepetitionCommentaire.css("text-overflow","ellipsis").css("direction","ltr").css("white-space","nowrap").css("overflow","hidden");
+}*/
+
+});
+
+if(Reponse.sex==1)
+{
+    JCloneRepetitionPresent.text("Présent");
+    JCloneRepetitionAbsent.text("Absent");
+
+}
+else
+{
+    JCloneRepetitionPresent.text("Présente");
+    JCloneRepetitionAbsent.text("Absente");
+}
+
+
+
+JCloneRepetitionDiv.append(JCloneRepetitionPresent).append(JCloneRepetitionAbsent).append(JCloneRepetitionJustification2).append(JCloneRepetitionEnvoyer).append(JCloneRepetitionRetour);
+JCloneRepetition.append(JCloneRepetitionTitre).append(JCloneRepetitionDate).append(JCloneRepetitionCommentaire).append(JCloneRepetitionDiv);
+
+
+
+$("#page").append(JCloneRepetition);
+
 
 
 
 
 }
+
+function ajouterTextOverflow(objet,taille)
+{
+    objet.css("text-overflow","ellipsis").css("direction","ltr").css("width",taille+"%").css("white-space","nowrap").css("overflow","hidden");
+    return objet;
+}
+
+
+function afficherToutleText(context){
+if ($(context.target).css("text-overflow")=="ellipsis")
+{
+    $(context.target).css("text-overflow","").css("direction","").css("white-space","").css("overflow","");
+}
+else
+{
+    $(context.target).css("text-overflow","ellipsis").css("direction","ltr").css("white-space","nowrap").css("overflow","hidden");
+}
+
+}
+
+
+
+
+
+function JCreerDropUpCreer(){
+var JCloneDropUpCreer=JDropUpCreer.clone(true,true);
+var JCloneDropUpCreerPost=JDropUpCreerPost.clone(true,true);
+var JCloneDropUpCreerEvenement=JDropUpCreerEvenement.clone(true,true);
+
+JCloneDropUpCreer.append(JCloneDropUpCreerPost).append(JCloneDropUpCreerEvenement).animate({bottom: '9.1%'});
+
+$("#page").append(JCloneDropUpCreer);
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
