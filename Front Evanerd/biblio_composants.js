@@ -91,6 +91,19 @@ var JRepetitionDiv=$("<div>").css("width","100%");
 var JRepetitionRetour=$("<button>").data("type","button").addClass("btn btn-danger ").val("Retour").html("Retour").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").css("background",'darkred').attr("type","retour");
 
 
+
+
+
+//variables pour le dropUpCreer
+var JDropUpCreer = $("<div>").css("width","30%").css("position","fixed").css("bottom","0%").css("left","35%");
+var JDropUpCreerPost=$("<button>").addClass("btn btn-danger ").text("Post").css("margin-bottom","0%").css("font-size","300%").css("width","100%").css("background",'darkred');
+var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenement").css("margin-bottom","0%").css("font-size","300%").css("width","100%").css("background",'darkred');
+
+
+
+
+
+
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
@@ -623,7 +636,14 @@ else
 
 
 
-function JDropUpCreer(){
+function JCreerDropUpCreer(){
+var JCloneDropUpCreer=JDropUpCreer.clone(true,true);
+var JCloneDropUpCreerPost=JDropUpCreerPost.clone(true,true);
+var JCloneDropUpCreerEvenement=JDropUpCreerEvenement.clone(true,true);
+
+JCloneDropUpCreer.append(JCloneDropUpCreerPost).append(JCloneDropUpCreerEvenement).animate({bottom: '9.1%'});
+
+$("#page").append(JCloneDropUpCreer);
 
 
 

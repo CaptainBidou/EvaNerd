@@ -1,5 +1,3 @@
-importScripts("http://localhost/EvaNerd/Front%20Evanerd/biblio_composants.js");
-
 var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
 
 function GETUser(){
@@ -34,6 +32,7 @@ function GETUserbyID($id){
         success: function(oRep){
             console.log(oRep); 
             return oRep;
+
         },
         dataType: "json"
     });
@@ -96,31 +95,7 @@ function POSTUser($informations){
         },
         dataType: "json"
     });
-}
-/**
- * 
- * @param $informations Un JSON contenant les différentes données nécessaires à la création d'un compte
- * 
- */
-
-function ListerPosts($informations){
-    $.ajax({
-        type: "GET",
-        url: api + "/posts",
-        headers: {"authToken":""}, // données dans les entetes 
-        data: [],
-        error : function(){
-            console.log("Une erreur s'est produite");
-        },
-        success: function(oRep){
-            console.log(oRep); 
-            oRep["posts"].forEach(element => {
-                JcreerPost(element);
-            });
-
-        },
-        dataType: "json"
-    });   
+    
 }
 
 
