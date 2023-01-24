@@ -160,14 +160,23 @@ switch($action) {
     case "POST /agendas":
         postAgenda($data, $queryString, $authKey);
         break;
+
     case "POST /agendas/ID/events":
         postAgendasEvent($data, $idTabs, $queryString, $authKey);
         break;
 
-    case "GET /agendas/ID/events/participations":
-        listAgendaEventParticipation($data, $idTabs, $authKey);
-        break;
+    /* Participation */
 
+    case "GET /users/ID/agendas/ID/participations":
+        listParticipations($data, $idTabs, $authKey);
+        break;
+    case "PUT users/ID/agendas/ID/participations?participation=?":
+        addParticipations($data, $idTabs, $queryString, $authKey);
+        break;
+    case "POST users/ID/agendas/ID/participations?participation=?":
+        postParticipations($data, $idTabs, $queryString, $authKey);
+        break;
+        
     default:
         notAction($data);
         break;
