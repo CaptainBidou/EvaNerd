@@ -24,7 +24,7 @@ function GETUser(){
 function GETUserbyID($id){
     $.ajax({
         type: "GET",
-        url: api + "/users" + $id,
+        url: api + "/users/" + $id,
         headers: {"authToken":""}, // données dans les entetes 
         error : function(){
             console.log("Une erreur s'est produite");
