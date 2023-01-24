@@ -231,4 +231,33 @@ function uploadImage($filename, $imageData) {
 	return $returnInfo;
 }
 
+/**
+ * Retourne la chaine si la taille de la chaine est comprise entre 2 valeurs
+ * @param string $string
+ * @param int $max taille maximale de la chaine
+ * @param int $min taille minimale de la chaine
+ * @param string|bool renvoie la chaine ou false
+ */
+function validString($string, $max, $min = 0) {
+	$lenght = strlen($string); 
+	return $lenght <= $max && $lenght >= $min;
+}
+
+/**
+ * Retourne True si la chaine passé en paramètre est une adresse email
+ * @param string $string
+ * @return string|bool retourne la chaine ou false si ce n'est pas une adresse email 
+ */
+function isEmail($string) {
+	return filter_var($string, FILTER_VALIDATE_EMAIL);
+}
+/**
+ * Retourne la racine du site
+ */
+function getBaseLink() {
+	$url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https://" : "http://";   
+	$url.= $_SERVER['HTTP_HOST'];
+	return $url;
+}
+
 ?>
