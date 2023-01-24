@@ -106,7 +106,9 @@ function getUserCredentials($tel) {
  */
 function selectUsers($idRole=null){
     $db = Config::getDatabase();
-    $sql = "SELECT U.id, U.firstName, U.lastName, U.sex, U.age, U.studies, U.photo, U.activation FROM Users AS U";
+    // TODO : serait-il plus sage de le faire autre part.
+    $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", U.id), CONCAT(\"/\", U.photo)) AS photo";
+    $sql = "SELECT U.id, U.firstName, U.lastName, U.sex, U.age, U.studies, $photo, U.activation FROM Users AS U";
     if ($idRole != null) {
         $sql .= " JOIN User_Roles AS UR ON U.id = UR.uid WHERE UR.rid = ? ";
         $params = [$idRole];
@@ -122,7 +124,8 @@ function selectUsers($idRole=null){
  */
 function selectUser($idUser, $me = 0){
     $db = Config::getDatabase();
-    $publicInfo = "U.id, U.firstName, U.lastName, U.sex, U.age, U.studies, U.photo, U.activation ";
+    $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", U.id), CONCAT(\"/\", U.photo)) AS photo";
+    $publicInfo = "U.id, U.firstName, U.lastName, U.sex, U.age, U.studies, $photo, U.activation ";
     $privateInfo = ", U.tel, U.mail ";
     $sql = "SELECT " . $publicInfo;
 
@@ -326,7 +329,6 @@ function updateRole($rid,$label = null,$active = null){
 
     array_push($params, $rid);
     $sql .= " WHERE id = ?";
-    echo $sql;
     return $db->SQLUpdate($sql, $params);
 }
 
@@ -413,8 +415,9 @@ function insertAchievement($label){
 // Requete sur les Groupes
 function selectGroups($uid){
     $db = Config::getDatabase();
+    $image = "CONCAT(CONCAT(\"" . getBaseLink() . "/groups/\"" . ", Groups.id), CONCAT(\"/\", Groups.image)) AS image";
     $params = [$uid];
-    $sql = "SELECT DISTINCT Groups.id, Groups.titre 
+    $sql = "SELECT DISTINCT Groups.id, Groups.titre, $image
             FROM User_Groups
             JOIN Groups ON Groups.id = User_Groups.gid; 
             WHERE uid = ?";
@@ -434,8 +437,9 @@ function selectGroupsPerm($gid){
 
 function selectGroupMessages($gid){
     $db = Config::getDatabase();
+    $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
     $params = [$gid];
-    $sql = "SELECT Group_Messages.*, Users.firstName, Users.lastName FROM `Group_Messages` JOIN Users ON Users.id = Group_Messages.uid WHERE Group_Messages.gid = ?;";
+    $sql = "SELECT Group_Messages.*, Users.firstName, Users.lastName, $photo FROM `Group_Messages` JOIN Users ON Users.id = Group_Messages.uid WHERE Group_Messages.gid = ?;";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
@@ -449,8 +453,9 @@ function selectGroupReaction($mid){
 
 function selectGroupReactions($gid) {
     $db = Config::getDatabase();
+    $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
     $params = [$gid];
-    $sql = "SELECT Group_Message_Reactions.emoji, Group_Message_Reactions.mid, Users.id AS uid, Users.firstName, Users.lastName
+    $sql = "SELECT Group_Message_Reactions.emoji, Group_Message_Reactions.mid, Users.id AS uid, Users.firstName, Users.lastName, $photo
             FROM Group_Messages
             JOIN Group_Message_Reactions
                 ON Group_Message_Reactions.mid = Group_Messages.id
@@ -490,7 +495,8 @@ function insertGroupMessage($uid,$gid,$content,$answerTo = null){
 
 function selectPosts($notAMember){
     $db = Config::getDatabase();
-    $sql = "SELECT Posts.*, Users.id AS uid, Users.firstName, Users.lastName 
+    $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
+    $sql = "SELECT Posts.*, Users.id AS uid, Users.firstName, Users.lastName, $photo
             FROM Posts
             JOIN Users ON Users.id = Posts.author";
     $whereStm = " WHERE Posts.visible = 1";
@@ -516,8 +522,9 @@ function selectPostReactions($pid){
 
 function selectPostMessages($pid){
     $db = Config::getDatabase();
+    $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
     $params = [$pid];
-    $sql = "SELECT Post_Comments.*, Users.firstName, Users.lastName FROM `Post_Comments` JOIN Users ON Users.id = Post_Comments.uid WHERE Post_Comments.pid = ?;";
+    $sql = "SELECT Post_Comments.*, Users.firstName, Users.lastName, $photo FROM `Post_Comments` JOIN Users ON Users.id = Post_Comments.uid WHERE Post_Comments.pid = ?;";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
