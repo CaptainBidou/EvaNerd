@@ -120,6 +120,7 @@ function ListerPosts(){
     });   
 }
 
+/** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
 function ListerConv($gid){
     $.ajax({
         type: "GET",
@@ -134,6 +135,7 @@ function ListerConv($gid){
             oRep["groups"].forEach(element => {
                 JCreerConv(element);
             });
+
 
         },
         dataType: "json"
