@@ -236,17 +236,20 @@ function uploadImage($filename, $imageData) {
  * @param string $string
  * @param int $max taille maximale de la chaine
  * @param int $min taille minimale de la chaine
- * @param string|bool renvoie la chaine ou false
+ * @param string|false renvoie la chaine ou false
  */
 function validString($string, $max, $min = 0) {
+	//TODO : vérifier si $string est une chaine
 	$lenght = strlen($string); 
-	return $lenght <= $max && $lenght >= $min;
+	if($lenght <= $max && $lenght >= $min) return $string;
+	
+	return false;
 }
 
 /**
  * Retourne True si la chaine passé en paramètre est une adresse email
  * @param string $string
- * @return string|bool retourne la chaine ou false si ce n'est pas une adresse email 
+ * @return string|false retourne la chaine ou false si ce n'est pas une adresse email 
  */
 function isEmail($string) {
 	return filter_var($string, FILTER_VALIDATE_EMAIL);
@@ -260,4 +263,16 @@ function getBaseLink() {
 	return $url;
 }
 
+/**
+ * Retourne la chaine si la chaine est est un numéro de téléphone
+ * @param string $string
+ * @return string|false
+ */
+function isPhoneNumber($string) {
+	if(preg_match("/^[0-9]*$/", $string)) {
+		return validString($string, 10, 10);
+	}
+
+	return false;
+}
 ?>
