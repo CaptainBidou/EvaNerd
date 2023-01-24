@@ -1,3 +1,5 @@
+importScripts("http://localhost/EvaNerd/Front%20Evanerd/biblio_composants.js");
+
 var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
 
 function GETUser(){
