@@ -63,17 +63,31 @@ var JConvp=$("<p>").addClass("navbar-text").data("type","conv_p").css("font-size
 var JConcert =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","concert").css('height','auto').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
 var JCouleur="silver";
 var JConcertTitre =$("<h2>").addClass("card-title").data('type','concert_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%').css("text-decoration","underline");
-var JConcertCommentaire=$("<p>").addClass("navbar-text").data("type","concert_comm").css("font-size","3em").css("float","left").css("margin-left","3%");
-var JConcertJeviens=$("<button>").data("type","header_tag").attr("type","concert_jeviens").addClass("btn btn-primary ").val("jeviens").css("background",'darkred').html("Je viens").css('height','10%').css("font-size","200%").css("position","relative").css("margin-left","30%");
-var JConcertJevienspas=$("<button>").data("type","header_tag").attr("type","concert_jevienspas").addClass("btn btn-primary ").val("jevienspas").css("background",'darkred').html("Je viens pas").css('height','10%').css("font-size","200%").css("position","relative");
-var JConcertJevienspeutetre=$("<button>").data("type","header_tag").attr("type","concert_jevienspe").addClass("btn btn-primary ").val("jevienspe").css("background",'darkred').html("Je viens peut être").css('height','10%').css("font-size","200%").css("position","relative").css("left","0");
+var JConcertCommentaire=$("<p>").addClass("navbar-text").attr("type","concert_comm").css("font-size","3em").css("float","left").css("margin-left","3%");
+var JConcertJeviens=$("<button>").data("type","button").attr("type","concert_jeviens").addClass("btn btn-danger ").val("jeviens").html("Je viens").css('height','10%').css("font-size","200%").css("position","relative").css("margin-left","30%").css("background",'darkred');
+var JConcertJevienspas=$("<button>").data("type","button").attr("type","concert_jevienspas").addClass("btn btn-danger ").val("jevienspas").html("Je viens pas").css('height','10%').css("font-size","200%").css("position","relative").css("background",'darkred');
+var JConcertJevienspeutetre=$("<button>").data("type","button").attr("type","concert_jevienspe").addClass("btn btn-danger ").val("jevienspe").html("Je viens peut être").css('height','10%').css("font-size","200%").css("position","relative").css("left","0").css("background",'darkred');
 var JConcertpourcentage=$("<div>").attr("type","concert_pourcentage").addClass("progress-bar progress-bar-striped progress-bar-animated").data("aria-valuemin","0").data("aria-valuemax","100").css("font-size","300%").css("background-color","red");
 var JConcertProgress = $("<div>").attr("type","concert_progress").addClass("progress").css("width","100%").css("height","8%").css("margin-top","5%");
 var JConcertDate=$("<p>").attr("type","concert_date").css("font-size","300%").css("color","Gray");
 
 
-//
 
+
+
+
+
+//variables pour les appels
+
+var JRepetition = $("<nav>").addClass("navbar").addClass("navbar").css("background-color","silver").data("type","appel").css('box-shadow','0px 2px 10px gray').css('padding','1%').css("margin-bottom","2%");
+var JRepetitionTitre = $("<h2>").addClass("card-title").data('type','appel_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%').css("text-decoration","underline");
+var JRepetitionDate=$("<p>").attr("type","appel_date").css("font-size","300%").css("color","Gray");
+var JRepetitionCommentaire=$("<p>").addClass("navbar-text").attr("type","appel_comm").css("font-size","3em").css("float","left").css("margin-left","3%").css("margin-right","20%");
+var JRepetitionPresent=$("<button>").data("type","button").addClass("btn btn-danger ").val("Present").css('height','10%').css("font-size","200%").css("float","right").css("margin-top","2%").css("margin-right","5%").attr("type","present").css("background",'darkred');
+var JRepetitionAbsent=$("<button>").data("type","button").addClass("btn btn-danger ").val("Absent").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").attr("type","absent").css("background",'darkred');
+var JRepetitionJustificationText=$("<textarea>").addClass("form-control").attr("placeholder","Motif de l'absence").attr("type","motif").css("font-size","200%");
+var JRepetitionEnvoyer=$("<button>").data("type","button").addClass("btn btn-danger ").val("Envoyer").html("Envoyer").css('height','10%').css("font-size","200%").css("float","right").css("margin-left","80%").css("margin-top","2%").css("background",'darkred').attr("type","envoyer");
+var JRepetitionDiv=$("<div>").css("width","100%");
 
 
 
@@ -432,8 +446,103 @@ $('#page').append(JCloneconcert);
 
 }
 
-
+/**
+ * 
+ * @param {*} Reponse 
+ * 
+ * 
+ * 
+ * Reponse est un json de la forme Reponse={"titre":"Répétition tutti","date":"01/12/2019","commentaire","Répétitions au capitole à 18h c'est très important de venir","sex":"0"}
+ * 
+ * 
+ */
 function JCreerAppel(Reponse){
+var JCloneRepetition=JRepetition.clone(true,true);
+var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide();
+
+
+
+var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true);
+var JCloneRepetitionTitre = JRepetitionTitre.clone(true,true).text(Reponse.titre);
+var JCloneRepetitionDate= JRepetitionDate.clone(true,true).text(Reponse.date);
+var JCloneRepetitionCommentaire=JRepetitionCommentaire.clone(true,true).text(Reponse.commentaire);
+JCloneRepetitionCommentaire=ajouterTextOverflow(JCloneRepetitionCommentaire,80);
+var JCloneRepetitionPresent=JRepetitionPresent.clone(true,true);
+var JCloneRepetitionAbsent=JRepetitionAbsent.clone(true,true);
+var JCloneRepetitionJustification2=JRepetitionJustificationText.clone(true,true).hide();
+
+
+JCloneRepetition.on("click",function(context){
+    console.log($(context.target).prev().prop('tagName'));
+//if($(context.target).prev().prop('tagName')=="INPUT" ||$(context.target).prev().prop('tagName')=="TEXTAREA"||$(context.target).prev().prop('tagName')=="LABEL")
+if($(context.target).attr("type")=="present")
+{
+    
+    JCloneRepetitionEnvoyer.show();
+    JCloneRepetitionAbsent.hide();
+    JCloneRepetitionPresent.hide();
+    
+}
+
+if($(context.target).attr("type")=="absent")
+{
+    JCloneRepetitionJustification2.fadeIn();
+    JCloneRepetitionEnvoyer.show();
+    JCloneRepetitionAbsent.hide();
+    JCloneRepetitionPresent.hide();
+}
+if($(context.target).attr("type")=="motif")
+{
+
+}
+
+if($(context.target).attr("type")=="envoyer"){
+    JCloneRepetitionEnvoyer.hide();
+    JCloneRepetitionJustification2.fadeOut();
+    JCloneRepetitionAbsent.hide();
+    JCloneRepetitionPresent.hide();
+}
+
+
+if($(context.target).attr("type")=="appel_comm"){
+
+   afficherToutleText(context,100); 
+}
+/*if (JCloneRepetitionCommentaire.css("text-overflow")=="ellipsis")
+{
+    JCloneRepetitionCommentaire.css("text-overflow","").css("direction","").css("white-space","").css("overflow","");
+}
+else
+{
+    JCloneRepetitionCommentaire.css("text-overflow","ellipsis").css("direction","ltr").css("white-space","nowrap").css("overflow","hidden");
+}*/
+
+});
+
+if(Reponse.sex==1)
+{
+    JCloneRepetitionPresent.text("Présent");
+    JCloneRepetitionAbsent.text("Absent");
+
+}
+else
+{
+    JCloneRepetitionPresent.text("Présente");
+    JCloneRepetitionAbsent.text("Absente");
+}
+
+
+
+JCloneRepetitionDiv.append(JCloneRepetitionPresent).append(JCloneRepetitionAbsent).append(JCloneRepetitionJustification2).append(JCloneRepetitionEnvoyer);
+JCloneRepetition.append(JCloneRepetitionTitre).append(JCloneRepetitionDate).append(JCloneRepetitionCommentaire).append(JCloneRepetitionDiv);
+
+
+
+$("#page").append(JCloneRepetition);
+
+
+
+
 
 }
 
@@ -442,6 +551,7 @@ function ajouterTextOverflow(objet,taille)
     objet.css("text-overflow","ellipsis").css("direction","ltr").css("width",taille+"%").css("white-space","nowrap").css("overflow","hidden");
     return objet;
 }
+
 
 function afficherToutleText(context){
 if ($(context.target).css("text-overflow")=="ellipsis")

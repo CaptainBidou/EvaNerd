@@ -29,9 +29,9 @@
 
 
 var conv={id:2,participants:[{id:5,nom:'Jean',prenom:'Pierre'},{id:8,nom:'michelmichel',prenom:'kubiak'},{id:18,nom:'Monticul',prenom:'Maurice'}],nom:null,image:"Ressources/Test/profile3.jpg",};
-var concert={'titre':'superconcert','commentaire':'génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees   ','pourcentage':'90','date':' 01/09/2008',"vote":"1"};
+var concert={'titre':'superconcert','commentaire':'génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees génial concert pour bien s amuser entre bestiiiees   ','pourcentage':'90','date':' 01/09/2008',"vote":"0"};
 
-
+var appel={"titre":"Répétition tutti","date":"01/12/2019","commentaire":"Répétitions au capitole à 18h c'est très important de venir","sex":"0"};
 $(document).ready(function(){
 
 
@@ -48,7 +48,8 @@ JCreerConcert(concert);*/
 
 
 JcreerHeader(Reponse);
-JCreerConv(conv);
+
+/*JCreerConv(conv);
 JCreerConv(conv);
 JCreerConv(conv);
 JCreerConv(conv);
@@ -64,7 +65,8 @@ JcreerPost(Reponse);
 JcreerPost(Reponse);
 JCreerConcert(concert);
 JCreerConcert(concert);
-JCreerConcert(concert);
+JCreerConcert(concert);*/
+JCreerAppel(appel);
 JcreerFooter(Reponse);
 
 });
