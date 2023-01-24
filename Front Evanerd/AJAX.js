@@ -100,6 +100,49 @@ function POSTUser($informations){
 
 
 
+function ListerPosts(){
+    $.ajax({
+        type: "GET",
+        url: api + "/posts",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            oRep["posts"].forEach(element => {
+                JcreerPost(element);
+            });
+
+        },
+        dataType: "json"
+    });   
+}
+
+function ListerConv($gid){
+    $.ajax({
+        type: "GET",
+        url: api + "GET /groups",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            oRep["groups"].forEach(element => {
+                JCreerConv(element);
+            });
+
+        },
+        dataType: "json"
+    });   
+}
+
+
+
+
 
 
 
