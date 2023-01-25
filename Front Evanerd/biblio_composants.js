@@ -47,16 +47,16 @@ var JConvImg = $("<img>").addClass("rounded-circle conversation-image").data("ty
 var JConvp=$("<p>").addClass("navbar-text left").data("type","conv_p");
 
 //variables pour les concerts 
-var JConcert =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","concert").css('height','auto').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
+var JConcert =$("<nav>").addClass("navbar concert").data("type","concert");
 var JCouleur="silver";
-var JConcertTitre =$("<h2>").addClass("card-title").data('type','concert_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%').css("text-decoration","underline");
-var JConcertCommentaire=$("<p>").addClass("navbar-text").attr("type","concert_comm").css("font-size","3em").css("float","left").css("margin-left","3%");
-var JConcertJeviens=$("<button>").data("type","button").attr("type","concert_jeviens").addClass("btn btn-danger ").val("jeviens").html("Je viens").css('height','10%').css("font-size","200%").css("position","relative").css("margin-left","30%").css("background",'darkred');
-var JConcertJevienspas=$("<button>").data("type","button").attr("type","concert_jevienspas").addClass("btn btn-danger ").val("jevienspas").html("Je viens pas").css('height','10%').css("font-size","200%").css("position","relative").css("background",'darkred');
-var JConcertJevienspeutetre=$("<button>").data("type","button").attr("type","concert_jevienspe").addClass("btn btn-danger ").val("jevienspe").html("Je viens peut être").css('height','10%').css("font-size","200%").css("position","relative").css("left","0").css("background",'darkred');
-var JConcertpourcentage=$("<div>").attr("type","concert_pourcentage").addClass("progress-bar progress-bar-striped progress-bar-animated").data("aria-valuemin","0").data("aria-valuemax","100").css("font-size","300%").css("background-color","red");
-var JConcertProgress = $("<div>").attr("type","concert_progress").addClass("progress").css("width","100%").css("height","8%").css("margin-top","5%");
-var JConcertDate=$("<p>").attr("type","concert_date").css("font-size","300%").css("color","Gray");
+var JConcertTitre =$("<h2>").addClass("card-title left concert-titre").data('type','concert_titre');
+var JConcertCommentaire=$("<p>").addClass("navbar-text left concert-commentaire").attr("type","concert_comm");
+var JConcertJeviens=$("<button>").data("type","button").attr("type","concert_jeviens").addClass("btn btn-danger concert-bouton").val("jeviens").html("Je viens").css("margin-left","30%");
+var JConcertJevienspas=$("<button>").data("type","button").attr("type","concert_jevienspas").addClass("btn btn-danger concert-bouton").val("jevienspas").html("Je viens pas");
+var JConcertJevienspeutetre=$("<button>").data("type","button").attr("type","concert_jevienspe").addClass("btn btn-danger concert-bouton").val("jevienspe").html("Je viens peut être").css("left","0");
+var JConcertpourcentage=$("<div>").attr("type","concert_pourcentage").addClass("progress-bar progress-bar-striped progress-bar-animated concert-pourcentage").data("aria-valuemin","0").data("aria-valuemax","100");
+var JConcertProgress = $("<div>").attr("type","concert_progress").addClass("progress concert-progress");
+var JConcertDate=$("<p>").attr("type","concert_date").addClass("concert-date");
 
 
 

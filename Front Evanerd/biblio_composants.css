@@ -119,3 +119,46 @@
     white-space: nowrap;
     overflow: hidden;
 }
+
+.concert {
+    background-color: lightgray;
+    height: auto;
+    padding: 1%;
+    box-shadow: 0px 2px 10px gray;
+    margin-bottom: 2%;
+}
+
+.concert-titre {
+    margin-left: 3%;
+    margin-top: 3%;
+    font-size: 400%;
+    text-decoration: underline;
+}
+
+.concert-commentaire {
+    font-size:3em;
+    margin-left: 3%;
+}
+
+.concert-bouton {
+    height: 10%;
+    font-size: 200%;
+    position:relative;
+    background: darkred;
+}
+
+.concert-pourcentage {
+    background-color: red;
+    font-size: 300%;
+}
+
+.concert-progress {
+    margin-top: 5%;
+    height: 8%;
+    width: 100%;
+}
+
+.concert-date {
+    color:gray;
+    font-size: 300%;
+}
