@@ -13,3 +13,44 @@
     padding:0;
 }
 
+#post {
+    width: 90%;
+    background-color: whitesmoke;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#post-titre {
+    float:left;
+    margin-left: 3%;
+    margin-top: 3%;
+    font-size: 400%;
+}
+
+#post-description {
+    font-size:300%;
+    margin-top: 2%;
+}
+
+#post-profile {
+    float:left;
+    width: 15%;
+}
+
+
+#icon {
+    width: 12%;
+    margin-left: 5%;
+    float: right;
+}
+
+#footer {
+    background-color: red;
+    height: 10%;
+    padding: 1%;
+    position: fixed;
+    top:91%;
+    z-index: 10;
+    box-shadow: 0px -2px 10px darkred;
+    width: 100%;
+}

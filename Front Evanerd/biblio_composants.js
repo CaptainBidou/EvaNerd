@@ -13,21 +13,21 @@ src="evanerd.html";
 
 
 //variables pour les posts
-var JPost =$("<div>").addClass("card").data('type','post').css('width','90%').css('background-color','WhiteSmoke').css('margin-left','auto').css('margin-right','auto');
-var JPostTitre=$("<h2>").addClass("card-title").data('type','post_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%');//TODO :rajouter des données pour quand on clique
+var JPost =$("<div>").addClass("card").addClass("post").data('type','post');
+var JPostTitre=$("<h2>").addClass("post-titre").addClass("card-title").data('type','post_titre');//TODO :rajouter des données pour quand on clique
 var JPostBody=$("<div>").addClass("card-body").data('type','post_body');
 var JPostImage=$("<img>").addClass("card-img-top").data('type','post_image');
-var JPostDescription=$("<p>").addClass("card-text").data('type','post_text').css('font-size','300%').css("margin-top","2%");
-var JPostProfile = $("<img>").addClass('rounded-circle').data("type","post_profile").css("float","left").css("width","15%");//TODO :rajouter des données pour quand on clique
-var JPostEpingle= $("<img>").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').css("float","right").css('width','12%');
-var JPostLike= $("<img>").data("type","post_like").attr('src','Ressources/Accueil/like.png').css("width","12%").css("float","right").css('margin-left','5%');
-var JPostReaction= $("<img>").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png').css("width","12%").css("float","right").css('margin-left','5%');
-var JPostCommentaire= $("<img>").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css("width","12%").css("float","right").css('margin-left','5%').css('margin-bottom','1%');
+var JPostDescription=$("<p>").addClass("post-description").addClass("card-text").data('type','post_text');
+var JPostProfile = $("<img>").addClass("post-profile").addClass('rounded-circle').data("type","post_profile");//TODO :rajouter des données pour quand on clique
+var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png');
+var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png');
+var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png');
+var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%');
 
 
 
 //variables pour le footer
-var JFooter =$("<nav>").addClass("navbar").css("background-color","red").data("type","footer").css('height','10%').css('padding','1%').css('position','fixed').css('top','91%').css('z-index','10').css('box-shadow','0px -2px 10px darkred').on("click",function(context){JClickFooter(context);}).css("width","100%");
+var JFooter =$("<nav>").addClass("footer").addClass("navbar").data("type","footer").on("click",function(context){JClickFooter(context);});
 var JFooterAccueil= $("<img>").data("type","footer_accueil").css('float','left').attr('src','Ressources/Footer/accueilGris.png').css('height','60%').attr('id','Accueil'); //TODO :rajouter des données pour quand on clique 
 var JFooterAppel=$("<img>").data("type","footer_appel").css('float','left').attr('src','Ressources/Footer/appel.png').css('height','60%').attr('id','Appel');//TODO :rajouter des données pour quand on clique
 var JFooterCreer=$("<img>").data("type","footer_creer").css('float','left').attr('src','Ressources/Footer/creer.png').css('height','60%').attr('id','Creer');//TODO :rajouter des données pour quand on clique
