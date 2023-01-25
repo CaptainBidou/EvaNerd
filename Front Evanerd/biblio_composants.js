@@ -42,9 +42,9 @@ var JHeaderItem=$("<input>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh
 var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher");
 
 //variables pour les Convs
-var JConv =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","conv").css('height','10%').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
-var JConvImg = $("<img>").addClass("rounded-circle").data("type","conv_img").css('position','absolute').css('height','80%');//TODO :rajouter des données pour quand on clique 
-var JConvp=$("<p>").addClass("navbar-text").data("type","conv_p").css("font-size","3em").css("float","left").css("margin-left","20%").css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
+var JConv =$("<nav>").addClass("navbar conversation").data("type","conv");
+var JConvImg = $("<img>").addClass("rounded-circle conversation-image").data("type","conv_img");//TODO :rajouter des données pour quand on clique 
+var JConvp=$("<p>").addClass("navbar-text left").data("type","conv_p");
 
 //variables pour les concerts 
 var JConcert =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","concert").css('height','auto').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");

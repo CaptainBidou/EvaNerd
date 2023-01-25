@@ -95,3 +95,27 @@
     height: 50%;
     font-size: 200%;
 }
+
+.conversation {
+    background-color: lightgray;
+    height: 10%;
+    padding: 1%;
+    box-shadow: 0px 2px 10px gray;
+    margin-bottom: 2%;
+}
+
+.conversation-image {
+    position:absolute;
+    height: 80%;
+
+}
+
+.conversation p {
+    font-size: 3em;
+    margin-left:20%;
+    text-overflow: ellipsis;
+    direction:ltr;
+    width: 60%;
+    white-space: nowrap;
+    overflow: hidden;
+}
