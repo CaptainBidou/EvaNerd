@@ -16,6 +16,7 @@ include_once "includes/maLibSecurisation.php";
  * @param array queryString sous forme de tableau
  */
 function authUser($data, $queryString) {
+    echo "test";
     if($tel = valider("tel", $queryString))
     if($password = valider("password", $queryString)) {
         if($idUser = checkUser($tel, $password)) {
@@ -188,7 +189,7 @@ function postUserInstrument($data, $authKey, $queryString) {
             if($instrument) {
                 if(!haveInstrument($uidConn, $iid)) {
                     insertUserInstrument($iid, $uidConn);
-                    $data["instrument"] = $instrument;
+                    $data["instrument"] = $instrument[0];
                     sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
                 }
                 sendError("L'utilisateur a déjà l'instrument", HTTP_FORBIDDEN);
@@ -363,7 +364,7 @@ function putInstruments($data, $idTabs, $authKey, $queryString) {
 
         if($label = htmlspecialchars(valider("label", $queryString))) {
             if(updateInstruments($instrument,$label)) {
-                $data["instrument"] = array("id" => insertInstruments($label), "label" => $label);
+                $data["instrument"] = array("id" => $instrument, "label" => $label);
                 sendResponse($data, [getStatusHeader(201)]);
             }
             else
@@ -456,10 +457,7 @@ function listGroupsReacts($data, $idTabs, $authKey) {
 
 function createUserGroups($data, $authKey, $queryString) {
     if($authKey) {
-        $idUser = authToId($authKey);
-        if (htmlspecialchars(valider("image")))
-            $image = addslashes(valider("image"));
-        
+
     }
     sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
 }
