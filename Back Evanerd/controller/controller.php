@@ -16,7 +16,6 @@ include_once "includes/maLibSecurisation.php";
  * @param array queryString sous forme de tableau
  */
 function authUser($data, $queryString) {
-    echo "test";
     if($tel = valider("tel", $queryString))
     if($password = valider("password", $queryString)) {
         if($idUser = checkUser($tel, $password)) {
@@ -24,9 +23,9 @@ function authUser($data, $queryString) {
             $data["user"] = updateAuthToken($idUser, $data["authToken"]);
             sendResponse($data, [getStatusHeader()]);
         }
-        sendError("identifiant invalide !", [getStatusHeader(HTTP_UNAUTHORIZED)]);
+        sendError("identifiant invalide !", HTTP_UNAUTHORIZED);
     }
-    sendError("Paramètres invalide !", [getStatusHeader(HTTP_BAD_REQUEST)]);
+    sendError("Paramètres invalide !", HTTP_BAD_REQUEST);
 }
 
 /**
@@ -36,7 +35,6 @@ function authUser($data, $queryString) {
  */
 function listUsers($data, $queryString) {
     $idRole = null;
-
     if($idRole = valider("idRole", $queryString)) {
         if(!is_id($idRole)) sendError("identifiant role attendu !", HTTP_BAD_REQUEST);
     }
