@@ -58,24 +58,18 @@ var JConcertpourcentage=$("<div>").attr("type","concert_pourcentage").addClass("
 var JConcertProgress = $("<div>").attr("type","concert_progress").addClass("progress concert-progress");
 var JConcertDate=$("<p>").attr("type","concert_date").addClass("concert-date");
 
-
-
-
-
-
-
 //variables pour les appels
 
-var JRepetition = $("<nav>").addClass("navbar").addClass("navbar").css("background-color","silver").data("type","appel").css('box-shadow','0px 2px 10px gray').css('padding','1%').css("margin-bottom","2%");
-var JRepetitionTitre = $("<h2>").addClass("card-title").data('type','appel_titre').css("float","left").css("margin-left","3%").css("margin-top","3%").css('font-size','400%').css("text-decoration","underline");
-var JRepetitionDate=$("<p>").attr("type","appel_date").css("font-size","300%").css("color","Gray");
-var JRepetitionCommentaire=$("<p>").addClass("navbar-text").attr("type","appel_comm").css("font-size","3em").css("float","left").css("margin-left","3%").css("margin-right","20%");
-var JRepetitionPresent=$("<button>").data("type","button").addClass("btn btn-danger ").val("Present").css('height','10%').css("font-size","200%").css("float","right").css("margin-top","2%").css("margin-right","5%").attr("type","present").css("background",'darkred');
-var JRepetitionAbsent=$("<button>").data("type","button").addClass("btn btn-danger ").val("Absent").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").attr("type","absent").css("background",'darkred');
-var JRepetitionJustificationText=$("<textarea>").addClass("form-control").attr("placeholder","Motif de l'absence").attr("type","motif").css("font-size","200%").css("margin-left","2%").css("width","90%");
-var JRepetitionEnvoyer=$("<button>").data("type","button").addClass("btn btn-danger ").val("Envoyer").html("Envoyer").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").css("background",'darkred').attr("type","envoyer");
+var JRepetition = $("<nav>").addClass("navbar repetition").addClass("navbar").data("type","appel");
+var JRepetitionTitre = $("<h2>").addClass("card-title left repetition-titre").data('type','appel_titre');
+var JRepetitionDate=$("<p>").attr("type","appel_date").addClass("repetition-date");
+var JRepetitionCommentaire=$("<p>").addClass("navbar-text left repetition-commentaire").attr("type","appel_comm");
+var JRepetitionPresent=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Present").attr("type","present");
+var JRepetitionAbsent=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Absent").attr("type","absent");
+var JRepetitionJustificationText=$("<textarea>").addClass("form-control repetition-justification").attr("placeholder","Motif de l'absence").attr("type","motif");
+var JRepetitionEnvoyer=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Envoyer").html("Envoyer").attr("type","envoyer");
 var JRepetitionDiv=$("<div>").css("width","100%");
-var JRepetitionRetour=$("<button>").data("type","button").addClass("btn btn-danger ").val("Retour").html("Retour").css('height','10%').css("font-size","200%").css("float","right").css("margin-right","5%").css("margin-top","2%").css("background",'darkred').attr("type","retour");
+var JRepetitionRetour=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Retour").html("Retour").attr("type","retour");
 
 
 
