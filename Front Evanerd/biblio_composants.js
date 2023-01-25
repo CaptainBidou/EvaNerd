@@ -13,8 +13,8 @@ src="evanerd.html";
 
 
 //variables pour les posts
-var JPost =$("<div>").addClass("card").addClass("post").data('type','post');
-var JPostTitre=$("<h2>").addClass("post-titre").addClass("card-title").data('type','post_titre');//TODO :rajouter des données pour quand on clique
+var JPost =$("<div>").addClass(["card", "post"]).data('type','post');
+var JPostTitre=$("<h2>").addClass(["post-titre","card-title"]).data('type','post_titre');//TODO :rajouter des données pour quand on clique
 var JPostBody=$("<div>").addClass("card-body").data('type','post_body');
 var JPostImage=$("<img>").addClass("card-img-top").data('type','post_image');
 var JPostDescription=$("<p>").addClass("post-description").addClass("card-text").data('type','post_text');
