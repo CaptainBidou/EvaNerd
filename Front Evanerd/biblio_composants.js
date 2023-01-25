@@ -24,8 +24,6 @@ var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','
 var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png');
 var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%');
 
-
-
 //variables pour le footer
 var JFooter =$("<nav>").addClass(["footer","navbar"]).data("type","footer").on("click",function(context){JClickFooter(context);});
 var JFooterAccueil= $("<img>").addClass(["footer-icon", "left"]).data("type","footer_accueil").attr('src','Ressources/Footer/accueilGris.png').attr('id','Accueil'); //TODO :rajouter des données pour quand on clique 
@@ -34,30 +32,19 @@ var JFooterCreer=$("<img>").addClass(["footer-icon", "left"]).data("type","foote
 var JFooterAgenda=$("<img>").addClass(["footer-icon", "left"]).data("type","footer_agenda").attr('src','Ressources/Footer/calendrier.png').attr('id','Calendrier');//TODO :rajouter des données pour quand on clique
 var JFooterMail=$("<img>").addClass(["footer-icon", "left"]).data("type","footer_mail").attr('src','Ressources/Footer/email.png').attr('id','Mail');//TODO :rajouter des données pour quand on clique
 
-
-
-
-
-
 //variables pour le header
-var JHeader =$("<nav>").addClass("navbar").css("background-color","red").data("type","header").css('height','10%').css('padding','1%').css('position','sticky').css('top','0px').css('z-index','10').css('box-shadow','0px 2px 10px darkred').css("margin-bottom","2%");
-var JHeaderLogo = $("<img>").addClass("rounded-circle").data("type","header_logo").css('float','left').attr('src','Ressources/Header/logo.png').css('height','90%');//TODO :rajouter des données pour quand on clique 
-var JHeaderProfile=$("<img>").addClass("rounded-circle").data("type","header_profile").css('float','right').css('height','90%');//TODO :rajouter des données pour quand on clique 
-var JHeaderTag=$("<button>").data("type","header_tag").attr("type","button").addClass("btn btn-primary dropdown-toggle").val("Categorie").css("background",'darkred').html("Categorie").css('height','50%').css("width","20%").css("font-size","200%");
+var JHeader =$("<nav>").addClass(["navbar", "header"]).data("type","header");
+var JHeaderLogo = $("<img>").addClass(["rounded-circle", "left", "header-icon"]).data("type","header_logo").attr('src','Ressources/Header/logo.png');//TODO :rajouter des données pour quand on clique 
+var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon"]).data("type","header_profile");//TODO :rajouter des données pour quand on clique 
+var JHeaderTag=$("<button>").addClass("btn btn-primary dropdown-toggle header-tag").data("type","header_tag").attr("type","button").val("Categorie").html("Categorie");
 var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu');
 var JHeaderItem=$("<input>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").attr("type","checkbox").data("type",'header_item');
-var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control").attr("placeholder","Rechercher").css("width","35%").css('height','50%').css("font-size","200%");
-
-
-
-
+var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher");
 
 //variables pour les Convs
 var JConv =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","conv").css('height','10%').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
 var JConvImg = $("<img>").addClass("rounded-circle").data("type","conv_img").css('position','absolute').css('height','80%');//TODO :rajouter des données pour quand on clique 
 var JConvp=$("<p>").addClass("navbar-text").data("type","conv_p").css("font-size","3em").css("float","left").css("margin-left","20%").css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
-
-
 
 //variables pour les concerts 
 var JConcert =$("<nav>").addClass("navbar").css("background-color","lightgray").data("type","concert").css('height','auto').css('padding','1%').css('box-shadow','0px 2px 10px gray').css("margin-bottom","2%");
