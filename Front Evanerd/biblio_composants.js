@@ -17,8 +17,8 @@ var JPost =$("<div>").addClass(["card", "post"]).data('type','post');
 var JPostTitre=$("<h2>").addClass(["post-titre","card-title"]).data('type','post_titre');//TODO :rajouter des données pour quand on clique
 var JPostBody=$("<div>").addClass("card-body").data('type','post_body');
 var JPostImage=$("<img>").addClass("card-img-top").data('type','post_image');
-var JPostDescription=$("<p>").addClass("post-description").addClass("card-text").data('type','post_text');
-var JPostProfile = $("<img>").addClass("post-profile").addClass('rounded-circle').data("type","post_profile");//TODO :rajouter des données pour quand on clique
+var JPostDescription=$("<p>").addClass(["post-description", "card-text"]).data('type','post_text');
+var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle']).data("type","post_profile");//TODO :rajouter des données pour quand on clique
 var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png');
 var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png');
 var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png');
@@ -27,12 +27,12 @@ var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire"
 
 
 //variables pour le footer
-var JFooter =$("<nav>").addClass("footer").addClass("navbar").data("type","footer").on("click",function(context){JClickFooter(context);});
-var JFooterAccueil= $("<img>").data("type","footer_accueil").css('float','left').attr('src','Ressources/Footer/accueilGris.png').css('height','60%').attr('id','Accueil'); //TODO :rajouter des données pour quand on clique 
-var JFooterAppel=$("<img>").data("type","footer_appel").css('float','left').attr('src','Ressources/Footer/appel.png').css('height','60%').attr('id','Appel');//TODO :rajouter des données pour quand on clique
-var JFooterCreer=$("<img>").data("type","footer_creer").css('float','left').attr('src','Ressources/Footer/creer.png').css('height','60%').attr('id','Creer');//TODO :rajouter des données pour quand on clique
-var JFooterAgenda=$("<img>").data("type","footer_agenda").css('float','right').attr('src','Ressources/Footer/calendrier.png').css('height','60%').attr('id','Calendrier');//TODO :rajouter des données pour quand on clique
-var JFooterMail=$("<img>").data("type","footer_mail").css('float','right').attr('src','Ressources/Footer/email.png').css('height','60%').attr('id','Mail');//TODO :rajouter des données pour quand on clique
+var JFooter =$("<nav>").addClass(["footer","navbar"]).data("type","footer").on("click",function(context){JClickFooter(context);});
+var JFooterAccueil= $("<img>").addClass(["footer-icon", "left"]).data("type","footer_accueil").attr('src','Ressources/Footer/accueilGris.png').attr('id','Accueil'); //TODO :rajouter des données pour quand on clique 
+var JFooterAppel=$("<img>").addClass(["footer-icon", "left"]).data("type","footer_appel").attr('src','Ressources/Footer/appel.png').attr('id','Appel');//TODO :rajouter des données pour quand on clique
+var JFooterCreer=$("<img>").addClass(["footer-icon", "left"]).data("type","footer_creer").attr('src','Ressources/Footer/creer.png').attr('id','Creer');//TODO :rajouter des données pour quand on clique
+var JFooterAgenda=$("<img>").addClass(["footer-icon", "left"]).data("type","footer_agenda").attr('src','Ressources/Footer/calendrier.png').attr('id','Calendrier');//TODO :rajouter des données pour quand on clique
+var JFooterMail=$("<img>").addClass(["footer-icon", "left"]).data("type","footer_mail").attr('src','Ressources/Footer/email.png').attr('id','Mail');//TODO :rajouter des données pour quand on clique
 
 
 
