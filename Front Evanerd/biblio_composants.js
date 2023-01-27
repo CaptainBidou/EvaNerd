@@ -36,7 +36,7 @@ var JFooterMail=$("<img>").addClass(["footer-icon", "left"]).data("type","footer
 var JHeader =$("<nav>").addClass(["navbar", "header"]).data("type","header");
 var JHeaderLogo = $("<img>").addClass(["rounded-circle", "left", "header-icon"]).data("type","header_logo").attr('src','Ressources/Header/logo.png');//TODO :rajouter des données pour quand on clique 
 var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon"]).data("type","header_profile");//TODO :rajouter des données pour quand on clique 
-var JHeaderTag=$("<button>").addClass("btn btn-primary dropdown-toggle header-tag").data("type","header_tag").attr("type","button").val("Categorie").html("Categorie");
+var JHeaderTag=$("<button>").addClass(["btn btn-primary dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie");
 var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu');
 var JHeaderItem=$("<input>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").attr("type","checkbox").data("type",'header_item');
 var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher");
@@ -95,14 +95,15 @@ var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenem
  * Reponse est un json de format : 
  * 
  * Reponse={
- *              'nom':'Michel',
- *              'prenom':'Jean',
- *              'epingle':1, // boolean
- *              'image':'lien/de/image.png',
+ *              'firstName':'Michel',
+ *              'lastName':'Jean',
+ *              'pinned':1, // boolean
+ *              'visible':1,
+ *              'banner':'lien/de/image.png',
  *              'like':'1',//boolean
- *              'reaction':'smiley',//null si aucune réaction
- *              'profile':'lien/de/image.png', //image de profile
- *              'description':'Aujourd hui je fais un concert ça va être génial venez nombreux !!',
+ *              'reaction':'smiley',//null si aucune réaction ( c la réaction de l'utilisateur actif)
+ *              'photo':'lien/de/image.png', //image de profile
+ *              'content':'Aujourd hui je fais un concert ça va être génial venez nombreux !!',
  * 
  *          };
  * 
@@ -114,12 +115,12 @@ var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenem
 
 function JcreerPost(Reponse){
 var jClonePost=JPost.clone(true,true);
-var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.prenom+" "+Reponse.nom).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
+var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.firstName+" "+Reponse.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
 var jClonePostBody=JPostBody.clone(true,true);
-var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.image);
-var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.description).on("click",function(context){afficherToutleText(context);});
+var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner);
+var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
 jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
-var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.profile);
+var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.photo);
 
 var jClonePost2=JPost.clone(true,true);
 var jClonePostBody2=JPostBody.clone(true,true);
@@ -213,7 +214,7 @@ if(Reponse.membre==0)
  * soit c'est un json de type 
  * 
  * Reponse={
- *          'profile'='lien/de/image.png',
+ *          'photo'='lien/de/image.png',
  * 
  * 
  *          }
@@ -233,8 +234,8 @@ var JCloneHeaderItem=JHeaderItem.clone(true,true);
 JCloneHeaderMenu.append(JHeaderItem);
 
 
-if(Reponse.profile!=null){
-    var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.profile);
+if(Reponse.photo!=null){
+    var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.photo);
 }
 else{
     var JCloneHeaderProfile=null;
@@ -341,28 +342,24 @@ JCouleur='silver';
 
 var JCloneConvImage = JConvImg.clone(true,true);
 if(Reponse.image!=null)
-{JCloneConvImage.attr("src",Reponse.image);}
+{JCloneConvImage.attr("src",Reponse.image);
+JCloneConv.append(JCloneConvImage);}
+
+
+
 var JCloneConvp=JConvp.clone(true,true);
-if(Reponse.nom==null){
-    var i =0;
-    JCloneConvp.text(Reponse.participants[i].nom+" "+Reponse.participants[i].prenom);
-    for(i=1;i<Reponse.participants.length;i++)
-    {
-        JCloneConvp.text(JCloneConvp.text()+", "+Reponse.participants[i].nom+" "+Reponse.participants[i].prenom);
-    }
-}
-else
-{
-    JCloneConvp.text(Reponse.nom);
+
+
+    JCloneConvp.text(Reponse.titre);
     
-}
 
 
 
 
 
 
-JCloneConv.append(JCloneConvImage).append(JCloneConvp);
+
+JCloneConv.append(JCloneConvp);
 $("#page").append(JCloneConv);
 
 
