@@ -77,11 +77,18 @@ var JRepetitionRetour=$("<button>").data("type","button").addClass("btn btn-dang
 
 //variables pour le dropUpCreer
 var JDropUpCreer = $("<div>").css("width","30%").css("position","fixed").css("bottom","0%").css("left","35%").attr("id","popup").attr("existe","1");
-var JDropUpCreerPost=$("<button>").addClass("btn btn-danger ").text("Post").css("margin-bottom","0%").css("font-size","300%").css("width","100%").css("background",'darkred').on("click",function(){JCreerPostCreer();});
-var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenement").css("margin-bottom","0%").css("font-size","300%").css("width","100%").css("background",'darkred').on("click",function(){JCreerEvenementCreer();});
+var JDropUpCreerPost=$("<button>").addClass("btn btn-danger ").text("Post").addClass("buttonCreer").on("click",function(){JCreerPostCreer();});
+var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenement").addClass("buttonCreer").on("click",function(){JCreerEvenementCreer();});
 
 
-
+//variables pour la page de création de post 
+var JCreerPostForm=$("<div>").addClass("divFormPost");
+var JCreerPostFormTitre=$("<input>").attr("type","text").addClass("divFormPostTitre").attr("placeholder","Titre du post");
+var JCreerPostFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre form-control").attr("placeholder","Description du post");
+var JCreerPostFormCheckBox=$("<input>").attr("type","checkbox").addClass("divFormPostCheckBox");
+var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){return null;});
+var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Ajouter une image").addClass("buttonAddImage").on("click",function(){return null;});
+var JCreerPostFormLabel=$("<p>").addClass("labelTypeForm");
 
 
 
@@ -648,8 +655,8 @@ $("#page").append(JCloneDropUpCreer);
 
 
 function JCreerEvenementCreer(){
-
-
+    $("#popup").remove();
+    $("#page").empty();
 
 
 
@@ -658,8 +665,8 @@ function JCreerEvenementCreer(){
 
 
 function JCreerPostCreer(){
-
-
+    $("#popup").remove();
+    $("#page").empty();
 
 
 
