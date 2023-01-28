@@ -214,4 +214,54 @@
     background-color: darkred;
 }
 
+.divFormPost
+{
+width:100%;
+font-size: 300%;
+padding-left:10%;
+padding-right:10%;
+}
+
+
+.divFormPostTitre
+{
+    height:3%;
+    font-size: 100%;
+}
+
+.divFormPostCheckBox
+{
+    height:3%; 
+    font-size: 100%;
+    margin-bottom:50%;
+}
+.LabelTypeForm
+{
+    margin-top: 5%;
+}
+
+.option 
+{
+    font-size: 25%;
+}
+
+.divFormPostContent
+{
+    height:15%;
+
+}
+
+
+.buttonAddImage
+{
+    font-size: 75%;
+    background-color: darkred;
+    width:80%;
+}
+
+.buttonPublier
+{
+    font-size: 75%; 
+    background-color: darkred;
+}
 

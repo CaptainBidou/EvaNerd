@@ -83,11 +83,11 @@ var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenem
 
 //variables pour la page de création de post 
 var JCreerPostForm=$("<div>").addClass("divFormPost");
-var JCreerPostFormTitre=$("<input>").attr("type","text").addClass("divFormPostTitre").attr("placeholder","Titre du post");
-var JCreerPostFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre form-control").attr("placeholder","Description du post");
-var JCreerPostFormCheckBox=$("<input>").attr("type","checkbox").addClass("divFormPostCheckBox");
+var JCreerPostFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control"]).attr("placeholder","Titre du post");
+var JCreerPostFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description du post");
+var JCreerPostFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Visible pour tout le monde").addClass("option")).append($("<option>").text("Visible seulement pour les membres").addClass("option"));
 var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){return null;});
-var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Ajouter une image").addClass("buttonAddImage").on("click",function(){return null;});
+var JCreerPostFormImage=$("<input>").addClass("btn btn-danger form-control-file").attr("type","file").text("Ajouter une image").addClass("buttonAddImage").on("click",function(){return null;});
 var JCreerPostFormLabel=$("<p>").addClass("labelTypeForm");
 
 
@@ -669,7 +669,22 @@ function JCreerPostCreer(){
     $("#page").empty();
 
 
+    var JCLonePostForme=JCreerPostForm.clone(true,true);
+    var JClonePostFormeTitreLabel=JCreerPostFormLabel.clone(true,true).text("Titre du poste");
+    var JClonePostFormeTitre=JCreerPostFormTitre.clone(true,true);
+    var JClonePostFormeContentLabel=JCreerPostFormLabel.clone(true,true).text("Description du poste");
+    var JClonePostFormeContent=JCreerPostFormContent.clone(true,true);
+    var JClonePostFormeCBLabel=JCreerPostFormLabel.clone(true,true).text("Visibilité du poste").attr("label",".divFormPostCheckBox");
+    var JClonePostFormeCheckBox=JCreerPostFormCheckBox.clone(true,true);
+    var JClonePostFormeImage=JCreerPostFormImage.clone(true,true);
+    var JClonePostFormePublier=JCreerPostFormPublier.clone(true,true);
 
+
+
+    JCLonePostForme.append([JClonePostFormeTitreLabel,JClonePostFormeTitre,JClonePostFormeContentLabel,JClonePostFormeContent,JClonePostFormeCBLabel,
+        JClonePostFormeCheckBox,JClonePostFormeImage, JClonePostFormePublier]);
+
+        $("#page").append(JCLonePostForme);
     
 
 
