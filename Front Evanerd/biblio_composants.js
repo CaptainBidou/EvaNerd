@@ -36,7 +36,7 @@ var JFooterMail=$("<img>").addClass(["footer-icon", "left"]).data("type","footer
 var JHeader =$("<nav>").addClass(["navbar", "header"]).data("type","header");
 var JHeaderLogo = $("<img>").addClass(["rounded-circle", "left", "header-icon"]).data("type","header_logo").attr('src','Ressources/Header/logo.png');//TODO :rajouter des données pour quand on clique 
 var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon"]).data("type","header_profile");//TODO :rajouter des données pour quand on clique 
-var JHeaderTag=$("<button>").addClass("btn btn-primary dropdown-toggle header-tag").data("type","header_tag").attr("type","button").val("Categorie").html("Categorie");
+var JHeaderTag=$("<button>").addClass(["btn btn-primary dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie");
 var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu');
 var JHeaderItem=$("<input>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").attr("type","checkbox").data("type",'header_item');
 var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher");
@@ -77,11 +77,29 @@ var JRepetitionRetour=$("<button>").data("type","button").addClass("btn btn-dang
 
 //variables pour le dropUpCreer
 var JDropUpCreer = $("<div>").css("width","30%").css("position","fixed").css("bottom","0%").css("left","35%").attr("id","popup").attr("existe","1");
-var JDropUpCreerPost=$("<button>").addClass("btn btn-danger ").text("Post").css("margin-bottom","0%").css("font-size","300%").css("width","100%").css("background",'darkred').on("click",function(){JCreerPostCreer();});
-var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenement").css("margin-bottom","0%").css("font-size","300%").css("width","100%").css("background",'darkred').on("click",function(){JCreerEvenementCreer();});
+var JDropUpCreerPost=$("<button>").addClass("btn btn-danger ").text("Post").addClass("buttonCreer").on("click",function(){JCreerPostCreer();});
+var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenement").addClass("buttonCreer").on("click",function(){JCreerEvenementCreer();});
 
 
+//variables pour la page de création de post 
+var JCreerPostForm=$("<div>").addClass("divFormPost");
+var JCreerPostFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control"]).attr("placeholder","Titre du post");
+var JCreerPostFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description du post");
+var JCreerPostFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Visible pour tout le monde").addClass("option")).append($("<option>").text("Visible seulement pour les membres").addClass("option"));
+var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){return null;});
+var JCreerPostFormImage=$("<input>").addClass("btn btn-danger form-control-file").attr("type","file").text("Ajouter une image").addClass("buttonAddImage").on("click",function(){return null;});
+var JCreerPostFormLabel=$("<p>").addClass("labelTypeForm");
 
+
+//variables pour la page de création d'évènements
+var JCreerEventForm=$("<div>").addClass("divFormPost");
+var JCreerEventFormLabel=$("<p>").addClass("labelTypeForm");
+var JCreerEventFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control"]).attr("placeholder","Nom de l'évènement");
+var JCreerEventFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Concert").addClass("option")).append($("<option>").text("Evènement intraorchestre").addClass("option"));
+var JCreerEventFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description de l'évènement");
+var JCreerEventDate=$("<input>").attr("type","datetime-local");
+var JCreerEventDuree=$("<input>").attr("type","time");
+var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){return null;});
 
 
 
@@ -95,14 +113,15 @@ var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenem
  * Reponse est un json de format : 
  * 
  * Reponse={
- *              'nom':'Michel',
- *              'prenom':'Jean',
- *              'epingle':1, // boolean
- *              'image':'lien/de/image.png',
+ *              'firstName':'Michel',
+ *              'lastName':'Jean',
+ *              'pinned':1, // boolean
+ *              'visible':1,
+ *              'banner':'lien/de/image.png',
  *              'like':'1',//boolean
- *              'reaction':'smiley',//null si aucune réaction
- *              'profile':'lien/de/image.png', //image de profile
- *              'description':'Aujourd hui je fais un concert ça va être génial venez nombreux !!',
+ *              'reaction':'smiley',//null si aucune réaction ( c la réaction de l'utilisateur actif)
+ *              'photo':'lien/de/image.png', //image de profile
+ *              'content':'Aujourd hui je fais un concert ça va être génial venez nombreux !!',
  * 
  *          };
  * 
@@ -114,12 +133,12 @@ var JDropUpCreerEvenement=$("<button>").addClass("btn btn-danger ").text("Evenem
 
 function JcreerPost(Reponse){
 var jClonePost=JPost.clone(true,true);
-var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.prenom+" "+Reponse.nom).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
+var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.firstName+" "+Reponse.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
 var jClonePostBody=JPostBody.clone(true,true);
-var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.image);
-var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.description).on("click",function(context){afficherToutleText(context);});
+var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner);
+var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
 jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
-var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.profile);
+var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.photo);
 
 var jClonePost2=JPost.clone(true,true);
 var jClonePostBody2=JPostBody.clone(true,true);
@@ -213,7 +232,7 @@ if(Reponse.membre==0)
  * soit c'est un json de type 
  * 
  * Reponse={
- *          'profile'='lien/de/image.png',
+ *          'photo'='lien/de/image.png',
  * 
  * 
  *          }
@@ -233,8 +252,8 @@ var JCloneHeaderItem=JHeaderItem.clone(true,true);
 JCloneHeaderMenu.append(JHeaderItem);
 
 
-if(Reponse.profile!=null){
-    var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.profile);
+if(Reponse.photo!=null){
+    var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.photo);
 }
 else{
     var JCloneHeaderProfile=null;
@@ -341,28 +360,24 @@ JCouleur='silver';
 
 var JCloneConvImage = JConvImg.clone(true,true);
 if(Reponse.image!=null)
-{JCloneConvImage.attr("src",Reponse.image);}
+{JCloneConvImage.attr("src",Reponse.image);
+JCloneConv.append(JCloneConvImage);}
+
+
+
 var JCloneConvp=JConvp.clone(true,true);
-if(Reponse.nom==null){
-    var i =0;
-    JCloneConvp.text(Reponse.participants[i].nom+" "+Reponse.participants[i].prenom);
-    for(i=1;i<Reponse.participants.length;i++)
-    {
-        JCloneConvp.text(JCloneConvp.text()+", "+Reponse.participants[i].nom+" "+Reponse.participants[i].prenom);
-    }
-}
-else
-{
-    JCloneConvp.text(Reponse.nom);
+
+
+    JCloneConvp.text(Reponse.titre);
     
-}
 
 
 
 
 
 
-JCloneConv.append(JCloneConvImage).append(JCloneConvp);
+
+JCloneConv.append(JCloneConvp);
 $("#page").append(JCloneConv);
 
 
@@ -651,6 +666,33 @@ $("#page").append(JCloneDropUpCreer);
 
 
 function JCreerEvenementCreer(){
+    $("#popup").remove();
+    $("#page").empty();
+
+
+    var JCloneCreerEventForm=JCreerEventForm.clone(true,true);
+    var JCloneCreerEventFormTitreLabel=JCreerEventFormLabel.clone(true,true).text("Nom de l'évènement");
+    var JCloneCreerEventFormTitre=JCreerEventFormTitre.clone(true,true);
+
+    var JCloneCreerEventFormCheckboxLabel=JCreerEventFormLabel.clone(true,true).text("Type d'évènement");
+    var JCloneCreerEventFormCheckBox=JCreerEventFormCheckBox.clone(true,true);
+
+    var JCloneCreerEventFormContentLabel=JCreerEventFormLabel.clone(true,true).text("Description de l'évènement");
+    var JCloneCreerEventFormContent=JCreerEventFormContent.clone(true,true);
+
+    var JCloneCreerEventFormDateLabel=JCreerEventFormLabel.clone(true,true).text("Date de l'évènement");
+    var JCloneCreerEventDate=JCreerEventDate.clone(true,true);
+
+    var JCloneCreerEventFormDureeLabel=JCreerEventFormLabel.clone(true,true).text("Durée de l'évènement");
+    var JCloneCreerEventDuree=JCreerEventDuree.clone(true,true);
+
+    var JCloneCreerEventFormPublier=JCreerEventFormPublier.clone(true,true);
+
+
+JCloneCreerEventForm.append([JCloneCreerEventFormTitreLabel,JCloneCreerEventFormTitre,JCloneCreerEventFormCheckboxLabel,JCloneCreerEventFormCheckBox,JCloneCreerEventFormContentLabel,JCloneCreerEventFormContent,JCloneCreerEventFormDateLabel,JCloneCreerEventDate,JCloneCreerEventFormDureeLabel,JCloneCreerEventDuree,JCloneCreerEventFormPublier]);
+
+console.log("qsdqsd");
+$("#page").append(JCloneCreerEventForm);
 
 
 
@@ -661,11 +703,26 @@ function JCreerEvenementCreer(){
 
 
 function JCreerPostCreer(){
+    $("#popup").remove();
+    $("#page").empty();
+
+
+    var JCLonePostForme=JCreerPostForm.clone(true,true);
+    var JClonePostFormeTitreLabel=JCreerPostFormLabel.clone(true,true).text("Titre du poste");
+    var JClonePostFormeTitre=JCreerPostFormTitre.clone(true,true);
+    var JClonePostFormeContentLabel=JCreerPostFormLabel.clone(true,true).text("Description du poste");
+    var JClonePostFormeContent=JCreerPostFormContent.clone(true,true);
+    var JClonePostFormeCBLabel=JCreerPostFormLabel.clone(true,true).text("Visibilité du poste").attr("label",".divFormPostCheckBox");
+    var JClonePostFormeCheckBox=JCreerPostFormCheckBox.clone(true,true);
+    var JClonePostFormeImage=JCreerPostFormImage.clone(true,true);
+    var JClonePostFormePublier=JCreerPostFormPublier.clone(true,true);
 
 
 
+    JCLonePostForme.append([JClonePostFormeTitreLabel,JClonePostFormeTitre,JClonePostFormeContentLabel,JClonePostFormeContent,JClonePostFormeCBLabel,
+        JClonePostFormeCheckBox,JClonePostFormeImage, JClonePostFormePublier]);
 
-
+        $("#page").append(JCLonePostForme);
     
 
 
