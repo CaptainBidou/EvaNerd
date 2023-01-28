@@ -465,7 +465,7 @@ function selectGroupReactions($gid) {
             FROM Group_Messages
             JOIN Group_Message_Reactions
                 ON Group_Message_Reactions.mid = Group_Messages.id
-            JOIN users
+            JOIN Users
                 ON Group_Message_Reactions.uid = Users.id
             WHERE Group_Messages.gid = ?;";
 
@@ -502,7 +502,8 @@ function insertGroupMessage($uid,$gid,$content,$answerTo = null){
 function selectPosts($notAMember){
     $db = Config::getDatabase();
     $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
-    $sql = "SELECT Posts.*, Users.id AS uid, Users.firstName, Users.lastName, $photo
+    $banner = "CONCAT(CONCAT(\"" . getBaseLink() . "/posts/\"" . ", Posts.id), CONCAT(\"/\", Posts.banner)) AS banner";
+    $sql = "SELECT Posts.id, Posts.content, $banner, Posts.pinned, Posts.visible, Users.id AS uid, Users.firstName, Users.lastName, $photo
             FROM Posts
             JOIN Users ON Users.id = Posts.author";
     $whereStm = " WHERE Posts.visible = 1";
@@ -519,10 +520,20 @@ function selectPost($pid){
     return Database::parcoursRs(($db->SQLSelect($sql, [$pid])));
 }
 
-function selectPostReactions($pid){
+function selectPostReactions($pid = null){
     $db = Config::getDatabase();
+    $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
     $params = [$pid];
-    $sql = "SELECT * FROM Post_Reactions WHERE pid = ? ";
+    $sql = "SELECT Post_Reactions.emoji, Post_Reactions.pid, Users.id AS uid, Users.firstName, Users.lastName, $photo
+            FROM Post_Reactions
+            JOIN Users ON Post_Reactions.uid = Users.id";
+    
+    $whereStm = " WHERE pid = ? ";
+    if($pid == null) {
+        $params =[];
+    }
+    else $sql .= $whereStm;
+
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
