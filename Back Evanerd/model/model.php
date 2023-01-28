@@ -2,6 +2,12 @@
 
 include_once("includes/Config.php");
 
+function getNewUid() {
+    $db = Config::getDatabase();
+    $sql = "SELECT MAX(Users.id)+1 FROM `Users`";
+    return $db->SQLGetChamp($sql);
+}
+
 function confirmToUser($confirmToken) {
     $db = Config::getDatabase();
     $sql = "SELECT Users.id FROM Users WHERE Users.confirmToken = ?";
