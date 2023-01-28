@@ -91,7 +91,6 @@ function defaultPicture($output, $firstName, $lastName, $font= "arial.ttf") {
     $textHeight = $textInfo["height"];
     $textWidth = $textInfo["width"];
     $fontSize = $textInfo["fontSize"];
-    echo $fontSize;
     // Ajouter le text à l'image
     imagettftext($image, $fontSize, 0, (450/2 - $textWidth/2) + $textWidth*0.05, 450/2 + $textHeight/2, $borderColor, $font, $initials);
     imagettftext($image, $fontSize, 0, 450/2 - $textWidth/2, 450/2 + $textHeight/2, $textColor, $font, $initials);
@@ -101,11 +100,4 @@ function defaultPicture($output, $firstName, $lastName, $font= "arial.ttf") {
     // Libérer la mémoire utilisée par l'image
     imagedestroy($image);
 }
-
-
-$alphabet = range("A", "Z");
-$a = $alphabet[array_rand($alphabet)];
-$b = $alphabet[array_rand($alphabet)];
-defaultPicture("test.png", $a, $b);
-
 ?>
