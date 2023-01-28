@@ -2,6 +2,7 @@
 include_once "baseController.php";
 include_once "model/model.php";
 include_once "includes/maLibSecurisation.php";
+include_once "includes/maLibGD2.php";
 /**
  * TODO : Refacto code redondant
  *  - Vérification que l'utilisateur a accès à un groupe
@@ -107,6 +108,7 @@ function postUser($data, $queryString) {
         else {
             // TODO image par defaut !
             $image = "default.png";
+            defaultPicture("$dir/$image", $firstName, $lastName);
         }
         // Enfin si tout est bon alors on créer l'utilisateur en base et on le renvoie en réponse
         $idUser = insertUser($firstName, $lastName, $mail, $tel, $password, $age, $studies, $sex, $image);
