@@ -90,6 +90,7 @@ var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publie
 var JCreerPostFormImage=$("<input>").addClass("btn btn-danger form-control-file").attr("type","file").text("Ajouter une image").addClass("buttonAddImage").on("click",function(){return null;});
 var JCreerPostFormLabel=$("<p>").addClass("labelTypeForm");
 
+
 //variables pour la page de création d'évènements
 var JCreerEventForm=$("<div>").addClass("divFormPost");
 var JCreerEventFormLabel=$("<p>").addClass("labelTypeForm");
@@ -98,7 +99,7 @@ var JCreerEventFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-con
 var JCreerEventFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description de l'évènement");
 var JCreerEventDate=$("<input>").attr("type","datetime-local");
 var JCreerEventDuree=$("<input>").attr("type","time");
-
+var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){return null;});
 
 
 
@@ -667,6 +668,33 @@ $("#page").append(JCloneDropUpCreer);
 function JCreerEvenementCreer(){
     $("#popup").remove();
     $("#page").empty();
+
+
+    var JCloneCreerEventForm=JCreerEventForm.clone(true,true);
+    var JCloneCreerEventFormTitreLabel=JCreerEventFormLabel.clone(true,true).text("Nom de l'évènement");
+    var JCloneCreerEventFormTitre=JCreerEventFormTitre.clone(true,true);
+
+    var JCloneCreerEventFormCheckboxLabel=JCreerEventFormLabel.clone(true,true).text("Type d'évènement");
+    var JCloneCreerEventFormCheckBox=JCreerEventFormCheckBox.clone(true,true);
+
+    var JCloneCreerEventFormContentLabel=JCreerEventFormLabel.clone(true,true).text("Description de l'évènement");
+    var JCloneCreerEventFormContent=JCreerEventFormContent.clone(true,true);
+
+    var JCloneCreerEventFormDateLabel=JCreerEventFormLabel.clone(true,true).text("Date de l'évènement");
+    var JCloneCreerEventDate=JCreerEventDate.clone(true,true);
+
+    var JCloneCreerEventFormDureeLabel=JCreerEventFormLabel.clone(true,true).text("Durée de l'évènement");
+    var JCloneCreerEventDuree=JCreerEventDuree.clone(true,true);
+
+    var JCloneCreerEventFormPublier=JCreerEventFormPublier.clone(true,true);
+
+
+JCloneCreerEventForm.append([JCloneCreerEventFormTitreLabel,JCloneCreerEventFormTitre,JCloneCreerEventFormCheckboxLabel,JCloneCreerEventFormCheckBox,JCloneCreerEventFormContentLabel,JCloneCreerEventFormContent,JCloneCreerEventFormDateLabel,JCloneCreerEventDate,JCloneCreerEventFormDureeLabel,JCloneCreerEventDuree,JCloneCreerEventFormPublier]);
+
+console.log("qsdqsd");
+$("#page").append(JCloneCreerEventForm);
+
+
 
 
 
