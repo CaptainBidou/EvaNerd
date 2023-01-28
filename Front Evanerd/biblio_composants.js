@@ -90,6 +90,16 @@ var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publie
 var JCreerPostFormImage=$("<input>").addClass("btn btn-danger form-control-file").attr("type","file").text("Ajouter une image").addClass("buttonAddImage").on("click",function(){return null;});
 var JCreerPostFormLabel=$("<p>").addClass("labelTypeForm");
 
+//variables pour la page de création d'évènements
+var JCreerEventForm=$("<div>").addClass("divFormPost");
+var JCreerEventFormLabel=$("<p>").addClass("labelTypeForm");
+var JCreerEventFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control"]).attr("placeholder","Nom de l'évènement");
+var JCreerEventFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Concert").addClass("option")).append($("<option>").text("Evènement intraorchestre").addClass("option"));
+var JCreerEventFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description de l'évènement");
+var JCreerEventDate=$("<input>").attr("type","datetime-local");
+var JCreerEventDuree=$("<input>").attr("type","time");
+
+
 
 
 /************************************************************************/
