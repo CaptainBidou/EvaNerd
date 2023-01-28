@@ -98,7 +98,7 @@ function postUser($data, $queryString) {
         $password = password_hash($plainPassword, PASSWORD_BCRYPT, ["cost"=>10]);
         // TODO : traitement des images
         if(!is_dir($dir)) mkdir($dir);
-        
+
         if(isset($_FILES["image"])) {
             $imageData = uploadImage($dir . "/image", $_FILES["image"]);
             if($imageData["code"] != 1) sendError($imageData["message"], HTTP_BAD_REQUEST);
@@ -545,12 +545,21 @@ function listPosts($data, $authKey) {
         $role = selectUserRoles($uidConn);
         $notAMember = (array_search("Non Membre", array_column($role, "label")) !== false) ? 1 : 0;
         $postData = selectPosts($notAMember);
+        $reactionData = groupby(selectPostReactions(), "pid");
+        // On regoupe par emoji
+        foreach($reactionData as $pid => $reactionstab) {
+            $reactionData[$pid] = groupby($reactionstab, "emoji");
+        }
         foreach($postData as $post) {
             $data["posts"][$i]["id"] = $post["id"];
             $data["posts"][$i]["author"] = ["id" => $post["uid"], "firstName" => $post["firstName"], "lastName" => $post["lastName"], "photo" => $post["photo"]];
             $data["posts"][$i]["content"] = $post["content"];
             $data["posts"][$i]["pinned"] = $post["pinned"];
             $data["posts"][$i]["visible"] = $post["visible"];
+            $data["posts"][$i]["banner"] = $post["banner"];
+            if(isset($reactionData[$post["id"]]))
+                $data["posts"][$i]["reactions"] = $reactionData[$post["id"]];
+            
             $i++;
 
         }
