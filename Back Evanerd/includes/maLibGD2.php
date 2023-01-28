@@ -62,7 +62,7 @@ function getTexteInfo($imgL, $imgH, $text, $font, $fontSizeMax = 180, $step = 5)
  * @param string $lastName nom de famille de l'utilisateur
  * @return void
  */
-function defaultPicture($output, $firstName, $lastName) {
+function defaultPicture($output, $firstName, $lastName, $font= "arial.ttf") {
     // Tirage d'une couleur aléatoire
     $bgColor = array_column(COLOR::cases(), "value");
     $bgHex = $bgColor[array_rand($bgColor)];
@@ -82,18 +82,18 @@ function defaultPicture($output, $firstName, $lastName) {
     // Définir la couleur du contour en noir
     $borderColor = imagecolorallocate($image, 0, 0, 0);
     // Définir la police à utiliser pour le texte
-    putenv('GDFONTPATH=' . realpath('./font'));
-	$font = realpath("./font/arial.ttf");
+    putenv('GDFONTPATH=' . realpath('./fonts'));
+	$font = realpath("./fonts/$font");
     // Obtenir les initiales du nom et prénom
     $initials = strtoupper($firstName[0] . $lastName[0]);
-    // Calcul taille cu texte
-    $textInfo = getTexteInfo(400,400, $initials, $font, 380, 1);
+    // Calcul taille du texte
+    $textInfo = getTexteInfo(400,400, $initials, $font, 200, 1);
     $textHeight = $textInfo["height"];
     $textWidth = $textInfo["width"];
     $fontSize = $textInfo["fontSize"];
-
+    echo $fontSize;
     // Ajouter le text à l'image
-    imagettftext($image, $fontSize, 0, 450/2 - $textWidth/2, 450/2 + $textHeight/2, $borderColor, $font, $initials);
+    imagettftext($image, $fontSize, 0, (450/2 - $textWidth/2) + $textWidth*0.05, 450/2 + $textHeight/2, $borderColor, $font, $initials);
     imagettftext($image, $fontSize, 0, 450/2 - $textWidth/2, 450/2 + $textHeight/2, $textColor, $font, $initials);
     // Ajouter un contour autour du texte
     // Enregistrer l'image
@@ -102,10 +102,10 @@ function defaultPicture($output, $firstName, $lastName) {
     imagedestroy($image);
 }
 
-/*
+
 $alphabet = range("A", "Z");
 $a = $alphabet[array_rand($alphabet)];
 $b = $alphabet[array_rand($alphabet)];
 defaultPicture("test.png", $a, $b);
-*/
+
 ?>
