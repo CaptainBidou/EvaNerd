@@ -1,6 +1,6 @@
 <?php
 
-define("IMAGE_MAXSIZE", 250*250); // TODO : à modifier
+define("IMAGE_MAXSIZE",25097152); // 25mb taille max
 define("IMAGE_ERR_NOTIMAGE", -1);
 define("IMAGE_ERR_SIZE", -2);
 define("IMAGE_ERR_BADEXTENSION", -3);
@@ -205,24 +205,28 @@ function uploadImage($filename, $imageData) {
     $finfo = finfo_open();
 	$mime_type = finfo_file($finfo, $imageData["tmp_name"], FILEINFO_MIME_TYPE);
 	finfo_close($finfo);
-    $returnInfo["FILENAME"] = $filename . ".$imageFileType";
+    $returnInfo["filename"] = $filename . ".$imageFileType";
 
     // Vérification du type : on ne voudrais pas que l'utilisateur upload un fichier php par exemple
     if(strpos($mime_type, 'image') !== 0) {
-        $returnInfo["CODE"] = IMAGE_ERR_NOTIMAGE;
+        $returnInfo["code"] = IMAGE_ERR_NOTIMAGE;
+		$returnInfo["message"] = "Le fichier n'est pas une image !";
     }
     // Vérification de la taille
     if ($imageData["size"] > IMAGE_MAXSIZE) {// on récupère l'info de la taille dans la superglobale $_FILES
-        $returnInfo["CODE"] = IMAGE_ERR_SIZE;
+        $returnInfo["code"] = IMAGE_ERR_SIZE;
+		$returnInfo["message"] = "La taille de l'image et invalide";
     }
     // Vérification de l'extension
     if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "gif" ) {
-        $returnInfo["CODE"] = IMAGE_ERR_BADEXTENSION;
+        $returnInfo["code"] = IMAGE_ERR_BADEXTENSION;
+		$returnInfo["message"] = "L'extension du fichier est invalide !";
     }
 
     // Tout est bon
     if (move_uploaded_file($imageData["tmp_name"], $file)) {
-        $returnInfo["CODE"] = 1;
+        $returnInfo["code"] = 1;
+		$returnInfo["message"] = "image OK !";
 
     }
     else {
