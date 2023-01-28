@@ -71,6 +71,9 @@ function sendUser($data, $idTabs, $authKey) {
  */
 function postUser($data, $queryString) {
     $image = "default.png";
+    $newId = getNewUid();
+    // TODO : créer une constante avec le chemin de base
+    $dir = "../ressources/users/$newId";
     // on récupère tous les champs obligatoire sinon on renvoie une erreur
     if($firstName = validString(htmlspecialchars(valider("firstName", $queryString)), 30, 3))
     if($lastName = validString(htmlspecialchars(valider("lastName", $queryString)), 30, 3))
@@ -81,7 +84,6 @@ function postUser($data, $queryString) {
         // Récupérations des champs optionnels 
         ($studies = validString(htmlspecialchars(valider("studies", $queryString)), 50, 0)) ? : $studies = "";
         ($sex = valider("sex", $queryString)) ? : $sex = 0;
-        ($imageData = valider("image", $queryString)) ? : $imageData = null;
         // TODO :
             // age :
                 // -> must be a int
@@ -95,8 +97,17 @@ function postUser($data, $queryString) {
         // On hash le mot de passe avec l'algo bcrypt2 et avec un cout de 10
         $password = password_hash($plainPassword, PASSWORD_BCRYPT, ["cost"=>10]);
         // TODO : traitement des images
-        if($imageData != null) $image = "image.png";
-
+        if(!is_dir($dir)) mkdir($dir);
+        
+        if(isset($_FILES["image"])) {
+            $imageData = uploadImage($dir . "/image", $_FILES["image"]);
+            if($imageData["code"] != 1) sendError($imageData["message"], HTTP_BAD_REQUEST);
+            $image = $imageData["filename"];
+        }
+        else {
+            // TODO image par defaut !
+            $image = "default.png";
+        }
         // Enfin si tout est bon alors on créer l'utilisateur en base et on le renvoie en réponse
         $idUser = insertUser($firstName, $lastName, $mail, $tel, $password, $age, $studies, $sex, $image);
         $data["user"] = selectUser($idUser)[0]; 
