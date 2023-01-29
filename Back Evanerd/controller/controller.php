@@ -73,8 +73,7 @@ function sendUser($data, $idTabs, $authKey) {
 function postUser($data, $queryString) {
     $image = "default.png";
     $newId = getNewUid();
-    // TODO : créer une constante avec le chemin de base
-    $dir = "../ressources/users/$newId";
+    $dir = DIR_USERS . $newId;
     // on récupère tous les champs obligatoire sinon on renvoie une erreur
     if($firstName = validString(htmlspecialchars(valider("firstName", $queryString)), 30, 3))
     if($lastName = validString(htmlspecialchars(valider("lastName", $queryString)), 30, 3))
@@ -88,16 +87,17 @@ function postUser($data, $queryString) {
         ($sex = isSex(valider("sex", $queryString))) ? : $sex = 0;
         // On hash le mot de passe avec l'algo bcrypt2 et avec un cout de 10
         $password = password_hash($plainPassword, PASSWORD_BCRYPT, ["cost"=>10]);
-        // TODO : traitement des images
+        // Si le répertoire pour cette id n'a pas été fait on le créer
         if(!is_dir($dir)) mkdir($dir);
-
+        // Traitement de l'image
         if(isset($_FILES["image"])) {
             $imageData = uploadImage($dir . "/image", $_FILES["image"]);
             if($imageData["code"] != 1) sendError($imageData["message"], HTTP_BAD_REQUEST);
-            $image = $imageData["filename"];
+            $image = basename($imageData["filename"]);
+            echo $image;
         }
         else {
-            // TODO image par defaut !
+            // Si il n'y pas d'image on en génére une
             $image = "default.png";
             defaultPicture("$dir/$image", $firstName, $lastName);
         }
@@ -178,7 +178,46 @@ function listGroupMessages($data, $idTabs, $authKey) {
  * @param string $authKey Token d'identification de l'utilisateur
  */
 function putUser($data, $idTabs, $authKey,$queryString) {
+    print_r($_FILES);
+    print_r($_POST);
+    // TODO : mettre à jour la doc
+    if($authKey) {
+        $uid = $idTabs[0];
+        $uidConn = validUser(authToId($authKey));
+        $dir = DIR_USERS . $uid;
+        if($uidConn != $uid) sendError("Vous n'avez pas la permissions !", HTTP_UNAUTHORIZED);
 
+        // Récupération et validation des infos :
+        $mail = isEmail(htmlspecialchars(valider("mail", $queryString)));
+        $tel = isPhoneNumber(valider("tel", $queryString));
+        $plainPassword = validString(valider("password", $queryString), 70, 5);
+        $age = intval(valider("age", $queryString));
+        $studies = validString(htmlspecialchars(valider("studies", $queryString)), 50, 0);
+        $image = false;
+        $user = selectUser($uidConn, 1);
+
+        // Vérification que le numéro de téléphone n'est pas déjà utilisé
+        if(phoneToUid($tel) !== false) sendError("Il y a déjà un compte avec ce numéro de téléphone !", HTTP_FORBIDDEN);
+        // Récupération de l'image
+        // TODO : GESTION D'UPLOAD DE FICHIER PUT OU ROUTE DEDIÉE POUR L'IMAGE
+        /*
+        if(isset($_FILES["image"])) {
+            // Récupération de l'ancienne image et des données de la nouvelle
+            $oldImage = basename($user[0]["photo"]);
+            $imageData = uploadImage($dir . "/image", $_FILES["image"]);
+            // Si l'image est pas correct, on envoie une erreur
+            if($imageData["code"] != 1) sendError($imageData["message"], HTTP_BAD_REQUEST);
+            $image = $imageData["filename"];
+            unlink("$dir/$oldImage");
+        }
+        */
+        // On hash le mot de passe avec l'algo bcrypt2 et avec un cout de 10
+        $password = $plainPassword ? password_hash($plainPassword, PASSWORD_BCRYPT, ["cost"=>10]) : false;
+        updateUser($uid, $mail, $tel, $age, $studies, $image,$password);
+        $data["user"] = selectUser($uidConn, 1);
+        sendResponse($data, [getStatusHeader(HTTP_OK)]);
+    }
+    sendError("Il faut être identifié !", HTTP_UNAUTHORIZED);
 }
 
 /**
@@ -221,11 +260,11 @@ function postUserRole($data, $idTabs, $authKey, $queryString) {
         $rid = valider("rid", $queryString);
         $rolesConn = selectUserRoles($uidConn);
         $roleToAdd = selectRole($rid);
-        $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
+
         //Verification si l'user existe, que le role existe et que l'user connecté est membre du CA
         if(!$roleToAdd) sendError("Ce role n'existe pas !", HTTP_BAD_REQUEST);
         if(!$user) sendError("Cet utilisateur n'existe pas !", HTTP_BAD_REQUEST);
-        if(!$admin) sendError("Vous ne pouvez pas faire cette action", HTTP_FORBIDDEN);
+        if(!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas faire cette action", HTTP_FORBIDDEN);
         $uid = $user[0]["id"];
         $roles = selectUserRoles($uid);
         // On vérifie si l'utilisateur n'a pas déjà ce role
@@ -316,8 +355,7 @@ function putRoles($data, $idTabs, $authKey, $queryString) {
         $uidConn = validUser(authToId($authKey));
         $rolesConn = selectUserRoles($uidConn);
         $roleAModif = $idTabs[0];
-        $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
-        if(!$admin) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
+        if(!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
 
         (($active = valider("active", $queryString)) !== false) ? : $active = null;
         ($label = htmlspecialchars(valider("label", $queryString))) != "" ? : $label = null;
@@ -332,7 +370,9 @@ function putRoles($data, $idTabs, $authKey, $queryString) {
     sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
 }
 
-
+/**
+ * //TODO ; REVOIR LA FONCTION !!!
+ */
 function postRole($data, $authKey, $queryString) {
 
     if($authKey) {
@@ -366,8 +406,7 @@ function putInstruments($data, $idTabs, $authKey, $queryString) {
         $uidConn = validUser(authToId($authKey));
         $rolesConn = selectUserRoles($uidConn);
         $instrument = $idTabs[0];
-        $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
-        if(!$admin) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
+        if(!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
 
         if($label = htmlspecialchars(valider("label", $queryString))) {
             if(updateInstruments($instrument,$label)) {
@@ -388,8 +427,7 @@ function postInstruments($data, $authKey, $queryString) {
     if($authKey) {
         $uidConn = validUser(authToId($authKey));
         $rolesConn = selectUserRoles($uidConn);
-        $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
-        if(!$admin) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
+        if(!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
 
         if($label = htmlspecialchars(valider("label", $queryString))) {
             $data["instrument"] = array("id" => insertInstruments($label), "label" => $label);
@@ -416,9 +454,7 @@ function putAchievements($data, $idTabs, $authKey, $queryString) {
     if($authKey){
         $uidConn = validUser(authToId($authKey));
         $rolesConn = selectUserRoles($uidConn);
-        $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
-        if(!$admin) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
-
+        if(!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
         if($label = htmlspecialchars(valider("label", $queryString))) {
             if(insertAchievement($label)) {
                 $data["achievements"] = array("id" => insertInstruments($label), "label" => $label);
@@ -640,8 +676,7 @@ function listAgendaEventCalls($data, $idTabs, $authKey) {
         $aid = $idTabs[0];
         $eid = $idTabs[1];
         $rolesConn = selectUserRoles($uidConn);
-        $admin = (array_search("Membre du CA", array_column($rolesConn, "label")) !== false) ? 1 : 0;
-        if(!$admin) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
+        if(!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
 
         $data["agendasId"] = $aid;
         $data["eventId"] = $eid;
