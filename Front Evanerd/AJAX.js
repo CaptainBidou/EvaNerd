@@ -93,7 +93,7 @@ function PUTUser($informations,$uid){
 
     $.ajax({
         type: "PUT",
-        url: api + "/users/",
+        url: api + "/users/"+$uid,
         headers: {"authToken":""}, // données dans les entetes 
         data: $data,
         error : function(){
