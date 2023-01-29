@@ -215,6 +215,72 @@ function ListerConv(){
     });   
 }
 
+/**
+ * Récupérer la liste des permissions d'un groupe
+ * @param {*} $gid Identifiant du groupe
+ */
+function ListerPermsConv($gid){
+    $.ajax({
+        type: "GET",
+        url: api + "/groups/" + $gid + "/permissions",
+        headers:{"authToken":""},
+        data : [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success : function(oRep){
+            console.log(oRep);
+            return oRep;
+        },
+        dataType: "json"
+    });
+}
+
+/**
+ * Récupérer la liste des messages d'un groupe
+ * @param {*} $gid Identifiant du groupe
+ */
+function ListerMsgConv($gid){
+    $.ajax({
+        type : "GET",
+        url : api + "/groups/" + $gid + "/messages",
+        headers:{"authToken" : ""},
+        data : [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success : function(oRep){
+            console.log(oRep);
+            oRep["groups"].forEach(element => {
+                JAfficherMessageConv(oRep);
+            });
+        },
+        dataType: "json"
+    });
+}
+
+/**
+ * Récupérer la liste des réactions d'un message d'un groupe
+ * @param {*} $gid Identifiant d'un groupe
+ * @param {*} $mid Identifiant d'un message
+ */
+function ListerReactMsgConv($gid, $mid){
+    $.ajax({
+        type :"GET",
+        url : api + "/groups/" + $gid + "/messages/" + $mid,
+        headers:{"authToken" : ""},
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        sucess : function(oRep){
+            console.log(oRep);
+            // Fonctions ReactMsgConv
+        },
+        dataType : "json"
+    });
+}
+
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
 function ListerAppel($aid,$eid){
     $.ajax({
