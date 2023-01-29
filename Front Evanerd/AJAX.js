@@ -1,5 +1,30 @@
 var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
 
+
+function auth($tel,$password){
+    oRep = $.ajax({
+        type: "GET",
+        url: api + "/auth/",
+        // headers: {"debug-data":true}, // données dans les entetes 
+        headers: {},
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            return oRep;
+
+        },
+        dataType: "json"
+    });
+    return oRep;
+}
+
+
+
+
+
 function GETUsers(){
     oRep = $.ajax({
         type: "GET",
@@ -20,6 +45,8 @@ function GETUsers(){
     return oRep;
 }
 
+
+
 /**  * @param $id Id de l'utilisateur */
 
 function GETUserbyID($id){
@@ -38,6 +65,53 @@ function GETUserbyID($id){
         dataType: "json"
     });
 }
+
+/**
+ * 
+ * @param $id Id de l'utilisateur
+ * @param $informations Un JSON contenant les différentes données nécessaires à la création d'un compte
+ * 
+ * Exemple de JSON : $Infos{[firstName]:Prénom,[lastName]:Nom,[age]:20,[sex]:1,[mail]:monMail@gmail.com,[tel]:0601020304,[studies]:Ingénieur,[password]:mpLabX}
+ */
+
+function PUTUser($informations,$uid){
+    $data = [];
+    if ($informations["firstName"])
+        $data["firstname"] = $informations["firstName"];
+    if ($informations["lastName"])
+        $data["lastName"] = $informations["lastName"];
+    if ($informations["age"])
+        $data["age"] = $informations["age"];
+    if ($informations["sex"])
+        $data["sex"] = $informations["sex"];
+    if ($informations["mail"])
+        $data["mail"] = $informations["mail"];
+    if ($informations["tel"])
+        $data["tel"] = $informations["tel"];
+    if ($informations["studies"])
+        $data["studies"] = $informations["studies"];
+
+    $.ajax({
+        type: "PUT",
+        url: api + "/users/",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: $data,
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            return oRep;
+
+        },
+        dataType: "json"
+    });
+    
+}
+
+
+
+
 
 /**
  * 
@@ -136,8 +210,6 @@ function ListerConv(){
             oRep["groups"].forEach(element => {
                 JCreerConv(element);
             });
-
-
         },
         dataType: "json"
     });   
