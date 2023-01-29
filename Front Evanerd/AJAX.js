@@ -1,7 +1,7 @@
 var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
 
-function GETUser(){
-    $.ajax({
+function GETUsers(){
+    oRep = $.ajax({
         type: "GET",
         url: api + "/users",
         // headers: {"debug-data":true}, // données dans les entetes 
@@ -17,6 +17,7 @@ function GETUser(){
         },
         dataType: "json"
     });
+    return oRep;
 }
 
 /**  * @param $id Id de l'utilisateur */
