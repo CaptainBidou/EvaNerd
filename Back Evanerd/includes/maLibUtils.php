@@ -1,11 +1,16 @@
 <?php
 
+// CONSTANTES UPLOADIMAGE
 define("IMAGE_MAXSIZE",25097152); // 25mb taille max
 define("IMAGE_ERR_NOTIMAGE", -1);
 define("IMAGE_ERR_SIZE", -2);
 define("IMAGE_ERR_BADEXTENSION", -3);
 define("IMAGE_ERR_UPLOAD", -4);
 
+// CONSTANTE DIR
+define("DIR_USERS", "../ressources/users/");
+define("DIR_GROUPS", "../ressources/groups/");
+define("DIR_POSTS", "../ressources/posts/");
 
 /**
  * Vérifie l'existence (isset) et la taille (non vide) d'un paramétre dans un des tableaux GET, POST, COOKIES, SESSION
@@ -287,5 +292,15 @@ function isSex($sex) {
 	$possible = [0,1,2];
 	if(array_search($sex,$possible, true) !== false) return $sex;
 	return false;
+}
+
+/**
+ * Permet de rechercher un role spécifique
+ * @param string $role role à rechercher
+ * @param array $roleData tableau des role récupérer par la fonction selectUserRoles
+ * @return int 
+ */
+function searchRole($role,$roleData) {
+	return (array_search($role, array_column($roleData, "label")) !== false) ? 1 : 0;
 }
 ?>
