@@ -1,6 +1,8 @@
 var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
 
 
+/* AUTHENTIFICATION AJAX FUNC */
+
 function auth($tel,$password){
     oRep = $.ajax({
         type: "GET",
@@ -20,10 +22,9 @@ function auth($tel,$password){
     });
     return oRep;
 }
+/***** AUTHENTIFICATION END **********/
 
-
-
-
+/* USERS AJAX FUNC */
 
 function GETUsers(){
     oRep = $.ajax({
@@ -74,7 +75,7 @@ function GETUserbyID($id){
  * Exemple de JSON : $Infos{[firstName]:Prénom,[lastName]:Nom,[age]:20,[sex]:1,[mail]:monMail@gmail.com,[tel]:0601020304,[studies]:Ingénieur,[password]:mpLabX}
  */
 
-function PUTUser($informations,$uid){
+function ModifyUser($informations,$uid){
     $data = [];
     if ($informations["firstName"])
         $data["firstname"] = $informations["firstName"];
@@ -109,10 +110,6 @@ function PUTUser($informations,$uid){
     
 }
 
-
-
-
-
 /**
  * 
  * @param $id Id de l'utilisateur
@@ -121,7 +118,7 @@ function PUTUser($informations,$uid){
  * Exemple de JSON : $Infos{[firstName]:Prénom,[lastName]:Nom,[age]:20,[sex]:1,[mail]:monMail@gmail.com,[tel]:0601020304,[studies]:Ingénieur,[password]:mpLabX}
  */
 
-function POSTUser($informations){
+function CreateUser($informations){
     $.ajax({
         type: "POST",
         url: api + "/users",
@@ -173,48 +170,7 @@ function POSTUser($informations){
     
 }
 
-
-function POSTInstruments($iid){
-    $.ajax({
-        type: "POST",
-        url: api + "/users/instruments",
-        headers: {"authToken":""}, // données dans les entetes 
-        data: [     
-            {
-            "key": "iid",
-            "value": $iid
-            }],
-        error : function(){
-            console.log("Une erreur s'est produite");
-        },
-        success: function(oRep){
-            console.log(oRep); 
-        },
-        dataType: "json"
-    });   
-}
-
-function POSTAchievements($aid){
-    $.ajax({
-        type: "POST",
-        url: api + "/users/achievements",
-        headers: {"authToken":""}, // données dans les entetes 
-        data: [     
-            {
-            "key": "aid",
-            "value": $aid
-            }],
-        error : function(){
-            console.log("Une erreur s'est produite");
-        },
-        success: function(oRep){
-            console.log(oRep); 
-        },
-        dataType: "json"
-    });   
-}
-
-function POSTUserRole($uid,$rid){
+function AddUserRole($uid,$rid){
     $.ajax({
         type: "POST",
         url: api + "/users/"+ $uid + "/achievements",
@@ -223,6 +179,26 @@ function POSTUserRole($uid,$rid){
             {
                 "key": "rid",
                 "value": $rid
+            }],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
+function AddserInstruments($iid){
+    $.ajax({
+        type: "POST",
+        url: api + "/users/instruments",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [     
+            {
+            "key": "iid",
+            "value": $iid
             }],
         error : function(){
             console.log("Une erreur s'est produite");
@@ -250,6 +226,9 @@ function VerifMail(){
     });   
 }
 
+/***** USERS END **********/
+
+/* ROLES AJAX FUNC */
 
 function ListerRoles($active){
     $.ajax({
@@ -267,7 +246,7 @@ function ListerRoles($active){
     });   
 }
 
-function ModifRole($informations,$rid){
+function ModifyRole($informations,$rid){
     if ($informations["label"])
         $data["label"] = $informations["label"];
     if ($informations["active"])
@@ -307,9 +286,12 @@ function CreateRole($informations,$rid){
         dataType: "json"
     });   
 }
+/***** ROLES END **********/
 
 
-function GetInstruments(){
+/* INSTRUMENTS AJAX FUNC */
+
+function ListInstruments(){
     $.ajax({
         type: "GET",
         url: api + "/instruments",
@@ -325,7 +307,7 @@ function GetInstruments(){
     });   
 }
 
-function ModifInstruments($label,$iid){
+function ModifyInstruments($label,$iid){
     $.ajax({
         type: "PUT",
         url: api + "/instruments/"+ $iid,
@@ -341,7 +323,7 @@ function ModifInstruments($label,$iid){
     });   
 }
 
-function CreerInstruments($label){
+function CreateInstruments($label){
     $.ajax({
         type: "POST",
         url: api + "/instruments",
@@ -356,13 +338,17 @@ function CreerInstruments($label){
         dataType: "json"
     });   
 }
+ 
+/***** INSTRUMENTS END **********/
 
 
 
-function ListerPosts(){
+/* ACHIEVEMENTS AJAX FUNC */
+
+function ListAchievements(){
     $.ajax({
         type: "GET",
-        url: api + "/posts",
+        url: api + "/achievements",
         headers: {"authToken":""}, // données dans les entetes 
         data: [],
         error : function(){
@@ -370,17 +356,52 @@ function ListerPosts(){
         },
         success: function(oRep){
             console.log(oRep); 
-            oRep["posts"].forEach(element => {
-                JcreerPost(element);
-            });
-
         },
         dataType: "json"
     });   
 }
 
+function ModifyAchievements($aid,$label){
+    $.ajax({
+        type: "PUT",
+        url: api + "/achievement/"+$aid,
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [{"key": "label" , "value" : $label}],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
+function CreateAchievements($aid){
+    $.ajax({
+        type: "POST",
+        url: api + "/users/achievements",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [     
+            {
+            "key": "aid",
+            "value": $aid
+            }],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+/* ACHIEVEMENTS END */
+
+/* GROUPS AJAX FUNC */
+
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
-function ListerConv(){
+function ListConv(){
     $.ajax({
         type: "GET",
         url: api + " /groups",
@@ -403,7 +424,7 @@ function ListerConv(){
  * Récupérer la liste des permissions d'un groupe
  * @param {*} $gid Identifiant du groupe
  */
-function ListerPermsConv($gid){
+function ListPermsConv($gid){
     $.ajax({
         type: "GET",
         url: api + "/groups/" + $gid + "/permissions",
@@ -424,7 +445,7 @@ function ListerPermsConv($gid){
  * Récupérer la liste des messages d'un groupe
  * @param {*} $gid Identifiant du groupe
  */
-function ListerMsgConv($gid){
+function ListMsgConv($gid){
     $.ajax({
         type : "GET",
         url : api + "/groups/" + $gid + "/messages",
@@ -448,7 +469,7 @@ function ListerMsgConv($gid){
  * @param {*} $gid Identifiant d'un groupe
  * @param {*} $mid Identifiant d'un message
  */
-function ListerReactMsgConv($gid, $mid){
+function ListReactMsgConv($gid, $mid){
     $.ajax({
         type :"GET",
         url : api + "/groups/" + $gid + "/messages/" + $mid,
@@ -469,7 +490,7 @@ function ListerReactMsgConv($gid, $mid){
  * Créer un groupe
  * @param {*} $informations Donnée de l'image & Titre de la discu
  */
-function CreerConv($informations){
+function CreateConv($informations){
     if($informations["image"])
         $data["image"] = $informations["image"];
     if($informations["titre"])
@@ -496,7 +517,7 @@ function CreerConv($informations){
  * @param {*} $gid Identifiant du groupe
  * @param {*} $uid Identifiant de l'utilisateur
  */
-function AjouterUserConv($gid, $uid){
+function AddUserConv($gid, $uid){
     $.ajax({
         type: "POST",
         url: api + "/groups/" + $gid + "/users/" + $uid,
@@ -519,7 +540,7 @@ function AjouterUserConv($gid, $uid){
  * @param {*} $informations Contenu du message & Identifiant du message cible
  */
 
-function AjouterMsgConv($gid, $informations){
+function AddMsgConv($gid, $informations){
 
     $data["content"] = $informations["content"];
     if($informations["answerTo"])
@@ -541,9 +562,73 @@ function AjouterMsgConv($gid, $informations){
     });
 
 }
+/* GROUPS END */
+
+/* POSTS AJAX FUNC */
+function ListPosts(){
+    $.ajax({
+        type: "GET",
+        url: api + "/posts",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            oRep["posts"].forEach(element => {
+                JcreerPost(element);
+            });
+
+        },
+        dataType: "json"
+    });   
+}
+
+
+/* POSTS END */
+
+
+
+/* AGENDAS AJAX FUNC */
+
 
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
-function ListerAppel($aid,$eid){
+function ListCalendars(){
+    $.ajax({
+        type: "GET",
+        url: api + "/agendas/",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    }); 
+}
+
+function ListCalendarsEvents($aid){
+    $.ajax({
+        type: "GET",
+        url: api + "/agendas/"+$aid,
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    }); 
+}
+
+
+/** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
+function ListCallMembers($aid,$eid){
     $.ajax({
         type: "GET",
         url: api + "/agendas/"+$aid+"/event/"+$eid+"/calls",
@@ -561,8 +646,91 @@ function ListerAppel($aid,$eid){
         dataType: "json"
     }); 
 }
+
+function CreateCalendars(){
+    $.ajax({
+        type: "POST",
+        url: api + "/agendas/",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    }); 
+}
   
 
+function CreateEventCalendars($aid){
+    $.ajax({
+        type: "POST",
+        url: api + "/agendas/"+$aid+"/events",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    }); 
+}
+/* END AGENDAS */
+
+/* PARTCIPATIONS AJAX FUNC */
+function ListUserParticipation($uid,$aeid){
+    $.ajax({
+        type: "GET",
+        url: api + "/users/"+$uid+"/agendas/"+$aeid+"/participations",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    }); 
+}
+
+function ModifUserParticipation($uid,$aeid,$partcipe){
+    $.ajax({
+        type: "PUT",
+        url: api + "/users/"+$uid+"/agendas/"+$aeid+"/participations?participation="+$partcipe,
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [{"key":"participation","value":$partcipe}],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    }); 
+}
+
+function AddUserParticipation($uid,$aeid,$partcipe){
+    $.ajax({
+        type: "POST",
+        url: api + "/users/"+$uid+"/agendas/"+$aeid+"/participations?participation="+$partcipe,
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [{"key":"participation","value":$partcipe}],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    }); 
+}
+
+/* PARTICIPATION END */
 
 
 
