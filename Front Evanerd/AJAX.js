@@ -97,7 +97,7 @@ function PUTUser($informations,$uid){
         headers: {"authToken":""}, // données dans les entetes 
         data: $data,
         error : function(){
-            console.log("Une erreur s'est produite");
+            console.log("Une erreur s'est produite : ERROR 403");
         },
         success: function(oRep){
             console.log(oRep); 
@@ -172,6 +172,85 @@ function POSTUser($informations){
     });
     
 }
+
+
+function POSTInstruments($iid){
+    $.ajax({
+        type: "POST",
+        url: api + "/users/instruments",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [     
+            {
+            "key": "iid",
+            "value": $iid
+            }],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
+function POSTAchievements($aid){
+    $.ajax({
+        type: "POST",
+        url: api + "/users/achievements",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [     
+            {
+            "key": "aid",
+            "value": $aid
+            }],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
+function POSTUserRole($uid,$rid){
+    $.ajax({
+        type: "POST",
+        url: api + "/users/"+ $uid + "/achievements",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [     
+            {
+            "key": "rid",
+            "value": $rid
+            }],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
+function VerifMail(){
+    $.ajax({
+        type: "POST",
+        url: api + "/users/verify",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
+
 
 
 
