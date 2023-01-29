@@ -155,33 +155,30 @@ function selectUser($idUser, $me = 0){
     return Database::parcoursRs($db->SQLSelect($sql, $params));
 }
 
-function updateUser($idUser,$mail = null,$tel = null,$age = null,$studies = null,$password=null){
+function updateUser($idUser,$mail = false,$tel = false,$age = false,$studies = false,$image = false,$password=false){
     $db = Config::getDatabase();
     $params = [];
-    $sql = "UPDATE Users SET";
-    if ($mail != null){
-        $sql = $sql . ",mail = ?";
-        array_push($params, $mail);
-    }
-    if ($tel != null){
-        $sql = $sql . ",tel = ?";
-        array_push($params, $tel);
-    }
-    if ($age != null){
-        $sql = $sql . ",age = ?";
-        array_push($params, $age);
-    }
-    if ($studies != null){
-        $sql = $sql . ",studies = ?";
-        array_push($params, $studies);
-    }
-    if ($password != null){
-        $sql = $sql . ",password = ?";
-        array_push($params, $password);
-    }
+
+    $sqlMail = $mail ? "?": "mail";
+    $sqlTel = $tel ? "?" : "tel";
+    $sqlAge = $age ? "?" : "age";
+    $sqlStudies = $studies ? "?" : "studies";
+    $sqlPassword = $password ? "?" : "password";
+    $sqlImage = $image ? "?": "photo";
+
+    if ($mail != false) array_push($params, $mail);
+    if ($tel != false) array_push($params, $tel);
+    if ($age != false) array_push($params, $age);
+    if ($studies != false) array_push($params, $studies);
+    if ($password != false) array_push($params, $password);
+    if ($image != false) array_push($params, $image);
     array_push($params,$idUser);
-    $sql = $sql . "WHERE id = ?";
-    return Database::parcoursRs($db->SQLUpdate($sql, $params));
+
+    if(count($params) == 1) return false;
+    $sql = "UPDATE Users SET mail=$sqlMail, tel=$sqlTel, age=$sqlAge, studies=$sqlStudies, password=$sqlPassword, photo=$sqlImage
+            WHERE id = ?";
+            
+    return $db->SQLUpdate($sql, $params);
 }
 /*
 function deleteUser($idUser){
