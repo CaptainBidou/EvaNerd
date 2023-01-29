@@ -219,6 +219,30 @@ function AddserInstruments($iid){
     });   
 }
 
+/**
+ * Requête permettant d'ajouter un achievement à un utilisateur
+ * @param {*} $aid Identifiant d'achievement
+ */
+function AddserAchievement($aid){
+    $.ajax({
+        type: "POST",
+        url: api + "/users/instruments",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [     
+            {
+            "key": "aid",
+            "value": $aid
+            }],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
 /** Requête permettant de vérifier le mail */
 function VerifMail(){
     $.ajax({
