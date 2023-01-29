@@ -386,6 +386,57 @@ function CreerConv($informations){
     });
 }
 
+/**
+ * Ajouter un utilisateur à un groupe
+ * @param {*} $gid Identifiant du groupe
+ * @param {*} $uid Identifiant de l'utilisateur
+ */
+function AjouterUserConv($gid, $uid){
+    $.ajax({
+        type: "POST",
+        url: api + "/groups/" + $gid + "/users/" + $uid,
+        headers: {"authToken" : ""},
+        data: [],
+        error: function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+            // à voir
+        },
+        dataType: "json"
+    });
+}
+
+/**
+ * Envoyer un message dans le groupe
+ * @param {} $gid Identifiant du groupe
+ * @param {*} $informations Contenu du message & Identifiant du message cible
+ */
+
+function AjouterMsgConv($gid, $informations){
+
+    $data["content"] = $informations["content"];
+    if($informations["answerTo"])
+        $data["answerTo"] = $informations["answerTo"];
+    
+    $.ajax({
+        type: "POST",
+        url: api + "/groups/" + $gid + "/messages",
+        headers: {"authToken" : ""},
+        data: $data,
+        error: function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+            // JAjouterMsg
+        },
+        dataType: "json"
+    });
+
+}
+
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
 function ListerAppel($aid,$eid){
     $.ajax({
