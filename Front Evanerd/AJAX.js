@@ -68,7 +68,7 @@ function GETUserbyID($id){
 }
 
 /**
- * 
+ * Requête permettant de modifier les informations d'un utilisateur
  * @param $id Id de l'utilisateur
  * @param $informations Un JSON contenant les différentes données nécessaires à la création d'un compte
  * 
@@ -111,7 +111,7 @@ function ModifyUser($informations,$uid){
 }
 
 /**
- * 
+ * Requête permettant de créer un nouvel utilisateur
  * @param $id Id de l'utilisateur
  * @param $informations Un JSON contenant les différentes données nécessaires à la création d'un compte
  * 
@@ -170,6 +170,11 @@ function CreateUser($informations){
     
 }
 
+/**
+ * Requête permettant d'ajouter un rôle à un utilisateur
+ * @param {*} $uid Identifiant de l'utilisateur
+ * @param {*} $rid Identifiant du rôle
+ */
 function AddUserRole($uid,$rid){
     $.ajax({
         type: "POST",
@@ -190,6 +195,10 @@ function AddUserRole($uid,$rid){
     });   
 }
 
+/**
+ * Requête permettant d'ajouter un instrument à un utilisateur
+ * @param {*} $iid Identifiant d'instrument
+ */
 function AddserInstruments($iid){
     $.ajax({
         type: "POST",
@@ -210,6 +219,7 @@ function AddserInstruments($iid){
     });   
 }
 
+/** Requête permettant de vérifier le mail */
 function VerifMail(){
     $.ajax({
         type: "POST",
@@ -230,6 +240,10 @@ function VerifMail(){
 
 /* ROLES AJAX FUNC */
 
+/**
+ * Requête permettant de lister les roles selon le paramètre active
+ * @param {*} $active Permet de préciser : 0 = Rôles inactifs; 1 = Rôles actifs; "both" = Les deux;
+ */
 function ListerRoles($active){
     $.ajax({
         type: "GET",
@@ -246,6 +260,11 @@ function ListerRoles($active){
     });   
 }
 
+/**
+ * Requête permettant de modifier un role à partir de ces informations
+ * @param {*} $informations Tableau de JSON contenant label et active* (*optionnel) 
+ * @param {*} $rid Identifiant du role
+ */
 function ModifyRole($informations,$rid){
     if ($informations["label"])
         $data["label"] = $informations["label"];
@@ -266,6 +285,11 @@ function ModifyRole($informations,$rid){
     });   
 }
 
+/**
+ * Requête permettant de créer un role à partir de ces informations
+ * @param {*} $informations Tableau de JSON contenant label et active* (*optionnel) 
+ * @param {*} $rid Identifiant du role
+ */
 function CreateRole($informations,$rid){
     $data["label"] = $informations["label"];
     if ($informations["active"])
@@ -291,6 +315,9 @@ function CreateRole($informations,$rid){
 
 /* INSTRUMENTS AJAX FUNC */
 
+/**
+ * Requête permettant de lister tout les instruments
+ */
 function ListInstruments(){
     $.ajax({
         type: "GET",
@@ -307,6 +334,11 @@ function ListInstruments(){
     });   
 }
 
+/**
+ * Requête permettant de modifier le nom d'un instruments 
+ * @param {*} $label Nom de l'instrument
+ * @param {*} $iid Identifiant de l'instrument
+ */
 function ModifyInstruments($label,$iid){
     $.ajax({
         type: "PUT",
@@ -323,6 +355,10 @@ function ModifyInstruments($label,$iid){
     });   
 }
 
+/**
+ * Requête permettant d'ajouter un instruments
+ * @param {*} $label Nom de l'instrument
+ */
 function CreateInstruments($label){
     $.ajax({
         type: "POST",
@@ -345,6 +381,9 @@ function CreateInstruments($label){
 
 /* ACHIEVEMENTS AJAX FUNC */
 
+/**
+ * Requête permettant d'obtenir la liste des achievement
+ */
 function ListAchievements(){
     $.ajax({
         type: "GET",
@@ -361,6 +400,11 @@ function ListAchievements(){
     });   
 }
 
+/**
+ * Requête permettant de modifier un achievement
+ * @param {*} $aid Identifiant de l'achievement
+ * @param {*} $label Nom de l'achievement
+ */
 function ModifyAchievements($aid,$label){
     $.ajax({
         type: "PUT",
@@ -377,16 +421,15 @@ function ModifyAchievements($aid,$label){
     });   
 }
 
-function CreateAchievements($aid){
+/**
+ * Requête permettant de créer un achievement
+ */
+function CreateAchievements(){
     $.ajax({
         type: "POST",
         url: api + "/users/achievements",
         headers: {"authToken":""}, // données dans les entetes 
-        data: [     
-            {
-            "key": "aid",
-            "value": $aid
-            }],
+        data: [],
         error : function(){
             console.log("Une erreur s'est produite");
         },
@@ -421,7 +464,7 @@ function ListConv(){
 }
 
 /**
- * Récupérer la liste des permissions d'un groupe
+ * Requête permettant de récupérer la liste des permissions d'un groupe
  * @param {*} $gid Identifiant du groupe
  */
 function ListPermsConv($gid){
@@ -442,7 +485,7 @@ function ListPermsConv($gid){
 }
 
 /**
- * Récupérer la liste des messages d'un groupe
+ * Requête permettant de récupérer la liste des messages d'un groupe
  * @param {*} $gid Identifiant du groupe
  */
 function ListMsgConv($gid){
@@ -465,7 +508,7 @@ function ListMsgConv($gid){
 }
 
 /**
- * Récupérer la liste des réactions d'un message d'un groupe
+ * Requête permettant de récupérer la liste des réactions d'un message d'un groupe
  * @param {*} $gid Identifiant d'un groupe
  * @param {*} $mid Identifiant d'un message
  */
@@ -487,7 +530,7 @@ function ListReactMsgConv($gid, $mid){
 }
 
 /**
- * Créer un groupe
+ * Requête permettant de créer un groupe
  * @param {*} $informations Donnée de l'image & Titre de la discu
  */
 function CreateConv($informations){
@@ -513,7 +556,7 @@ function CreateConv($informations){
 }
 
 /**
- * Ajouter un utilisateur à un groupe
+ * Requête permettant d'ajouter un utilisateur à un groupe
  * @param {*} $gid Identifiant du groupe
  * @param {*} $uid Identifiant de l'utilisateur
  */
@@ -535,7 +578,7 @@ function AddUserConv($gid, $uid){
 }
 
 /**
- * Envoyer un message dans le groupe
+ * Requête permettant d'envoyer un message dans le groupe
  * @param {} $gid Identifiant du groupe
  * @param {*} $informations Contenu du message & Identifiant du message cible
  */
@@ -565,6 +608,8 @@ function AddMsgConv($gid, $informations){
 /* GROUPS END */
 
 /* POSTS AJAX FUNC */
+
+/** Requête permettant de récupérer la liste des posts */
 function ListPosts(){
     $.ajax({
         type: "GET",
@@ -585,7 +630,48 @@ function ListPosts(){
     });   
 }
 
+/**
+ * Requête permettant de récupérer la liste des réactions envoyés sur un post
+ * @param {*} $pid identifiant du post
+ */
 
+function ListPostReactions($pid){
+    $.ajax({
+        type: "GET",
+        url: api + "/posts/"+$pid+"/reactions",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
+
+/**
+ * Requête permettant de récupérer la liste des messages envoyés sur un post
+ * @param {*} $pid identifiant du post
+ */
+
+function ListPostMessages($pid){
+    $.ajax({
+        type: "GET",
+        url: api + "/posts/"+$pid+"/messages",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
 /* POSTS END */
 
 
@@ -609,6 +695,11 @@ function ListCalendars(){
         dataType: "json"
     }); 
 }
+
+/**
+ * Requête permettant de récupérer les événements d'un calendrier
+ * @param {*} $aid Identifiant de l'agenda
+ */
 
 function ListCalendarsEvents($aid){
     $.ajax({
@@ -647,6 +738,9 @@ function ListCallMembers($aid,$eid){
     }); 
 }
 
+/**
+ * Requête permettant de créer un nouveau calendrier
+ */
 function CreateCalendars(){
     $.ajax({
         type: "POST",
@@ -663,7 +757,10 @@ function CreateCalendars(){
     }); 
 }
   
-
+/**
+ * Requête permettant de créer un nouvelle évenement dans le calendrier
+ * @param {*} $aid Identifiant du calendrier
+ */
 function CreateEventCalendars($aid){
     $.ajax({
         type: "POST",
@@ -682,6 +779,12 @@ function CreateEventCalendars($aid){
 /* END AGENDAS */
 
 /* PARTCIPATIONS AJAX FUNC */
+
+/**
+ * Requête permettant de lister l'ensemble des participants à un événement
+ * @param {*} $uid Identifiant de l'utilisateur
+ * @param {*} $aeid Identifiant de l'évenement dans l'agenda
+ */
 function ListUserParticipation($uid,$aeid){
     $.ajax({
         type: "GET",
@@ -698,6 +801,12 @@ function ListUserParticipation($uid,$aeid){
     }); 
 }
 
+/**
+ * Requête permettant de modifier le statut de participation de l'utilisateur à un événement
+ * @param {*} $uid Identifiant de l'utilisateur
+ * @param {*} $aeid Identifiant de l'évenement dans l'agenda
+ * @param {*} $partcipe 
+ */
 function ModifUserParticipation($uid,$aeid,$partcipe){
     $.ajax({
         type: "PUT",
@@ -714,6 +823,12 @@ function ModifUserParticipation($uid,$aeid,$partcipe){
     }); 
 }
 
+/**
+ * Requête permettant d'ajouter le statut de participation de l'utilisateur à un événement
+ * @param {*} $uid Identifiant de l'utilisateur
+ * @param {*} $aeid Identifiant de l'évenement dans l'agenda
+ * @param {*} $partcipe 
+ */
 function AddUserParticipation($uid,$aeid,$partcipe){
     $.ajax({
         type: "POST",
