@@ -275,9 +275,35 @@ function ListerReactMsgConv($gid, $mid){
         },
         sucess : function(oRep){
             console.log(oRep);
-            // Fonctions ReactMsgConv
+            // Fonctions JReactMsgConv
         },
         dataType : "json"
+    });
+}
+
+/**
+ * Créer un groupe
+ * @param {*} $informations Donnée de l'image & Titre de la discu
+ */
+function CreerConv($informations){
+    if($informations["image"])
+        $data["image"] = $informations["image"];
+    if($informations["titre"])
+        $data["titre"] = $informations["titre"];
+
+    $.ajax({
+        type:"POST",
+        url: api + "/groups",
+        headers:{"authToken" : ""},
+        data: $data,
+        error: function(){
+            console.log("Une erreur s'est produite");
+        },
+        success : function(oRep){
+            console.log(oRep);
+            //Fonction JCreerConv
+        },
+        dataType: "json"
     });
 }
 
