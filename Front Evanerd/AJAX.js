@@ -221,8 +221,8 @@ function POSTUserRole($uid,$rid){
         headers: {"authToken":""}, // données dans les entetes 
         data: [     
             {
-            "key": "rid",
-            "value": $rid
+                "key": "rid",
+                "value": $rid
             }],
         error : function(){
             console.log("Une erreur s'est produite");
@@ -251,6 +251,111 @@ function VerifMail(){
 }
 
 
+function ListerRoles($active){
+    $.ajax({
+        type: "GET",
+        url: api + "/roles/",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [{"key": "active" , "value" : $active}],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
+function ModifRole($informations,$rid){
+    if ($informations["label"])
+        $data["label"] = $informations["label"];
+    if ($informations["active"])
+        $data["active"] = $informations["active"];
+    $.ajax({
+        type: "PUT",
+        url: api + "/roles/"+$rid,
+        headers: {"authToken":""}, // données dans les entetes 
+        data: $data,
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
+function CreateRole($informations,$rid){
+    $data["label"] = $informations["label"];
+    if ($informations["active"])
+        $data["active"] = $informations["active"];
+    else
+        $data["active"] = 1;
+    $.ajax({
+        type: "POST",
+        url: api + "/roles/",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: $data,
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
+
+function GetInstruments(){
+    $.ajax({
+        type: "GET",
+        url: api + "/instruments",
+        headers: {"authToken":""}, // données dans les entetes 
+        data:[],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
+function ModifInstruments($label,$iid){
+    $.ajax({
+        type: "PUT",
+        url: api + "/instruments/"+ $iid,
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [{"key": "label" , "value" : $label}],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
+
+function CreerInstruments($label){
+    $.ajax({
+        type: "POST",
+        url: api + "/instruments",
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [{"key": "label" , "value" : $label}],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
+}
 
 
 
