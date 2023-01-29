@@ -279,4 +279,13 @@ function isPhoneNumber($string) {
 
 	return false;
 }
+
+/**
+ * Retourne le sexe de l'utilisateur si le sexe est bien compris entre {0,1,2}
+ */
+function isSex($sex) {
+	$possible = [0,1,2];
+	if(array_search($sex,$possible, true) !== false) return $sex;
+	return false;
+}
 ?>

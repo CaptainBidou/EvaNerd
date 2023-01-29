@@ -2,6 +2,13 @@
 
 include_once("includes/Config.php");
 
+
+function phoneToUid($tel) {
+    $db = Config::getDatabase();
+    $sql = "SELECT Users.tel FROM Users WHERE Users.tel = ?;";
+    return $db->SQLGetChamp($sql, [$tel]);
+}
+
 function getNewUid() {
     $db = Config::getDatabase();
     $sql = "SELECT MAX(Users.id)+1 FROM `Users`";
@@ -12,6 +19,12 @@ function confirmToUser($confirmToken) {
     $db = Config::getDatabase();
     $sql = "SELECT Users.id FROM Users WHERE Users.confirmToken = ?";
     return $db->SQLGetChamp($sql,[$confirmToken]);
+}
+
+function selectConfirmToken($uid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT Users.confirmToken FROM Users WHERE Users.id = ?";
+    return $db->SQLGetChamp($sql, [$uid]);
 }
 
 function activateUser($uid) {
@@ -217,9 +230,9 @@ function deleteUser($idUser){
     /* Suppression des posts concernant l'utilisateur et des commentaires et réaction de ces posts 
 }*/
 
-function insertUser($firstname,$lastname,$mail,$tel,$password,$age,$studies = "" , $sex = 0, $image = "default.png"){
+function insertUser($firstname,$lastname,$mail,$tel,$password,$age,$confirmToken,$studies = "" , $sex = 0, $image = "default.png"){
     $db = Config::getDatabase();
-    $params = [$firstname,$lastname,$mail,$tel,$password,$age, $studies, $sex, $image, generateEmailConfirmToken($tel)];
+    $params = [$firstname,$lastname,$mail,$tel,$password,$age, $studies, $sex, $image, $confirmToken];
     $sql = "INSERT INTO Users (firstname, lastname, mail, tel, password, age, studies, sex, photo, activation, confirmToken) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)";
     

@@ -81,20 +81,11 @@ function postUser($data, $queryString) {
     if($mail = isEmail(htmlspecialchars(valider("mail", $queryString))))
     if($tel = isPhoneNumber(valider("tel", $queryString)))
     if($plainPassword = validString(valider("password", $queryString), 70, 5))
-    if($age = valider("age", $queryString)) {
+    if($age = intval(valider("age", $queryString))) {
+        if(phoneToUid($tel) !== false) sendError("Il y a déjà un compte avec ce numéro de téléphone !", HTTP_FORBIDDEN);
         // Récupérations des champs optionnels 
         ($studies = validString(htmlspecialchars(valider("studies", $queryString)), 50, 0)) ? : $studies = "";
-        ($sex = valider("sex", $queryString)) ? : $sex = 0;
-        // TODO :
-            // age :
-                // -> must be a int
-            // tel :
-                // -> must be unique
-            // sex
-                // -> must be 0, 1, 2
-            // imageData
-                // -> must be an image
-            // -> size not exceed ? mb
+        ($sex = isSex(valider("sex", $queryString))) ? : $sex = 0;
         // On hash le mot de passe avec l'algo bcrypt2 et avec un cout de 10
         $password = password_hash($plainPassword, PASSWORD_BCRYPT, ["cost"=>10]);
         // TODO : traitement des images
@@ -110,8 +101,13 @@ function postUser($data, $queryString) {
             $image = "default.png";
             defaultPicture("$dir/$image", $firstName, $lastName);
         }
+        // Génération du token de confirmation
+        $token = generateEmailConfirmToken($tel);
         // Enfin si tout est bon alors on créer l'utilisateur en base et on le renvoie en réponse
-        $idUser = insertUser($firstName, $lastName, $mail, $tel, $password, $age, $studies, $sex, $image);
+        $idUser = insertUser($firstName, $lastName, $mail, $tel, $password, $age,$token, $studies, $sex, $image);
+        // TODO : Récupérer l'objet mail pour envoyer le mail avec le lien de confirmation
+
+        // On envoie l'utilisateur créé
         $data["user"] = selectUser($idUser)[0]; 
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
     }
