@@ -242,25 +242,25 @@ if(Reponse.membre==0)
  * 
  */
 function JcreerHeader(Reponse){
-var JCloneHeader=JHeader.clone(true,true);
-var JCloneHeaderLogo=JHeaderLogo.clone(true,true);
-var JCloneHeaderSearch=JHeaderSearch.clone(true,true);
-var JCloneHeaderTag=JHeaderTag.clone(true,true);
-var JCloneHeaderMenu=JHeaderMenu.clone(true,true);
-var JCloneHeaderItem=JHeaderItem.clone(true,true);
+    var JCloneHeader=JHeader.clone(true,true);
+    var JCloneHeaderLogo=JHeaderLogo.clone(true,true);
+    var JCloneHeaderSearch=JHeaderSearch.clone(true,true);
+    var JCloneHeaderTag=JHeaderTag.clone(true,true);
+    var JCloneHeaderMenu=JHeaderMenu.clone(true,true);
+    var JCloneHeaderItem=JHeaderItem.clone(true,true);
 
-JCloneHeaderMenu.append(JHeaderItem);
+    JCloneHeaderMenu.append(JHeaderItem);
 
 
-if(Reponse.photo!=null){
-    var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.photo);
-}
-else{
-    var JCloneHeaderProfile=null;
-}
+    if(Reponse.photo!=null){
+        var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.photo);
+    }
+    else{
+        var JCloneHeaderProfile=null;
+    }
 
-JCloneHeader.append(JCloneHeaderLogo).append(JCloneHeaderTag).append(JCloneHeaderMenu).append(JCloneHeaderSearch).append(JCloneHeaderProfile);
-$("#header").append(JCloneHeader);
+    JCloneHeader.append(JCloneHeaderLogo).append(JCloneHeaderTag).append(JCloneHeaderMenu).append(JCloneHeaderSearch).append(JCloneHeaderProfile);
+    $("#header").append(JCloneHeader);
 
 }
 
@@ -317,13 +317,11 @@ function JClickFooter(context){
 function JSetFooterColorBlack()
 {
     
-$("#Accueil").attr("src","Ressources/Footer/accueil.png");
-$("#Creer").attr("src",'Ressources/Footer/creer.png');
-$("#Appel").attr("src",'Ressources/Footer/appel.png');
-$("#Calendrier").attr("src",'Ressources/Footer/calendrier.png');
-$("#Mail").attr("src",'Ressources/Footer/email.png');
-
-
+    $("#Accueil").attr("src","Ressources/Footer/accueil.png");
+    $("#Creer").attr("src",'Ressources/Footer/creer.png');
+    $("#Appel").attr("src",'Ressources/Footer/appel.png');
+    $("#Calendrier").attr("src",'Ressources/Footer/calendrier.png');
+    $("#Mail").attr("src",'Ressources/Footer/email.png');
 
 }
 
@@ -349,41 +347,23 @@ $("#Mail").attr("src",'Ressources/Footer/email.png');
  * 
  */
 function JCreerConv(Reponse){
-var JCloneConv =JConv.clone(true,true).attr("type_id",Reponse.id).css("background-color",JCouleur);
+    var JCloneConv =JConv.clone(true,true).attr("type_id",Reponse.id).css("background-color",JCouleur);
 
-if (JCouleur == 'silver')
-JCouleur='Lightgray';
-else
-JCouleur='silver';
-
-
-
-var JCloneConvImage = JConvImg.clone(true,true);
-if(Reponse.image!=null)
-{JCloneConvImage.attr("src",Reponse.image);
-JCloneConv.append(JCloneConvImage);}
-
-
-
-var JCloneConvp=JConvp.clone(true,true);
-
-
-    JCloneConvp.text(Reponse.titre);
+    if (JCouleur == 'silver')
+        JCouleur='Lightgray';
+    else
+        JCouleur='silver';
     
-
-
-
-
-
-
-
-JCloneConv.append(JCloneConvp);
-$("#page").append(JCloneConv);
-
-
-
-
-
+    var JCloneConvImage = JConvImg.clone(true,true);
+    if(Reponse.image!=null)
+    {
+        JCloneConvImage.attr("src",Reponse.image);
+        JCloneConv.append(JCloneConvImage);
+    }
+    var JCloneConvp=JConvp.clone(true,true);
+    JCloneConvp.text(Reponse.titre);
+    JCloneConv.append(JCloneConvp);
+    $("#page").append(JCloneConv);
 }
 
 /**
@@ -428,66 +408,60 @@ function JAfficherMessageConv(Reponse){
 
 
 function JCreerConcert(Reponse){
-var JCloneconcert=JConcert.clone(true,true).css("background-color",JCouleur);
-var JClonedate=JConcertDate.clone(true,true).text(Reponse.date);
-var JCloneTitre= JConcertTitre.clone(true,true).text(Reponse.titre);
-var JCloneCommentaire= JConcertCommentaire.clone(true,true).text(Reponse.commentaire).css("max-height","20%");
-JCloneCommentaire= ajouterTextOverflow(JCloneCommentaire,80);
-JCloneCommentaire.on("click",function(context){afficherToutleText(context);})
-var JCloneJeviens=JConcertJeviens.clone(true,true);
-var JCloneJevienspas=JConcertJevienspas.clone(true,true);
-var JCloneJevienspeutetre =JConcertJevienspeutetre.clone(true,true);
+    var JCloneconcert=JConcert.clone(true,true).css("background-color",JCouleur);
+    var JClonedate=JConcertDate.clone(true,true).text(Reponse.date);
+    var JCloneTitre= JConcertTitre.clone(true,true).text(Reponse.titre);
+    var JCloneCommentaire= JConcertCommentaire.clone(true,true).text(Reponse.commentaire).css("max-height","20%");
+    JCloneCommentaire= ajouterTextOverflow(JCloneCommentaire,80);
+    JCloneCommentaire.on("click",function(context){afficherToutleText(context);})
+    var JCloneJeviens=JConcertJeviens.clone(true,true);
+    var JCloneJevienspas=JConcertJevienspas.clone(true,true);
+    var JCloneJevienspeutetre =JConcertJevienspeutetre.clone(true,true);
 
-var JCloneProgress=JConcertProgress.clone(true,true);
-var JClonepourcentage=JConcertpourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
+    var JCloneProgress=JConcertProgress.clone(true,true);
+    var JClonepourcentage=JConcertpourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
 
-JCloneJeviens.on("click",function(){
-    JCloneJeviens.fadeOut();
-    JCloneJevienspas.fadeOut();
-    JCloneJevienspeutetre.fadeOut();
-});
-JCloneJevienspeutetre.on("click",function(){
-    JCloneJeviens.fadeOut();
-    JCloneJevienspas.fadeOut();
-    JCloneJevienspeutetre.fadeOut();
-});
-JCloneJevienspas.on("click",function(){
-    JCloneJeviens.fadeOut();
-    JCloneJevienspas.fadeOut();
-    JCloneJevienspeutetre.fadeOut();
-});
-
-
-if(Reponse.pourcentage<33)
-JClonepourcentage.css('background-color','red');
-
-else if(Reponse.pourcentage<63)
-JClonepourcentage.css('background-color','orange');
-
-else if(Reponse.pourcentage<100)
-    JClonepourcentage.css('background-color','green');
+    JCloneJeviens.on("click",function(){
+        JCloneJeviens.fadeOut();
+        JCloneJevienspas.fadeOut();
+        JCloneJevienspeutetre.fadeOut();
+    });
+    JCloneJevienspeutetre.on("click",function(){
+        JCloneJeviens.fadeOut();
+        JCloneJevienspas.fadeOut();
+        JCloneJevienspeutetre.fadeOut();
+    });
+    JCloneJevienspas.on("click",function(){
+        JCloneJeviens.fadeOut();
+        JCloneJevienspas.fadeOut();
+        JCloneJevienspeutetre.fadeOut();
+    });
 
 
+    if(Reponse.pourcentage<33)
+        JClonepourcentage.css('background-color','red');
+
+    else if(Reponse.pourcentage<63)
+        JClonepourcentage.css('background-color','orange');
+
+    else if(Reponse.pourcentage<100)
+        JClonepourcentage.css('background-color','green');
 
 
+    if (JCouleur == 'silver')
+        JCouleur='Lightgray';
+    else
+        JCouleur='silver';
 
 
-if (JCouleur == 'silver')
-JCouleur='Lightgray';
-else
-JCouleur='silver';
+    JCloneProgress.append(JClonepourcentage);
 
+    if(Reponse.vote==0)
+        JCloneconcert.append(JCloneTitre).append(JClonedate).append(JCloneCommentaire).append(JCloneJeviens).append(JCloneJevienspas).append(JCloneJevienspeutetre).append(JCloneProgress);
+    else
+        JCloneconcert.append(JCloneTitre).append(JClonedate).append(JCloneCommentaire).append(JCloneProgress);
 
-JCloneProgress.append(JClonepourcentage);
-
-if(Reponse.vote==0)
-JCloneconcert.append(JCloneTitre).append(JClonedate).append(JCloneCommentaire).append(JCloneJeviens).append(JCloneJevienspas).append(JCloneJevienspeutetre).append(JCloneProgress);
-else
-JCloneconcert.append(JCloneTitre).append(JClonedate).append(JCloneCommentaire).append(JCloneProgress);
-
-$('#page').append(JCloneconcert);
-
-
+    $('#page').append(JCloneconcert);
 
 }
 
@@ -502,106 +476,106 @@ $('#page').append(JCloneconcert);
  * 
  */
 function JCreerAppel(Reponse){
-var JCloneRepetition=JRepetition.clone(true,true).css("background-color",JCouleur);
+    var JCloneRepetition=JRepetition.clone(true,true).css("background-color",JCouleur);
 
-if (JCouleur == 'silver')
-JCouleur='Lightgray';
-else
-JCouleur='silver';
+    if (JCouleur == 'silver')
+        JCouleur='Lightgray';
+    else
+        JCouleur='silver';
 
-var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide();
-var JCloneRepetitionRetour=JRepetitionRetour.clone(true,true).hide();
-
-
-var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true);
-var JCloneRepetitionTitre = JRepetitionTitre.clone(true,true).text(Reponse.titre);
-var JCloneRepetitionDate= JRepetitionDate.clone(true,true).text(Reponse.date);
-var JCloneRepetitionCommentaire=JRepetitionCommentaire.clone(true,true).text(Reponse.commentaire);
-JCloneRepetitionCommentaire=ajouterTextOverflow(JCloneRepetitionCommentaire,80);
-var JCloneRepetitionPresent=JRepetitionPresent.clone(true,true);
-var JCloneRepetitionAbsent=JRepetitionAbsent.clone(true,true);
-var JCloneRepetitionJustification2=JRepetitionJustificationText.clone(true,true).hide();
+    var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide();
+    var JCloneRepetitionRetour=JRepetitionRetour.clone(true,true).hide();
 
 
-JCloneRepetition.on("click",function(context){
+    var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true);
+    var JCloneRepetitionTitre = JRepetitionTitre.clone(true,true).text(Reponse.titre);
+    var JCloneRepetitionDate= JRepetitionDate.clone(true,true).text(Reponse.date);
+    var JCloneRepetitionCommentaire=JRepetitionCommentaire.clone(true,true).text(Reponse.commentaire);
+    JCloneRepetitionCommentaire=ajouterTextOverflow(JCloneRepetitionCommentaire,80);
+    var JCloneRepetitionPresent=JRepetitionPresent.clone(true,true);
+    var JCloneRepetitionAbsent=JRepetitionAbsent.clone(true,true);
+    var JCloneRepetitionJustification2=JRepetitionJustificationText.clone(true,true).hide();
+
+
+    JCloneRepetition.on("click",function(context){
+        
+    //if($(context.target).prev().prop('tagName')=="INPUT" ||$(context.target).prev().prop('tagName')=="TEXTAREA"||$(context.target).prev().prop('tagName')=="LABEL")
+    if($(context.target).attr("type")=="present")
+    {
+        
+        JCloneRepetitionEnvoyer.show();
+        JCloneRepetitionAbsent.hide();
+        JCloneRepetitionPresent.hide();
+        JCloneRepetitionRetour.show();
+        JCloneRepetitionEnvoyer.data("valeur","present");
+        
+    }
+
+    if($(context.target).attr("type")=="absent")
+    {
+        JCloneRepetitionJustification2.fadeIn();
+        JCloneRepetitionEnvoyer.show();
+        JCloneRepetitionAbsent.hide();
+        JCloneRepetitionPresent.hide();
+        JCloneRepetitionRetour.show();
+        JCloneRepetitionEnvoyer.data("valeur","absent");
+    }
+    if($(context.target).attr("type")=="motif")
+    {
+
+    }
+
+    if($(context.target).attr("type")=="envoyer"){
+        
+        //TODO placer la requete ici
     
-//if($(context.target).prev().prop('tagName')=="INPUT" ||$(context.target).prev().prop('tagName')=="TEXTAREA"||$(context.target).prev().prop('tagName')=="LABEL")
-if($(context.target).attr("type")=="present")
-{
+        JCloneRepetition.remove();
     
-    JCloneRepetitionEnvoyer.show();
-    JCloneRepetitionAbsent.hide();
-    JCloneRepetitionPresent.hide();
-    JCloneRepetitionRetour.show();
-    JCloneRepetitionEnvoyer.data("valeur","present");
-    
-}
+    }
+    if($(context.target).attr("type")=="retour"){
+        JCloneRepetitionEnvoyer.hide();
+        JCloneRepetitionAbsent.show();
+        JCloneRepetitionPresent.show();
+        JCloneRepetitionRetour.hide();
+        JCloneRepetitionJustification2.hide();
+        
+    }
 
-if($(context.target).attr("type")=="absent")
-{
-    JCloneRepetitionJustification2.fadeIn();
-    JCloneRepetitionEnvoyer.show();
-    JCloneRepetitionAbsent.hide();
-    JCloneRepetitionPresent.hide();
-    JCloneRepetitionRetour.show();
-    JCloneRepetitionEnvoyer.data("valeur","absent");
-}
-if($(context.target).attr("type")=="motif")
-{
+    if($(context.target).attr("type")=="appel_comm"){
 
-}
+    afficherToutleText(context,100); 
+    }
+    /*if (JCloneRepetitionCommentaire.css("text-overflow")=="ellipsis")
+    {
+        JCloneRepetitionCommentaire.css("text-overflow","").css("direction","").css("white-space","").css("overflow","");
+    }
+    else
+    {
+        JCloneRepetitionCommentaire.css("text-overflow","ellipsis").css("direction","ltr").css("white-space","nowrap").css("overflow","hidden");
+    }*/
 
-if($(context.target).attr("type")=="envoyer"){
-    
-    //TODO placer la requete ici
-   
-    JCloneRepetition.remove();
-   
-}
-if($(context.target).attr("type")=="retour"){
-    JCloneRepetitionEnvoyer.hide();
-    JCloneRepetitionAbsent.show();
-    JCloneRepetitionPresent.show();
-    JCloneRepetitionRetour.hide();
-    JCloneRepetitionJustification2.hide();
-    
- }
+    });
 
-if($(context.target).attr("type")=="appel_comm"){
+    if(Reponse.sex==1)
+    {
+        JCloneRepetitionPresent.text("Présent");
+        JCloneRepetitionAbsent.text("Absent");
 
-   afficherToutleText(context,100); 
-}
-/*if (JCloneRepetitionCommentaire.css("text-overflow")=="ellipsis")
-{
-    JCloneRepetitionCommentaire.css("text-overflow","").css("direction","").css("white-space","").css("overflow","");
-}
-else
-{
-    JCloneRepetitionCommentaire.css("text-overflow","ellipsis").css("direction","ltr").css("white-space","nowrap").css("overflow","hidden");
-}*/
-
-});
-
-if(Reponse.sex==1)
-{
-    JCloneRepetitionPresent.text("Présent");
-    JCloneRepetitionAbsent.text("Absent");
-
-}
-else
-{
-    JCloneRepetitionPresent.text("Présente");
-    JCloneRepetitionAbsent.text("Absente");
-}
+    }
+    else
+    {
+        JCloneRepetitionPresent.text("Présente");
+        JCloneRepetitionAbsent.text("Absente");
+    }
 
 
 
-JCloneRepetitionDiv.append(JCloneRepetitionPresent).append(JCloneRepetitionAbsent).append(JCloneRepetitionJustification2).append(JCloneRepetitionEnvoyer).append(JCloneRepetitionRetour);
-JCloneRepetition.append(JCloneRepetitionTitre).append(JCloneRepetitionDate).append(JCloneRepetitionCommentaire).append(JCloneRepetitionDiv);
+    JCloneRepetitionDiv.append(JCloneRepetitionPresent).append(JCloneRepetitionAbsent).append(JCloneRepetitionJustification2).append(JCloneRepetitionEnvoyer).append(JCloneRepetitionRetour);
+    JCloneRepetition.append(JCloneRepetitionTitre).append(JCloneRepetitionDate).append(JCloneRepetitionCommentaire).append(JCloneRepetitionDiv);
 
 
 
-$("#page").append(JCloneRepetition);
+    $("#page").append(JCloneRepetition);
 
 
 
@@ -648,16 +622,15 @@ else if($("#popup").attr("existe")==0)
     $("#popup").attr("existe","1");
 }
 
-
 else
 {
-var JCloneDropUpCreer=JDropUpCreer.clone(true,true);
-var JCloneDropUpCreerPost=JDropUpCreerPost.clone(true,true);
-var JCloneDropUpCreerEvenement=JDropUpCreerEvenement.clone(true,true);
+    var JCloneDropUpCreer=JDropUpCreer.clone(true,true);
+    var JCloneDropUpCreerPost=JDropUpCreerPost.clone(true,true);
+    var JCloneDropUpCreerEvenement=JDropUpCreerEvenement.clone(true,true);
 
-JCloneDropUpCreer.append(JCloneDropUpCreerPost).append(JCloneDropUpCreerEvenement).animate({bottom: '9.1%'});
+    JCloneDropUpCreer.append(JCloneDropUpCreerPost).append(JCloneDropUpCreerEvenement).animate({bottom: '9.1%'});
 
-$("#page").append(JCloneDropUpCreer);
+    $("#page").append(JCloneDropUpCreer);
 
 }
 
