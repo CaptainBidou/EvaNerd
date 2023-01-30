@@ -233,7 +233,8 @@ padding-right:10%;
 {
     height:3%; 
     font-size: 100%;
-    margin-bottom:50%;
+    margin-bottom: 5%;
+    
 }
 .LabelTypeForm
 {
@@ -265,3 +266,17 @@ padding-right:10%;
     background-color: darkred;
 }
 
+.divFormEventDate
+{
+
+    margin-right: 70%;
+    margin-bottom: 5%;
+
+}
+
+.buttonPublier
+{
+margin-left:30%;
+margin-right:auto;
+
+}

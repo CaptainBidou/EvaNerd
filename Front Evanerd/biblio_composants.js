@@ -98,7 +98,7 @@ var JCreerEventFormTitre=$("<input>").attr("type","text").addClass(["divFormPost
 var JCreerEventFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Concert").addClass("option")).append($("<option>").text("Evènement intraorchestre").addClass("option"));
 var JCreerEventFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description de l'évènement");
 var JCreerEventDate=$("<input>").attr("type","datetime-local");
-var JCreerEventDuree=$("<input>").attr("type","time");
+var JCreerEventDuree=$("<input>").attr("type","time").addClass("divFormEventDate");
 var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){return null;});
 
 
