@@ -715,9 +715,22 @@ function JCreerPostCreer(){
 
 
 
+function JCreerProfileActivite(Reponse){
 
 
 
+}
+
+function JCreerProfileTag(Reponse){
+
+}
+
+function JCreerProfile(Reponse){
+    
+
+
+
+}
 
 
 
