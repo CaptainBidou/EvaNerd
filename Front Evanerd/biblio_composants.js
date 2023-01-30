@@ -103,6 +103,18 @@ var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publi
 
 
 
+
+//variables pour la page du profil
+var JProfile = $("<div>").addClass("divProfile");
+var JProfileImage=$("<img>").addClass("rounded-circle profileImage").data("type","profile_img");
+var JProfileTag=$("<p>").addClass("Profiletag");
+var JProfilePourcentage=$("<div>").attr("type","profile_pourcentage").addClass("progress-bar progress-bar-striped progress-bar-animated profile-pourcentage").data("aria-valuemin","0").data("aria-valuemax","100");
+var JProfileActivite=$("<nav>").addClass("navbar Activite").addClass("navbar").data("type","activite");
+var JProfileActiviteContent=$("<p>").attr("type","activite_context").addClass("activite-content");
+var JProfileActiviteImage=$("<img>").addClass("activite-img");
+
+
+
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
