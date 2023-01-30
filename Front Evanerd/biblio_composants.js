@@ -105,7 +105,6 @@ var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publi
 
 
 //variables pour la page du profil
-var JProfile = $("<div>").addClass("divProfile");
 var JProfileImage=$("<img>").addClass("rounded-circle profileImage").data("type","profile_img");
 var JProfileTag=$("<p>").addClass("Profiletag");
 var JProfilePourcentage=$("<div>").attr("type","profile_pourcentage").addClass("progress-bar progress-bar-striped progress-bar-animated profile-pourcentage").data("aria-valuemin","0").data("aria-valuemax","100");
@@ -721,15 +720,32 @@ function JCreerProfileActivite(Reponse){
 
 }
 
-function JCreerProfileTag(Reponse){
 
+/**
+ * 
+ * @param {*} Reponse
+ * 
+ *  Reponse={"tag":[,{"nom":"Flute","couleur":"pink"}],}
+ * Nous on prend juste un json du type {"nom":"Haut bois","couleur","blue"}
+ *  
+ */
+function JCreerProfileTag(Reponse){
+var JCloneProfileTag=JProfileTag.clone(true,true).text(Reponse.nom).css("background-color",Reponse.couleur);
+$("#page").append(JCloneProfileTag);
 }
 
+
+/**
+ * 
+ * @param {*} Reponse
+ * 
+ * 
+ * Reponse={"nom":jean,"prenom":"pierre","activites":[{"nom":"repetition tutti"},{"nom":"repetition haut bois"}]} 
+ */
 function JCreerProfile(Reponse){
-    
-
-
-
+var JCloneProfileActivite=JProfileActivite.clone(true,true);
+var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true);
+var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.nom);
 }
 
 
