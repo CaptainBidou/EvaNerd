@@ -276,7 +276,43 @@ padding-right:10%;
 
 .buttonPublier
 {
-margin-left:30%;
-margin-right:auto;
+    margin-left:30%;
+    margin-right:auto;
 
+}
+
+
+.Activite
+{
+    background-color: lightgray;
+    width:90%;
+    padding:2%;
+    font-size: 300%;
+    margin-left:5%;
+    box-shadow: 0px 2px 10px gray;
+
+}
+
+.activite-img
+{
+    width:15%;
+
+
+}
+
+
+.Profiletag
+{
+    border-radius: 20px;
+    font-size: 200%;
+    margin-left:5%;
+    width:30%;
+    text-align: center;
+
+}
+
+.profileImage
+{
+    width:50%;
+    margin-left:25%;
 }

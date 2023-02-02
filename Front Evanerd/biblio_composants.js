@@ -108,7 +108,7 @@ var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publi
 var JProfileImage=$("<img>").addClass("rounded-circle profileImage").data("type","profile_img");
 var JProfileTag=$("<p>").addClass("Profiletag");
 var JProfilePourcentage=$("<div>").attr("type","profile_pourcentage").addClass("progress-bar progress-bar-striped progress-bar-animated profile-pourcentage").data("aria-valuemin","0").data("aria-valuemax","100");
-var JProfileActivite=$("<nav>").addClass("navbar Activite").addClass("navbar").data("type","activite");
+var JProfileActivite=$("<nav>").addClass("navbar Activite").data("type","activite");
 var JProfileActiviteContent=$("<p>").attr("type","activite_context").addClass("activite-content");
 var JProfileActiviteImage=$("<img>").addClass("activite-img");
 
@@ -716,13 +716,15 @@ function JCreerPostCreer(){
 
 function JCreerProfile(Reponse){
 
+
+var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
+var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true);
+$("#page").append(JCloneProfileImage);
 var tag = {"nom":"Haut bois","couleur":"blue"};
 var activity = {"nom":"jean","prenom":"pierre","activites":[{"nom":"repetition tutti"},{"nom":"repetition haut bois"}]};
 JCreerProfileTag(tag);
+$("#page").append(JCloneProfilePourcentage);
 JCreerProfileActivite(activity);
-var JCloneProfileImage=JProfileActivite.clone(true,true);
-var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true);
-
 
 
 
@@ -742,6 +744,8 @@ var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true);
 function JCreerProfileTag(Reponse){
 var JCloneProfileTag=JProfileTag.clone(true,true).text(Reponse.nom).css("background-color",Reponse.couleur);
 $("#page").append(JCloneProfileTag);
+
+
 }
 
 
@@ -754,9 +758,11 @@ $("#page").append(JCloneProfileTag);
  */
 function JCreerProfileActivite(Reponse){
 var JCloneProfileActivite=JProfileActivite.clone(true,true);
-var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true);
-var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.nom);
-JCloneProfileActivite.append([JCloneProfileActiviteContent,JProfileActiviteImage]);
+var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true).attr("src","Ressources/Footer/calendrier.png");
+var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites[1].nom);
+JCloneProfileActiviteContent=ajouterTextOverflow(JCloneProfileActiviteContent,80);
+JCloneProfileActiviteContent.on("click",function(context){afficherToutleText(context);})
+JCloneProfileActivite.append([JCloneProfileActiviteContent,JCloneProfileActiviteImage]);
 $("#page").append(JCloneProfileActivite);
 
 }
