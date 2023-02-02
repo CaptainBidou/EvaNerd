@@ -720,6 +720,14 @@ var tag = {"nom":"Haut bois","couleur":"blue"};
 var activity = {"nom":"jean","prenom":"pierre","activites":[{"nom":"repetition tutti"},{"nom":"repetition haut bois"}]};
 JCreerProfileTag(tag);
 JCreerProfileActivite(activity);
+var JCloneProfileImage=JProfileActivite.clone(true,true);
+var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true);
+
+
+
+
+
+
 }
 
 
@@ -750,6 +758,7 @@ var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true);
 var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.nom);
 JCloneProfileActivite.append([JCloneProfileActiviteContent,JProfileActiviteImage]);
 $("#page").append(JCloneProfileActivite);
+
 }
 
 
