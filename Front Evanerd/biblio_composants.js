@@ -714,10 +714,12 @@ function JCreerPostCreer(){
 
 
 
-function JCreerProfileActivite(Reponse){
+function JCreerProfile(Reponse){
 
-
-
+var tag = {"nom":"Haut bois","couleur":"blue"};
+var activity = {"nom":"jean","prenom":"pierre","activites":[{"nom":"repetition tutti"},{"nom":"repetition haut bois"}]};
+JCreerProfileTag(tag);
+JCreerProfileActivite(activity);
 }
 
 
@@ -726,7 +728,7 @@ function JCreerProfileActivite(Reponse){
  * @param {*} Reponse
  * 
  *  Reponse={"tag":[,{"nom":"Flute","couleur":"pink"}],}
- * Nous on prend juste un json du type {"nom":"Haut bois","couleur","blue"}
+ * Nous on prend juste un json du type {"nom":"Haut bois","couleur":"blue"}
  *  
  */
 function JCreerProfileTag(Reponse){
@@ -742,10 +744,12 @@ $("#page").append(JCloneProfileTag);
  * 
  * Reponse={"nom":jean,"prenom":"pierre","activites":[{"nom":"repetition tutti"},{"nom":"repetition haut bois"}]} 
  */
-function JCreerProfile(Reponse){
+function JCreerProfileActivite(Reponse){
 var JCloneProfileActivite=JProfileActivite.clone(true,true);
 var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true);
 var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.nom);
+JCloneProfileActivite.append([JCloneProfileActiviteContent,JProfileActiviteImage]);
+$("#page").append(JCloneProfileActivite);
 }
 
 
