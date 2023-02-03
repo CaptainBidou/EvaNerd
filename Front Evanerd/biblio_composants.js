@@ -106,8 +106,10 @@ var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publi
 
 //variables pour la page du profil
 var JProfileImage=$("<img>").addClass("rounded-circle profileImage").data("type","profile_img");
+var JProfileNom=$("<p>").addClass("profileNom");
 var JProfileTag=$("<p>").addClass("Profiletag");
 var JProfilePourcentage=$("<div>").attr("type","profile_pourcentage").addClass("progress-bar progress-bar-striped progress-bar-animated profile-pourcentage").data("aria-valuemin","0").data("aria-valuemax","100");
+var JProfileProgress = $("<div>").attr("type","concert_progress").addClass("progress concert-progress");
 var JProfileActivite=$("<nav>").addClass("navbar Activite").data("type","activite");
 var JProfileActiviteContent=$("<p>").attr("type","activite_context").addClass("activite-content");
 var JProfileActiviteImage=$("<img>").addClass("activite-img");
@@ -716,14 +718,18 @@ function JCreerPostCreer(){
 
 function JCreerProfile(Reponse){
 
-
+var JCloneProfileProgress=JProfileProgress.clone(true,true);
 var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
-var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true);
+var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');;
+var JCloneProfileNom=JProfileNom.clone(true,true).text(Reponse.firstName + Reponse.lastName);  
+
+
 $("#page").append(JCloneProfileImage);
+$("#page").append(JCloneProfileNom);
 var tag = {"nom":"Haut bois","couleur":"blue"};
 var activity = {"nom":"jean","prenom":"pierre","activites":[{"nom":"repetition tutti"},{"nom":"repetition haut bois"}]};
 JCreerProfileTag(tag);
-$("#page").append(JCloneProfilePourcentage);
+$("#page").append([JCloneProfileProgress,JCloneProfilePourcentage]);
 JCreerProfileActivite(activity);
 
 
