@@ -21,7 +21,7 @@ function authUser($data, $queryString) {
     if($password = valider("password", $queryString)) {
         if($idUser = checkUser($tel, $password)) {
             $data["authToken"] = generateAuthToken($tel);
-            $data["user"] = updateAuthToken($idUser, $data["authToken"]);
+            $data["user"] = updateAuthToken($idUser, $data["authToken"])[0];
             sendResponse($data, [getStatusHeader()]);
         }
         sendError("identifiant invalide !", HTTP_UNAUTHORIZED);
@@ -314,6 +314,7 @@ function notAction($data) {
 
 
 function postUserAchievement($data, $authKey, $queryString) {
+    // TODO : Faire les conditions pour les achievement
     if($authKey){
         $uidConn = authToId($authKey);
         if ($aid= htmlspecialchars(valider("achievement", $queryString))){
@@ -603,10 +604,6 @@ function listPosts($data, $authKey) {
     sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
 
-function listPostsReacts($data, $idTabs, $authKey) {
-
-}
-
 /**
  * Permet d'envoyer un commentaire sous un post
  * @param array $data tableau à completer et envoyé
@@ -711,10 +708,35 @@ function listAgendaEventParticipation($data, $idTabs, $authKey) {
 }
 
 function listParticipations($data, $idTabs, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+    if($authKey) {
+        $aid = $idTabs[0];
+        $eid = $idTabs[1];
+        $uidConn = validUser(authToId($authKey));
+        $agendaData = selectCalendar($uidConn, $aid);
+        if(!$agendaData) sendError("Vous n'avez pas les permissions !", HTTP_UNAUTHORIZED);
+        $data["agendasId"] = $aid;
+        $data["eventId"] = $eid;
+        $agendaData = groupby(selectParticipations($eid), "participation");
+        foreach ($agendaData as $key => $participationData) {
+            $i = 0;
+            $data["participations"][$key] = array();
+            foreach ($participationData as $agenda) {
+                $data["participations"][$key][$i]["user"] = ["id" => $agenda["uid"], "firstName" => $agenda["firstName"], "lastName" => $agenda["lastName"], "photo" => $agenda["photo"]];
+                $i++;
+            }
+        }
+        sendResponse($data, [getStatusHeader(HTTP_OK)]);
+        
+
+        
+    }
+    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
 
 function addParticipations($data, $idTabs, $queryString, $authKey) {
+    if($authKey) {
+           
+    }
     sendError("Not implemented yet !", HTTP_NOT_FOUND);
 }
 

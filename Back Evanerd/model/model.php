@@ -112,7 +112,7 @@ function authToId($authToken) {
  */
 function getUserCredentials($tel) {
     $db = Config::getDatabase();
-    $sql= "SELECT id, tel, activation, password FROM users WHERE tel = ?;";
+    $sql= "SELECT id, tel, activation, password FROM Users WHERE tel = ?;";
     
     return Database::parcoursRs($db->SQLSelect($sql, [$tel]));
 }
@@ -556,16 +556,21 @@ function selectPostMessages($pid){
 }
 
 // TODO : eventuellement modif pour rendre l'uid optionnelle
-function selectCalendar($uid){
+function selectCalendar($uid, $aid = null){
     $db = Config::getDatabase();
     $params = [$uid];
+    $sqlAid = "";
+    if($aid)  {
+        $sqlAid = " AND Agendas.id = ?";
+        array_push($params,$aid);
+    }
     $sql = "SELECT Agendas.* 
             FROM Agendas
             JOIN Agenda_Perms 
                 ON Agendas.id = Agenda_Perms.aid
             JOIN User_Roles
                 ON User_Roles.rid = Agenda_Perms.rid
-            WHERE Agenda_Perms.read = 1 AND User_Roles.uid = ?;";
+            WHERE Agenda_Perms.read = 1 AND User_Roles.uid = ? $sqlAid;";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
@@ -585,13 +590,29 @@ function selectEvents($aid, $uid){
 
 function selectCallMembers($aeid){
     $db = Config::getDatabase();
+    $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
     $params = [$aeid];
-    $sql = "SELECT Agenda_Event_Calls.*, Users.id, Users.firstName, Users.lastName
+    $sql = "SELECT Agenda_Event_Calls.*, Users.id, Users.firstName, Users.lastName, $photo
             FROM Agenda_Event_Calls
             JOIN Users ON Users.id = Agenda_Event_Calls.uid
             WHERE Agenda_Event_Calls.aeid = ?;";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
+function selectParticipations($aeid, $uid = null) {
+    $db = Config::getDatabase();
+    $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
+    $params = [$aeid];
+    $sqlUid = "";
+    if($uid) {
+        $sqlUid = " AND User_Participation.uid = ?";
+        array_push($params, $uid);
+    }
+    $sql = "SELECT User_Participations.participation, Users.id as uid, Users.firstName, Users.lastName, $photo
+            FROM User_Participations
+            JOIN Users ON Users.id = User_Participations.uid
+            WHERE User_Participations.aeid = ?;";
 
+    return Database::parcoursRs($db->SQLSelect($sql, $params));
+}
 ?>
