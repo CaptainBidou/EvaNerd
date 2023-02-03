@@ -42,7 +42,7 @@ var JHeaderItem=$("<input>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh
 var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher");
 
 //variables pour les Convs
-var JConv =$("<nav>").addClass("navbar conversation").data("type","conv");
+var JConv =$("<nav>").addClass("navbar conversation").data("type","conv").on("click",function(context){return $(context.target).attr("type_id");});//TODO ICI TU APPELLE TA FONCTION
 var JConvImg = $("<img>").addClass("rounded-circle conversation-image").data("type","conv_img");//TODO :rajouter des données pour quand on clique 
 var JConvp=$("<p>").addClass("navbar-text left").data("type","conv_p");
 
@@ -98,8 +98,19 @@ var JCreerEventFormTitre=$("<input>").attr("type","text").addClass(["divFormPost
 var JCreerEventFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Concert").addClass("option")).append($("<option>").text("Evènement intraorchestre").addClass("option"));
 var JCreerEventFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description de l'évènement");
 var JCreerEventDate=$("<input>").attr("type","datetime-local");
-var JCreerEventDuree=$("<input>").attr("type","time");
+var JCreerEventDuree=$("<input>").attr("type","time").addClass("divFormEventDate");
 var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){return null;});
+
+
+
+
+//variables pour la page du profil
+var JProfileImage=$("<img>").addClass("rounded-circle profileImage").data("type","profile_img");
+var JProfileTag=$("<p>").addClass("Profiletag");
+var JProfilePourcentage=$("<div>").attr("type","profile_pourcentage").addClass("progress-bar progress-bar-striped progress-bar-animated profile-pourcentage").data("aria-valuemin","0").data("aria-valuemax","100");
+var JProfileActivite=$("<nav>").addClass("navbar Activite").data("type","activite");
+var JProfileActiviteContent=$("<p>").attr("type","activite_context").addClass("activite-content");
+var JProfileActiviteImage=$("<img>").addClass("activite-img");
 
 
 
@@ -354,14 +365,14 @@ function JCreerConv(Reponse){
     else
         JCouleur='silver';
     
-    var JCloneConvImage = JConvImg.clone(true,true);
+    var JCloneConvImage = JConvImg.clone(true,true).attr("type_id",Reponse.id);
     if(Reponse.image!=null)
     {
         JCloneConvImage.attr("src",Reponse.image);
         JCloneConv.append(JCloneConvImage);
     }
     var JCloneConvp=JConvp.clone(true,true);
-    JCloneConvp.text(Reponse.titre);
+    JCloneConvp.text(Reponse.titre).attr("type_id",Reponse.id);
     JCloneConv.append(JCloneConvp);
     $("#page").append(JCloneConv);
 }
@@ -703,7 +714,58 @@ function JCreerPostCreer(){
 
 
 
+function JCreerProfile(Reponse){
 
+
+var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
+var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true);
+$("#page").append(JCloneProfileImage);
+var tag = {"nom":"Haut bois","couleur":"blue"};
+var activity = {"nom":"jean","prenom":"pierre","activites":[{"nom":"repetition tutti"},{"nom":"repetition haut bois"}]};
+JCreerProfileTag(tag);
+$("#page").append(JCloneProfilePourcentage);
+JCreerProfileActivite(activity);
+
+
+
+
+
+}
+
+
+/**
+ * 
+ * @param {*} Reponse
+ * 
+ *  Reponse={"tag":[,{"nom":"Flute","couleur":"pink"}],}
+ * Nous on prend juste un json du type {"nom":"Haut bois","couleur":"blue"}
+ *  
+ */
+function JCreerProfileTag(Reponse){
+var JCloneProfileTag=JProfileTag.clone(true,true).text(Reponse.nom).css("background-color",Reponse.couleur);
+$("#page").append(JCloneProfileTag);
+
+
+}
+
+
+/**
+ * 
+ * @param {*} Reponse
+ * 
+ * 
+ * Reponse={"nom":jean,"prenom":"pierre","activites":[{"nom":"repetition tutti"},{"nom":"repetition haut bois"}]} 
+ */
+function JCreerProfileActivite(Reponse){
+var JCloneProfileActivite=JProfileActivite.clone(true,true);
+var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true).attr("src","Ressources/Footer/calendrier.png");
+var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites[1].nom);
+JCloneProfileActiviteContent=ajouterTextOverflow(JCloneProfileActiviteContent,80);
+JCloneProfileActiviteContent.on("click",function(context){afficherToutleText(context);})
+JCloneProfileActivite.append([JCloneProfileActiviteContent,JCloneProfileActiviteImage]);
+$("#page").append(JCloneProfileActivite);
+
+}
 
 
 
