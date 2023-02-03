@@ -8,10 +8,10 @@ define("IMAGE_ERR_BADEXTENSION", -3);
 define("IMAGE_ERR_UPLOAD", -4);
 
 // CONSTANTE DIR
-define("DIR_USERS", "../ressources/users/");
-define("DIR_GROUPS", "../ressources/groups/");
-define("DIR_POSTS", "../ressources/posts/");
-
+define("DIR_RESSOURCES", "/Evanerd/Back%20Evanerd/ressources"); // Répertoire depuis localhost/
+define("DIR_USERS", "./ressources/users/");
+define("DIR_GROUPS", "./ressources/groups/");
+define("DIR_POSTS", "./ressources/posts/");
 /**
  * Vérifie l'existence (isset) et la taille (non vide) d'un paramétre dans un des tableaux GET, POST, COOKIES, SESSION
  * Renvoie false si le paramétre est vide ou absent
@@ -268,7 +268,7 @@ function isEmail($string) {
  */
 function getBaseLink() {
 	$url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https://" : "http://";   
-	$url.= $_SERVER['HTTP_HOST'] . "/ressources";
+	$url.= $_SERVER['HTTP_HOST'] . DIR_RESSOURCES;
 	return $url;
 }
 
