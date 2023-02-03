@@ -134,11 +134,7 @@ switch($action) {
     case "GET /posts":
         listPosts($data, $authKey);
         break;
-
-    case "GET /posts/ID/reactions":
-        listPostsReacts($data, $idTabs, $authKey);
-        break;
-    
+        
     case "GET /posts/ID/messages":
         listPostsMessages($data, $idTabs, $authKey);
         break;
@@ -167,16 +163,16 @@ switch($action) {
 
     /* Participation */
 
-    case "GET /users/ID/agendas/ID/participations":
+    case "GET /agendas/ID/event/ID/participations":
         listParticipations($data, $idTabs, $authKey);
         break;
-    case "PUT users/ID/agendas/ID/participations?participation=?":
+    case "PUT users/ID/agendas/ID/participations":
         addParticipations($data, $idTabs, $queryString, $authKey);
         break;
-    case "POST users/ID/agendas/ID/participations?participation=?":
+    case "POST /agendas/ID/events/ID/participations":
         postParticipations($data, $idTabs, $queryString, $authKey);
         break;
-        
+    
     default:
         notAction($data);
         break;
