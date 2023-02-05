@@ -32,12 +32,12 @@ switch($action) {
     
     case "GET /users/ID/instruments":
         getUserInstruments($data, $idTabs);
-    break;
+        break;
 
     case "GET /users/ID/roles":
         getUserRoles($data, $idTabs);
-    break;
-
+        break;
+    
     case "PUT /users/ID":
         putUser($data, $idTabs, $authKey, $queryString);
         break;
@@ -60,6 +60,10 @@ switch($action) {
 
     case "POST /users/verify":
         verifMail($data, $queryString);
+        break;
+    
+    case "POST /users/ID/image":
+        postImage($data, $idTabs, $authKey);
         break;
 
     case "DEL /users/instruments":
@@ -171,7 +175,7 @@ switch($action) {
 
     /* Participation */
 
-    case "GET  ":
+    case "GET agendas/ID/events/ID/participations":
         listParticipations($data, $idTabs, $authKey);
         break;
     case "PUT users/ID/agendas/ID/participations":
