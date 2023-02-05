@@ -15,20 +15,17 @@
 
 
 $(document).ready(function(){
-    JcreerHeader({"photo" : pdp});
-    JcreerFooter({"membre" : member});
     JCreerConnexion(); // pour afficher la connexion
-    AfficherAccueil();
+    //AfficherAccueil();
 });
 
 
 
 // FONCTIONS A MODIF POUR LE AJAX
 
+
 function AfficherAccueil(){
     $("#page").html("");
-    //auth("0256696969","ecayon");
-    console.log(authcode);
     ListPosts(authcode);
 }
 
@@ -76,10 +73,10 @@ function AfficherCreer(){
 
 
 function Connexion(){
-var tel=$("#tel").val();
-var mdp=$("#pwd").val();
+    var tel=$("#tel").val();
+    var mdp=$("#pwd").val();
 
-Auth(tel,mdp);
+    auth(tel,mdp);
 
 }
 
