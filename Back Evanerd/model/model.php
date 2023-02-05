@@ -15,6 +15,12 @@ function getNewUid() {
     return $db->SQLGetChamp($sql);
 }
 
+function getNewGid() {
+    $db = Config::getDatabase();
+    $sql = "SELECT MAX(Groups.id)+1 FROM `Groups`";
+    return $db->SQLGetChamp($sql);
+}
+
 function confirmToUser($confirmToken) {
     $db = Config::getDatabase();
     $sql = "SELECT Users.id FROM Users WHERE Users.confirmToken = ?";
@@ -491,6 +497,15 @@ function insertGroup($uid,$image=null,$title=null){
     $sql = "INSERT INTO Groups(titre,image) VALUES(?,?)";
     $gid = $db->SQLInsert($sql, $params);
     insertIntoGroup($uid, $gid);
+
+    return $gid;
+}
+
+function selectGroup($gid) {
+    $image = "CONCAT(CONCAT(\"" . getBaseLink() . "/groups/\"" . ", Groups.id), CONCAT(\"/\", Groups.image)) AS image";
+    $sql = "SELECT Groups.id, Groups.titre, $image FROM Groups Where id = ?";
+    $db = Config::getDatabase();
+    return Database::parcoursRs($db->SQLSelect($sql, [$gid]));
 }
 
 function insertIntoGroup($uid,$gid){
