@@ -630,4 +630,15 @@ function selectParticipations($aeid, $uid = null) {
 
     return Database::parcoursRs($db->SQLSelect($sql, $params));
 }
+
+
+function selectUserInstruments($uid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT Instruments.*
+            FROM Instruments
+            JOIN User_Instruments ON User_Instruments.iid = Instruments.id
+            WHERE User_Instruments.uid = ?;";
+    return Database::parcoursRs($db->SQLSelect($sql, [$uid]));
+
+}
 ?>
