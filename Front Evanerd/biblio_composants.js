@@ -157,54 +157,54 @@ var JMessageDown=$("<div>").addClass("Message-Down");
 
 
 function JcreerPost(Reponse){
-var jClonePost=JPost.clone(true,true);
-var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.firstName+" "+Reponse.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
-var jClonePostBody=JPostBody.clone(true,true);
-var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner);
-var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
-jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
-var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.photo);
+    var jClonePost=JPost.clone(true,true);
+    var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.firstName+" "+Reponse.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
+    var jClonePostBody=JPostBody.clone(true,true);
+    var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner);
+    var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
+    jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
+    var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.photo);
 
-var jClonePost2=JPost.clone(true,true);
-var jClonePostBody2=JPostBody.clone(true,true);
-
-
-var jClonePostEpingle=JPostEpingle.clone(true,true);
-var jClonePostComm=JPostCommentaire.clone(true,true);
-var jClonePostLike=JPostLike.clone(true,true);
-var jClonePostReact=JPostReaction.clone(true,true);
+    var jClonePost2=JPost.clone(true,true);
+    var jClonePostBody2=JPostBody.clone(true,true);
 
 
-
-
-
-//.append(jClonePostProfile)
-jClonePostBody2.append(jClonePostProfile).append(jClonePostTitre).css("vertical-align","middle");
+    var jClonePostEpingle=JPostEpingle.clone(true,true);
+    var jClonePostComm=JPostCommentaire.clone(true,true);
+    var jClonePostLike=JPostLike.clone(true,true);
+    var jClonePostReact=JPostReaction.clone(true,true);
 
 
 
 
 
-jClonePost2.append(jClonePostBody2).css("width","100%").css("background-color","lightgray").css("border-radius","5px 5px 0 0");
-jClonePostBody.append(jClonePostImage).append(jClonePostDescription);
-
-if(Reponse.membre==1)
-{
-jClonePostBody2.append(jClonePostEpingle);
-jClonePostBody.append(jClonePostComm).append(jClonePostLike).append(jClonePostReact);
-}
-
-if(Reponse.membre==0){
-
-}
-
-
-jClonePost.append(jClonePost2).append(jClonePostBody).css('margin-top','5%');
+    //.append(jClonePostProfile)
+    jClonePostBody2.append(jClonePostProfile).append(jClonePostTitre).css("vertical-align","middle");
 
 
 
-$("#page").append(jClonePost);
-}
+
+
+    jClonePost2.append(jClonePostBody2).css("width","100%").css("background-color","lightgray").css("border-radius","5px 5px 0 0");
+    jClonePostBody.append(jClonePostImage).append(jClonePostDescription);
+
+    if(Reponse.membre==1)
+    {
+    jClonePostBody2.append(jClonePostEpingle);
+    jClonePostBody.append(jClonePostComm).append(jClonePostLike).append(jClonePostReact);
+    }
+
+    if(Reponse.membre==0){
+
+    }
+
+
+    jClonePost.append(jClonePost2).append(jClonePostBody).css('margin-top','5%');
+
+
+
+    $("#page").append(jClonePost);
+    }
 
 
 
@@ -228,26 +228,23 @@ $("#page").append(jClonePost);
  * 
  */
 function JcreerFooter(Reponse){
-var JCloneFooter=JFooter.clone(true,true);
-var JCloneFooterAcceuil=JFooterAccueil.clone('true','true');
-var JCloneFooterAppel=JFooterAppel.clone('true','true');
-var JCloneFooterCreer=JFooterCreer.clone('true','true');
-var JCloneFooterAgenda=JFooterAgenda.clone('true','true');
-var JCloneFooterMail=JFooterMail.clone('true','true');
+    var JCloneFooter=JFooter.clone(true,true);
+    var JCloneFooterAcceuil=JFooterAccueil.clone('true','true');
+    var JCloneFooterAppel=JFooterAppel.clone('true','true');
+    var JCloneFooterCreer=JFooterCreer.clone('true','true');
+    var JCloneFooterAgenda=JFooterAgenda.clone('true','true');
+    var JCloneFooterMail=JFooterMail.clone('true','true');
 
 
 
-if(Reponse.membre==1){
-JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);}
-$("#footer").append(JCloneFooter);
-if(Reponse.membre==0)
-{
-    JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAgenda).append(JCloneFooterMail);
-    $("#footer").append(JCloneFooter);
-}
-
-
-
+    if(Reponse.membre==1){
+        JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);}
+        $("#footer").append(JCloneFooter);
+        if(Reponse.membre==0)
+        {
+            JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAgenda).append(JCloneFooterMail);
+            $("#footer").append(JCloneFooter);
+        }
 }
 
 /**
