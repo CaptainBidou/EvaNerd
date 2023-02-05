@@ -8,7 +8,7 @@ define("IMAGE_ERR_BADEXTENSION", -3);
 define("IMAGE_ERR_UPLOAD", -4);
 
 // CONSTANTE DIR
-define("DIR_RESSOURCES", "/Evanerd/Back%20Evanerd/Ressources"); // Répertoire depuis localhost/
+define("DIR_RESSOURCES", "/Evanerd/Back%20Evanerd/ressources"); // Répertoire depuis localhost/
 define("DIR_USERS", "./Ressources/users/");
 define("DIR_GROUPS", "./Ressources/groups/");
 define("DIR_POSTS", "./Ressources/posts/");
