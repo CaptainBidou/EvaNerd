@@ -11,6 +11,7 @@
 #body
 {
     padding:0;
+    margin:0;
 }
 
 .post {
@@ -75,8 +76,8 @@
     position: sticky;
     top:0px;
     z-index: 10;
-    box-shadow: 0px -2px 10px darkred;
-    margin-bottom: 2%;
+    box-shadow: 0px 2px 10px darkred;
+    /*margin-bottom: 2%;*/
 }
 
 .header-icon {
@@ -101,7 +102,7 @@
     height: 10%;
     padding: 1%;
     box-shadow: 0px 2px 10px gray;
-    margin-bottom: 2%;
+    margin-top: 2%;
 }
 
 .conversation-image {
@@ -125,7 +126,7 @@
     height: auto;
     padding: 1%;
     box-shadow: 0px 2px 10px gray;
-    margin-bottom: 2%;
+    margin-top: 2%;
 }
 
 .concert-titre {
@@ -167,7 +168,7 @@
     background-color: silver;
     box-shadow: 0px 2px 10px gray;
     padding:1%;
-    margin-bottom: 2%;
+    margin-top: 2%;
 }
 
 .repetition-titre {
@@ -342,4 +343,49 @@ padding-right:10%;
 width:10%;
 position:absolute;
 
+}
+
+.MessageHeader
+{
+    background-color: lightgray;
+    position: absolute;
+    position: sticky;
+    top:0px;
+    z-index: 10;
+    font-size:300%;
+    padding:1%;
+    font-weight: bold;
+    height:8%;
+    box-shadow: 0px 2px 10px silver;
+}
+
+.Message-Fleche,.Message-Reglage,.Message-Epingle
+{
+    width:10%;
+    
+}
+.Message-Down
+{
+    background-color: lightgray;
+box-shadow: 0px -2px 10px silver;
+position: fixed;
+top:82.5%;
+width:100%;
+padding:1%;
+display: inline;
+height:8%;
+}
+.Message-Input
+{
+    width:88%;
+    height: 100%;
+    font-size: 300%;
+
+}
+.Message-Send
+{
+width:10%;
+float:right;
+margin:0;
+margin-top: 3%;
 }

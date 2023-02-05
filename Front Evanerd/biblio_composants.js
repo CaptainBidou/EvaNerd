@@ -116,16 +116,28 @@ var JProfileActiviteImage=$("<img>").addClass("activite-img");
 var JProfileReglage=$("<img>").attr("src","Ressources/Profile/reglage.png").addClass("profile-reglage");
 
 
-//variables pour les messages
+//variables pour la vue message
 var JMessageHeader = $("<nav>").addClass("navbar MessageHeader");
 var JMessageFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addClass("Message-Fleche");
 var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addClass("Message-Reglage");
 var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle");
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
-var JMessage=$("<div>").addClass("Message");
-var JMessageInput=$("<input>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message");
-var JMessageSend=$("<img>").addClass("Message-Send").attr("src","Ressources/Message/send.png").on("click",function(){return null;});
+var JMessage=$("<div>").addClass("Message").data("attribut","divMessage");
+var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message");
+var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(){return null;});
 var JMessageDown=$("<div>").addClass("Message-Down");
+
+//variables pour les messages créé par des participants
+var JMessageParticipantDiv=$("<div>").addClass("Participant-Div");
+var JMessageParticipantProfile=$("<img>").addClass("Participant-Profile");
+var JMessageParticipantTitre=$("<p>").addClass("Participant-Titre");
+var JMessageParticipantRep=$("<img>").addClass("Participant-Rep").attr("src","Ressources/Message/rep.png");
+var JMessageParticipantEpingle=$("<img>").addClass("Participant-Epingle").attr("src","Ressources/Message/epingle.png");
+var JMessageParticipantContent=$("<p>").addClass("Participant-content");
+
+//variables pour les messages créé par l'utilisateur actif 
+
+
 
 
 /************************************************************************/
@@ -823,11 +835,12 @@ function JCreerMessage(Reponse){
     var JCloneMessageInput=JMessageInput.clone(true,true);
     var JCloneMessageSend=JMessageSend.clone(true,true);
 
+    JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,60);
     
-    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageReglage,JCloneMessageEpingle,JCloneMessageParticipant]);
+    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageReglage,JCloneMessageEpingle]);
     $("#page").append(JCloneMessageHeader);
 
-JCloneMessageDown.append([JCloneMessageInput,JCloneMessageSend]);
+JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
 $("#page").append(JCloneMessageDown);
 
     
@@ -835,7 +848,13 @@ $("#page").append(JCloneMessageDown);
 
 }
 
+function JCreerMessageParticipant(Reponse)
+{
 
+
+
+
+}
 
 
 
