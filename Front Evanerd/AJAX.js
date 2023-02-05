@@ -724,7 +724,7 @@ function ListPostMessages($pid){
 
 
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
-function ListCalendars(){
+function ListCalendars($type = "concert"){
     $.ajax({
         type: "GET",
         url: api + "/agendas/",
@@ -735,6 +735,9 @@ function ListCalendars(){
         },
         success: function(oRep){
             console.log(oRep); 
+            oRep["agendas"].forEach(element => {
+                ListCalendarsEvents(element["id"],$type);
+            });
         },
         dataType: "json"
     }); 
@@ -745,17 +748,23 @@ function ListCalendars(){
  * @param {*} $aid Identifiant de l'agenda
  */
 
-function ListCalendarsEvents($aid){
+function ListCalendarsEvents($aid,$type){
     $.ajax({
         type: "GET",
         url: api + "/agendas/"+$aid,
         headers: {"authToken":""}, // données dans les entetes 
-        data: [],
+        data: [            {
+            "key": "type",
+            "value": $type
+        }],
         error : function(){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
-            console.log(oRep); 
+            console.log(oRep);
+            oRep["events"].forEach(element => {
+                JCreerConcert(element);
+            });
         },
         dataType: "json"
     }); 
