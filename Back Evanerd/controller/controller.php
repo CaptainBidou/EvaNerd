@@ -181,14 +181,13 @@ function listGroupMessages($data, $idTabs, $authKey) {
  * @param string $authKey Token d'identification de l'utilisateur
  */
 function putUser($data, $idTabs, $authKey,$queryString) {
-    print_r($_FILES);
-    print_r($_POST);
     // TODO : mettre à jour la doc
     if($authKey) {
         $uid = $idTabs[0];
         $uidConn = validUser(authToId($authKey));
         $dir = DIR_USERS . $uid;
-        if($uidConn != $uid) sendError("Vous n'avez pas la permissions !", HTTP_UNAUTHORIZED);
+        if($uidConn != $uid && !searchRole("Membre du CA", selectUserRoles($uid))) 
+            sendError("Vous n'avez pas la permissions !", HTTP_UNAUTHORIZED);
 
         // Récupération et validation des infos :
         $mail = isEmail(htmlspecialchars(valider("mail", $queryString)));
@@ -196,27 +195,11 @@ function putUser($data, $idTabs, $authKey,$queryString) {
         $plainPassword = validString(valider("password", $queryString), 70, 5);
         $age = intval(valider("age", $queryString));
         $studies = validString(htmlspecialchars(valider("studies", $queryString)), 50, 0);
-        $image = false;
-        $user = selectUser($uidConn, 1);
-
         // Vérification que le numéro de téléphone n'est pas déjà utilisé
         if(phoneToUid($tel) !== false) sendError("Il y a déjà un compte avec ce numéro de téléphone !", HTTP_FORBIDDEN);
-        // Récupération de l'image
-        // TODO : GESTION D'UPLOAD DE FICHIER PUT OU ROUTE DEDIÉE POUR L'IMAGE
-        /*
-        if(isset($_FILES["image"])) {
-            // Récupération de l'ancienne image et des données de la nouvelle
-            $oldImage = basename($user[0]["photo"]);
-            $imageData = uploadImage($dir . "/image", $_FILES["image"]);
-            // Si l'image est pas correct, on envoie une erreur
-            if($imageData["code"] != 1) sendError($imageData["message"], HTTP_BAD_REQUEST);
-            $image = $imageData["filename"];
-            unlink("$dir/$oldImage");
-        }
-        */
         // On hash le mot de passe avec l'algo bcrypt2 et avec un cout de 10
         $password = $plainPassword ? password_hash($plainPassword, PASSWORD_BCRYPT, ["cost"=>10]) : false;
-        updateUser($uid, $mail, $tel, $age, $studies, $image,$password);
+        updateUser($uid, $mail, $tel, $age, $studies,false,$password);
         $data["user"] = selectUser($uidConn, 1);
         sendResponse($data, [getStatusHeader(HTTP_OK)]);
     }
@@ -309,12 +292,12 @@ function delUserInstrument($data, $authKey, $queryString) {
 }
 
 /**
- * 
+ * Réponse de l'api par défaut
  */
 function notAction($data) {
-    sendResponse($data, [getStatusHeader(HTTP_OK)]);
+    //sendResponse($data, [getStatusHeader(HTTP_OK)]);
+    sendError("Cette route n'existe pas ! ", HTTP_NOT_FOUND);
 }
-
 
 function postUserAchievement($data, $authKey, $queryString) {
     // TODO : Faire les conditions pour les achievement
@@ -789,4 +772,31 @@ function getUserInstruments($data, $idTabs){
     $data["userId"] = $uid;
     $data["instruments"] = selectUserInstruments($uid);
     sendResponse($data, [getStatusHeader(HTTP_OK)]);
+}
+
+function postImage($data, $idTabs,$authKey) {
+    if($authKey) {
+        $uid = $idTabs[0];
+        $uidConn = validUser(authToId($authKey));
+        $dir = DIR_USERS . $uid;
+        if($uidConn != $uid && !searchRole("Membre du CA", selectUserRoles($uid))) 
+            sendError("Vous n'avez pas la permissions !", HTTP_UNAUTHORIZED);
+        
+        $user = selectUser($uid, 1);
+        if(isset($_FILES["image"])) {
+            // Récupération de l'ancienne image et des données de la nouvelle
+            $oldImage = basename($user[0]["photo"]);
+            $imageData = uploadImage($dir . "/image", $_FILES["image"]);
+            // Si l'image est pas correct, on envoie une erreur
+            if($imageData["code"] != 1) sendError($imageData["message"], HTTP_BAD_REQUEST);
+            $image = basename($imageData["filename"]);
+            unlink("$dir/$oldImage");
+            updateUser($uid,false,false,false, false, $image);
+            $data["user"] = $user[0];
+            $data["user"]["photo"] = getBaseLink() . "/users/$uid/$image";
+            sendResponse($data, [getStatusHeader(HTTP_OK)]);
+        }
+        sendError("Aucune image reçu !", HTTP_BAD_REQUEST);
+    }
+    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
