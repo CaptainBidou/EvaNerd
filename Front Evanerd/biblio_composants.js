@@ -106,12 +106,14 @@ var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publi
 
 //variables pour la page du profil
 var JProfileImage=$("<img>").addClass("rounded-circle profileImage").data("type","profile_img");
+var JProfileNom=$("<p>").addClass("profileNom");
 var JProfileTag=$("<p>").addClass("Profiletag");
 var JProfilePourcentage=$("<div>").attr("type","profile_pourcentage").addClass("progress-bar progress-bar-striped progress-bar-animated profile-pourcentage").data("aria-valuemin","0").data("aria-valuemax","100");
+var JProfileProgress = $("<div>").attr("type","concert_progress").addClass("progress profile-progress");
 var JProfileActivite=$("<nav>").addClass("navbar Activite").data("type","activite");
 var JProfileActiviteContent=$("<p>").attr("type","activite_context").addClass("activite-content");
 var JProfileActiviteImage=$("<img>").addClass("activite-img");
-
+var JProfileReglage=$("<img>").attr("src","Ressources/Profile/reglage.png").addClass("profile-reglage");
 
 
 /************************************************************************/
@@ -715,16 +717,44 @@ function JCreerPostCreer(){
 
 
 function JCreerProfile(Reponse){
+var JCloneProfileReglage=JProfileReglage.clone(true,true);
+$("#page").append(JCloneProfileReglage);
 
-
+var JCloneProfileProgress=JProfileProgress.clone(true,true);
 var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
-var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true);
+var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
+var JCloneProfileNom=JProfileNom.clone(true,true).text(Reponse.firstName +" "+ Reponse.lastName);  
+
+if(Reponse.pourcentage<33)
+        JCloneProfilePourcentage.css('background-color','red');
+
+    else if(Reponse.pourcentage<63)
+        JCloneProfilePourcentage.css('background-color','orange');
+
+    else if(Reponse.pourcentage<100)
+        JCloneProfilePourcentage.css('background-color','green');
+
+
+    if (JCouleur == 'silver')
+        JCouleur='Lightgray';
+    else
+        JCouleur='silver';
+
+
+
+
 $("#page").append(JCloneProfileImage);
-var tag = {"nom":"Haut bois","couleur":"blue"};
-var activity = {"nom":"jean","prenom":"pierre","activites":[{"nom":"repetition tutti"},{"nom":"repetition haut bois"}]};
-JCreerProfileTag(tag);
-$("#page").append(JCloneProfilePourcentage);
-JCreerProfileActivite(activity);
+$("#page").append(JCloneProfileNom);
+var i;
+for(i=0;i<Reponse.tag.length;i++)
+JCreerProfileTag(Reponse.tag[i]);
+
+
+$("#page").append(JCloneProfileProgress.append(JCloneProfilePourcentage));
+
+for(i=0;i<Reponse.activity.length;i++)
+{var activity = {"nom":Reponse.firstName,"prenom":Reponse.lastName,"activites":Reponse.activity[i],};
+JCreerProfileActivite(activity);}
 
 
 
@@ -759,7 +789,7 @@ $("#page").append(JCloneProfileTag);
 function JCreerProfileActivite(Reponse){
 var JCloneProfileActivite=JProfileActivite.clone(true,true);
 var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true).attr("src","Ressources/Footer/calendrier.png");
-var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites[1].nom);
+var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.nom);
 JCloneProfileActiviteContent=ajouterTextOverflow(JCloneProfileActiviteContent,80);
 JCloneProfileActiviteContent.on("click",function(context){afficherToutleText(context);})
 JCloneProfileActivite.append([JCloneProfileActiviteContent,JCloneProfileActiviteImage]);
