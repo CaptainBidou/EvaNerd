@@ -1,7 +1,9 @@
+
 var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
-var authcode = "57d2dca86990ece87017703e4fb0e8cd";
-var member = 1 ;
-var pdp = "../Back%20Evanerd/ressources/users/2/default.jpg";
+var authcode = "";
+var member = 0;
+var pdp = "";
+
 
 /* AUTHENTIFICATION AJAX FUNC */
 
@@ -21,12 +23,19 @@ function auth($tel,$password){
         },],
         error : function(){
             console.log("Une erreur s'est produite");
+            
         },
         success: function(oRep){
             console.log(oRep); 
             authcode = oRep.authToken;
+            member = !oRep["user"].noMember;
+            pdp = oRep["user"].photo;
         },
         dataType: "json"
+    }).done(function launchAPP(){
+        JcreerHeader({"photo" : pdp});
+        AfficherAccueil();
+        JcreerFooter({"membre" : member});
     });
     return 1;
 }
