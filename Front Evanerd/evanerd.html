@@ -17,6 +17,7 @@
 $(document).ready(function(){
     JcreerHeader({"photo" : pdp});
     JcreerFooter({"membre" : member});
+    JCreerConnexion(); // pour afficher la connexion
     AfficherAccueil();
 });
 
@@ -74,7 +75,13 @@ function AfficherCreer(){
 
 
 
+function Connexion(){
+var tel=$("#tel").val();
+var mdp=$("#pwd").val();
 
+Auth(tel,mdp);
+
+}
 
 </script>
 
