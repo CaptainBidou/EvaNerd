@@ -501,7 +501,22 @@ function listGroupsReacts($data, $idTabs, $authKey) {
 
 function createUserGroups($data, $authKey, $queryString) {
     if($authKey) {
-
+        $newId = getNewGid();
+        $dir = DIR_GROUPS . $newId;
+        $uidConn = validUser(authToId($authKey));
+        $image = "default.png";
+        if(!is_dir($dir)) mkdir($dir);
+        if($title = validString(valider("title", $queryString), 70, 3)) {
+            if(isset($_FILES["image"])) {
+                $imageInfo = uploadImage("$dir/image", $_FILES["image"]);
+                if($imageInfo["code"] != 1) sendError($imageInfo["message"], HTTP_FORBIDDEN);
+                $image = basename($imageInfo["filename"]);
+            }
+            $gid = insertGroup($uidConn, $image, $title);
+            $data["group"] = selectGroup($gid)[0];
+            sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+        }
+        else sendError("il faut spécifier un titre", HTTP_FORBIDDEN);
     }
     sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
 }
@@ -735,6 +750,18 @@ function listParticipations($data, $idTabs, $authKey) {
 
 function addParticipations($data, $idTabs, $queryString, $authKey) {
     if($authKey) {
+        $aid = $idTabs[0];
+        $eid = $idTabs[1];
+        $uidConn = validUser(authToId($authKey));
+        // Vérifier les droits de l'utilisateur connecté (droit de lecture !)
+        $agendasData = selectCalendar($uidConn, $aid);
+        // Vérifier que la querystring envoie les 3 caractère possible
+        $string = validString(valider("answer", $queryString), 1, 1);
+        if(!$string) sendError("Il faut spécifier la réponse !", HTTP_FORBIDDEN);
+        if(!$agendasData) sendError("Vous n'avez pas les permissions !", HTTP_UNAUTHORIZED);
+        // Vérifier que l'utilisateur n'a pas déjà donnée une réponse
+        
+        //insertParticipation()
            
     }
     sendError("Not implemented yet !", HTTP_NOT_FOUND);
