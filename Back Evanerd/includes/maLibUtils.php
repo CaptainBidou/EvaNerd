@@ -235,7 +235,8 @@ function uploadImage($filename, $imageData) {
 
     }
     else {
-        $returnInfo["CODE"] = IMAGE_ERR_UPLOAD;
+        $returnInfo["code"] = IMAGE_ERR_UPLOAD;
+		$returnInfo["message"] = "Échec de l'upload";
 	}
 	return $returnInfo;
 }
