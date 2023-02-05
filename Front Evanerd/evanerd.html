@@ -8,10 +8,11 @@
 <script src="Jquery/jquery-3.6.2.min.js"></script>
 <script src="Jquery/jquery-ui.min.js"></script>
 <script src="biblio_composants.js"></script>
-
+<script src="AJAX.js"></script>
 
 
 <script>
+    $authcode = "bf6161a00837b7fbc9b3c51d02e82497"
     var Reponse={
                  'nom':'Salvado Robalo',
                  'prenom':' jean-marie-paul-christine-cunegonde',
@@ -33,49 +34,38 @@ var concert={'titre':'superconcert','commentaire':'génial concert pour bien s a
 
 var appel={"titre":"Répétition tutti","date":"01/12/2019","commentaire":"Répétitions au capitole à 18h c'est très important de venir","sex":"0"};
 $(document).ready(function(){
+        /*JCreerConcert(concert);
+        JCreerConcert(concert);
+        JCreerConcert(concert);*/
+        JcreerHeader(Reponse);
+        AfficherAccueil();
+        /*JCreerConv(conv);
+        JCreerConv(conv);
+        JCreerConv(conv);
+        JCreerConv(conv);
+        JCreerConv(conv);
 
+        JcreerPost(Reponse);
+        JcreerPost(Reponse);
+        JcreerPost(Reponse);
+        JcreerPost(Reponse);
+        JcreerPost(Reponse);
+        JcreerPost(Reponse);
+        JcreerPost(Reponse);
+        JcreerPost(Reponse);
+        JCreerConcert(concert);
+        JCreerConcert(concert);
+        JCreerConcert(concert);*/
+        /*JCreerAppel(appel);
+        JCreerAppel(appel);
+        JCreerAppel(appel);
+        JCreerAppel(appel);
+        JCreerAppel(appel);
+        JCreerAppel(appel);
+        JCreerAppel(appel);
+        JCreerAppel(appel);*/
 
-/*JCreerConcert(concert);
-JCreerConcert(concert);
-JCreerConcert(concert);*/
-
-
-
-
-
-
-
-
-
-JcreerHeader(Reponse);
-AfficherAccueil();
-/*JCreerConv(conv);
-JCreerConv(conv);
-JCreerConv(conv);
-JCreerConv(conv);
-JCreerConv(conv);
-
-JcreerPost(Reponse);
-JcreerPost(Reponse);
-JcreerPost(Reponse);
-JcreerPost(Reponse);
-JcreerPost(Reponse);
-JcreerPost(Reponse);
-JcreerPost(Reponse);
-JcreerPost(Reponse);
-JCreerConcert(concert);
-JCreerConcert(concert);
-JCreerConcert(concert);*/
-/*JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);*/
-
-JcreerFooter(Reponse);
+        JcreerFooter(Reponse);
 
 });
 
@@ -89,8 +79,8 @@ function AfficherAccueil(){
 $("#page").html("");
 
     //ici obtenir la réponse de la requête 
-
-    var Reponse={
+    ListPosts($authcode);
+    /*var Reponse={
         'nom':'Salvado Robalo',
         'prenom':' jean-marie-paul-christine-cunegonde',
         'epingle':1, // boolean
@@ -104,7 +94,6 @@ $("#page").html("");
 
 
     };
-
     JcreerPost(Reponse);
     JcreerPost(Reponse);
     JcreerPost(Reponse);
@@ -112,12 +101,7 @@ $("#page").html("");
     JcreerPost(Reponse);
     JcreerPost(Reponse);
     JcreerPost(Reponse);
-    JcreerPost(Reponse);
-
-
-
-
-
+    JcreerPost(Reponse);*/
 
 }
 
@@ -130,10 +114,10 @@ function AfficherMessagerie(){
     //ici obtenir la réponse de la requête 
 
     JCreerConv(conv);
-JCreerConv(conv);
-JCreerConv(conv);
-JCreerConv(conv);
-JCreerConv(conv);
+    JCreerConv(conv);
+    JCreerConv(conv);
+    JCreerConv(conv);
+    JCreerConv(conv);
 
 }
 
@@ -144,13 +128,13 @@ function AfficherAppel(){
     //ici obtenir la réponse de la requête 
     var appel={"titre":"Répétition tutti","date":"01/12/2019","commentaire":"Répétitions au capitole à 18h c'est très important de venir","sex":"0"};
     JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
-JCreerAppel(appel);
+    JCreerAppel(appel);
+    JCreerAppel(appel);
+    JCreerAppel(appel);
+    JCreerAppel(appel);
+    JCreerAppel(appel);
+    JCreerAppel(appel);
+    JCreerAppel(appel);
 }
 
 function AfficherCalendrier(){
@@ -166,14 +150,8 @@ function AfficherCalendrier(){
 
 
 function AfficherCreer(){
-
-
-    
     //ici obtenir la réponse de la requête
-    JDropUpCreer();
-
-
-    
+    JDropUpCreer();   
 }
 
 
