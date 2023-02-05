@@ -477,14 +477,14 @@ function CreateAchievements(){
 /* GROUPS AJAX FUNC */
 
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
-function ListConv(){
+function ListConv($authToken){
     $.ajax({
         type: "GET",
-        url: api + " /groups",
-        headers: {"authToken":""}, // données dans les entetes 
+        url: api + "/groups",
+        headers: {"authToken":$authToken}, // données dans les entetes 
         data: [],
-        error : function(){
-            console.log("Une erreur s'est produite");
+        error : function(oRep){
+            console.log(oRep);
         },
         success: function(oRep){
             console.log(oRep); 
