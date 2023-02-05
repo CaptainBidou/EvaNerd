@@ -19,9 +19,12 @@ include_once "includes/maLibGD2.php";
 function authUser($data, $queryString) {
     if($tel = valider("tel", $queryString))
     if($password = valider("password", $queryString)) {
-        if($idUser = checkUser($tel, $password)) {
+        if($uidConn = checkUser($tel, $password)) {
+            $rolesConn = selectUserRoles($uidConn);
             $data["authToken"] = generateAuthToken($tel);
-            $data["user"] = updateAuthToken($idUser, $data["authToken"])[0];
+            $data["user"] = updateAuthToken($uidConn, $data["authToken"])[0];
+            $data["user"]["admin"] = searchRole("Membre du CA", $rolesConn);
+            $data["user"]["noMember"] = searchRole("Non membre", $rolesConn);
             sendResponse($data, [getStatusHeader()]);
         }
         sendError("identifiant invalide !", HTTP_UNAUTHORIZED);
@@ -769,4 +772,21 @@ function addParticipations($data, $idTabs, $queryString, $authKey) {
 
 function postParticipations($data, $idTabs, $queryString, $authKey) {
     sendError("Not implemented yet !", HTTP_NOT_FOUND);
+}
+
+function getUserRoles($data, $idTabs) {
+    $uid = validUser($idTabs[0]);
+    if(!selectUser($uid)) sendError("Cet utilisateur n'existe pas !", HTTP_FORBIDDEN);
+    $data["userId"] = $uid;
+    $data["roles"] = selectUserRoles($uid);
+    sendResponse($data, [getStatusHeader(HTTP_OK)]);
+
+}
+
+function getUserInstruments($data, $idTabs){
+    $uid = $idTabs[0];
+    if(!selectUser($uid)) sendError("Cet utilisateur n'existe pas !", HTTP_FORBIDDEN);
+    $data["userId"] = $uid;
+    $data["instruments"] = selectUserInstruments($uid);
+    sendResponse($data, [getStatusHeader(HTTP_OK)]);
 }
