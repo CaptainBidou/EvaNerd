@@ -112,7 +112,7 @@ function authToId($authToken) {
  */
 function getUserCredentials($tel) {
     $db = Config::getDatabase();
-    $sql= "SELECT id, tel, activation, password FROM users WHERE tel = ?;";
+    $sql= "SELECT id, tel, activation, password FROM Users WHERE tel = ?;";
     
     return Database::parcoursRs($db->SQLSelect($sql, [$tel]));
 }
@@ -599,10 +599,15 @@ function selectCallMembers($aeid){
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
-function selectParticipations($aeid) {
+function selectParticipations($aeid, $uid = null) {
     $db = Config::getDatabase();
     $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
     $params = [$aeid];
+    $sqlUid = "";
+    if($uid) {
+        $sqlUid = " AND User_Participation.uid = ?";
+        array_push($params, $uid);
+    }
     $sql = "SELECT User_Participations.participation, Users.id as uid, Users.firstName, Users.lastName, $photo
             FROM User_Participations
             JOIN Users ON Users.id = User_Participations.uid
