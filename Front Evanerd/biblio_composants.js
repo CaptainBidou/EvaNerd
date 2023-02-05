@@ -116,6 +116,18 @@ var JProfileActiviteImage=$("<img>").addClass("activite-img");
 var JProfileReglage=$("<img>").attr("src","Ressources/Profile/reglage.png").addClass("profile-reglage");
 
 
+//variables pour les messages
+var JMessageHeader = $("<nav>").addClass("navbar MessageHeader");
+var JMessageFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addClass("Message-Fleche");
+var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addClass("Message-Reglage");
+var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle");
+var JMessageParticipant=$("<p>").addClass("Message-Participant");
+var JMessage=$("<div>").addClass("Message");
+var JMessageInput=$("<input>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message");
+var JMessageSend=$("<img>").addClass("Message-Send").attr("src","Ressources/Message/send.png").on("click",function(){return null;});
+var JMessageDown=$("<div>").addClass("Message-Down");
+
+
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
@@ -798,7 +810,30 @@ $("#page").append(JCloneProfileActivite);
 }
 
 
+function JCreerMessage(Reponse){
+    var JCloneMessageHeader = JMessageHeader.clone(true,true);
+    var JCloneMessageFleche =JMessageFleche.clone(true,true);
+    var JCloneMessageReglage=JMessageReglage.clone(true,true);
+    var JCloneMessageEpingle=JMessageEpingle.clone(true,true);
+    var JCloneMessageParticipant=JMessageParticipant.clone(true,true).text(Reponse.titre);
 
+    var JCloneMessage=JMessage.clone(true,true);
+
+    var JCloneMessageDown=JMessageDown.clone(true,true);
+    var JCloneMessageInput=JMessageInput.clone(true,true);
+    var JCloneMessageSend=JMessageSend.clone(true,true);
+
+    
+    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageReglage,JCloneMessageEpingle,JCloneMessageParticipant]);
+    $("#page").append(JCloneMessageHeader);
+
+JCloneMessageDown.append([JCloneMessageInput,JCloneMessageSend]);
+$("#page").append(JCloneMessageDown);
+
+    
+    
+
+}
 
 
 
