@@ -634,11 +634,11 @@ function AddMsgConv($gid, $informations){
 /* POSTS AJAX FUNC */
 
 /** Requête permettant de récupérer la liste des posts */
-function ListPosts(){
+function ListPosts($authToken){
     $.ajax({
         type: "GET",
         url: api + "/posts",
-        headers: {"authToken":""}, // données dans les entetes 
+        headers: {"authToken":$authToken}, // données dans les entetes 
         data: [],
         error : function(){
             console.log("Une erreur s'est produite");
