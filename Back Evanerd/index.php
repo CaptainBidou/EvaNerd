@@ -30,6 +30,14 @@ switch($action) {
         sendUser($data, $idTabs, $authKey);
         break;
     
+    case "GET /users/ID/instruments":
+        getUserInstruments($data, $idTabs);
+    break;
+
+    case "GET /users/ID/roles":
+        getUserRoles($data, $idTabs);
+    break;
+
     case "PUT /users/ID":
         putUser($data, $idTabs, $authKey, $queryString);
         break;
@@ -163,7 +171,7 @@ switch($action) {
 
     /* Participation */
 
-    case "GET /agendas/ID/event/ID/participations":
+    case "GET  ":
         listParticipations($data, $idTabs, $authKey);
         break;
     case "PUT users/ID/agendas/ID/participations":
