@@ -620,13 +620,13 @@ function selectParticipations($aeid, $uid = null) {
     $params = [$aeid];
     $sqlUid = "";
     if($uid) {
-        $sqlUid = " AND User_Participation.uid = ?";
+        $sqlUid = " AND User_Participations.uid = ?";
         array_push($params, $uid);
     }
     $sql = "SELECT User_Participations.participation, Users.id as uid, Users.firstName, Users.lastName, $photo
             FROM User_Participations
             JOIN Users ON Users.id = User_Participations.uid
-            WHERE User_Participations.aeid = ?;";
+            WHERE User_Participations.aeid = ? $sqlUid;";
 
     return Database::parcoursRs($db->SQLSelect($sql, $params));
 }
@@ -640,5 +640,11 @@ function selectUserInstruments($uid) {
             WHERE User_Instruments.uid = ?;";
     return Database::parcoursRs($db->SQLSelect($sql, [$uid]));
 
+}
+
+function insertParticipation($uid, $aeid, $participation) {
+    $db = Config::getDatabase();
+    $sql = "INSERT INTO User_Participations(uid, aeid, participation) VALUES (?,?,?)";
+    $db->SQLInsert($sql, [$uid, $aeid, $participation]);
 }
 ?>

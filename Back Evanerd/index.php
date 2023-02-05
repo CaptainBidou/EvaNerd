@@ -178,9 +178,7 @@ switch($action) {
     case "GET agendas/ID/events/ID/participations":
         listParticipations($data, $idTabs, $authKey);
         break;
-    case "PUT users/ID/agendas/ID/participations":
-        addParticipations($data, $idTabs, $queryString, $authKey);
-        break;
+        
     case "POST /agendas/ID/events/ID/participations":
         postParticipations($data, $idTabs, $queryString, $authKey);
         break;
