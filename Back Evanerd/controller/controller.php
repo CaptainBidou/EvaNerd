@@ -734,27 +734,27 @@ function listParticipations($data, $idTabs, $authKey) {
     sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
 
-function addParticipations($data, $idTabs, $queryString, $authKey) {
+function postParticipations($data, $idTabs, $queryString, $authKey) {
     if($authKey) {
         $aid = $idTabs[0];
         $eid = $idTabs[1];
         $uidConn = validUser(authToId($authKey));
         // Vérifier les droits de l'utilisateur connecté (droit de lecture !)
         $agendasData = selectCalendar($uidConn, $aid);
-        // Vérifier que la querystring envoie les 3 caractère possible
-        $string = validString(valider("answer", $queryString), 1, 1);
-        if(!$string) sendError("Il faut spécifier la réponse !", HTTP_FORBIDDEN);
+        // Vérifier que la querystring envoie les 3 caractères possibles
+        $participation = validString(valider("answer", $queryString), 1, 1);
+        if(!$participation) sendError("Il faut spécifier la réponse !", HTTP_FORBIDDEN);
+        // Si l'utilisateur ne peut pas voir l'évenement
         if(!$agendasData) sendError("Vous n'avez pas les permissions !", HTTP_UNAUTHORIZED);
         // Vérifier que l'utilisateur n'a pas déjà donnée une réponse
-        
-        //insertParticipation()
-           
+        if(selectParticipations($eid, $uidConn)) sendError("Vous avez déjà répondu !", HTTP_FORBIDDEN);
+        insertParticipation($uidConn, $eid, $participation);
+        $data["agendasId"] = $aid;
+        $data["eventId"] = $eid;
+        $data["participaiton"] = selectParticipations($eid, $uidConn)[0]["participation"];
+        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);           
     }
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);
-}
-
-function postParticipations($data, $idTabs, $queryString, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+    sendError("Vous devez vous identifier !", HTTP_UNAUTHORIZED);
 }
 
 function getUserRoles($data, $idTabs) {
