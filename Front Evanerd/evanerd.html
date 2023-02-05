@@ -17,9 +17,9 @@
 $(document).ready(function(){
     JcreerHeader({"photo" : pdp});
     JcreerFooter({"membre" : member});
+    JCreerConnexion(); // pour afficher la connexion
     AfficherAccueil();
 });
-
 
 
 
@@ -36,18 +36,7 @@ function AfficherAccueil(){
 
 function AfficherMessagerie(){
     $("#page").html("");
-    /*var conv={id:2,participants:[{id:5,nom:'Jean',prenom:'Pierre'},{id:8,nom:'michelmichel',prenom:'kubiak'},{id:18,nom:'Monticul',prenom:'Maurice'}],nom:null,image:"Ressources/Test/profile3.jpg",};
-
-    //ici obtenir la réponse de la requête 
-
-    JCreerConv(conv);
-    JCreerConv(conv);
-    JCreerConv(conv);
-    JCreerConv(conv);
-    JCreerConv(conv);
-    */
-    
-    ListConv($authcode);
+    ListConv(authcode);
 }
 
 
@@ -86,7 +75,13 @@ function AfficherCreer(){
 
 
 
+function Connexion(){
+var tel=$("#tel").val();
+var mdp=$("#pwd").val();
 
+Auth(tel,mdp);
+
+}
 
 </script>
 

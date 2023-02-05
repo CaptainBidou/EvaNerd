@@ -116,17 +116,40 @@ var JProfileActiviteImage=$("<img>").addClass("activite-img");
 var JProfileReglage=$("<img>").attr("src","Ressources/Profile/reglage.png").addClass("profile-reglage");
 
 
-//variables pour les messages
+//variables pour la vue message
 var JMessageHeader = $("<nav>").addClass("navbar MessageHeader");
 var JMessageFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addClass("Message-Fleche");
 var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addClass("Message-Reglage");
 var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle");
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
-var JMessage=$("<div>").addClass("Message");
-var JMessageInput=$("<input>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message");
-var JMessageSend=$("<img>").addClass("Message-Send").attr("src","Ressources/Message/send.png").on("click",function(){return null;});
+var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
+var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message");
+var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(){return null;});
 var JMessageDown=$("<div>").addClass("Message-Down");
 
+//variables pour les messages créé par des participants
+var JMessageParticipantDiv=$("<div>").addClass("Participant-Div");
+var JMessageParticipantProfile=$("<img>").addClass("Participant-Profile");
+var JMessageParticipantTitre=$("<p>").addClass("Participant-Titre");
+var JMessageParticipantRep=$("<img>").addClass("Participant-Rep").attr("src","Ressources/Message/rep.png");
+var JMessageParticipantEpingle=$("<img>").addClass("Participant-Epingle").attr("src","Ressources/Message/epingle.png");
+var JMessageParticipantContent=$("<p>").addClass("Participant-content");
+
+//variables pour les messages créé par l'utilisateur actif 
+var JMessageActifDiv=$("<div>").addClass("Actif-Div");
+var JMessageActifProfile=$("<img>").addClass("Actif-Profile");
+var JMessageActifTitre=$("<p>").addClass("Actif-Titre");
+var JMessageActifRep=$("<img>").addClass("Actif-Rep").attr("src","Ressources/Message/rep.png");
+var JMessageActifEpingle=$("<img>").addClass("Actif-Epingle").attr("src","Ressources/Message/epingle.png");
+var JMessageActifContent=$("<p>").addClass("Actif-content");
+
+//variables pour la connexion
+var JConnexion = $("<div>").addClass("divFormConnexion");
+var JConnexionTelephone=$("<input>").addClass("form-control Connexion-phone").attr("placeholder","Téléphone").attr("id","tel");
+var JConnexionPwd=$("<input>").addClass("text").addClass("form-control Connexion-pwd").attr("placeholder","Mot de passe").attr("id","pwd");
+var JConnexionSubmit=$("<button>").addClass("btn btn-danger Connexion-Submit").html("Se connecter").on("click",function(context){Connexion();});
+var JConnexionP=$("<p>").addClass("Connexion-p");
+var JConnexionTitre=$("<h1>").addClass("Connexion-titre");
 
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
@@ -157,54 +180,54 @@ var JMessageDown=$("<div>").addClass("Message-Down");
 
 
 function JcreerPost(Reponse){
-var jClonePost=JPost.clone(true,true);
-var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.firstName+" "+Reponse.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
-var jClonePostBody=JPostBody.clone(true,true);
-var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner);
-var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
-jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
-var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.photo);
+    var jClonePost=JPost.clone(true,true);
+    var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.firstName+" "+Reponse.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
+    var jClonePostBody=JPostBody.clone(true,true);
+    var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner);
+    var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
+    jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
+    var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.photo);
 
-var jClonePost2=JPost.clone(true,true);
-var jClonePostBody2=JPostBody.clone(true,true);
-
-
-var jClonePostEpingle=JPostEpingle.clone(true,true);
-var jClonePostComm=JPostCommentaire.clone(true,true);
-var jClonePostLike=JPostLike.clone(true,true);
-var jClonePostReact=JPostReaction.clone(true,true);
+    var jClonePost2=JPost.clone(true,true);
+    var jClonePostBody2=JPostBody.clone(true,true);
 
 
-
-
-
-//.append(jClonePostProfile)
-jClonePostBody2.append(jClonePostProfile).append(jClonePostTitre).css("vertical-align","middle");
+    var jClonePostEpingle=JPostEpingle.clone(true,true);
+    var jClonePostComm=JPostCommentaire.clone(true,true);
+    var jClonePostLike=JPostLike.clone(true,true);
+    var jClonePostReact=JPostReaction.clone(true,true);
 
 
 
 
 
-jClonePost2.append(jClonePostBody2).css("width","100%").css("background-color","lightgray").css("border-radius","5px 5px 0 0");
-jClonePostBody.append(jClonePostImage).append(jClonePostDescription);
-
-if(Reponse.membre==1)
-{
-jClonePostBody2.append(jClonePostEpingle);
-jClonePostBody.append(jClonePostComm).append(jClonePostLike).append(jClonePostReact);
-}
-
-if(Reponse.membre==0){
-
-}
-
-
-jClonePost.append(jClonePost2).append(jClonePostBody).css('margin-top','5%');
+    //.append(jClonePostProfile)
+    jClonePostBody2.append(jClonePostProfile).append(jClonePostTitre).css("vertical-align","middle");
 
 
 
-$("#page").append(jClonePost);
-}
+
+
+    jClonePost2.append(jClonePostBody2).css("width","100%").css("background-color","lightgray").css("border-radius","5px 5px 0 0");
+    jClonePostBody.append(jClonePostImage).append(jClonePostDescription);
+
+    if(Reponse.membre==1)
+    {
+    jClonePostBody2.append(jClonePostEpingle);
+    jClonePostBody.append(jClonePostComm).append(jClonePostLike).append(jClonePostReact);
+    }
+
+    if(Reponse.membre==0){
+
+    }
+
+
+    jClonePost.append(jClonePost2).append(jClonePostBody).css('margin-top','5%');
+
+
+
+    $("#page").append(jClonePost);
+    }
 
 
 
@@ -228,26 +251,23 @@ $("#page").append(jClonePost);
  * 
  */
 function JcreerFooter(Reponse){
-var JCloneFooter=JFooter.clone(true,true);
-var JCloneFooterAcceuil=JFooterAccueil.clone('true','true');
-var JCloneFooterAppel=JFooterAppel.clone('true','true');
-var JCloneFooterCreer=JFooterCreer.clone('true','true');
-var JCloneFooterAgenda=JFooterAgenda.clone('true','true');
-var JCloneFooterMail=JFooterMail.clone('true','true');
+    var JCloneFooter=JFooter.clone(true,true);
+    var JCloneFooterAcceuil=JFooterAccueil.clone('true','true');
+    var JCloneFooterAppel=JFooterAppel.clone('true','true');
+    var JCloneFooterCreer=JFooterCreer.clone('true','true');
+    var JCloneFooterAgenda=JFooterAgenda.clone('true','true');
+    var JCloneFooterMail=JFooterMail.clone('true','true');
 
 
 
-if(Reponse.membre==1){
-JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);}
-$("#footer").append(JCloneFooter);
-if(Reponse.membre==0)
-{
-    JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAgenda).append(JCloneFooterMail);
-    $("#footer").append(JCloneFooter);
-}
-
-
-
+    if(Reponse.membre==1){
+        JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);}
+        $("#footer").append(JCloneFooter);
+        if(Reponse.membre==0)
+        {
+            JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAgenda).append(JCloneFooterMail);
+            $("#footer").append(JCloneFooter);
+        }
 }
 
 /**
@@ -391,30 +411,7 @@ function JCreerConv(Reponse){
     $("#page").append(JCloneConv);
 }
 
-/**
- * 
- * @param {*} Reponse est un json contenant un tableau "message " de json dans lesquels il y a le nom de celui qui a envoyé le message, sa couleur son message sa pdp cette liste va donc du plus ancien message au plus récent 
- * 
- * 
- * Reponse = {'message':[
- * {nom:Mathieu,prenom:Somet,message:"salut les geeks",profile:"Ressources/Test/profile2.jpg"},
- * {nom:Norman,prenom;Thavaux,message"moi aussi jaime les enfants",profile:"Ressources/Test/profile3.jpg"}
- * 
- * 
- * 
- * ]}
- * 
- * 
- * 
- * 
- */
-function JAfficherMessageConv(Reponse){
 
-
-
-
-
-}
 
 
 
@@ -823,25 +820,60 @@ function JCreerMessage(Reponse){
     var JCloneMessageInput=JMessageInput.clone(true,true);
     var JCloneMessageSend=JMessageSend.clone(true,true);
 
+    JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,60);
     
-    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageReglage,JCloneMessageEpingle,JCloneMessageParticipant]);
+    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageReglage,JCloneMessageEpingle]);
     $("#page").append(JCloneMessageHeader);
-
-JCloneMessageDown.append([JCloneMessageInput,JCloneMessageSend]);
+    $("#page").append(JCloneMessage);
+JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
 $("#page").append(JCloneMessageDown);
 
+    JCreerMessageParticipant(Reponse,JCloneMessage);
     
-    
+
+}
+
+function JCreerMessageParticipant(Reponse,div)
+{
+
+    var JCloneMessageParticipantDiv=JMessageParticipantDiv.clone(true,true);
+    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.banner);
+    var JCloneMessageParticipantTitre=JMessageParticipantTitre.clone(true,true).text(Reponse.firstName+ " "+Reponse.lastName);
+    var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true);
+    var JCloneMessageParticipantEpingle=JMessageParticipantEpingle.clone(true,true);
+    var JCloneMessageParticipantContent=JMessageParticipantContent.clone(true,true).text(Reponse.content);
+
+
+
+    JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantRep,JCloneMessageParticipantEpingle,JCloneMessageParticipantContent]);
+$(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]);
+
+}
+
+function JCreerMessageActif(Reponse,div)
+{
+
+
 
 }
 
 
 
+function JCreerConnexion(){
+
+    var JCloneTitre=JConnexionTitre.clone(true,true).text("Connexion");
+    var JCloneLegendTel=JConnexionP.clone(true,true).text("Téléphone");
+    var JCloneLegendPwd=JConnexionP.clone(true,true).text("Mot de Passe");
+    var JCloneConnexion =  JConnexion.clone(true,true);
+    var JCloneConnexionTelephone= JConnexionTelephone.clone(true,true);
+    var JCloneConnexionPwd=JConnexionPwd.clone(true,true);
+    var JCloneConnexionSubmit=JConnexionSubmit.clone(true,true);
+
+    JCloneConnexion.append([JCloneTitre,JCloneLegendTel,JCloneConnexionTelephone,JCloneLegendPwd,JCloneConnexionPwd,JCloneConnexionSubmit]);
+    $("#page").append(JCloneConnexion);
 
 
-
-
-
+}
 
 
 
