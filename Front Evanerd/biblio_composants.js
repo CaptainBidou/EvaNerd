@@ -129,7 +129,7 @@ var JMessageDown=$("<div>").addClass("Message-Down");
 
 //variables pour les messages créé par des participants
 var JMessageParticipantDiv=$("<div>").addClass("Participant-Div");
-var JMessageParticipantProfile=$("<img>").addClass("Participant-Profile");
+var JMessageParticipantProfile=$("<img>").addClass("Participant-Profile rounded-circle");
 var JMessageParticipantTitre=$("<p>").addClass("Participant-Titre");
 var JMessageParticipantRep=$("<img>").addClass("Participant-Rep").attr("src","Ressources/Message/rep.png");
 var JMessageParticipantEpingle=$("<img>").addClass("Participant-Epingle").attr("src","Ressources/Message/epingle.png");
@@ -137,7 +137,7 @@ var JMessageParticipantContent=$("<p>").addClass("Participant-content");
 
 //variables pour les messages créé par l'utilisateur actif 
 var JMessageActifDiv=$("<div>").addClass("Actif-Div");
-var JMessageActifProfile=$("<img>").addClass("Actif-Profile");
+var JMessageActifProfile=$("<img>").addClass("Actif-Profile rounded-circle");
 var JMessageActifTitre=$("<p>").addClass("Actif-Titre");
 var JMessageActifRep=$("<img>").addClass("Actif-Rep").attr("src","Ressources/Message/rep.png");
 var JMessageActifEpingle=$("<img>").addClass("Actif-Epingle").attr("src","Ressources/Message/epingle.png");
@@ -830,8 +830,11 @@ function JCreerMessage(Reponse){
     $("#page").append(JCloneMessage);
 JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
 $("#page").append(JCloneMessageDown);
-
-    JCreerMessageParticipant(Reponse,JCloneMessage);
+var i;
+console.log(Reponse.message.length);
+    for(i=0;i<Reponse.message.length;i++)
+    {JCreerMessageParticipant(Reponse.message[i],JCloneMessage);}
+    
     
 
 }
@@ -839,7 +842,7 @@ $("#page").append(JCloneMessageDown);
 function JCreerMessageParticipant(Reponse,div)
 {
 
-    var JCloneMessageParticipantDiv=JMessageParticipantDiv.clone(true,true);
+    var JCloneMessageParticipantDiv=JMessageParticipantDiv.clone(true,true).css("background-color","lightgray");
     var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.banner);
     var JCloneMessageParticipantTitre=JMessageParticipantTitre.clone(true,true).text(Reponse.firstName+ " "+Reponse.lastName);
     var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true);
@@ -848,8 +851,9 @@ function JCreerMessageParticipant(Reponse,div)
 
 
 
-    JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantRep,JCloneMessageParticipantEpingle,JCloneMessageParticipantContent]);
+    JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantContent,JCloneMessageParticipantRep,JCloneMessageParticipantEpingle]);
 $(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]);
+
 
 }
 
