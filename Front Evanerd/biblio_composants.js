@@ -113,7 +113,7 @@ var JProfileProgress = $("<div>").attr("type","concert_progress").addClass("prog
 var JProfileActivite=$("<nav>").addClass("navbar Activite").data("type","activite");
 var JProfileActiviteContent=$("<p>").attr("type","activite_context").addClass("activite-content");
 var JProfileActiviteImage=$("<img>").addClass("activite-img");
-
+var JProfileReglage=$("<img>").attr("src","Ressources/Profile/reglage.png").addClass("profile-reglage");
 
 
 /************************************************************************/
@@ -717,6 +717,8 @@ function JCreerPostCreer(){
 
 
 function JCreerProfile(Reponse){
+var JCloneProfileReglage=JProfileReglage.clone(true,true);
+$("#page").append(JCloneProfileReglage);
 
 var JCloneProfileProgress=JProfileProgress.clone(true,true);
 var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
