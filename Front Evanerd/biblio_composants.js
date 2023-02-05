@@ -720,7 +720,7 @@ function JCreerProfile(Reponse){
 
 var JCloneProfileProgress=JProfileProgress.clone(true,true);
 var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
-var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');;
+var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
 var JCloneProfileNom=JProfileNom.clone(true,true).text(Reponse.firstName + Reponse.lastName);  
 
 
