@@ -1,26 +1,34 @@
 var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
-
+var authcode = "57d2dca86990ece87017703e4fb0e8cd";
+var member = 1 ;
+var pdp = "../Back%20Evanerd/ressources/users/2/default.jpg";
 
 /* AUTHENTIFICATION AJAX FUNC */
 
 function auth($tel,$password){
-    oRep = $.ajax({
-        type: "GET",
-        url: api + "/auth/",
+    $.ajax({
+        type: "POST",
+        url: api + "/auth?"+ "tel="+$tel+"&password="+$password,
         // headers: {"debug-data":true}, // données dans les entetes 
         headers: {},
-        data: [],
+        data: [  {
+            "key": "tel",
+            "value": $tel
+        },
+        {
+            "key": "password",
+            "value": $password
+        },],
         error : function(){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
             console.log(oRep); 
-            return oRep;
-
+            authcode = oRep.authToken;
         },
         dataType: "json"
     });
-    return oRep;
+    return 1;
 }
 /***** AUTHENTIFICATION END **********/
 
@@ -97,6 +105,7 @@ function ModifyUser($informations,$uid){
         url: api + "/users/"+$uid,
         headers: {"authToken":""}, // données dans les entetes 
         data: $data,
+        async: false,
         error : function(){
             console.log("Une erreur s'est produite : ERROR 403");
         },
@@ -640,12 +649,14 @@ function ListPosts($authToken){
         url: api + "/posts",
         headers: {"authToken":$authToken}, // données dans les entetes 
         data: [],
-        error : function(){
+        error : function(oRep){
             console.log("Une erreur s'est produite");
+            console.log(oRep);
         },
         success: function(oRep){
-            console.log(oRep); 
+            console.log(oRep);
             oRep["posts"].forEach(element => {
+                element["membre"] = 1
                 JcreerPost(element);
             });
 
