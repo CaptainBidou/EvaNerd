@@ -1,7 +1,9 @@
+
 var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
-var authcode = "57d2dca86990ece87017703e4fb0e8cd";
-var member = 1 ;
-var pdp = "../Back%20Evanerd/ressources/users/2/default.jpg";
+var authcode = "";
+var member = 0;
+var pdp = "";
+
 
 /* AUTHENTIFICATION AJAX FUNC */
 
@@ -21,12 +23,19 @@ function auth($tel,$password){
         },],
         error : function(){
             console.log("Une erreur s'est produite");
+            
         },
         success: function(oRep){
             console.log(oRep); 
             authcode = oRep.authToken;
+            member = !oRep["user"].noMember;
+            pdp = oRep["user"].photo;
         },
         dataType: "json"
+    }).done(function launchAPP(){
+        JcreerHeader({"photo" : pdp});
+        AfficherAccueil();
+        JcreerFooter({"membre" : member});
     });
     return 1;
 }
@@ -715,7 +724,7 @@ function ListPostMessages($pid){
 
 
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
-function ListCalendars(){
+function ListCalendars($type = "concert"){
     $.ajax({
         type: "GET",
         url: api + "/agendas/",
@@ -726,6 +735,9 @@ function ListCalendars(){
         },
         success: function(oRep){
             console.log(oRep); 
+            oRep["agendas"].forEach(element => {
+                ListCalendarsEvents(element["id"],$type);
+            });
         },
         dataType: "json"
     }); 
@@ -736,17 +748,23 @@ function ListCalendars(){
  * @param {*} $aid Identifiant de l'agenda
  */
 
-function ListCalendarsEvents($aid){
+function ListCalendarsEvents($aid,$type){
     $.ajax({
         type: "GET",
         url: api + "/agendas/"+$aid,
         headers: {"authToken":""}, // données dans les entetes 
-        data: [],
+        data: [            {
+            "key": "type",
+            "value": $type
+        }],
         error : function(){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
-            console.log(oRep); 
+            console.log(oRep);
+            oRep["events"].forEach(element => {
+                JCreerConcert(element);
+            });
         },
         dataType: "json"
     }); 
