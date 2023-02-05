@@ -136,7 +136,12 @@ var JMessageParticipantEpingle=$("<img>").addClass("Participant-Epingle").attr("
 var JMessageParticipantContent=$("<p>").addClass("Participant-content");
 
 //variables pour les messages créé par l'utilisateur actif 
-
+var JMessageActifDiv=$("<div>").addClass("Actif-Div");
+var JMessageActifProfile=$("<img>").addClass("Actif-Profile");
+var JMessageActifTitre=$("<p>").addClass("Actif-Titre");
+var JMessageActifRep=$("<img>").addClass("Actif-Rep").attr("src","Ressources/Message/rep.png");
+var JMessageActifEpingle=$("<img>").addClass("Actif-Epingle").attr("src","Ressources/Message/epingle.png");
+var JMessageActifContent=$("<p>").addClass("Actif-content");
 
 
 
