@@ -878,7 +878,7 @@ function JCreerMessageActif(Reponse,div,couleur)
 {
 
     if(couleur==null)
-    couleur="lightblue";
+        couleur="lightblue";
 
     var JCloneMessageActifDiv=JMessageActifDiv.clone(true,true).css("background-color",couleur);
     var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.banner);
