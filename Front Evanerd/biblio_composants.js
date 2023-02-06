@@ -294,6 +294,12 @@ function JcreerHeader(Reponse){
     var JCloneHeaderMenu=JHeaderMenu.clone(true,true);
     var JCloneHeaderItem=JHeaderItem.clone(true,true);
 
+    if (Reponse==null)
+    {
+       JCloneHeader.append(JCloneHeaderLogo);
+
+    }
+    else{
     JCloneHeaderMenu.append(JHeaderItem);
 
 
@@ -304,7 +310,14 @@ function JcreerHeader(Reponse){
         var JCloneHeaderProfile=null;
     }
 
-    JCloneHeader.append(JCloneHeaderLogo).append(JCloneHeaderTag).append(JCloneHeaderMenu).append(JCloneHeaderSearch).append(JCloneHeaderProfile);
+    if (Reponse=null)
+    {
+       JCloneHeader.append(JCloneHeaderLogo);
+
+    }
+   
+    JCloneHeader.append(JCloneHeaderLogo).append(JCloneHeaderTag).append(JCloneHeaderMenu).append(JCloneHeaderSearch).append(JCloneHeaderProfile);}
+    
     $("#header").append(JCloneHeader);
 
 }
@@ -874,8 +887,9 @@ function JCreerConnexion(){
     var JCloneConnexionSubmit=JConnexionSubmit.clone(true,true);
 
     JCloneConnexion.append([JCloneTitre,JCloneLegendTel,JCloneConnexionTelephone,JCloneLegendPwd,JCloneConnexionPwd,JCloneConnexionSubmit]);
-    $("#page").append(JCloneConnexion);
-
+    JcreerHeader(null);
+     $("#page").append(JCloneConnexion);
+    
 
 }
 

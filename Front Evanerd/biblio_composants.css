@@ -46,6 +46,7 @@
     width:100%;*/
     margin-bottom:25%;
     
+    
     /*page*/
     
 }
@@ -395,11 +396,17 @@ margin-top: 3%;
 .divFormConnexion
 {
     margin-top: 10%;
-    background-color: lightgray;
+    background-color: red;
     height:50%;
     padding:5%;
-    box-shadow: 0px 2px 10px silver;
-    box-shadow: 0px -2px 10px silver;
+    width:80%;
+    /*box-shadow: 0px 4px 10px darkred;*/
+    box-shadow: 0px 2px 10px darkred;
+    border-radius: 20px;
+    margin-left:10%;
+    margin-top:25%;
+    color:black;
+    
 }
 
 .Connexion-phone,.Connexion-Pwd
@@ -412,6 +419,7 @@ margin-top: 3%;
 {
     
     font-size: 200%;
+    background-color: darkred;
 }
 .Connexion-p
 {
