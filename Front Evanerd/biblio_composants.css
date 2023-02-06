@@ -1,12 +1,4 @@
-#page
-{
-    padding-top:4%;
-    padding-bottom: 24%;
-    position:relative;
-    width:100%;
-    /*page*/
-    
-}
+
 
 #body
 {
@@ -46,6 +38,17 @@
     float: right;
 }
 
+#page
+{
+   /* padding-top:4%;
+    padding-bottom: 24%;
+    position:relative;
+    width:100%;*/
+    margin-bottom:25%;
+    
+    /*page*/
+    
+}
 .footer {
     background-color: red;
     height: 10%;
@@ -348,9 +351,8 @@ position:absolute;
 .MessageHeader
 {
     background-color: lightgray;
-    position: absolute;
-    position: sticky;
-    top:0px;
+    position: fixed;
+    top:10%;
     z-index: 10;
     font-size:300%;
     padding:1%;
@@ -369,7 +371,7 @@ position:absolute;
     background-color: lightgray;
 box-shadow: 0px -2px 10px silver;
 position: fixed;
-top:82.5%;
+top:83%;
 width:100%;
 padding:1%;
 display: inline;
@@ -420,4 +422,48 @@ margin-top: 3%;
 
     font-size: 500%;
     text-align: center;
+}
+
+.Participant-Profile{
+width:20%;
+margin-top: 5%;
+float: left;
+
+}
+.Participant-Rep
+{
+    width:6%;
+    margin-left:80%;
+
+
+}
+.Participant-Epingle
+{
+    width:6%;
+    margin-left:5%;
+   
+    
+}
+.Participant-Div
+{
+width:60%;
+border-radius: 20px;
+font-size: 250%;
+padding:1%;
+margin-left: 22%;
+margin-top: 5%;
+box-shadow: 0px 2px 10px silver;
+box-shadow: 0px -2px 10px silver;
+
+}
+.Participant-Titre
+{
+font-weight:bold;
+
+}
+
+.Message
+{
+    margin-top: 20%;
+    margin-bottom: 39%;
 }
