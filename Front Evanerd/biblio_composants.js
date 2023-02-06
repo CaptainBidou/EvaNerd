@@ -145,8 +145,8 @@ var JMessageActifContent=$("<p>").addClass("Actif-content");
 
 //variables pour la connexion
 var JConnexion = $("<div>").addClass("divFormConnexion");
-var JConnexionTelephone=$("<input>").addClass("form-control Connexion-phone").attr("placeholder","Téléphone").attr("id","tel");
-var JConnexionPwd=$("<input>").addClass("text").addClass("form-control Connexion-pwd").attr("placeholder","Mot de passe").attr("id","pwd");
+var JConnexionTelephone=$("<input>").addClass("form-control Connexion-phone").attr("placeholder","Téléphone").attr("id","tel").attr("type","number");
+var JConnexionPwd=$("<input>").addClass("text").addClass("form-control Connexion-pwd").attr("placeholder","Mot de passe").attr("id","pwd").attr("type","password");
 var JConnexionSubmit=$("<button>").addClass("btn btn-danger Connexion-Submit").html("Se connecter").on("click",function(context){Connexion();});
 var JConnexionP=$("<p>").addClass("Connexion-p");
 var JConnexionTitre=$("<h1>").addClass("Connexion-titre");
@@ -833,7 +833,7 @@ function JCreerMessage(Reponse){
     var JCloneMessageInput=JMessageInput.clone(true,true);
     var JCloneMessageSend=JMessageSend.clone(true,true);
 
-    JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,50);
+    JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,55);
     
     $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageReglage,JCloneMessageEpingle]);
     $("#page").append(JCloneMessageHeader);
@@ -842,8 +842,15 @@ JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
 $("#page").append(JCloneMessageDown);
 var i;
 console.log(Reponse.message.length);
+
     for(i=0;i<Reponse.message.length;i++)
-    {JCreerMessageParticipant(Reponse.message[i],JCloneMessage);}
+    {if(Reponse.message[i].id==Reponse.id)
+        {
+            JCreerMessageActif(Reponse.message[i],JCloneMessage,Reponse.color);
+        }
+        
+        else
+        JCreerMessageParticipant(Reponse.message[i],JCloneMessage);}
     
     
 
@@ -867,8 +874,23 @@ $(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]);
 
 }
 
-function JCreerMessageActif(Reponse,div)
+function JCreerMessageActif(Reponse,div,couleur)
 {
+
+    if(couleur==null)
+    couleur="lightblue";
+
+    var JCloneMessageActifDiv=JMessageActifDiv.clone(true,true).css("background-color",couleur);
+    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.banner);
+    var JCloneMessageActifTitre=JMessageActifTitre.clone(true,true).text(Reponse.firstName+ " "+Reponse.lastName);
+    var JCloneMessageActifRep=JMessageActifRep.clone(true,true);
+    var JCloneMessageActifEpingle=JMessageActifEpingle.clone(true,true);
+    var JCloneMessageActifContent=JMessageActifContent.clone(true,true).text(Reponse.content);
+
+
+
+    JCloneMessageActifDiv.append([JCloneMessageActifTitre,JCloneMessageActifContent,JCloneMessageActifRep,JCloneMessageActifEpingle]);
+$(div).append([JCloneMessageActifProfile,JCloneMessageActifDiv]);
 
 
 
