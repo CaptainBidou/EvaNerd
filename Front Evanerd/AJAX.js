@@ -33,6 +33,7 @@ function auth($tel,$password){
         },
         dataType: "json"
     }).done(function launchAPP(){
+        $('#header').empty();
         JcreerHeader({"photo" : pdp});
         AfficherAccueil();
         JcreerFooter({"membre" : member});
