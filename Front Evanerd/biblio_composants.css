@@ -362,7 +362,7 @@ position:absolute;
     box-shadow: 0px 2px 10px silver;
 }
 
-.Message-Fleche,.Message-Reglage,.Message-Epingle
+.Message-Fleche,.Message-Reglage
 {
     width:10%;
     
@@ -474,4 +474,20 @@ font-weight:bold;
 {
     margin-top: 20%;
     margin-bottom: 39%;
+}
+
+
+,.Message-Reglage
+{
+width:10%;
+float:right;
+margin-left:0%;
+
+
+}
+.Message-Epingle{
+
+    margin-right:15%;
+
+
 }

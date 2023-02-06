@@ -824,7 +824,7 @@ function JCreerMessage(Reponse){
     var JCloneMessageHeader = JMessageHeader.clone(true,true);
     var JCloneMessageFleche =JMessageFleche.clone(true,true);
     var JCloneMessageReglage=JMessageReglage.clone(true,true);
-    var JCloneMessageEpingle=JMessageEpingle.clone(true,true);
+    var JCloneMessageEpingle=JMessageEpingle.clone(true,true).show();
     var JCloneMessageParticipant=JMessageParticipant.clone(true,true).text(Reponse.titre);
 
     var JCloneMessage=JMessage.clone(true,true);
@@ -833,7 +833,7 @@ function JCreerMessage(Reponse){
     var JCloneMessageInput=JMessageInput.clone(true,true);
     var JCloneMessageSend=JMessageSend.clone(true,true);
 
-    JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,60);
+    JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,50);
     
     $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageReglage,JCloneMessageEpingle]);
     $("#page").append(JCloneMessageHeader);
