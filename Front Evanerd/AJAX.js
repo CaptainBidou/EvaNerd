@@ -664,6 +664,7 @@ function ListPosts($authToken){
         },
         success: function(oRep){
             console.log(oRep);
+            oRep["posts"].sort(function compare(e1,e2) { return e2.pinned - e1.pinned });
             oRep["posts"].forEach(element => {
                 element["membre"] = 1
                 JcreerPost(element);
