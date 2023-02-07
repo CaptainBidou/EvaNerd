@@ -756,22 +756,19 @@ function ListCalendars($type = "concert"){
  * @param {*} $aid Identifiant de l'agenda
  */
 
-function ListCalendarsEvents($aid,$type){
+function ListCalendarsEvents($authToken,$aid){
     $.ajax({
         type: "GET",
-        url: api + "/agendas/"+$aid,
-        headers: {"authToken":""}, // données dans les entetes 
-        data: [            {
-            "key": "type",
-            "value": $type
-        }],
+        url: api + "/agendas/"+$aid +"/events",
+        headers: {"authToken":$authToken}, // données dans les entetes 
+        data: [],
         error : function(){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
             console.log(oRep);
             oRep["events"].forEach(element => {
-                JCreerConcert(element);
+                JCreerAppel(element);
             });
         },
         dataType: "json"
