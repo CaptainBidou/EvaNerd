@@ -180,12 +180,12 @@ var JConnexionTitre=$("<h1>").addClass("Connexion-titre");
 
 function JcreerPost(Reponse){
     var jClonePost=JPost.clone(true,true);
-    var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.firstName+" "+Reponse.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
+    var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.author.firstName+" "+Reponse.author.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
     var jClonePostBody=JPostBody.clone(true,true);
     var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner);
     var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
     jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
-    var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.photo);
+    var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.author.photo);
 
     var jClonePost2=JPost.clone(true,true);
     var jClonePostBody2=JPostBody.clone(true,true);
