@@ -647,4 +647,23 @@ function insertParticipation($uid, $aeid, $participation) {
     $sql = "INSERT INTO User_Participations(uid, aeid, participation) VALUES (?,?,?)";
     $db->SQLInsert($sql, [$uid, $aeid, $participation]);
 }
+
+function selectLiked($pid, $uid){
+    $db = Config::getDatabase();
+    $sql = "SELECT Liked, pid, uid
+            FROM Post_Likes
+            WHERE pid = ? AND uid = ?";
+    $param = [$pid, $uid];
+
+    return Database::parcoursRs($db->SQLSelect($sql, $param));
+}
+function Liked($pid, $uid, $liked){
+    $db = Config::getDatabase();
+    $sql = "UPDATE Liked
+            SET Liked = ?
+            WHERE pid = ? AND uid = ?";
+    $param = [$pid, $uid];
+
+    return Database::parcoursRs(($db->SQLUpdate($liked, $sql, $param)));
+}
 ?>

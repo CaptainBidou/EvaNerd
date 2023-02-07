@@ -824,7 +824,27 @@ function postPost($data, $authKey,$queryString) {
     }
 }
 
-function postPostLike($data, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+function postPostLike($data, $idTabs, $authKey) {
+    if($authKey){
+        $uidConn = validUser(authToId($authKey));
+        $pid = $idTabs[0];
+        $post = selectPost($pid);
+        $like = selectLiked();
+
+        if (!$post) sendError("Le post n'existe pas !", HTTP_BAD_REQUEST);
+
+        if ($like == false) {
+            insertLiked($uidConn, $pid, 1);
+            $data["like"] = ["uid" => $uidConn, "pid" => $pid, "liked" => 1]; 
+        } else {
+            $data["like"] = ["uid" => $uidConn, "pid" => $pid, "liked" => !Liked($pid, $uidConn, !$like[0]["liked"])];
+            if ($like[0]["liked"])
+                Liked($pid, $uidConn, 0);
+            else
+                Liked($pid, $uidConn, 1);
+        }
+        
+        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+    }
 }
 
