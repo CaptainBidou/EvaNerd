@@ -42,7 +42,7 @@ var JHeaderItem=$("<input>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh
 var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher");
 
 //variables pour les Convs
-var JConv =$("<nav>").addClass("navbar conversation").data("type","conv").on("click",function(context){return $(context.target).attr("type_id");});//TODO ICI TU APPELLE TA FONCTION
+var JConv =$("<nav>").addClass("navbar conversation").data("type","conv").on("click",function(context){JRecupMessages(context);});//TODO ICI TU APPELLE TA FONCTION
 var JConvImg = $("<img>").addClass("rounded-circle conversation-image").data("type","conv_img");//TODO :rajouter des données pour quand on clique 
 var JConvp=$("<p>").addClass("navbar-text left").data("type","conv_p");
 
