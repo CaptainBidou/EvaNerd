@@ -83,9 +83,10 @@ function JRecupMessages(context){
     var id=$(context.target).attr("type_id");
     //connexion à un groupe 
     console.log(id);
-    var nomgroupe=$("p",context.target).text();
+    var nomgroupe = $(context.target).text();
+    console.log(nomgroupe);
     $("#page").html("");
-    ListMsgConv(id,nomgroupe,user);
+    ListMsgConv(id,nomgroupe,user,authcode);
 }
 
 function JRecupId(){
