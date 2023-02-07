@@ -124,7 +124,7 @@ var JMessageParticipant=$("<p>").addClass("Message-Participant");
 var JMessageLayout=$("<div>").addClass("Message-Layout scroller").data("type","layout");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
 var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message");
-var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(){return null;});
+var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerMessage(context.target);});
 var JMessageDown=$("<div>").addClass("Message-Down");
 
 //variables pour les messages créé par des participants
@@ -1029,3 +1029,13 @@ $(target).attr("src","Ressources/Message/epingle.png");}
 }
 
 
+function JEnvoyerMessage(target){
+    console.log($("Message-Down",".Actif-Div").attr("id"));
+$(target).attr("message",$(".Message-Input").val()).attr("rep",$(".Actif-Div").data("id"));
+
+
+
+
+
+
+}
