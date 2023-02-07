@@ -3,6 +3,7 @@ var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
 var authcode = "";
 var member = 0;
 var pdp = "";
+var user = "";
 
 
 /* AUTHENTIFICATION AJAX FUNC */
@@ -33,6 +34,7 @@ function auth($tel,$password){
         },
         success: function(oRep){
             console.log(oRep); 
+            user = oRep["user"].id;
             authcode = oRep.authToken;
             member = !oRep["user"].noMember;
             pdp = oRep["user"].photo;
@@ -537,20 +539,22 @@ function ListPermsConv($gid){
  * Requête permettant de récupérer la liste des messages d'un groupe
  * @param {*} $gid Identifiant du groupe
  */
-function ListMsgConv($gid){
+function ListMsgConv($gid,$title,$currentuser,$authToken){
     $.ajax({
         type : "GET",
         url : api + "/groups/" + $gid + "/messages",
-        headers:{"authToken" : ""},
+        headers:{"authToken" : $authToken},
         data : [],
-        error : function(){
+        error : function(err){
             console.log("Une erreur s'est produite");
+            console.log(err);
         },
         success : function(oRep){
             console.log(oRep);
-            oRep["groups"].forEach(element => {
-                JAfficherMessageConv(oRep);
-            });
+            oRep.titre = $title;
+            oRep.id = $currentuser;
+            oRep["messages"].sort(function func(e1,e2){ return e1.id - e2.id ;});
+            JCreerMessage(oRep);
         },
         dataType: "json"
     });
@@ -674,7 +678,8 @@ function ListPosts($authToken){
             oRep["posts"].sort(function compare(e1,e2) { return e2.pinned - e1.pinned });
             oRep["posts"].forEach(element => {
                 element["membre"] = 1
-                JcreerPost(element);
+                if (element.visible == 1)
+                    JcreerPost(element);
             });
 
         },

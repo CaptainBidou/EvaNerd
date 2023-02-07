@@ -653,6 +653,25 @@ function insertParticipation($uid, $aeid, $participation) {
     $db->SQLInsert($sql, [$uid, $aeid, $participation]);
 }
 
+function selectLiked($pid, $uid){
+    $db = Config::getDatabase();
+    $sql = "SELECT Liked, pid, uid
+            FROM Post_Likes
+            WHERE pid = ? AND uid = ?";
+    $param = [$pid, $uid];
+
+    return Database::parcoursRs($db->SQLSelect($sql, $param));
+}
+function Liked($pid, $uid, $liked){
+    $db = Config::getDatabase();
+    $sql = "UPDATE Liked
+            SET Liked = ?
+            WHERE pid = ? AND uid = ?";
+    $param = [$pid, $uid];
+
+    return Database::parcoursRs(($db->SQLUpdate($liked, $sql, $param)));
+}
+
 function insertPost($title, $content, $image, $pinned, $visible, $author) {
     $db = Config::getDatabase();
     $param = [$author, $content, $image, $pinned, $visible];

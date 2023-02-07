@@ -833,31 +833,65 @@ function JCreerMessage(Reponse){
     $("#page").append(JCloneMessageDown);
     var i;
     console.log(Reponse.messages.length);
-
+var j;
     for(i=0;i<Reponse.messages.length;i++)
-    {if(Reponse.messages[i].author.id==Reponse.id)
+    {
+        if(Reponse.messages[i].answerTo!=null)
+        {   
+            for(j=0;j<Reponse.messages.length;j++)
+            {
+                if(Reponse.messages[i].answerTo==Reponse.messages[j].id)
+                    Reponse.messages[i].answerTo=Reponse.messages[j];
+            }
+
+
+        }
+        
+        
+        if(Reponse.messages[i].author.id==Reponse.id)
         {
-            JCreerMessageActif(Reponse.messages[i],JCloneMessage,Reponse.color);
+            JCreerMessageActif(Reponse.messages[i],JCloneMessage,Reponse.color,0);
         }
         
         else
-        JCreerMessageParticipant(Reponse.messages[i],JCloneMessage);}
+        JCreerMessageParticipant(Reponse.messages[i],JCloneMessage,0);
+    
+    
+    }
     
     
 
 }
 
-function JCreerMessageParticipant(Reponse,div)
-{
+function JCreerMessageParticipant(Reponse,div,rep)
+{   
+    
+    var JCloneMessageParticipantDiv=JMessageParticipantDiv.clone(true,true).css("background-color","lightgray").attr("id",Reponse.id);
+    if(rep==1)
+    {   JCloneMessageParticipantDiv.addClass("reponse-message-linked");
+    JCloneMessageParticipantDiv.attr("href","#"+ JCloneMessageParticipantDiv.attr("id"));
+    JCloneMessageParticipantDiv.attr("id","");
+    JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantContent]);
+    $(div).append(JCloneMessageParticipantDiv);
+    return;
+    }
 
-    var JCloneMessageParticipantDiv=JMessageParticipantDiv.clone(true,true).css("background-color","lightgray");
     var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo);
     var JCloneMessageParticipantTitre=JMessageParticipantTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
     var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true);
+   
     var JCloneMessageParticipantEpingle=JMessageParticipantEpingle.clone(true,true);
+    if(Reponse.pinned==1)
+    JCloneMessageParticipantEpingle.attr("src","Ressources/Message/epingleNOIR.png")
+
     var JCloneMessageParticipantContent=JMessageParticipantContent.clone(true,true).text(Reponse.content);
 
-
+    if(Reponse.answerTo!=null)
+        { var answer=Reponse.answerTo;
+            Reponse.answerTo=null;
+            JCloneMessageParticipantDiv.append("<a>");
+            $("a",JCloneMessageParticipantDiv).attr("href","#"+answer.id).addClass("lien-message");
+        JCreerMessageParticipant(answer,$("a",JCloneMessageParticipantDiv),1);}
 
     JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantContent,JCloneMessageParticipantRep,JCloneMessageParticipantEpingle]);
     $(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]);
@@ -865,20 +899,41 @@ function JCreerMessageParticipant(Reponse,div)
 
 }
 
-function JCreerMessageActif(Reponse,div,couleur)
+function JCreerMessageActif(Reponse,div,couleur,rep)
 {
 
     if(couleur==null)
         couleur="lightblue";
 
-    var JCloneMessageActifDiv=JMessageActifDiv.clone(true,true).css("background-color",couleur);
-    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo);
+    var JCloneMessageActifDiv=JMessageActifDiv.clone(true,true).css("background-color",couleur).attr("id",Reponse.id);
     var JCloneMessageActifTitre=JMessageActifTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
-    var JCloneMessageActifRep=JMessageActifRep.clone(true,true);
-    var JCloneMessageActifEpingle=JMessageActifEpingle.clone(true,true);
     var JCloneMessageActifContent=JMessageActifContent.clone(true,true).text(Reponse.content);
 
+    if(rep==1)
+    {   JCloneMessageActifDiv.addClass("reponse-message-linked");
+   JCloneMessageActifDiv.attr("reference", JCloneMessageActifDiv.attr("id"));
+   JCloneMessageActifDiv.attr("id","");
+    JCloneMessageActifDiv.append([JCloneMessageActifTitre,JCloneMessageActifContent]);
+    $(div).append(JCloneMessageActifDiv);
+    return;
+    }
 
+    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo);
+    
+    var JCloneMessageActifRep=JMessageActifRep.clone(true,true);
+    var JCloneMessageActifEpingle=JMessageActifEpingle.clone(true,true);
+    if(Reponse.pinned==1)
+    JCloneMessageActifEpingle.attr("src","Ressources/Message/epingleNOIR.png");
+
+   
+
+
+    if(Reponse.answerTo!=null)
+    { var answer=Reponse.answerTo;
+        Reponse.answerTo=null;
+        JCloneMessageActifDiv.append("<a>");
+        $("a",JCloneMessageActifDiv).attr("href","#"+answer.id).addClass("lien-message");
+    JCreerMessageActif(answer,$("a",JCloneMessageActifDiv),"coral",1);}
 
     JCloneMessageActifDiv.append([JCloneMessageActifTitre,JCloneMessageActifContent,JCloneMessageActifRep,JCloneMessageActifEpingle]);
     $(div).append([JCloneMessageActifProfile,JCloneMessageActifDiv]);

@@ -159,7 +159,7 @@ switch($action) {
         break;
     
     case "POST /posts/ID/likes":
-        postPostLike($data, $authKey);
+        postPostLike($data, $idTabs, $authKey);
         break;
     
     /* Agendas */
