@@ -121,6 +121,7 @@ var JMessageFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addCla
 var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addClass("Message-Reglage");
 var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle").on("click",function(context){JLayoutPinnedMessages(context.target);});
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
+var JMessageLayout=$("<div>").addClass("Message-Layout").data("type","layout");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
 var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message");
 var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(){return null;});
@@ -816,6 +817,8 @@ function JCreerMessage(Reponse){
     var JCloneMessageFleche =JMessageFleche.clone(true,true);
     var JCloneMessageReglage=JMessageReglage.clone(true,true);
     var JCloneMessageEpingle=JMessageEpingle.clone(true,true).show();
+    var JCloneMessageLayout=JMessageLayout.clone(true,true);
+
     var JCloneMessageParticipant=JMessageParticipant.clone(true,true).text(Reponse.titre);
 
     var JCloneMessage=JMessage.clone(true,true);
@@ -826,7 +829,7 @@ function JCreerMessage(Reponse){
 
     JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,55);
     
-    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageReglage,JCloneMessageEpingle]);
+    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageReglage,JCloneMessageEpingle,JCloneMessageLayout]);
     $("#page").append(JCloneMessageHeader);
     $("#page").append(JCloneMessage);
     JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
@@ -847,7 +850,9 @@ var j;
 
         }
         
-        
+        if(Reponse.messages[i].pinned==1)
+            JCreerMessageActif(Reponse.messages[i],JCloneMessageLayout,Reponse.color,0);
+
         if(Reponse.messages[i].author.id==Reponse.id)
         {
             JCreerMessageActif(Reponse.messages[i],JCloneMessage,Reponse.color,0);
@@ -904,13 +909,16 @@ function JCreerMessageParticipant(Reponse,div,rep)
 function JCreerMessageActif(Reponse,div,couleur,rep)
 {
 
+    
+        
+
     if(couleur==null)
         couleur="lightblue";
 
     var JCloneMessageActifDiv=JMessageActifDiv.clone(true,true).css("background-color",couleur).attr("id",Reponse.id);
     var JCloneMessageActifTitre=JMessageActifTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
     var JCloneMessageActifContent=JMessageActifContent.clone(true,true).text(Reponse.content);
-
+    
     if(rep==1)
     {   JCloneMessageActifDiv.addClass("reponse-message-linked");
    JCloneMessageActifDiv.attr("reference", JCloneMessageActifDiv.attr("id"));
@@ -919,7 +927,13 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
     $(div).append(JCloneMessageActifDiv);
     return;
     }
-
+    
+    if(div.data("type")=="layout")
+    {   JCloneMessageActifDiv.addClass("messages-layout-pinned");
+        JCloneMessageActifDiv.append([JCloneMessageActifTitre,JCloneMessageActifContent]);
+    $(div).append(JCloneMessageActifDiv);
+    return;
+    }
     var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo);
     
     var JCloneMessageActifRep=JMessageActifRep.clone(true,true).attr("id_message",Reponse.id);
@@ -1000,11 +1014,11 @@ function JLayoutPinnedMessages(target){
 
 
 if($(target).attr("src")=="Ressources/Message/epingle.png")
-{   $("Message-Layout",target).show(); 
+{   $(".Message-Layout").animate({left: '25%'}); 
 $(target).attr("src","Ressources/Message/epingleNOIR.png");}
 
 else
-{$("Message-Layout",target).hide();//TODO RAJOUTER ANIMATION
+{$(".Message-Layout").animate({left: '100%'});//TODO RAJOUTER ANIMATION
 $(target).attr("src","Ressources/Message/epingle.png");}
 
 
