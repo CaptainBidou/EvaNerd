@@ -678,7 +678,8 @@ function ListPosts($authToken){
             oRep["posts"].sort(function compare(e1,e2) { return e2.pinned - e1.pinned });
             oRep["posts"].forEach(element => {
                 element["membre"] = 1
-                JcreerPost(element);
+                if (element.visible == 1)
+                    JcreerPost(element);
             });
 
         },
