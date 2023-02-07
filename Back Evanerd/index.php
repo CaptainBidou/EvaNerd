@@ -141,7 +141,10 @@ switch($action) {
     case "POST /groups/ID/messages":
         postMessagesGroups($data, $idTabs, $authKey, $queryString);
         break;
-
+    
+    case "POST /groups/ID/messages/ID/reactions":
+        postMessageReactions($data, $idTabs, $authKey, $queryString);
+        break;
     /* Posts */
     case "GET /posts":
         listPosts($data, $authKey);
@@ -149,6 +152,14 @@ switch($action) {
         
     case "GET /posts/ID/messages":
         listPostsMessages($data, $idTabs, $authKey);
+        break;
+    
+    case "POST /posts":
+        postPost($data, $authKey,$queryString);
+        break;
+    
+    case "POST /posts/ID/likes":
+        postPostLike($data, $authKey);
         break;
     
     /* Agendas */
@@ -178,7 +189,7 @@ switch($action) {
     case "GET agendas/ID/events/ID/participations":
         listParticipations($data, $idTabs, $authKey);
         break;
-        
+
     case "POST /agendas/ID/events/ID/participations":
         postParticipations($data, $idTabs, $queryString, $authKey);
         break;

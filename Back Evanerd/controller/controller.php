@@ -800,3 +800,31 @@ function postImage($data, $idTabs,$authKey) {
     }
     sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
+
+function postMessageReactions($data, $idTabs, $authKey, $queryString) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+}
+
+function postPost($data, $authKey,$queryString) {
+    if($authKey) {
+        $newId = getNewPid();
+        $dir = DIR_POSTS . $newId;
+        $uidConn = validUser(authToId($authKey));
+        if($title = validString(valider("title", $queryString), 70, 3))
+        if($content = validString(valider("content"), 300, 0));
+        if($pinned = valider("pinned", $queryString))
+        if($visible = valider("visible", $queryString))
+        if($_FILES["banner"]) {
+            if(!is_dir($dir)) mkdir($dir);
+            uploadImage("$dir/image", $_FILES);
+            $pid = insertPost($title, $content, $pinned, $visible);
+            $data["post"] = selectPost($pid)[0];
+            sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+        }
+    }
+}
+
+function postPostLike($data, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+}
+
