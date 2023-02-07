@@ -40,7 +40,7 @@ function AfficherMessagerie(){
 function AfficherAppel(){
     $("#page").html("");
     //ici obtenir la réponse de la requête 
-    var appel={"titre":"Répétition tutti","date":"01/12/2019","commentaire":"Répétitions au capitole à 18h c'est très important de venir","sex":"0"};
+    /* var appel={"titre":"Répétition tutti","date":"01/12/2019","commentaire":"Répétitions au capitole à 18h c'est très important de venir","sex":"0"};
     JCreerAppel(appel);
     JCreerAppel(appel);
     JCreerAppel(appel);
@@ -48,7 +48,9 @@ function AfficherAppel(){
     JCreerAppel(appel);
     JCreerAppel(appel);
     JCreerAppel(appel);
-    JCreerAppel(appel);
+    JCreerAppel(appel); */
+
+    ListCallMembers(authcode,$aid,$eid);
 }
 
 function AfficherCalendrier(){
@@ -73,9 +75,7 @@ function AfficherCreer(){
 function Connexion(){
     var tel=$("#tel").val();
     var mdp=$("#pwd").val();
-
     auth(tel,mdp);
-
 }
 function JRecupMessages(context){
 if($(context.target).attr("type")=="convp")

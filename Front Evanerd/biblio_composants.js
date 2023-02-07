@@ -739,48 +739,41 @@ function JCreerPostCreer(){
 
 
 function JCreerProfile(Reponse){
-var JCloneProfileReglage=JProfileReglage.clone(true,true);
-$("#page").append(JCloneProfileReglage);
+    var JCloneProfileReglage=JProfileReglage.clone(true,true);
+    $("#page").append(JCloneProfileReglage);
 
-var JCloneProfileProgress=JProfileProgress.clone(true,true);
-var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
-var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
-var JCloneProfileNom=JProfileNom.clone(true,true).text(Reponse.firstName +" "+ Reponse.lastName);  
+    var JCloneProfileProgress=JProfileProgress.clone(true,true);
+    var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
+    var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
+    var JCloneProfileNom=JProfileNom.clone(true,true).text(Reponse.firstName +" "+ Reponse.lastName);  
 
-if(Reponse.pourcentage<33)
-        JCloneProfilePourcentage.css('background-color','red');
+    if(Reponse.pourcentage<33)
+            JCloneProfilePourcentage.css('background-color','red');
 
-    else if(Reponse.pourcentage<63)
-        JCloneProfilePourcentage.css('background-color','orange');
+        else if(Reponse.pourcentage<63)
+            JCloneProfilePourcentage.css('background-color','orange');
 
-    else if(Reponse.pourcentage<100)
-        JCloneProfilePourcentage.css('background-color','green');
-
-
-    if (JCouleur == 'silver')
-        JCouleur='Lightgray';
-    else
-        JCouleur='silver';
+        else if(Reponse.pourcentage<100)
+            JCloneProfilePourcentage.css('background-color','green');
 
 
+        if (JCouleur == 'silver')
+            JCouleur='Lightgray';
+        else
+            JCouleur='silver';
+
+    $("#page").append(JCloneProfileImage);
+    $("#page").append(JCloneProfileNom);
+    var i;
+    for(i=0;i<Reponse.tag.length;i++)
+    JCreerProfileTag(Reponse.tag[i]);
 
 
-$("#page").append(JCloneProfileImage);
-$("#page").append(JCloneProfileNom);
-var i;
-for(i=0;i<Reponse.tag.length;i++)
-JCreerProfileTag(Reponse.tag[i]);
+    $("#page").append(JCloneProfileProgress.append(JCloneProfilePourcentage));
 
-
-$("#page").append(JCloneProfileProgress.append(JCloneProfilePourcentage));
-
-for(i=0;i<Reponse.activity.length;i++)
-{var activity = {"nom":Reponse.firstName,"prenom":Reponse.lastName,"activites":Reponse.activity[i],};
-JCreerProfileActivite(activity);}
-
-
-
-
+    for(i=0;i<Reponse.activity.length;i++)
+    {var activity = {"nom":Reponse.firstName,"prenom":Reponse.lastName,"activites":Reponse.activity[i],};
+    JCreerProfileActivite(activity);}
 
 }
 
@@ -794,10 +787,8 @@ JCreerProfileActivite(activity);}
  *  
  */
 function JCreerProfileTag(Reponse){
-var JCloneProfileTag=JProfileTag.clone(true,true).text(Reponse.nom).css("background-color",Reponse.couleur);
-$("#page").append(JCloneProfileTag);
-
-
+    var JCloneProfileTag=JProfileTag.clone(true,true).text(Reponse.nom).css("background-color",Reponse.couleur);
+    $("#page").append(JCloneProfileTag);
 }
 
 
@@ -809,14 +800,13 @@ $("#page").append(JCloneProfileTag);
  * Reponse={"nom":jean,"prenom":"pierre","activites":[{"nom":"repetition tutti"},{"nom":"repetition haut bois"}]} 
  */
 function JCreerProfileActivite(Reponse){
-var JCloneProfileActivite=JProfileActivite.clone(true,true);
-var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true).attr("src","Ressources/Footer/calendrier.png");
-var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.nom);
-JCloneProfileActiviteContent=ajouterTextOverflow(JCloneProfileActiviteContent,80);
-JCloneProfileActiviteContent.on("click",function(context){afficherToutleText(context);})
-JCloneProfileActivite.append([JCloneProfileActiviteContent,JCloneProfileActiviteImage]);
-$("#page").append(JCloneProfileActivite);
-
+    var JCloneProfileActivite=JProfileActivite.clone(true,true);
+    var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true).attr("src","Ressources/Footer/calendrier.png");
+    var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.nom);
+    JCloneProfileActiviteContent=ajouterTextOverflow(JCloneProfileActiviteContent,80);
+    JCloneProfileActiviteContent.on("click",function(context){afficherToutleText(context);})
+    JCloneProfileActivite.append([JCloneProfileActiviteContent,JCloneProfileActiviteImage]);
+    $("#page").append(JCloneProfileActivite);
 }
 
 
@@ -838,10 +828,10 @@ function JCreerMessage(Reponse){
     $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageReglage,JCloneMessageEpingle]);
     $("#page").append(JCloneMessageHeader);
     $("#page").append(JCloneMessage);
-JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
-$("#page").append(JCloneMessageDown);
-var i;
-console.log(Reponse.messages.length);
+    JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
+    $("#page").append(JCloneMessageDown);
+    var i;
+    console.log(Reponse.messages.length);
 
     for(i=0;i<Reponse.messages.length;i++)
     {if(Reponse.messages[i].id==Reponse.id)
@@ -869,7 +859,7 @@ function JCreerMessageParticipant(Reponse,div)
 
 
     JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantContent,JCloneMessageParticipantRep,JCloneMessageParticipantEpingle]);
-$(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]);
+    $(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]);
 
 
 }
@@ -890,9 +880,7 @@ function JCreerMessageActif(Reponse,div,couleur)
 
 
     JCloneMessageActifDiv.append([JCloneMessageActifTitre,JCloneMessageActifContent,JCloneMessageActifRep,JCloneMessageActifEpingle]);
-$(div).append([JCloneMessageActifProfile,JCloneMessageActifDiv]);
-
-
+    $(div).append([JCloneMessageActifProfile,JCloneMessageActifDiv]);
 
 }
 
