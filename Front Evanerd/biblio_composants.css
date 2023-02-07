@@ -370,6 +370,7 @@ position:absolute;
     font-weight: bold;
     height:8%;
     box-shadow: 0px 2px 10px silver;
+    width:100%;
 }
 
 .Message-Fleche,.Message-Reglage
