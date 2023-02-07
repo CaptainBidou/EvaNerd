@@ -131,7 +131,7 @@ var JMessageParticipantDiv=$("<div>").addClass("Participant-Div");
 var JMessageParticipantProfile=$("<img>").addClass("Participant-Profile rounded-circle");
 var JMessageParticipantTitre=$("<p>").addClass("Participant-Titre");
 var JMessageParticipantRep=$("<img>").addClass("Participant-Rep").attr("src","Ressources/Message/rep.png");
-var JMessageParticipantEpingle=$("<img>").addClass("Participant-Epingle").attr("src","Ressources/Message/epingle.png");
+var JMessageParticipantEpingle=$("<img>").addClass("Participant-Epingle").attr("src","Ressources/Message/epingle.png").on("click",function(context){JclickEpingle(context.target);});
 var JMessageParticipantContent=$("<p>").addClass("Participant-content");
 
 //variables pour les messages créé par l'utilisateur actif 
@@ -139,7 +139,7 @@ var JMessageActifDiv=$("<div>").addClass("Actif-Div");
 var JMessageActifProfile=$("<img>").addClass("Actif-Profile rounded-circle");
 var JMessageActifTitre=$("<p>").addClass("Actif-Titre");
 var JMessageActifRep=$("<img>").addClass("Actif-Rep").attr("src","Ressources/Message/rep.png");
-var JMessageActifEpingle=$("<img>").addClass("Actif-Epingle").attr("src","Ressources/Message/epingle.png");
+var JMessageActifEpingle=$("<img>").addClass("Actif-Epingle").attr("src","Ressources/Message/epingle.png").on("click",function(context){JclickEpingle(context.target);});
 var JMessageActifContent=$("<p>").addClass("Actif-content");
 
 //variables pour la connexion
@@ -882,7 +882,7 @@ function JCreerMessageParticipant(Reponse,div,rep)
     
     var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true);
    
-    var JCloneMessageParticipantEpingle=JMessageParticipantEpingle.clone(true,true);
+    var JCloneMessageParticipantEpingle=JMessageParticipantEpingle.clone(true,true).attr("id_message",Reponse.id);
     if(Reponse.pinned==1)
     JCloneMessageParticipantEpingle.attr("src","Ressources/Message/epingleNOIR.png")
 
@@ -923,7 +923,7 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
     var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo);
     
     var JCloneMessageActifRep=JMessageActifRep.clone(true,true);
-    var JCloneMessageActifEpingle=JMessageActifEpingle.clone(true,true);
+    var JCloneMessageActifEpingle=JMessageActifEpingle.clone(true,true).attr("id_message",Reponse.id);
     if(Reponse.pinned==1)
     JCloneMessageActifEpingle.attr("src","Ressources/Message/epingleNOIR.png");
 
@@ -966,7 +966,13 @@ function JCreerConnexion(){
 
 
 
+function JclickEpingle(target){
 
+$(target).attr("src","Ressources/Message/epingleNOIR.png");
+
+EpinglerUnMessage($(target).attr("id_message"));// à implémenter dans la couche client 
+
+}
 
 
 
