@@ -119,7 +119,7 @@ var JProfileReglage=$("<img>").attr("src","Ressources/Profile/reglage.png").addC
 var JMessageHeader = $("<nav>").addClass("navbar MessageHeader");
 var JMessageFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addClass("Message-Fleche").on("click",function(){AfficherMessagerie();});
 var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addClass("Message-Reglage");
-var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle");
+var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle").on("click",function(context){JLayoutPinnedMessages(context.target);});
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
 var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message");
@@ -996,6 +996,25 @@ $(".Message-Down").append([JCloneMessageEnReponse,JCloneCroix,JCloneMessageSend,
 
 
 
+function JLayoutPinnedMessages(target){
 
+
+if($(target).attr("src")=="Ressources/Message/epingle.png")
+{   $("Message-Layout",target).show(); 
+$(target).attr("src","Ressources/Message/epingleNOIR.png");}
+
+else
+{$("Message-Layout",target).hide();//TODO RAJOUTER ANIMATION
+$(target).attr("src","Ressources/Message/epingle.png");}
+
+
+
+
+
+
+
+
+
+}
 
 
