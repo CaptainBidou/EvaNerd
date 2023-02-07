@@ -841,12 +841,12 @@ function JCreerMessage(Reponse){
 JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
 $("#page").append(JCloneMessageDown);
 var i;
-console.log(Reponse.message.length);
+console.log(Reponse.messages.length);
 
-    for(i=0;i<Reponse.message.length;i++)
-    {if(Reponse.message[i].id==Reponse.id)
+    for(i=0;i<Reponse.messages.length;i++)
+    {if(Reponse.messages[i].id==Reponse.id)
         {
-            JCreerMessageActif(Reponse.message[i],JCloneMessage,Reponse.color);
+            JCreerMessageActif(Reponse.messages[i],JCloneMessage,Reponse.color);
         }
         
         else

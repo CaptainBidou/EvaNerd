@@ -35,7 +35,47 @@ var conv={"id":2,'color':"lightblue","titre":'Discussion avec Ferreol le gros ki
 {'id':2,'firstName':'Bruno','lastName':'François','banner':'Ressources/Test/profile2.jpg','content':'Bah en vrai la forme et tout et toi le boss ??',"color":"blue"},{'id':3,'firstName':'Ferreol','lastName':'Binot','banner':'Ressources/Test/profile3.jpg','content':'La forme le sang d ailleurs tu veux voir mon dirac ??',"color":"lightgray"},{'id':2,'firstName':'Bruno','lastName':'François','banner':'Ressources/Test/profile2.jpg','content':'OOOH mais on connais çaa !!!!',"color":"blue"}]};
 
 
-
+var conv2={
+    "apiname": "EVANERD API",
+    "version": "1.0",
+    "groupId": 1,
+    "messages": [
+        {
+            "id": 1,
+            "author": {
+                "id": 1,
+                "firstName": "Lukas",
+                "lastName": "Grando",
+                "photo": "http://localhost/EvaNerd/Back Evanerd/ressources/users/1/image.jpeg"
+            },
+            "content": "Salut les amis ça va ?",
+            "pinned": 1,
+            "answerTo": null
+        },
+        {
+            "id": 2,
+            "author": {
+                "id": 2,
+                "firstName": "Tomas",
+                "lastName": "Treny",
+                "photo": "http://localhost/EvaNerd/Back Evanerd/ressources/users/2/default.png"
+            },
+            "content": "ça va est toi ?",
+            "pinned": null,
+            "answerTo": 1,
+            "reactions": {
+                "?": [
+                    {
+                        "uid": 1,
+                        "firstName": "Lukas",
+                        "lastName": "Grando",
+                        "photo": "http://localhost/EvaNerd/Back Evanerd/ressources/users/1/image.jpeg"
+                    }
+                ]
+            }
+        }
+    ]
+};
 
 
 
@@ -62,7 +102,7 @@ JcreerHeader(Reponse);
 
 //JCreerDropUpCreer();
 
-JCreerMessage(conv);
+JCreerMessage(conv2);
 
 
 
