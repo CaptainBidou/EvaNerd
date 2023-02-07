@@ -554,9 +554,7 @@ function ListMsgConv($gid,$title,$currentuser,$authToken){
             oRep.titre = $title;
             oRep.id = $currentuser;
             oRep["messages"].sort(function func(e1,e2){ return e1.id - e2.id ;});
-            oRep["messages"].forEach(element => {
-                JCreerMessage(oRep);
-            });
+            JCreerMessage(oRep);
         },
         dataType: "json"
     });
