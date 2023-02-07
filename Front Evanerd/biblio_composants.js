@@ -66,7 +66,7 @@ var JRepetitionCommentaire=$("<p>").addClass("navbar-text left repetition-commen
 var JRepetitionPresent=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Present").attr("type","present");
 var JRepetitionAbsent=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Absent").attr("type","absent");
 var JRepetitionJustificationText=$("<textarea>").addClass("form-control repetition-justification").attr("placeholder","Motif de l'absence").attr("type","motif");
-var JRepetitionEnvoyer=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Envoyer").html("Envoyer").attr("type","envoyer");
+var JRepetitionEnvoyer=$("<button>").data("type","button").attr("id","envoyer").addClass("btn btn-danger repetition-bouton").val("Envoyer").html("Envoyer").attr("type","envoyer");
 var JRepetitionDiv=$("<div>").css("width","100%");
 var JRepetitionRetour=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Retour").html("Retour").attr("type","retour");
 
@@ -543,6 +543,7 @@ function JCreerAppel(Reponse){
         JCloneRepetitionRetour.show();
         JCloneRepetitionEnvoyer.data("valeur","present");
         
+        
     }
 
     if($(context.target).attr("type")=="absent")
@@ -556,16 +557,15 @@ function JCreerAppel(Reponse){
     }
     if($(context.target).attr("type")=="motif")
     {
-
+        
     }
 
     if($(context.target).attr("type")=="envoyer"){
         
         //TODO placer la requete ici
-    
-        JCloneRepetition.remove();
+        JCloneRepetitionEnvoyer.data("motif",$(context.target).text());
         JRecupId(context.target);
-        
+        JCloneRepetition.remove();
     
     }
     if($(context.target).attr("type")=="retour"){
