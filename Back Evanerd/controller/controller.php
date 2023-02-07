@@ -810,21 +810,46 @@ function postPost($data, $authKey,$queryString) {
         $newId = getNewPid();
         $dir = DIR_POSTS . $newId;
         $uidConn = validUser(authToId($authKey));
+        if(searchRole("Non Membre", selectUserRoles($uidConn))) sendError("Vous n'avez pas la permission !", HTTP_UNAUTHORIZED);
         if($title = validString(valider("title", $queryString), 70, 3))
         if($content = validString(valider("content"), 300, 0));
-        if($pinned = valider("pinned", $queryString))
-        if($visible = valider("visible", $queryString))
+        if(($pinned = valider("visible", $queryString)) !== false)
+        if(($visible = valider("pinned", $queryString)) !== false)
         if($_FILES["banner"]) {
             if(!is_dir($dir)) mkdir($dir);
-            uploadImage("$dir/image", $_FILES);
-            $pid = insertPost($title, $content, $pinned, $visible);
+            $imageInfo = uploadImage("$dir/image", $_FILES["banner"]);
+            if($imageInfo["code"] != 1 )  sendError($imageInfo["message"], HTTP_BAD_REQUEST);
+            $image = basename($imageInfo["filename"]);
+            $pid = insertPost($title, $content, $image, $pinned, $visible, $uidConn);
             $data["post"] = selectPost($pid)[0];
             sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
         }
+        sendError("Paramètres invalide !", HTTP_BAD_REQUEST);
     }
+    sendError("Vous devez être identifié", HTTP_UNAUTHORIZED);
 }
 
-function postPostLike($data, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+function postPostLike($data, $idTabs, $authKey) {
+    if($authKey){
+        $uidConn = validUser(authToId($authKey));
+        $pid = $idTabs[0];
+        $post = selectPost($pid);
+        $like = selectLiked();
+
+        if (!$post) sendError("Le post n'existe pas !", HTTP_BAD_REQUEST);
+
+        if ($like == false) {
+            insertLiked($uidConn, $pid, 1);
+            $data["like"] = ["uid" => $uidConn, "pid" => $pid, "liked" => 1]; 
+        } else {
+            $data["like"] = ["uid" => $uidConn, "pid" => $pid, "liked" => !Liked($pid, $uidConn, !$like[0]["liked"])];
+            if ($like[0]["liked"])
+                Liked($pid, $uidConn, 0);
+            else
+                Liked($pid, $uidConn, 1);
+        }
+        
+        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+    }
 }
 
