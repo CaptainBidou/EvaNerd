@@ -1,5 +1,6 @@
 
-var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
+//var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
+var api ="http://51.68.231.61/api/v1";
 var authcode = "";
 var member = 0;
 var pdp = "";
