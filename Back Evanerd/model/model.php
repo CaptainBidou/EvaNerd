@@ -15,6 +15,11 @@ function getNewUid() {
     return $db->SQLGetChamp($sql);
 }
 
+function getNewPid() {
+    $db = Config::getDatabase();
+    $sql = "SELECT MAX(Posts.id)+1 FROM `Posts`";
+    return $db->SQLGetChamp($sql);
+}
 function getNewGid() {
     $db = Config::getDatabase();
     $sql = "SELECT MAX(Groups.id)+1 FROM `Groups`";
@@ -644,7 +649,14 @@ function selectUserInstruments($uid) {
 
 function insertParticipation($uid, $aeid, $participation) {
     $db = Config::getDatabase();
-    $sql = "INSERT INTO User_Participations(uid, aeid, participation) VALUES (?,?,?)";
+    $sql = "INSERT INTO User_Participations(uid, aeid, participation) VALUES (?,?,?);";
     $db->SQLInsert($sql, [$uid, $aeid, $participation]);
+}
+
+function insertPost($title, $content, $image, $pinned, $visible, $author) {
+    $db = Config::getDatabase();
+    $param = [$author, $content, $image, $pinned, $visible];
+    $sql = "INSERT INTO Posts(author, content, banner, pinned, visible) VALUES (?,?,?,?,?);";
+    return $db->SQLInsert($sql, $param);
 }
 ?>
