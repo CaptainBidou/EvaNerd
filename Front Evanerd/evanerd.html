@@ -85,7 +85,7 @@ function JRecupMessages(context){
     console.log(id);
     var nomgroupe=$("p",context.target).text();
     $("#page").html("");
-    ListMsgConv(id);
+    ListMsgConv(id,nomgroupe,user);
 }
 
 function JRecupId(){
