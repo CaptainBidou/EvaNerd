@@ -867,6 +867,8 @@ function JCreerMessageParticipant(Reponse,div,rep)
 {   
     
     var JCloneMessageParticipantDiv=JMessageParticipantDiv.clone(true,true).css("background-color","lightgray").attr("id",Reponse.id);
+    var JCloneMessageParticipantTitre=JMessageParticipantTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
+    var JCloneMessageParticipantContent=JMessageParticipantContent.clone(true,true).text(Reponse.content);
     if(rep==1)
     {   JCloneMessageParticipantDiv.addClass("reponse-message-linked");
     JCloneMessageParticipantDiv.attr("href","#"+ JCloneMessageParticipantDiv.attr("id"));
@@ -877,21 +879,21 @@ function JCreerMessageParticipant(Reponse,div,rep)
     }
 
     var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo);
-    var JCloneMessageParticipantTitre=JMessageParticipantTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
+    
     var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true);
    
     var JCloneMessageParticipantEpingle=JMessageParticipantEpingle.clone(true,true);
     if(Reponse.pinned==1)
     JCloneMessageParticipantEpingle.attr("src","Ressources/Message/epingleNOIR.png")
 
-    var JCloneMessageParticipantContent=JMessageParticipantContent.clone(true,true).text(Reponse.content);
+    
 
     if(Reponse.answerTo!=null)
         { var answer=Reponse.answerTo;
             Reponse.answerTo=null;
             JCloneMessageParticipantDiv.append("<a>");
             $("a",JCloneMessageParticipantDiv).attr("href","#"+answer.id).addClass("lien-message");
-        JCreerMessageParticipant(answer,$("a",JCloneMessageParticipantDiv),1);}
+        JCreerMessageActif(answer,$("a",JCloneMessageParticipantDiv),"blueviolet",1);}
 
     JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantContent,JCloneMessageParticipantRep,JCloneMessageParticipantEpingle]);
     $(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]);
@@ -933,7 +935,7 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
         Reponse.answerTo=null;
         JCloneMessageActifDiv.append("<a>");
         $("a",JCloneMessageActifDiv).attr("href","#"+answer.id).addClass("lien-message");
-    JCreerMessageActif(answer,$("a",JCloneMessageActifDiv),"coral",1);}
+    JCreerMessageActif(answer,$("a",JCloneMessageActifDiv),"blueviolet",1);}
 
     JCloneMessageActifDiv.append([JCloneMessageActifTitre,JCloneMessageActifContent,JCloneMessageActifRep,JCloneMessageActifEpingle]);
     $(div).append([JCloneMessageActifProfile,JCloneMessageActifDiv]);

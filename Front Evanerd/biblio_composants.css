@@ -526,10 +526,12 @@ margin-left:0%;
     font-size: 100%;
     margin-left:1%;
     width:98%;
+    background-color: blueviolet;
 }
 
 .lien-message
 {
     text-decoration: none;
     color:black;
+    background-color: blueviolet;
 }
