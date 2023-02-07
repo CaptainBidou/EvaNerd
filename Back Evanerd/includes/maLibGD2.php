@@ -7,8 +7,13 @@ enum COLOR:string{
     case PURPLE = "#7a1fa2";
     case LIGHT_RED = "#ec407a";
     case RED = "#c2175b";
+    case DARK_RED = "#9D0800";
     case LIGHT_BLUE = "#0288d1";
+    case BLUE = "#0039a3";
     case ORANGE = "#f5511e";
+    case LIGHTGREEN ="#95ff15";
+    case GREEN = "#228b22";
+    case PINK = "#fc6c9f";
 }
 
 /**
