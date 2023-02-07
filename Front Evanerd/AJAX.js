@@ -3,6 +3,7 @@ var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
 var authcode = "";
 var member = 0;
 var pdp = "";
+var user = "";
 
 
 /* AUTHENTIFICATION AJAX FUNC */
@@ -33,6 +34,7 @@ function auth($tel,$password){
         },
         success: function(oRep){
             console.log(oRep); 
+            user = oRep["user"].id;
             authcode = oRep.authToken;
             member = !oRep["user"].noMember;
             pdp = oRep["user"].photo;
@@ -537,7 +539,7 @@ function ListPermsConv($gid){
  * Requête permettant de récupérer la liste des messages d'un groupe
  * @param {*} $gid Identifiant du groupe
  */
-function ListMsgConv($gid){
+function ListMsgConv($gid,$title,$currentuser){
     $.ajax({
         type : "GET",
         url : api + "/groups/" + $gid + "/messages",
@@ -548,7 +550,9 @@ function ListMsgConv($gid){
         },
         success : function(oRep){
             console.log(oRep);
-            oRep["groups"].forEach(element => {
+            oRep.titre = $title;
+            oRep.id = $currentuser;
+            oRep["messages"].forEach(element => {
                 JAfficherMessageConv(oRep);
             });
         },
