@@ -59,7 +59,6 @@ var JConcertProgress = $("<div>").attr("type","concert_progress").addClass("prog
 var JConcertDate=$("<p>").attr("type","concert_date").addClass("concert-date");
 
 //variables pour les appels
-
 var JRepetition = $("<nav>").addClass("navbar repetition").addClass("navbar").data("type","appel");
 var JRepetitionTitre = $("<h2>").addClass("card-title left repetition-titre").data('type','appel_titre');
 var JRepetitionDate=$("<p>").attr("type","appel_date").addClass("repetition-date");
@@ -518,11 +517,11 @@ function JCreerAppel(Reponse){
     else
         JCouleur='silver';
 
-    var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide();
+    var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide().attr("type_id",Reponse.id);
     var JCloneRepetitionRetour=JRepetitionRetour.clone(true,true).hide();
 
 
-    var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true);
+    var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true).attr("type_id","Reponse.id");
     var JCloneRepetitionTitre = JRepetitionTitre.clone(true,true).text(Reponse.titre);
     var JCloneRepetitionDate= JRepetitionDate.clone(true,true).text(Reponse.date);
     var JCloneRepetitionCommentaire=JRepetitionCommentaire.clone(true,true).text(Reponse.commentaire);
@@ -565,6 +564,8 @@ function JCreerAppel(Reponse){
         //TODO placer la requete ici
     
         JCloneRepetition.remove();
+        JRecupId(context.target);
+        
     
     }
     if($(context.target).attr("type")=="retour"){
@@ -834,7 +835,7 @@ function JCreerMessage(Reponse){
     console.log(Reponse.messages.length);
 
     for(i=0;i<Reponse.messages.length;i++)
-    {if(Reponse.messages[i].id==Reponse.id)
+    {if(Reponse.messages[i].author.id==Reponse.id)
         {
             JCreerMessageActif(Reponse.messages[i],JCloneMessage,Reponse.color);
         }
