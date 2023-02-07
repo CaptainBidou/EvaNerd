@@ -117,7 +117,7 @@ var JProfileReglage=$("<img>").attr("src","Ressources/Profile/reglage.png").addC
 
 //variables pour la vue message
 var JMessageHeader = $("<nav>").addClass("navbar MessageHeader");
-var JMessageFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addClass("Message-Fleche");
+var JMessageFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addClass("Message-Fleche").on("click",function(){AfficherMessagerie();});
 var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addClass("Message-Reglage");
 var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle");
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
