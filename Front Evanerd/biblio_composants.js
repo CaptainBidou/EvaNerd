@@ -565,7 +565,7 @@ function JCreerAppel(Reponse){
         //TODO placer la requete ici
         JCloneRepetitionEnvoyer.data("motif",$(context.target).text());
         JRecupId(context.target);
-        JCloneRepetition.remove();
+        JCloneRepetition.hide();
     
     }
     if($(context.target).attr("type")=="retour"){
