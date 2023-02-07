@@ -825,7 +825,7 @@ function JCreerMessage(Reponse){
 
     var JCloneMessageDown=JMessageDown.clone(true,true);
     var JCloneMessageInput=JMessageInput.clone(true,true);
-    var JCloneMessageSend=JMessageSend.clone(true,true);
+    var JCloneMessageSend=JMessageSend.clone(true,true).attr("groupId",Reponse.groupId);
 
     JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,55);
     
@@ -1030,12 +1030,17 @@ $(target).attr("src","Ressources/Message/epingle.png");}
 
 
 function JEnvoyerMessage(target){
-    console.log($("Message-Down",".Actif-Div").attr("id"));
-$(target).attr("message",$(".Message-Input").val()).attr("rep",$(".Actif-Div").data("id"));
+if($(".Actif-Div",".Message-Down").attr("id")==undefined)
+$(".Actif-Div",".Message-Down").attr("id","null");
 
 
+$(target).attr("message",$(".Message-Input").val()).attr("rep",$(".Actif-Div",".Message-Down").attr("id"));
 
 
+console.log($(target).attr("groupId"));
+
+
+EnvoyerMessage($(target).attr("groupId"),$(target).attr("message"),$(target).attr("rep"));// à impémenter dans la couche client 
 
 
 }
