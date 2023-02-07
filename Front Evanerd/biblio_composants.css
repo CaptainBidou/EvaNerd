@@ -384,11 +384,11 @@ position:absolute;
     background-color: lightgray;
 box-shadow: 0px -2px 10px silver;
 position: fixed;
-top:83%;
+bottom:9%;
 width:100%;
 padding:1%;
 display: inline;
-height:8%;
+/*height:8%;*/
 }
 .Message-Input
 {
@@ -534,4 +534,14 @@ margin-left:0%;
     text-decoration: none;
     color:black;
     background-color: blueviolet;
+}
+
+.Croix-Message-Reponse
+{
+    position:absolute;
+    width:10%;
+    float:right;
+    top:0%;
+    right:1%;
+    
 }

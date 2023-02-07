@@ -130,7 +130,7 @@ var JMessageDown=$("<div>").addClass("Message-Down");
 var JMessageParticipantDiv=$("<div>").addClass("Participant-Div");
 var JMessageParticipantProfile=$("<img>").addClass("Participant-Profile rounded-circle");
 var JMessageParticipantTitre=$("<p>").addClass("Participant-Titre");
-var JMessageParticipantRep=$("<img>").addClass("Participant-Rep").attr("src","Ressources/Message/rep.png");
+var JMessageParticipantRep=$("<img>").addClass("Participant-Rep").attr("src","Ressources/Message/rep.png").on("click",function(context){JclickRep(context.target);});
 var JMessageParticipantEpingle=$("<img>").addClass("Participant-Epingle").attr("src","Ressources/Message/epingle.png").on("click",function(context){JclickEpingle(context.target);});
 var JMessageParticipantContent=$("<p>").addClass("Participant-content");
 
@@ -138,7 +138,7 @@ var JMessageParticipantContent=$("<p>").addClass("Participant-content");
 var JMessageActifDiv=$("<div>").addClass("Actif-Div");
 var JMessageActifProfile=$("<img>").addClass("Actif-Profile rounded-circle");
 var JMessageActifTitre=$("<p>").addClass("Actif-Titre");
-var JMessageActifRep=$("<img>").addClass("Actif-Rep").attr("src","Ressources/Message/rep.png");
+var JMessageActifRep=$("<img>").addClass("Actif-Rep").attr("src","Ressources/Message/rep.png").on("click",function(context){JclickRep(context.target);});
 var JMessageActifEpingle=$("<img>").addClass("Actif-Epingle").attr("src","Ressources/Message/epingle.png").on("click",function(context){JclickEpingle(context.target);});
 var JMessageActifContent=$("<p>").addClass("Actif-content");
 
@@ -880,7 +880,7 @@ function JCreerMessageParticipant(Reponse,div,rep)
 
     var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo);
     
-    var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true);
+    var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true).attr("id_message",Reponse.id);
    
     var JCloneMessageParticipantEpingle=JMessageParticipantEpingle.clone(true,true).attr("id_message",Reponse.id);
     if(Reponse.pinned==1)
@@ -922,7 +922,7 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
 
     var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo);
     
-    var JCloneMessageActifRep=JMessageActifRep.clone(true,true);
+    var JCloneMessageActifRep=JMessageActifRep.clone(true,true).attr("id_message",Reponse.id);
     var JCloneMessageActifEpingle=JMessageActifEpingle.clone(true,true).attr("id_message",Reponse.id);
     if(Reponse.pinned==1)
     JCloneMessageActifEpingle.attr("src","Ressources/Message/epingleNOIR.png");
@@ -976,7 +976,21 @@ EpinglerUnMessage($(target).attr("id_message"));// à implémenter dans la couch
 
 
 
+function JclickRep(target){
+    var id = $(target).attr("id_message");
 
+$(".Message-Down").empty();
+var JCloneMessageEnReponse=$("#"+id).clone(true,true).css("background-color","blueviolet").css("margin","0").css("margin-bottom","1%").addClass("Reponse-Message-layup");
+$("a",JCloneMessageEnReponse).remove();
+$(".Participant-Rep",JCloneMessageEnReponse).remove();
+$(".Participant-Epingle",JCloneMessageEnReponse).remove();
+var JCloneCroix=$("<img>").attr("src","Ressources/Message/croix.png").addClass("Croix-Message-Reponse Reponse-Message-layup").clone(true,true).on("click",function(){$(".Reponse-Message-layup").remove();
+});
+var JCloneMessageInput=JMessageInput.clone(true,true);
+var JCloneMessageSend=JMessageSend.clone(true,true);
+$(".Message-Down").append([JCloneMessageEnReponse,JCloneCroix,JCloneMessageSend,JCloneMessageInput]);
+
+}
 
 
 
