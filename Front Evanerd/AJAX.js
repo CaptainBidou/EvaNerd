@@ -539,21 +539,23 @@ function ListPermsConv($gid){
  * Requête permettant de récupérer la liste des messages d'un groupe
  * @param {*} $gid Identifiant du groupe
  */
-function ListMsgConv($gid,$title,$currentuser){
+function ListMsgConv($gid,$title,$currentuser,$authToken){
     $.ajax({
         type : "GET",
         url : api + "/groups/" + $gid + "/messages",
-        headers:{"authToken" : ""},
+        headers:{"authToken" : $authToken},
         data : [],
-        error : function(){
+        error : function(err){
             console.log("Une erreur s'est produite");
+            console.log(err);
         },
         success : function(oRep){
             console.log(oRep);
             oRep.titre = $title;
             oRep.id = $currentuser;
+            oRep["messages"].sort(function func(e1,e2){ return e1.id - e2.id ;});
             oRep["messages"].forEach(element => {
-                JAfficherMessageConv(oRep);
+                JCreerMessage(oRep);
             });
         },
         dataType: "json"
