@@ -7,6 +7,12 @@ var pdp = "";
 
 /* AUTHENTIFICATION AJAX FUNC */
 
+/**
+ * Requête permettant de s'identifier sur le site
+ * @param $tel Numéro de téléphone
+ * @param $password Mot de passe
+ */
+
 function auth($tel,$password){
     $.ajax({
         type: "POST",
@@ -774,11 +780,11 @@ function ListCalendarsEvents($aid,$type){
 
 
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
-function ListCallMembers($aid,$eid){
+function ListCallMembers($authToken,$aid,$eid){
     $.ajax({
         type: "GET",
         url: api + "/agendas/"+$aid+"/event/"+$eid+"/calls",
-        headers: {"authToken":""}, // données dans les entetes 
+        headers: {"authToken": $authToken}, // données dans les entetes 
         data: [],
         error : function(){
             console.log("Une erreur s'est produite");
@@ -813,7 +819,7 @@ function CreateCalendars(){
 }
   
 /**
- * Requête permettant de créer un nouvelle évenement dans le calendrier
+ * Requête permettant de créer un nouvel évenement dans le calendrier
  * @param {*} $aid Identifiant du calendrier
  */
 function CreateEventCalendars($aid){
