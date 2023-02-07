@@ -520,3 +520,16 @@ margin-left:0%;
 {
     margin-right:30%;
 }
+
+.reponse-message-linked
+{
+    font-size: 100%;
+    margin-left:1%;
+    width:98%;
+}
+
+.lien-message
+{
+    text-decoration: none;
+    color:black;
+}
