@@ -42,7 +42,7 @@ var JHeaderItem=$("<input>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh
 var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher");
 
 //variables pour les Convs
-var JConv =$("<nav>").addClass("navbar conversation").data("type","conv").on("click",function(context){return $(context.target).attr("type_id");});//TODO ICI TU APPELLE TA FONCTION
+var JConv =$("<nav>").addClass("navbar conversation").data("type","conv").on("click",function(context){JRecupMessages(context);});//TODO ICI TU APPELLE TA FONCTION
 var JConvImg = $("<img>").addClass("rounded-circle conversation-image").data("type","conv_img");//TODO :rajouter des données pour quand on clique 
 var JConvp=$("<p>").addClass("navbar-text left").data("type","conv_p");
 
@@ -59,7 +59,6 @@ var JConcertProgress = $("<div>").attr("type","concert_progress").addClass("prog
 var JConcertDate=$("<p>").attr("type","concert_date").addClass("concert-date");
 
 //variables pour les appels
-
 var JRepetition = $("<nav>").addClass("navbar repetition").addClass("navbar").data("type","appel");
 var JRepetitionTitre = $("<h2>").addClass("card-title left repetition-titre").data('type','appel_titre');
 var JRepetitionDate=$("<p>").attr("type","appel_date").addClass("repetition-date");
@@ -67,7 +66,7 @@ var JRepetitionCommentaire=$("<p>").addClass("navbar-text left repetition-commen
 var JRepetitionPresent=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Present").attr("type","present");
 var JRepetitionAbsent=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Absent").attr("type","absent");
 var JRepetitionJustificationText=$("<textarea>").addClass("form-control repetition-justification").attr("placeholder","Motif de l'absence").attr("type","motif");
-var JRepetitionEnvoyer=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Envoyer").html("Envoyer").attr("type","envoyer");
+var JRepetitionEnvoyer=$("<button>").data("type","button").attr("id","envoyer").addClass("btn btn-danger repetition-bouton").val("Envoyer").html("Envoyer").attr("type","envoyer");
 var JRepetitionDiv=$("<div>").css("width","100%");
 var JRepetitionRetour=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Retour").html("Retour").attr("type","retour");
 
@@ -129,7 +128,7 @@ var JMessageDown=$("<div>").addClass("Message-Down");
 
 //variables pour les messages créé par des participants
 var JMessageParticipantDiv=$("<div>").addClass("Participant-Div");
-var JMessageParticipantProfile=$("<img>").addClass("Participant-Profile");
+var JMessageParticipantProfile=$("<img>").addClass("Participant-Profile rounded-circle");
 var JMessageParticipantTitre=$("<p>").addClass("Participant-Titre");
 var JMessageParticipantRep=$("<img>").addClass("Participant-Rep").attr("src","Ressources/Message/rep.png");
 var JMessageParticipantEpingle=$("<img>").addClass("Participant-Epingle").attr("src","Ressources/Message/epingle.png");
@@ -137,7 +136,7 @@ var JMessageParticipantContent=$("<p>").addClass("Participant-content");
 
 //variables pour les messages créé par l'utilisateur actif 
 var JMessageActifDiv=$("<div>").addClass("Actif-Div");
-var JMessageActifProfile=$("<img>").addClass("Actif-Profile");
+var JMessageActifProfile=$("<img>").addClass("Actif-Profile rounded-circle");
 var JMessageActifTitre=$("<p>").addClass("Actif-Titre");
 var JMessageActifRep=$("<img>").addClass("Actif-Rep").attr("src","Ressources/Message/rep.png");
 var JMessageActifEpingle=$("<img>").addClass("Actif-Epingle").attr("src","Ressources/Message/epingle.png");
@@ -145,8 +144,8 @@ var JMessageActifContent=$("<p>").addClass("Actif-content");
 
 //variables pour la connexion
 var JConnexion = $("<div>").addClass("divFormConnexion");
-var JConnexionTelephone=$("<input>").addClass("form-control Connexion-phone").attr("placeholder","Téléphone").attr("id","tel");
-var JConnexionPwd=$("<input>").addClass("text").addClass("form-control Connexion-pwd").attr("placeholder","Mot de passe").attr("id","pwd");
+var JConnexionTelephone=$("<input>").addClass("form-control Connexion-phone").attr("placeholder","Téléphone").attr("id","tel").attr("type","number");
+var JConnexionPwd=$("<input>").addClass("text").addClass("form-control Connexion-pwd").attr("placeholder","Mot de passe").attr("id","pwd").attr("type","password");
 var JConnexionSubmit=$("<button>").addClass("btn btn-danger Connexion-Submit").html("Se connecter").on("click",function(context){Connexion();});
 var JConnexionP=$("<p>").addClass("Connexion-p");
 var JConnexionTitre=$("<h1>").addClass("Connexion-titre");
@@ -181,12 +180,12 @@ var JConnexionTitre=$("<h1>").addClass("Connexion-titre");
 
 function JcreerPost(Reponse){
     var jClonePost=JPost.clone(true,true);
-    var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.firstName+" "+Reponse.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
+    var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.author.firstName+" "+Reponse.author.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
     var jClonePostBody=JPostBody.clone(true,true);
     var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner);
     var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
     jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
-    var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.photo);
+    var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.author.photo);
 
     var jClonePost2=JPost.clone(true,true);
     var jClonePostBody2=JPostBody.clone(true,true);
@@ -294,6 +293,12 @@ function JcreerHeader(Reponse){
     var JCloneHeaderMenu=JHeaderMenu.clone(true,true);
     var JCloneHeaderItem=JHeaderItem.clone(true,true);
 
+    if (Reponse==null)
+    {
+       JCloneHeader.append(JCloneHeaderLogo);
+
+    }
+    else{
     JCloneHeaderMenu.append(JHeaderItem);
 
 
@@ -304,7 +309,14 @@ function JcreerHeader(Reponse){
         var JCloneHeaderProfile=null;
     }
 
-    JCloneHeader.append(JCloneHeaderLogo).append(JCloneHeaderTag).append(JCloneHeaderMenu).append(JCloneHeaderSearch).append(JCloneHeaderProfile);
+    if (Reponse=null)
+    {
+       JCloneHeader.append(JCloneHeaderLogo);
+
+    }
+   
+    JCloneHeader.append(JCloneHeaderLogo).append(JCloneHeaderTag).append(JCloneHeaderMenu).append(JCloneHeaderSearch).append(JCloneHeaderProfile);}
+    
     $("#header").append(JCloneHeader);
 
 }
@@ -505,11 +517,11 @@ function JCreerAppel(Reponse){
     else
         JCouleur='silver';
 
-    var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide();
+    var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide().attr("type_id",Reponse.id);
     var JCloneRepetitionRetour=JRepetitionRetour.clone(true,true).hide();
 
 
-    var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true);
+    var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true).attr("type_id","Reponse.id");
     var JCloneRepetitionTitre = JRepetitionTitre.clone(true,true).text(Reponse.titre);
     var JCloneRepetitionDate= JRepetitionDate.clone(true,true).text(Reponse.date);
     var JCloneRepetitionCommentaire=JRepetitionCommentaire.clone(true,true).text(Reponse.commentaire);
@@ -531,6 +543,7 @@ function JCreerAppel(Reponse){
         JCloneRepetitionRetour.show();
         JCloneRepetitionEnvoyer.data("valeur","present");
         
+        
     }
 
     if($(context.target).attr("type")=="absent")
@@ -544,14 +557,15 @@ function JCreerAppel(Reponse){
     }
     if($(context.target).attr("type")=="motif")
     {
-
+        
     }
 
     if($(context.target).attr("type")=="envoyer"){
         
         //TODO placer la requete ici
-    
-        JCloneRepetition.remove();
+        JCloneRepetitionEnvoyer.data("motif",$(context.target).text());
+        JRecupId(context.target);
+        JCloneRepetition.hide();
     
     }
     if($(context.target).attr("type")=="retour"){
@@ -726,48 +740,41 @@ function JCreerPostCreer(){
 
 
 function JCreerProfile(Reponse){
-var JCloneProfileReglage=JProfileReglage.clone(true,true);
-$("#page").append(JCloneProfileReglage);
+    var JCloneProfileReglage=JProfileReglage.clone(true,true);
+    $("#page").append(JCloneProfileReglage);
 
-var JCloneProfileProgress=JProfileProgress.clone(true,true);
-var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
-var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
-var JCloneProfileNom=JProfileNom.clone(true,true).text(Reponse.firstName +" "+ Reponse.lastName);  
+    var JCloneProfileProgress=JProfileProgress.clone(true,true);
+    var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
+    var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
+    var JCloneProfileNom=JProfileNom.clone(true,true).text(Reponse.firstName +" "+ Reponse.lastName);  
 
-if(Reponse.pourcentage<33)
-        JCloneProfilePourcentage.css('background-color','red');
+    if(Reponse.pourcentage<33)
+            JCloneProfilePourcentage.css('background-color','red');
 
-    else if(Reponse.pourcentage<63)
-        JCloneProfilePourcentage.css('background-color','orange');
+        else if(Reponse.pourcentage<63)
+            JCloneProfilePourcentage.css('background-color','orange');
 
-    else if(Reponse.pourcentage<100)
-        JCloneProfilePourcentage.css('background-color','green');
-
-
-    if (JCouleur == 'silver')
-        JCouleur='Lightgray';
-    else
-        JCouleur='silver';
+        else if(Reponse.pourcentage<100)
+            JCloneProfilePourcentage.css('background-color','green');
 
 
+        if (JCouleur == 'silver')
+            JCouleur='Lightgray';
+        else
+            JCouleur='silver';
+
+    $("#page").append(JCloneProfileImage);
+    $("#page").append(JCloneProfileNom);
+    var i;
+    for(i=0;i<Reponse.tag.length;i++)
+    JCreerProfileTag(Reponse.tag[i]);
 
 
-$("#page").append(JCloneProfileImage);
-$("#page").append(JCloneProfileNom);
-var i;
-for(i=0;i<Reponse.tag.length;i++)
-JCreerProfileTag(Reponse.tag[i]);
+    $("#page").append(JCloneProfileProgress.append(JCloneProfilePourcentage));
 
-
-$("#page").append(JCloneProfileProgress.append(JCloneProfilePourcentage));
-
-for(i=0;i<Reponse.activity.length;i++)
-{var activity = {"nom":Reponse.firstName,"prenom":Reponse.lastName,"activites":Reponse.activity[i],};
-JCreerProfileActivite(activity);}
-
-
-
-
+    for(i=0;i<Reponse.activity.length;i++)
+    {var activity = {"nom":Reponse.firstName,"prenom":Reponse.lastName,"activites":Reponse.activity[i],};
+    JCreerProfileActivite(activity);}
 
 }
 
@@ -781,10 +788,8 @@ JCreerProfileActivite(activity);}
  *  
  */
 function JCreerProfileTag(Reponse){
-var JCloneProfileTag=JProfileTag.clone(true,true).text(Reponse.nom).css("background-color",Reponse.couleur);
-$("#page").append(JCloneProfileTag);
-
-
+    var JCloneProfileTag=JProfileTag.clone(true,true).text(Reponse.nom).css("background-color",Reponse.couleur);
+    $("#page").append(JCloneProfileTag);
 }
 
 
@@ -796,14 +801,13 @@ $("#page").append(JCloneProfileTag);
  * Reponse={"nom":jean,"prenom":"pierre","activites":[{"nom":"repetition tutti"},{"nom":"repetition haut bois"}]} 
  */
 function JCreerProfileActivite(Reponse){
-var JCloneProfileActivite=JProfileActivite.clone(true,true);
-var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true).attr("src","Ressources/Footer/calendrier.png");
-var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.nom);
-JCloneProfileActiviteContent=ajouterTextOverflow(JCloneProfileActiviteContent,80);
-JCloneProfileActiviteContent.on("click",function(context){afficherToutleText(context);})
-JCloneProfileActivite.append([JCloneProfileActiviteContent,JCloneProfileActiviteImage]);
-$("#page").append(JCloneProfileActivite);
-
+    var JCloneProfileActivite=JProfileActivite.clone(true,true);
+    var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true).attr("src","Ressources/Footer/calendrier.png");
+    var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.nom);
+    JCloneProfileActiviteContent=ajouterTextOverflow(JCloneProfileActiviteContent,80);
+    JCloneProfileActiviteContent.on("click",function(context){afficherToutleText(context);})
+    JCloneProfileActivite.append([JCloneProfileActiviteContent,JCloneProfileActiviteImage]);
+    $("#page").append(JCloneProfileActivite);
 }
 
 
@@ -811,7 +815,7 @@ function JCreerMessage(Reponse){
     var JCloneMessageHeader = JMessageHeader.clone(true,true);
     var JCloneMessageFleche =JMessageFleche.clone(true,true);
     var JCloneMessageReglage=JMessageReglage.clone(true,true);
-    var JCloneMessageEpingle=JMessageEpingle.clone(true,true);
+    var JCloneMessageEpingle=JMessageEpingle.clone(true,true).show();
     var JCloneMessageParticipant=JMessageParticipant.clone(true,true).text(Reponse.titre);
 
     var JCloneMessage=JMessage.clone(true,true);
@@ -820,15 +824,25 @@ function JCreerMessage(Reponse){
     var JCloneMessageInput=JMessageInput.clone(true,true);
     var JCloneMessageSend=JMessageSend.clone(true,true);
 
-    JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,60);
+    JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,55);
     
     $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageReglage,JCloneMessageEpingle]);
     $("#page").append(JCloneMessageHeader);
     $("#page").append(JCloneMessage);
-JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
-$("#page").append(JCloneMessageDown);
+    JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
+    $("#page").append(JCloneMessageDown);
+    var i;
+    console.log(Reponse.messages.length);
 
-    JCreerMessageParticipant(Reponse,JCloneMessage);
+    for(i=0;i<Reponse.messages.length;i++)
+    {if(Reponse.messages[i].author.id==Reponse.id)
+        {
+            JCreerMessageActif(Reponse.messages[i],JCloneMessage,Reponse.color);
+        }
+        
+        else
+        JCreerMessageParticipant(Reponse.messages[i],JCloneMessage);}
+    
     
 
 }
@@ -836,24 +850,38 @@ $("#page").append(JCloneMessageDown);
 function JCreerMessageParticipant(Reponse,div)
 {
 
-    var JCloneMessageParticipantDiv=JMessageParticipantDiv.clone(true,true);
-    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.banner);
-    var JCloneMessageParticipantTitre=JMessageParticipantTitre.clone(true,true).text(Reponse.firstName+ " "+Reponse.lastName);
+    var JCloneMessageParticipantDiv=JMessageParticipantDiv.clone(true,true).css("background-color","lightgray");
+    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo);
+    var JCloneMessageParticipantTitre=JMessageParticipantTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
     var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true);
     var JCloneMessageParticipantEpingle=JMessageParticipantEpingle.clone(true,true);
     var JCloneMessageParticipantContent=JMessageParticipantContent.clone(true,true).text(Reponse.content);
 
 
 
-    JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantRep,JCloneMessageParticipantEpingle,JCloneMessageParticipantContent]);
-$(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]);
+    JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantContent,JCloneMessageParticipantRep,JCloneMessageParticipantEpingle]);
+    $(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]);
+
 
 }
 
-function JCreerMessageActif(Reponse,div)
+function JCreerMessageActif(Reponse,div,couleur)
 {
 
+    if(couleur==null)
+        couleur="lightblue";
 
+    var JCloneMessageActifDiv=JMessageActifDiv.clone(true,true).css("background-color",couleur);
+    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo);
+    var JCloneMessageActifTitre=JMessageActifTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
+    var JCloneMessageActifRep=JMessageActifRep.clone(true,true);
+    var JCloneMessageActifEpingle=JMessageActifEpingle.clone(true,true);
+    var JCloneMessageActifContent=JMessageActifContent.clone(true,true).text(Reponse.content);
+
+
+
+    JCloneMessageActifDiv.append([JCloneMessageActifTitre,JCloneMessageActifContent,JCloneMessageActifRep,JCloneMessageActifEpingle]);
+    $(div).append([JCloneMessageActifProfile,JCloneMessageActifDiv]);
 
 }
 
@@ -870,8 +898,9 @@ function JCreerConnexion(){
     var JCloneConnexionSubmit=JConnexionSubmit.clone(true,true);
 
     JCloneConnexion.append([JCloneTitre,JCloneLegendTel,JCloneConnexionTelephone,JCloneLegendPwd,JCloneConnexionPwd,JCloneConnexionSubmit]);
-    $("#page").append(JCloneConnexion);
-
+    JcreerHeader(null);
+     $("#page").append(JCloneConnexion);
+    
 
 }
 

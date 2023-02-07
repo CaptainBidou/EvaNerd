@@ -12,7 +12,7 @@ class Config {
     // DATABASE CONFIG
     private static $BDD_host="localhost"; // Host de la base de donnée (généralement localhost)
     private static $BDD_user="root"; // Nom de l'utilisateur de la base de donnée
-    private static $BDD_password=""; // Mot de passe du compte utilisateur
+    private static $BDD_password="password"; // Mot de passe du compte utilisateur
     private static $BDD_base="evanerd"; // nom de la base de donnée 
     private static $db = null; // attribut contenant l'instance de la base de donnée une fois initialisé
     
