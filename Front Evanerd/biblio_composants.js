@@ -840,7 +840,7 @@ function JCreerMessage(Reponse){
         }
         
         else
-        JCreerMessageParticipant(Reponse.message[i],JCloneMessage);}
+        JCreerMessageParticipant(Reponse.messages[i],JCloneMessage);}
     
     
 
@@ -850,8 +850,8 @@ function JCreerMessageParticipant(Reponse,div)
 {
 
     var JCloneMessageParticipantDiv=JMessageParticipantDiv.clone(true,true).css("background-color","lightgray");
-    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.banner);
-    var JCloneMessageParticipantTitre=JMessageParticipantTitre.clone(true,true).text(Reponse.firstName+ " "+Reponse.lastName);
+    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo);
+    var JCloneMessageParticipantTitre=JMessageParticipantTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
     var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true);
     var JCloneMessageParticipantEpingle=JMessageParticipantEpingle.clone(true,true);
     var JCloneMessageParticipantContent=JMessageParticipantContent.clone(true,true).text(Reponse.content);
@@ -871,8 +871,8 @@ function JCreerMessageActif(Reponse,div,couleur)
         couleur="lightblue";
 
     var JCloneMessageActifDiv=JMessageActifDiv.clone(true,true).css("background-color",couleur);
-    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.banner);
-    var JCloneMessageActifTitre=JMessageActifTitre.clone(true,true).text(Reponse.firstName+ " "+Reponse.lastName);
+    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo);
+    var JCloneMessageActifTitre=JMessageActifTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
     var JCloneMessageActifRep=JMessageActifRep.clone(true,true);
     var JCloneMessageActifEpingle=JMessageActifEpingle.clone(true,true);
     var JCloneMessageActifContent=JMessageActifContent.clone(true,true).text(Reponse.content);
