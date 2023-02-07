@@ -121,7 +121,7 @@ var JMessageFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addCla
 var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addClass("Message-Reglage");
 var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle").on("click",function(context){JLayoutPinnedMessages(context.target);});
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
-var JMessageLayout=$("<div>").addClass("Message-Layout").data("type","layout");
+var JMessageLayout=$("<div>").addClass("Message-Layout scroller").data("type","layout");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
 var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message");
 var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(){return null;});
@@ -863,8 +863,8 @@ var j;
     
     
     }
-    
-    
+    console.log($("#"+i).scrollTop());
+    JCloneMessage.animate({scrollTop:0,})
 
 }
 
@@ -927,7 +927,7 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
     $(div).append(JCloneMessageActifDiv);
     return;
     }
-    
+
     if(div.data("type")=="layout")
     {   JCloneMessageActifDiv.addClass("messages-layout-pinned");
         JCloneMessageActifDiv.append([JCloneMessageActifTitre,JCloneMessageActifContent]);
@@ -953,6 +953,8 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
 
     JCloneMessageActifDiv.append([JCloneMessageActifTitre,JCloneMessageActifContent,JCloneMessageActifRep,JCloneMessageActifEpingle]);
     $(div).append([JCloneMessageActifProfile,JCloneMessageActifDiv]);
+
+
 
 }
 
@@ -1020,11 +1022,6 @@ $(target).attr("src","Ressources/Message/epingleNOIR.png");}
 else
 {$(".Message-Layout").animate({left: '100%'});//TODO RAJOUTER ANIMATION
 $(target).attr("src","Ressources/Message/epingle.png");}
-
-
-
-
-
 
 
 
