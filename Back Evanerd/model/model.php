@@ -664,12 +664,12 @@ function selectLiked($pid, $uid){
 }
 function Liked($pid, $uid, $liked){
     $db = Config::getDatabase();
-    $sql = "UPDATE Liked
-            SET Liked = ?
+    $sql = "UPDATE Post_Likes
+            SET liked = ?
             WHERE pid = ? AND uid = ?";
-    $param = [$pid, $uid];
+    $param = [$liked, $pid, $uid];
 
-    return Database::parcoursRs(($db->SQLUpdate($liked, $sql, $param)));
+    return $db->SQLUpdate($sql, $param);
 }
 
 function insertPost($title, $content, $image, $pinned, $visible, $author) {
@@ -678,4 +678,12 @@ function insertPost($title, $content, $image, $pinned, $visible, $author) {
     $sql = "INSERT INTO Posts(author, content, banner, pinned, visible) VALUES (?,?,?,?,?);";
     return $db->SQLInsert($sql, $param);
 }
+
+function insertLiked($uid, $pid, $liked) {
+    $db = Config::getDatabase();
+    $param = [$uid, $pid, $liked];
+    $sql = "INSERT INTO Post_Likes(uid,pid,liked) VALUES (?,?,?);";
+    return $db->SQLInsert($sql, $param);
+}
+
 ?>
