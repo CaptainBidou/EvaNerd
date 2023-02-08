@@ -645,10 +645,12 @@ function listPostsMessages($data, $idTabs, $authKey) {
 
 }
 
-function listAgendas($data, $authKey) {
+function listAgendas($data, $queryString, $authKey) {
     if($authKey) {
         $uidConn = validUser(authToId($authKey));
-        $agendas = selectCalendar($uidConn);
+        $type = valider("type", $queryString);
+        if(!$type) $type = "extra"; 
+        $agendas = selectCalendar($uidConn,null, $type);
         $data["agendas"] = $agendas;
         sendResponse($data, [getStatusHeader()]);
     }

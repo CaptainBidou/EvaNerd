@@ -168,7 +168,7 @@ switch($action) {
     /* Agendas */
 
     case "GET /agendas":
-        listAgendas($data, $authKey);
+        listAgendas($data, $queryString, $authKey);
         break;
     
     case "GET /agendas/ID/events":

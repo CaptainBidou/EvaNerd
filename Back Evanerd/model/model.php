@@ -1,5 +1,7 @@
 <?php
 
+use function PHPSTORM_META\type;
+
 include_once("includes/Config.php");
 
 
@@ -576,21 +578,26 @@ function selectPostMessages($pid){
 }
 
 // TODO : eventuellement modif pour rendre l'uid optionnelle
-function selectCalendar($uid, $aid = null){
+function selectCalendar($uid, $aid = null, $type = "intra"){
     $db = Config::getDatabase();
-    $params = [$uid];
+    $params = [];
     $sqlAid = "";
+
     if($aid)  {
         $sqlAid = " AND Agendas.id = ?";
         array_push($params,$aid);
     }
-    $sql = "SELECT Agendas.* 
-            FROM Agendas
-            JOIN Agenda_Perms 
-                ON Agendas.id = Agenda_Perms.aid
-            JOIN User_Roles
-                ON User_Roles.rid = Agenda_Perms.rid
-            WHERE Agenda_Perms.read = 1 AND User_Roles.uid = ? $sqlAid;";
+    if($type == "extra") {
+        $sql = "SELECT Agendas.* FROM Agendas 
+                WHERE Agendas.extra = 1 $sqlAid;"; 
+    }
+    else if($type == "intra") {
+        array_unshift($params, $uid);
+        $sql = "SELECT Agendas.* FROM Agendas 
+                JOIN Agenda_Perms ON Agendas.id = Agenda_Perms.aid
+                JOIN User_Roles ON User_Roles.rid = Agenda_Perms.rid
+                WHERE Agenda_Perms.read = 1 AND User_Roles.uid = ? AND Agendas.extra = 0 $sqlAid;";
+    }
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
