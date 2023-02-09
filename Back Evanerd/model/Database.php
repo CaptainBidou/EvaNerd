@@ -28,7 +28,7 @@ class Database {
         $this->dbh->setAttribute(PDO::MYSQL_ATTR_FOUND_ROWS, true);
         // Lors d'une erreur SQL, PDO/PDOStatement renvoie un PDOException (pratique pour capturer les erreurs)
         $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->dbh->exec("SET CHARACTER SET utf8");
+        $this->dbh->exec("SET CHARACTER SET utf8mb4");
         
     }
 
