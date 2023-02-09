@@ -396,7 +396,7 @@ var comm={
                 "id": 1,
                 "firstName": "Lukas",
                 "lastName": "Grando",
-                "photo": "http://localhost/EvaNerd/Back Evanerd/ressources/users/1/image.jpeg"
+                "photo": "Ressources/Test/profile4.png"
             },
             "content": "Super ce post !",
             "pinned": 0,
@@ -408,7 +408,7 @@ var comm={
                 "id": 2,
                 "firstName": "Tomas",
                 "lastName": "Treny",
-                "photo": "http://localhost/EvaNerd/Back Evanerd/ressources/users/2/default.png"
+                "photo": "Ressources/Test/profile4.png"
             },
             "content": "ratio",
             "pinned": 1,
@@ -441,7 +441,7 @@ $(document).ready(function(){
 JCreerConcert(concert);
 JCreerConcert(concert);*/
 
-
+//JCreerMessage(conv2);
 
 
 //JCreerConnexion();
@@ -489,8 +489,18 @@ JcreerFooter(Reponse);
 
 });
 
-function JRecupMessages(){
 
+function CommentairesPosts(){
+
+    JCreerCommentaireLayout(comm);
+    
+
+}
+
+
+
+function JRecupMessages(){
+    $("#page").empty();
     JCreerMessage(conv2);
 }
 

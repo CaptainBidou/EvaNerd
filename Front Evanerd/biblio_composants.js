@@ -22,7 +22,7 @@ var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle']).data(
 var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').on("click",function(context){JclickEpingle(context.target);});
 var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png');
 var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png');
-var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%');
+var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts();});
 
 //variables pour le footer
 var JFooter =$("<nav>").addClass(["footer","navbar"]).data("type","footer").on("click",function(context){JClickFooter(context);});
@@ -163,6 +163,18 @@ var JReglageMessagePerson=$("<input>").addClass("form-control Message-Personne-R
 var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Personne").on("click",function(context){});
 var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 
+
+
+
+
+//VARRIABLES pour les comms des posts
+var JCommentaires = $("<div>").addClass("commentaires");
+var JCommentairesCroix=$("<img>").addClass("commentaires-cross").attr("src","Ressources/Accueil/croix.png").on("click",function(){$(".card").css("filter","blur(0)");$(".commentaires").remove();})
+var JCommentaireInput=$("<textarea>").attr('type','text').addClass("form-control Commentaire-Input").attr("placeholder","Votre commentaire");
+var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerCommentaire(context.target);});
+var JCommentaireDown=$("<div>").addClass("Commentaire-Down");
+
+
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
@@ -200,7 +212,7 @@ function JcreerPost(Reponse,membre){
     jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
     var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.author.photo);
 
-    var jClonePost2=JPost.clone(true,true);
+    var jClonePost2=JPost.clone(true,true).addClass("fixed-banner");
     var jClonePostBody2=JPostBody.clone(true,true);
 
 
@@ -851,9 +863,9 @@ function JCreerMessage(Reponse){
     $("#page").append(JCloneMessage);
     JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
     $("#page").append(JCloneMessageDown);
-    var i;
+    var i=0;
     console.log(Reponse.messages.length);
-var j;
+var j=0;
     for(i=0;i<Reponse.messages.length;i++)
     {
         if(Reponse.messages[i].answerTo!=null)
@@ -949,6 +961,18 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
     $(div).append(JCloneMessageActifDiv);
     return;
     }
+    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo);
+    if(rep==2)
+    {   JCloneMessageActifDiv.addClass("Commentaire-message-layout");
+   JCloneMessageActifDiv.attr("reference", JCloneMessageActifDiv.attr("id"));
+   JCloneMessageActifDiv.attr("id","");
+   $(div).append(JCloneMessageActifProfile);
+    JCloneMessageActifDiv.append([JCloneMessageActifTitre,JCloneMessageActifContent]);
+    $(div).append(JCloneMessageActifDiv);
+    return;
+    }
+
+
 
     if(div.data("type")=="layout")
     {   JCloneMessageActifDiv.addClass("messages-layout-pinned");
@@ -956,7 +980,7 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
     $(div).append(JCloneMessageActifDiv);
     return;
     }
-    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo);
+    
     
     var JCloneMessageActifRep=JMessageActifRep.clone(true,true).attr("id_message",Reponse.id);
     var JCloneMessageActifEpingle=JMessageActifEpingle.clone(true,true).attr("id_message",Reponse.id);
@@ -1116,3 +1140,35 @@ $(".Reglage-Message-Layout").animate({left: '25%'});
 
 }
 
+function JCreerCommentaireLayout(Reponse){
+
+
+
+
+$(".card").css("filter","blur(20px)");
+var JCloneCommentairesCroix=JCommentairesCroix.clone(true,true);
+var JCloneCommentaires =JCommentaires.clone(true,true).css("filter","blur(0)");
+
+
+JCloneCommentaires.append(JCloneCommentairesCroix);
+
+var i;
+for(i=0;i<Reponse.comments.length;i++)
+{
+
+    JCreerMessageActif(Reponse.comments[i],JCloneCommentaires,"lightblue",2);
+
+}
+
+
+
+
+
+$("#page").append(JCloneCommentaires);
+
+
+
+
+
+
+}

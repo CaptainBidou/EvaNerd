@@ -627,3 +627,35 @@ margin-right: 100%;
     margin-top: 2%;
 
 }
+.commentaires
+{
+    padding: 1%;
+    position: fixed;
+    z-index: 10;
+    background-color: gray;
+    height:60%;
+    width:80%;
+    top:20%;
+    left:10%;
+    border-radius: 10px;
+    font-size: 200%;
+    overflow-y: scroll;
+scrollbar-color: rebeccapurple green;
+}
+
+.commentaires-cross
+{
+    width:10%;
+    position:absolute;
+    right:1%;
+    margin-bottom: 5%;
+   
+}
+
+.Commentaire-message-layout
+{
+    width:60%;
+    font-size: 150%;
+
+
+}
