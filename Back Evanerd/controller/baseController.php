@@ -91,7 +91,7 @@ function sendResponse($data, $httpHeaders = array())
             header($httpHeader);
         }
     }
-    header("Content-Type: application/json; charset=utf-8n");
+    header("Content-Type: application/json; charset=utf-8");
     echo json_encode($data);
     exit;
 }

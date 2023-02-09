@@ -645,10 +645,12 @@ function listPostsMessages($data, $idTabs, $authKey) {
 
 }
 
-function listAgendas($data, $authKey) {
+function listAgendas($data, $queryString, $authKey) {
     if($authKey) {
         $uidConn = validUser(authToId($authKey));
-        $agendas = selectCalendar($uidConn);
+        $type = valider("type", $queryString);
+        if(!$type) $type = "extra"; 
+        $agendas = selectCalendar($uidConn,null, $type);
         $data["agendas"] = $agendas;
         sendResponse($data, [getStatusHeader()]);
     }
@@ -834,22 +836,24 @@ function postPostLike($data, $idTabs, $authKey) {
         $uidConn = validUser(authToId($authKey));
         $pid = $idTabs[0];
         $post = selectPost($pid);
-        $like = selectLiked();
-
+        $like = selectLiked($pid,$uidConn);
+        print_r($like);
+        $data["like"] = ["uid" => $uidConn, "pid" => $pid];
+        // TODO : vérifier que l'user oeut voir le post (ajouter un param optionnel à selectPost)
         if (!$post) sendError("Le post n'existe pas !", HTTP_BAD_REQUEST);
-
-        if ($like == false) {
+        if (!$like) {
             insertLiked($uidConn, $pid, 1);
-            $data["like"] = ["uid" => $uidConn, "pid" => $pid, "liked" => 1]; 
+            $data["like"]["liked"] = 1; 
         } else {
-            $data["like"] = ["uid" => $uidConn, "pid" => $pid, "liked" => !Liked($pid, $uidConn, !$like[0]["liked"])];
-            if ($like[0]["liked"])
+            if ($like[0]["Liked"])
                 Liked($pid, $uidConn, 0);
             else
                 Liked($pid, $uidConn, 1);
+
+            $data["like"]["liked"] = !$like[0]["Liked"];
         }
-        
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
     }
+    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
 
