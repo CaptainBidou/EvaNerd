@@ -76,7 +76,7 @@ function haveGroupPermission($idUser, $idGroup) {
     $sql = "SELECT * FROM Roles 
             JOIN Groups_Perms
                 ON Groups_Perms.rid = Roles.id
-            JOIN User_groups
+            JOIN User_Groups
                 ON User_Groups.gid = Groups_Perms.gid
             JOIN Users
                 ON Users.id = User_Groups.uid
