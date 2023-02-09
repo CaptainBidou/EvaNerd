@@ -19,7 +19,7 @@ var JPostBody=$("<div>").addClass("card-body").data('type','post_body');
 var JPostImage=$("<img>").addClass("card-img-top").data('type','post_image');
 var JPostDescription=$("<p>").addClass(["post-description", "card-text"]).data('type','post_text');
 var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle']).data("type","post_profile");//TODO :rajouter des données pour quand on clique
-var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png');
+var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').on("click",function(context){JclickEpingle(context.target);});
 var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png');
 var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png');
 var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%');
@@ -191,7 +191,7 @@ var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 
 
 
-function JcreerPost(Reponse){
+function JcreerPost(Reponse,membre){
     var jClonePost=JPost.clone(true,true);
     var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.author.firstName+" "+Reponse.author.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
     var jClonePostBody=JPostBody.clone(true,true);
@@ -204,7 +204,12 @@ function JcreerPost(Reponse){
     var jClonePostBody2=JPostBody.clone(true,true);
 
 
-    var jClonePostEpingle=JPostEpingle.clone(true,true);
+    var jClonePostEpingle=JPostEpingle.clone(true,true).attr("id_post",Reponse.id);
+    if(Reponse.pinned==1)
+    {
+        jClonePostEpingle.attr("src","Ressources/Accueil/epingleNOIR.png")
+
+    }
     var jClonePostComm=JPostCommentaire.clone(true,true);
     var jClonePostLike=JPostLike.clone(true,true);
     var jClonePostReact=JPostReaction.clone(true,true);
@@ -223,13 +228,13 @@ function JcreerPost(Reponse){
     jClonePost2.append(jClonePostBody2).css("width","100%").css("background-color","lightgray").css("border-radius","5px 5px 0 0");
     jClonePostBody.append(jClonePostImage).append(jClonePostDescription);
 
-    if(Reponse.membre==1)
+    if(membre==1)
     {
     jClonePostBody2.append(jClonePostEpingle);
     jClonePostBody.append(jClonePostComm).append(jClonePostLike).append(jClonePostReact);
     }
 
-    if(Reponse.membre==0){
+    if(membre==0){
 
     }
 
@@ -1000,13 +1005,25 @@ function JCreerConnexion(){
 
 
 function JclickEpingle(target){
-
-
     if($(target).attr("src")=="Ressources/Message/epingleNOIR.png")
-        $(target).attr("src","Ressources/Message/epingle.png");
-    else
-    $(target).attr("src","Ressources/Message/epingleNOIR.png");
-EpinglerUnMessage($(target).attr("id_message"));// à implémenter dans la couche client 
+       { $(target).attr("src","Ressources/Message/epingle.png");
+       DesEpinglerUnMessage($(target).attr("id_message")); }
+
+    if($(target).attr("src")=="Ressources/Message/epingle.png")
+    {
+        $(target).attr("src","Ressources/Message/epingleNOIR.png");
+        EpinglerUnMessage($(target).attr("id_message"));// à implémenter dans la couche client 
+    }
+
+    if($(target).attr("src")=="Ressources/Accueil/epingleNOIR.png")
+    { $(target).attr("src","Ressources/Accueil/epingle.png");
+    DesEpinglerUnPost($(target).attr("id_post"));                                     }
+
+
+    if($(target).attr("src")=="Ressources/Accueil/epingle.png")
+    { $(target).attr("src","Ressources/Accueil/epingleNOIR.png");
+    EpinglerUnPost($(target).attr("id_post"));                                      }
+
 
 }
 
