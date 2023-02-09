@@ -581,11 +581,13 @@ function listPosts($data, $authKey) {
         $role = selectUserRoles($uidConn);
         $notAMember = (array_search("Non Membre", array_column($role, "label")) !== false) ? 1 : 0;
         $postData = selectPosts($notAMember);
-        $reactionData = groupby(selectPostReactions(), "pid");
         // On regoupe par emoji
+        /*
+        $reactionData = groupby(selectPostReactions(), "pid");
         foreach($reactionData as $pid => $reactionstab) {
             $reactionData[$pid] = groupby($reactionstab, "emoji");
         }
+        */
         foreach($postData as $post) {
             $data["posts"][$i]["id"] = $post["id"];
             $data["posts"][$i]["author"] = ["id" => $post["uid"], "firstName" => $post["firstName"], "lastName" => $post["lastName"], "photo" => $post["photo"]];
@@ -593,9 +595,11 @@ function listPosts($data, $authKey) {
             $data["posts"][$i]["pinned"] = $post["pinned"];
             $data["posts"][$i]["visible"] = $post["visible"];
             $data["posts"][$i]["banner"] = $post["banner"];
+            /*
             if(isset($reactionData[$post["id"]]))
                 $data["posts"][$i]["reactions"] = $reactionData[$post["id"]];
             
+            */
             $i++;
 
         }
@@ -686,7 +690,6 @@ function listAgendaEventCalls($data, $idTabs, $authKey) {
             $data["calls"][$i]["user"] = array("uid" => $calls["uid"], "firstName" => $calls["firstName"], "lastName" => $calls["lastName"]);
             $data["calls"][$i]["present"] = $calls["present"];
             if(!$calls["present"]) {
-                $data["calls"][$i]["reason_title"] = $calls["reason_title"];
                 $data["calls"][$i]["reason_desc"] = $calls["reason_desc"];
             }
             $i++;
@@ -804,23 +807,31 @@ function postImage($data, $idTabs,$authKey) {
 }
 
 function postMessageReactions($data, $idTabs, $authKey, $queryString) {
-    /*if($authKey){
-        $uidConn = validUser(authToId($authKey));
-        $gid = $idTabs[0];
-        $mid = $idTabs[1];
-        $msg = selectGroupMessage($mid, $gid);
-        $reac = selectGroupReaction($mid);
-        print_r($mid);
-        $data["reactions"] = ["mid" => $mid, "uid" => $uidConn, "gid" => $gid];
+    if($authKey){
+        if($emoji = valider("emoji", $queryString)) {
+            $uidConn = validUser(authToId($authKey));
+            $gid = $idTabs[0];
+            $mid = $idTabs[1];
+            $msg = selectGroupMessage($mid, $gid);
+            $reac = selectGroupReaction($mid, $uidConn, $emoji);
+            $data["reaction"] = ["uid" => $uidConn, "mid" => $mid];
 
-        if (!$msg)
-            sendError("Le message n'existe pas !", HTTP_BAD_REQUEST);
-        if (!$reac) {
+            if(!$msg) sendError("Ce message n'existe pas !", HTTP_BAD_REQUEST);
+            $data["groupId"] = $gid;
+            $data["messageId"] = $mid;
 
+            if(!$reac) {
+                insertGroupMessageReaction($mid, $uidConn, $emoji);
+                $data["reaction"] = $emoji;
+                sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+            }
+            deleteGroupMessageReaction($mid, $uidConn, $emoji);
+            $data["reaction"] = null;
+            sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
         }
-
+        sendError("Vous devez saisir un emoji", HTTP_BAD_REQUEST);
     }
-    sendError("Vous devez être identifié", HTTP_UNAUTHORIZED);*/
+    sendError("Vous devez être identifié", HTTP_UNAUTHORIZED);
     sendError("Not implemented yet !", HTTP_NOT_FOUND);
 }
 
