@@ -20,7 +20,7 @@ var JPostImage=$("<img>").addClass("card-img-top").data('type','post_image');
 var JPostDescription=$("<p>").addClass(["post-description", "card-text"]).data('type','post_text');
 var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle']).data("type","post_profile");//TODO :rajouter des données pour quand on clique
 var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').on("click",function(context){JclickEpingle(context.target);});
-var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png');
+var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png').on("click",function(context){JClickLike(context.target);});
 var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png');
 var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts();});
 
@@ -1184,6 +1184,22 @@ $("#page").append(JCloneCommentaires);
 
 
 
+
+
+
+}
+
+
+
+
+function JClickLike(target){
+    if($(target).attr("src")=="Ressources/Accueil/like.png")
+    { 
+    $(target).attr("src","Ressources/Accueil/likeBlanc.png");}
+    
+    else
+    {//TODO RAJOUTER ANIMATION
+    $(target).attr("src","Ressources/Accueil/like.png");}
 
 
 
