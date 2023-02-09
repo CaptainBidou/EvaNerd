@@ -473,10 +473,21 @@ function selectGroupMessages($gid){
 }
 
 
-function selectGroupReaction($mid){
+function selectGroupReaction($mid,$uid = null, $emoji = null){
     $db = Config::getDatabase();
     $params = [$mid];
-    $sql = "SELECT * FROM Group_Message_Reactions WHERE mid = ?";
+    $sqlUid = "";
+    $sqlEmoji = "";
+
+    if($uid) {
+        $sqlUid = " AND uid = ?";
+        array_push($params, $uid);
+    }
+    if($emoji) {
+        $sqlEmoji = " AND emoji = ?";
+        array_push($params, $emoji);
+    }
+    $sql = "SELECT * FROM Group_Message_Reactions WHERE mid = ? $sqlUid $sqlEmoji";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
@@ -716,6 +727,21 @@ function insertPinned($id, $uid, $gid, $pinned) {
     $param = [$pinned,$id, $uid, $gid];
     $sql = "INSERT INTO Group_Messages(id, uid, gid, pinned) VALUES (?, ?, ?, ?)";
     return $db->SQLInsert($sql, $param);
+}
+
+function insertGroupMessageReaction($mid, $uid, $reaction) {
+    $db = Config::getDatabase();
+    $params = [$mid, $uid, $reaction];
+    $sql = "INSERT INTO Group_Message_Reactions(mid, uid, emoji) VALUES (?,?,?);";
+    return $db->SQLInsert($sql, $params);
+}
+
+function deleteGroupMessageReaction($mid, $uid, $emoji) {
+    $db = Config::getDatabase();
+    $params = [$mid, $uid, $emoji];
+    $sql = "DELETE FROM Group_Message_Reactions WHERE mid = ? AND uid = ? AND emoji = ?;";
+
+    return $db->SQLDelete($sql, $params);
 }
 
 ?>
