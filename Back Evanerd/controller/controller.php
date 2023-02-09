@@ -804,6 +804,23 @@ function postImage($data, $idTabs,$authKey) {
 }
 
 function postMessageReactions($data, $idTabs, $authKey, $queryString) {
+    /*if($authKey){
+        $uidConn = validUser(authToId($authKey));
+        $gid = $idTabs[0];
+        $mid = $idTabs[1];
+        $msg = selectGroupMessage($mid, $gid);
+        $reac = selectGroupReaction($mid);
+        print_r($mid);
+        $data["reactions"] = ["mid" => $mid, "uid" => $uidConn, "gid" => $gid];
+
+        if (!$msg)
+            sendError("Le message n'existe pas !", HTTP_BAD_REQUEST);
+        if (!$reac) {
+
+        }
+
+    }
+    sendError("Vous devez être identifié", HTTP_UNAUTHORIZED);*/
     sendError("Not implemented yet !", HTTP_NOT_FOUND);
 }
 
@@ -846,9 +863,9 @@ function postPostLike($data, $idTabs, $authKey) {
             $data["like"]["liked"] = 1; 
         } else {
             if ($like[0]["Liked"])
-                Liked($pid, $uidConn, 0);
+                liked($pid, $uidConn, 0);
             else
-                Liked($pid, $uidConn, 1);
+                liked($pid, $uidConn, 1);
 
             $data["like"]["liked"] = !$like[0]["Liked"];
         }
@@ -857,3 +874,29 @@ function postPostLike($data, $idTabs, $authKey) {
     sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
 
+function postPostPinned($data, $idTabs, $authKey) { // A TESTER
+    if($authKey) {
+        $uidConn = validUser(authToId($authKey));
+        $gid = $idTabs[0];
+        $mid = $idTabs[1];
+        $msg = selectGroupMessage($mid, $gid);
+        $pin = selectPinned($mid, $uidConn, $gid);
+        print_r($pin);
+        $data["pin"] = ["mid" => $mid, "uid" => $uidConn, "gid" => $gid];
+
+        if (!$msg)
+            sendError("Le message n'existe pas !", HTTP_BAD_REQUEST);
+        if (!$pin) {
+            insertPinned($mid, $uidConn, $gid, 1);
+            $data["pin"]["pinned"] = 1;
+        } else {
+            if ($pin[0]["Pinned"])
+                pinned($mid, $uidConn, $gid, 0);
+            else 
+                pinned($mid, $uidConn, $gid, 1);
+            $data["pin"]["pinned"] = !($pin[0]["Pinned"]);
+        }
+        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+    }
+    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+}

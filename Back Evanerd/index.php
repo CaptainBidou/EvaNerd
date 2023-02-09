@@ -148,6 +148,11 @@ switch($action) {
     case "POST /groups/ID/messages/ID/reactions":
         postMessageReactions($data, $idTabs, $authKey, $queryString);
         break;
+
+    case "POST groups/ID/messages/ID/pinned":
+        postPostPinned($data, $idTabs, $authKey);
+        break;
+    
     /* Posts */
     case "GET /posts":
         listPosts($data, $authKey);

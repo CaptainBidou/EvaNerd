@@ -669,7 +669,7 @@ function selectLiked($pid, $uid){
 
     return Database::parcoursRs($db->SQLSelect($sql, $param));
 }
-function Liked($pid, $uid, $liked){
+function liked($pid, $uid, $liked){
     $db = Config::getDatabase();
     $sql = "UPDATE Post_Likes
             SET liked = ?
@@ -690,6 +690,31 @@ function insertLiked($uid, $pid, $liked) {
     $db = Config::getDatabase();
     $param = [$uid, $pid, $liked];
     $sql = "INSERT INTO Post_Likes(uid,pid,liked) VALUES (?,?,?);";
+    return $db->SQLInsert($sql, $param);
+}
+
+function selectPinned($id, $uid, $gid) {
+    $db = Config::getDatabase();
+    $param = [$id, $uid, $gid];
+    $sql = "SELECT pinned, pid, uid, id
+            FROM Group_Messages
+            WHERE id= ? AND uid = ? AND pid = ?";
+    return Database::parcoursRs($db->SQLSelect($sql, $param));
+}
+
+function pinned($id, $uid, $gid, $pinned) {
+    $db = Config::getDatabase();
+    $param = [$pinned,$id, $uid, $gid];
+    $sql = "UPDATE Group_Messages
+            SET pinned  = ? 
+            WHERE id = ? AND uid = ? AND gid = ?";
+    return $db->SQLUpdate($sql, $param);
+}
+
+function insertPinned($id, $uid, $gid, $pinned) {
+    $db = Config::getDatabase();
+    $param = [$pinned,$id, $uid, $gid];
+    $sql = "INSERT INTO Group_Messages(id, uid, gid, pinned) VALUES (?, ?, ?, ?)";
     return $db->SQLInsert($sql, $param);
 }
 
