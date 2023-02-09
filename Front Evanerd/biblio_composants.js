@@ -157,8 +157,9 @@ var JReglageMessage=$("<div>").addClass("Reglage-Message-Layout").attr("type","d
 var JReglageMessageImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Message-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;});
 var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Image").on("click",function(context){});
 var JReglageMessageColor=$("<input>").attr("type","color").addClass("Message-Personne-Color");
-var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Changer de couleur").on("click",function(context){});
-var JReglageMessagePerson=$("<input>").addClass("Message-Personne-Reglage").attr("type","text").attr("placeholder","Nom de la personne");
+var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Changer de couleur").on("click",function(context){ var couleur=$(".Message-Personne-Color").val();
+                                                                                                                                                        JmodifCouleur(couleur);});
+var JReglageMessagePerson=$("<input>").addClass("form-control Message-Personne-Reglage").attr("type","text").attr("placeholder","Nom de la personne");
 var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Personne").on("click",function(context){});
 var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 
@@ -917,6 +918,11 @@ function JCreerMessageParticipant(Reponse,div,rep)
 
 }
 
+function JmodifCouleur(Reponse){
+$(".Actif-Div").css("background-color",Reponse);
+$(".reponse-message-linked").css("background-color","blueviolet");
+}
+
 function JCreerMessageActif(Reponse,div,couleur,rep)
 {
 
@@ -1092,3 +1098,4 @@ $("#page").append(JCloneReglageMessage);
 $(".Reglage-Message-Layout").animate({left: '25%'});
 
 }
+
