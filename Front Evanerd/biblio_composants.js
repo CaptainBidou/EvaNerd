@@ -169,6 +169,8 @@ var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 
 //VARRIABLES pour les comms des posts
 var JCommentaires = $("<div>").addClass("commentaires");
+var JCommentairesUp=$("<div>").addClass("commentaires-Up");
+var JCommentairesMiddle=$("<div>").addClass("commentaires-Mid");
 var JCommentairesCroix=$("<img>").addClass("commentaires-cross").attr("src","Ressources/Accueil/croix.png").on("click",function(){$(".card").css("filter","blur(0)");$(".commentaires").remove();})
 var JCommentaireInput=$("<textarea>").attr('type','text').addClass("form-control Commentaire-Input").attr("placeholder","Votre commentaire");
 var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerCommentaire(context.target);});
@@ -1143,22 +1145,36 @@ $(".Reglage-Message-Layout").animate({left: '25%'});
 function JCreerCommentaireLayout(Reponse){
 
 
-
+var JCloneCommentaireUp=JCommentairesUp.clone(true,true);
+var JCloneCommentairesMiddle=JCommentairesMiddle.clone(true,true);
 
 $(".card").css("filter","blur(20px)");
 var JCloneCommentairesCroix=JCommentairesCroix.clone(true,true);
 var JCloneCommentaires =JCommentaires.clone(true,true).css("filter","blur(0)");
 
 
-JCloneCommentaires.append(JCloneCommentairesCroix);
+JCloneCommentaireUp.append(JCloneCommentairesCroix);
 
 var i;
 for(i=0;i<Reponse.comments.length;i++)
 {
 
-    JCreerMessageActif(Reponse.comments[i],JCloneCommentaires,"lightblue",2);
+    JCreerMessageActif(Reponse.comments[i],JCloneCommentairesMiddle,"lightblue",2);
 
 }
+var JCloneCommentaireInput=JCommentaireInput.clone(true,true);
+var JCloneCommentaireSend=JCommentaireSend.clone(true,true);
+var JCloneCommentaireDown=JCommentaireDown.clone(true,true);
+
+
+
+JCloneCommentaireDown.append([JCloneCommentaireSend,JCloneCommentaireInput]);
+
+
+JCloneCommentaires.append([JCloneCommentaireUp,JCloneCommentairesMiddle,JCloneCommentaireDown]);
+
+
+
 
 
 
