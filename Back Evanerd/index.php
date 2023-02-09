@@ -1,8 +1,11 @@
 <?php 
 include_once "controller/controller.php";
 
-$data = genereAPIInfo();
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: *");
+header("Access-Control-Allow-Headers: *");
 
+$data = genereAPIInfo();
 $authKey = getAuthHeader();
 $queryString = getRequestParams();
 $requestType = getRequestType();
@@ -165,7 +168,7 @@ switch($action) {
     /* Agendas */
 
     case "GET /agendas":
-        listAgendas($data, $authKey);
+        listAgendas($data, $queryString, $authKey);
         break;
     
     case "GET /agendas/ID/events":

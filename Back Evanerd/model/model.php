@@ -1,5 +1,7 @@
 <?php
 
+use function PHPSTORM_META\type;
+
 include_once("includes/Config.php");
 
 
@@ -15,6 +17,11 @@ function getNewUid() {
     return $db->SQLGetChamp($sql);
 }
 
+function getNewPid() {
+    $db = Config::getDatabase();
+    $sql = "SELECT MAX(Posts.id)+1 FROM `Posts`";
+    return $db->SQLGetChamp($sql);
+}
 function getNewGid() {
     $db = Config::getDatabase();
     $sql = "SELECT MAX(Groups.id)+1 FROM `Groups`";
@@ -571,21 +578,26 @@ function selectPostMessages($pid){
 }
 
 // TODO : eventuellement modif pour rendre l'uid optionnelle
-function selectCalendar($uid, $aid = null){
+function selectCalendar($uid, $aid = null, $type = "intra"){
     $db = Config::getDatabase();
-    $params = [$uid];
+    $params = [];
     $sqlAid = "";
+
     if($aid)  {
         $sqlAid = " AND Agendas.id = ?";
         array_push($params,$aid);
     }
-    $sql = "SELECT Agendas.* 
-            FROM Agendas
-            JOIN Agenda_Perms 
-                ON Agendas.id = Agenda_Perms.aid
-            JOIN User_Roles
-                ON User_Roles.rid = Agenda_Perms.rid
-            WHERE Agenda_Perms.read = 1 AND User_Roles.uid = ? $sqlAid;";
+    if($type == "extra") {
+        $sql = "SELECT Agendas.* FROM Agendas 
+                WHERE Agendas.extra = 1 $sqlAid;"; 
+    }
+    else if($type == "intra") {
+        array_unshift($params, $uid);
+        $sql = "SELECT Agendas.* FROM Agendas 
+                JOIN Agenda_Perms ON Agendas.id = Agenda_Perms.aid
+                JOIN User_Roles ON User_Roles.rid = Agenda_Perms.rid
+                WHERE Agenda_Perms.read = 1 AND User_Roles.uid = ? AND Agendas.extra = 0 $sqlAid;";
+    }
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
@@ -644,7 +656,7 @@ function selectUserInstruments($uid) {
 
 function insertParticipation($uid, $aeid, $participation) {
     $db = Config::getDatabase();
-    $sql = "INSERT INTO User_Participations(uid, aeid, participation) VALUES (?,?,?)";
+    $sql = "INSERT INTO User_Participations(uid, aeid, participation) VALUES (?,?,?);";
     $db->SQLInsert($sql, [$uid, $aeid, $participation]);
 }
 
@@ -659,11 +671,26 @@ function selectLiked($pid, $uid){
 }
 function Liked($pid, $uid, $liked){
     $db = Config::getDatabase();
-    $sql = "UPDATE Liked
-            SET Liked = ?
+    $sql = "UPDATE Post_Likes
+            SET liked = ?
             WHERE pid = ? AND uid = ?";
-    $param = [$pid, $uid];
+    $param = [$liked, $pid, $uid];
 
-    return Database::parcoursRs(($db->SQLUpdate($liked, $sql, $param)));
+    return $db->SQLUpdate($sql, $param);
 }
+
+function insertPost($title, $content, $image, $pinned, $visible, $author) {
+    $db = Config::getDatabase();
+    $param = [$author, $content, $image, $pinned, $visible];
+    $sql = "INSERT INTO Posts(author, content, banner, pinned, visible) VALUES (?,?,?,?,?);";
+    return $db->SQLInsert($sql, $param);
+}
+
+function insertLiked($uid, $pid, $liked) {
+    $db = Config::getDatabase();
+    $param = [$uid, $pid, $liked];
+    $sql = "INSERT INTO Post_Likes(uid,pid,liked) VALUES (?,?,?);";
+    return $db->SQLInsert($sql, $param);
+}
+
 ?>

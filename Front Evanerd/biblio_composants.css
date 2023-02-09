@@ -384,11 +384,11 @@ position:absolute;
     background-color: lightgray;
 box-shadow: 0px -2px 10px silver;
 position: fixed;
-top:83%;
+bottom:9%;
 width:100%;
 padding:1%;
 display: inline;
-height:8%;
+/*height:8%;*/
 }
 .Message-Input
 {
@@ -526,10 +526,47 @@ margin-left:0%;
     font-size: 100%;
     margin-left:1%;
     width:98%;
+    background-color: blueviolet;
 }
 
 .lien-message
 {
     text-decoration: none;
     color:black;
+    background-color: blueviolet;
+}
+
+.Croix-Message-Reponse
+{
+    position:absolute;
+    width:10%;
+    float:right;
+    top:0%;
+    right:1%;
+    
+}
+
+
+.Message-Layout
+{
+background-color: darkred;
+box-shadow: 0px -2px 10px silver;
+padding:1%;
+font-size: 30%;
+width:75%;
+position: absolute;
+left:100%;
+top:105%;
+height:800%;
+border-radius: 20px 0px 0px 20px ;
+overflow-y: scroll;
+scrollbar-color: rebeccapurple green;
+}
+
+
+.messages-layout-pinned
+{
+background-color: lightgray;
+font-weight: normal;
+scrollbar-width: thin;
 }
