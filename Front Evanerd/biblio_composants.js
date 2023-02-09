@@ -118,7 +118,7 @@ var JProfileReglage=$("<img>").attr("src","Ressources/Profile/reglage.png").addC
 //variables pour la vue message
 var JMessageHeader = $("<nav>").addClass("navbar MessageHeader");
 var JMessageFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addClass("Message-Fleche").on("click",function(){AfficherMessagerie();});
-var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addClass("Message-Reglage");
+var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addClass("Message-Reglage").on("click",function(){JReglageConv();});
 var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle").on("click",function(context){JLayoutPinnedMessages(context.target);});
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
 var JMessageLayout=$("<div>").addClass("Message-Layout scroller").data("type","layout");
@@ -150,6 +150,17 @@ var JConnexionPwd=$("<input>").addClass("text").addClass("form-control Connexion
 var JConnexionSubmit=$("<button>").addClass("btn btn-danger Connexion-Submit").html("Se connecter").on("click",function(context){Connexion();});
 var JConnexionP=$("<p>").addClass("Connexion-p");
 var JConnexionTitre=$("<h1>").addClass("Connexion-titre");
+
+
+//variables pour les réglages des messages 
+var JReglageMessage=$("<div>").addClass("Reglage-Message-Layout").attr("type","divisionReglage");
+var JReglageMessageImage=$("<input>").addClass("btn btn-danger form-control-file").attr("type","file").text("Ajouter une image").addClass("buttonAddImage").on("click",function(){return null;});
+var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger ").html("Ajouter une Image").on("click",function(context){});
+var JReglageMessageColor=$("<input>").attr("type","color");
+var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger ").html("Changer de couleur").on("click",function(context){});
+var JReglageMessagePerson=$("<input>").addClass("Message-Personne-Reglage").attr("type","text");
+var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger ").html("Ajouter une Personne").on("click",function(context){});
+
 
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
@@ -984,8 +995,11 @@ function JCreerConnexion(){
 
 function JclickEpingle(target){
 
-$(target).attr("src","Ressources/Message/epingleNOIR.png");
 
+    if($(target).attr("src")=="Ressources/Message/epingleNOIR.png")
+        $(target).attr("src","Ressources/Message/epingle.png");
+    else
+    $(target).attr("src","Ressources/Message/epingleNOIR.png");
 EpinglerUnMessage($(target).attr("id_message"));// à implémenter dans la couche client 
 
 }
@@ -1042,5 +1056,30 @@ console.log($(target).attr("groupId"));
 
 EnvoyerMessage($(target).attr("groupId"),$(target).attr("message"),$(target).attr("rep"));// à impémenter dans la couche client 
 
+
+}
+
+
+
+function JReglageConv(){
+
+    if($(".Reglage-Message-Layout").attr("type")=="divisionReglage")
+    {   
+        
+        return $(".Reglage-Message-Layout").remove();}
+
+    var JCloneReglageMessage=JReglageMessage.clone(true,true);
+    var JCloneReglageMessageImage= JReglageMessageImage.clone(true,true);
+    var JCloneReglageMessageImageSubmit=JReglageMessageImageSubmit.clone(true,true);
+    var JCloneReglageMessageColor=JReglageMessageColor.clone(true,true);
+    var JCloneReglageMessageColorSubmit=JReglageMessageColorSubmit.clone(true,true);
+    var JCloneReglageMessagePerson=JReglageMessagePerson.clone(true,true);
+    var JCloneReglageMessagePersonSubmit=JReglageMessagePersonSubmit.clone(true,true);
+
+
+    JCloneReglageMessage.append([JCloneReglageMessageImage,JCloneReglageMessageImageSubmit,JCloneReglageMessageColor,JCloneReglageMessageColorSubmit,
+        JCloneReglageMessagePerson,JCloneReglageMessagePersonSubmit]);
+
+$("#page").append(JCloneReglageMessage);
 
 }
