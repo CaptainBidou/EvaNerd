@@ -95,6 +95,16 @@ function JRecupId(){
     //ListCalendarsEvents(authcode,aid);
     //ListCallMembers(authcode,aid,eid);
 }
+function EnvoyerMessage(groupId,message,rep){
+    $informations={"content":message,
+                    "answerTo":rep,};
+                    
+    AddMsgConv(groupId, informations);
+}
+
+
+
+
 
 </script>
 
