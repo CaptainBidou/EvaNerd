@@ -549,7 +549,7 @@ margin-left:0%;
 
 .Message-Layout
 {
-background-color: lightgray;
+background-color: gray;
 box-shadow: 0px -2px 10px silver;
 padding:1%;
 font-size: 30%;
@@ -557,10 +557,12 @@ width:75%;
 position: absolute;
 left:100%;
 top:105%;
-height:800%;
+height:780%;
 border-radius: 20px 0px 0px 20px ;
 overflow-y: scroll;
 scrollbar-color: rebeccapurple green;
+margin-top: 2%;
+margin-bottom: 2%;
 }
 
 
@@ -583,10 +585,45 @@ overflow-y: scroll;
 scrollbar-color: rebeccapurple green;
 height: 63%;
 width:75%;
-padding:1%;
+padding:5%;
 border-radius: 20px 0px 0px 20px ;
-left:25%;
+left:100%;
 top:19%;
-font-size:30%;
+
 z-index: 10;
+}
+
+.Reglage-Message-Image,.Message-Personne-Color
+{
+font-size:190%;
+}
+.Reglage-Message-Submit
+{
+    margin-top: 5%;
+    font-size:190%;
+}
+.Message-Personne-Reglage
+{
+    font-size:190%; 
+}
+.Message-Reglage-label
+{
+    margin-top: 2%;
+    font-size:250%; 
+    font-weight: bold;
+}
+
+.Message-Personne-Color
+{
+margin-right: 100%;
+
+}
+
+.Reglage-Message-Titre
+{
+
+    font-size:350%; 
+    text-align: center;
+    margin-top: 2%;
+
 }

@@ -154,13 +154,13 @@ var JConnexionTitre=$("<h1>").addClass("Connexion-titre");
 
 //variables pour les réglages des messages 
 var JReglageMessage=$("<div>").addClass("Reglage-Message-Layout").attr("type","divisionReglage");
-var JReglageMessageImage=$("<input>").addClass("btn btn-danger form-control-file").attr("type","file").text("Ajouter une image").addClass("buttonAddImage").on("click",function(){return null;});
-var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger ").html("Ajouter une Image").on("click",function(context){});
-var JReglageMessageColor=$("<input>").attr("type","color");
-var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger ").html("Changer de couleur").on("click",function(context){});
-var JReglageMessagePerson=$("<input>").addClass("Message-Personne-Reglage").attr("type","text");
-var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger ").html("Ajouter une Personne").on("click",function(context){});
-
+var JReglageMessageImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Message-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;});
+var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Image").on("click",function(context){});
+var JReglageMessageColor=$("<input>").attr("type","color").addClass("Message-Personne-Color");
+var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Changer de couleur").on("click",function(context){});
+var JReglageMessagePerson=$("<input>").addClass("Message-Personne-Reglage").attr("type","text").attr("placeholder","Nom de la personne");
+var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Personne").on("click",function(context){});
+var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
@@ -1064,22 +1064,31 @@ EnvoyerMessage($(target).attr("groupId"),$(target).attr("message"),$(target).att
 function JReglageConv(){
 
     if($(".Reglage-Message-Layout").attr("type")=="divisionReglage")
-    {   
-        
-        return $(".Reglage-Message-Layout").remove();}
-
+    {   $(".Reglage-Message-Layout").attr("type","divisionReglageHide");
+        $(".Reglage-Message-Layout").animate({left: '100%'});
+        return ;}
+        if($(".Reglage-Message-Layout").attr("type")=="divisionReglageHide")
+        {   $(".Reglage-Message-Layout").attr("type","divisionReglage");
+            $(".Reglage-Message-Layout").animate({left: '25%'});
+            return ;}
+    
+    var JLabelTitre= JReglageMessageLabel.clone(true,true).text("Configuration").addClass("Reglage-Message-Titre");
     var JCloneReglageMessage=JReglageMessage.clone(true,true);
+    var JLabelImage= JReglageMessageLabel.clone(true,true).text("Nouvelle image du groupe");
     var JCloneReglageMessageImage= JReglageMessageImage.clone(true,true);
     var JCloneReglageMessageImageSubmit=JReglageMessageImageSubmit.clone(true,true);
+    var JLabelColor=JReglageMessageLabel.clone(true,true).text("Changer la couleur de message");
     var JCloneReglageMessageColor=JReglageMessageColor.clone(true,true);
     var JCloneReglageMessageColorSubmit=JReglageMessageColorSubmit.clone(true,true);
+    var JLabelPerson=JReglageMessageLabel.clone(true,true).text("Ajouter une personne");
     var JCloneReglageMessagePerson=JReglageMessagePerson.clone(true,true);
     var JCloneReglageMessagePersonSubmit=JReglageMessagePersonSubmit.clone(true,true);
 
 
-    JCloneReglageMessage.append([JCloneReglageMessageImage,JCloneReglageMessageImageSubmit,JCloneReglageMessageColor,JCloneReglageMessageColorSubmit,
+    JCloneReglageMessage.append([ JLabelTitre,JLabelImage,JCloneReglageMessageImage,JCloneReglageMessageImageSubmit,JLabelColor,JCloneReglageMessageColor,JCloneReglageMessageColorSubmit,JLabelPerson,
         JCloneReglageMessagePerson,JCloneReglageMessagePersonSubmit]);
 
 $("#page").append(JCloneReglageMessage);
+$(".Reglage-Message-Layout").animate({left: '25%'});
 
 }
