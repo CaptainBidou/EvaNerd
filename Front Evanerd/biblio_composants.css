@@ -591,7 +591,7 @@ scrollbar-width: thin;
 
 .Reglage-Message-Layout
 {
-background-color: gray;
+background-color: silver;
 position: fixed;
 overflow-y: scroll;
 scrollbar-color: rebeccapurple green;
@@ -776,4 +776,39 @@ margin-top:5%;
     
    
   
+}
+
+.Reglage-Profil-Layout
+{
+
+
+
+    background-color: silver;
+    position: fixed;
+    overflow-y: scroll;
+    scrollbar-color: rebeccapurple green;
+    height: 63%;
+    width:75%;
+    padding:5%;
+    border-radius: 20px 0px 0px 20px ;
+    left:100%;
+    top:19%;
+    z-index: 10;
+    
+   
+  
+}
+
+
+.Reglage-Profil-Image,.Reglage-Profil-Submit,.Reglage-Profil-Select-Tel-Mail,.Reglage-Profil-Input-Tel-Mail,.Reglage-Profil-Submit,.Reglage-Profil-Select-Tag
+{
+    font-size:190%;
+    margin:2%;
+}
+
+.Reglage-Profil-label
+{
+    font-size:250%; 
+    font-weight: bold;
+    margin:2%;
 }

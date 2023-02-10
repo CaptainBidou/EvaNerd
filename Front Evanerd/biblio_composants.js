@@ -187,14 +187,15 @@ var JReactionCroix=$("<img>").addClass("Reaction-cross").attr("src","Ressources/
 
 
 //variables pour les reglages du profil
+var JReglageProfileLabel=$("<p>").addClass("Reglage-Profil-label");
 var JReglageProfileDiv=$("<div>").addClass("Reglage-Profil-Layout").attr("type","divisionReglage");
-var JReglageProfileImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Profil-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;});
-var JReglageProfileImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit").html("Ajouter une Image").on("click",function(context){});
-var JReglageProfileSelectTelMail=$("<select>").addClass("form-control Reglage-Profil-Select-Tel-Mail").attr("id","exampleFormControlSelect1").append($("<option>").text("Mail").addClass("option")).append($("<option>").text("Telephone").addClass("option"));;
-var JReglageProfileInputTelMail=$("<input>").addClass("form-control Reglage-Profil-Input-Tel-Mail").attr("type","text").attr("placeholder","Mail ou Telephone");
-var JReglageProfileSubmitTelMail=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit").html("Ajouter un Mail ou un Telephone").on("click",function(context){});
-var JReglageProfileTagSelect=$("<select>").addClass("form-control Reglage-Profil-Select-Tag").attr("id","exampleFormControlSelect1").append($("<option>").text("Tag").addClass("option"));
-var JReglageProfileTagSubmit=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit").html("Ajouter un Tag").on("click",function(context){});
+var JReglageProfileImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Profil-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;}).on("change",function(context){$(".Submit-Image-profile").fadeIn(1000);});
+var JReglageProfileImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit Submit-Image-profile").html("Ajouter une Image").on("click",function(context){});
+var JReglageProfileSelectTelMail=$("<select>").addClass("form-control Reglage-Profil-Select-Tel-Mail").attr("id","exampleFormControlSelect1").append($("<option>").text("Mail").addClass("option")).append($("<option>").text("Telephone").addClass("option")).on("change",function(context){$(".Reglage-Profil-Input-Tel-Mail").fadeIn(1000);});;
+var JReglageProfileInputTelMail=$("<input>").addClass("form-control Reglage-Profil-Input-Tel-Mail").attr("type","text").attr("placeholder","Mail ou Telephone").on("keypress",function(context){$(".Submit-Reglage-Profile-mailTel").fadeIn(1000);});
+var JReglageProfileSubmitTelMail=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit Submit-Reglage-Profile-mailTel").html("Ajouter un Mail ou un Telephone");
+var JReglageProfileTagSelect=$("<select>").addClass("form-control Reglage-Profil-Select-Tag").attr("id","exampleFormControlSelect1").append($("<option>").text("Tag").addClass("option")).on("change",function(context){$(".Reglage-Profil-Input-tag").fadeIn(1000);});
+var JReglageProfileTagSubmit=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit Reglage-Profil-Input-tag").html("Ajouter un Tag").on("click",function(context){});
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
@@ -1262,25 +1263,33 @@ function JRevenirProfile(){
 
 function JReglageProfile()
 {
-if($(".Reglage-Profil-Layout").attr("type")=="divisionReglage")
+if($(".Reglage-Profil-Layout").attr("type-position")=="visible")
     {   
-        $(".Reglage-Profil-Layout").remove();
-        console.log("sdfsdf");
+        
+        $(".Reglage-Profil-Layout").animate({left: '100%'});
+        $(".Reglage-Profil-Layout").attr("type-position","hide");
         return;
     }
+if($(".Reglage-Profil-Layout").attr("type-position")=="hide")
+{
+
+    $(".Reglage-Profil-Layout").animate({left: '25%'});
+    $(".Reglage-Profil-Layout").attr("type-position","visible");
+    return;
+
+}
 
 
 
 
-
-var JCloneReglageProfile=JReglageProfileDiv.clone(true,true);
+var JCloneReglageProfile=JReglageProfileDiv.clone(true,true).attr("type-position","visible");
 var JCloneReglageProfileImage=JReglageProfileImage.clone(true,true);
-var JCloneReglageProfileImageSubmit=JReglageProfileImageSubmit.clone(true,true);
+var JCloneReglageProfileImageSubmit=JReglageProfileImageSubmit.clone(true,true).hide();
 var JCloneReglageProfileSelectTelMail=JReglageProfileSelectTelMail.clone(true,true);
 var JCloneReglageProfileInputTelMail=JReglageProfileInputTelMail.clone(true,true).hide();
-var JCloneReglageProfileSubmitTelMail=JReglageProfileSubmitTelMail.clone(true,true);
+var JCloneReglageProfileSubmitTelMail=JReglageProfileSubmitTelMail.clone(true,true).hide();
 var JCloneReglageProfileTagSelect=JReglageProfileTagSelect.clone(true,true);
-var JCloneReglageProfileTagSubmit=JReglageProfileTagSubmit.clone(true,true);
+var JCloneReglageProfileTagSubmit=JReglageProfileTagSubmit.clone(true,true).hide();
 
 
 
@@ -1288,7 +1297,7 @@ JCloneReglageProfile.append([JCloneReglageProfileImage,JCloneReglageProfileImage
 
 
 $("#page").append(JCloneReglageProfile);
-
+JCloneReglageProfile.animate({left: '25%'});
 
 
 }
