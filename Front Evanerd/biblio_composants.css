@@ -107,6 +107,8 @@
     padding: 1%;
     box-shadow: 0px 2px 10px gray;
     margin-top: 2%;
+    border-radius: 10px;
+    margin:2%;
 }
 
 .conversation-image {
@@ -589,7 +591,7 @@ scrollbar-width: thin;
 
 .Reglage-Message-Layout
 {
-background-color: gray;
+background-color: silver;
 position: fixed;
 overflow-y: scroll;
 scrollbar-color: rebeccapurple green;
@@ -763,9 +765,7 @@ margin-top:5%;
 
     width: 98%;
     height: 40%;
-    background-color:gray ;
     border-radius: 10px;
-    box-shadow: 0px 2px 10px black;
     margin-top: 2%;
     margin-bottom: 2%;
     padding: 1%;
@@ -776,4 +776,47 @@ margin-top:5%;
     
    
   
+}
+
+.Reglage-Profil-Layout
+{
+
+
+
+    background-color: silver;
+    position: fixed;
+    overflow-y: scroll;
+    scrollbar-color: rebeccapurple green;
+    height: 63%;
+    width:75%;
+    padding:5%;
+    border-radius: 20px 0px 0px 20px ;
+    left:100%;
+    top:19%;
+    z-index: 10;
+    
+   
+  
+}
+
+
+.Reglage-Profil-Image,.Reglage-Profil-Submit,.Reglage-Profil-Select-Tel-Mail,.Reglage-Profil-Input-Tel-Mail,.Reglage-Profil-Submit,.Reglage-Profil-Select-Tag
+{
+    font-size:190%;
+    margin:2%;
+}
+
+.Reglage-Profil-label
+{
+    font-size:300%; 
+    font-weight: bold;
+    margin:2%;
+}
+
+
+.Reglage-Profil-Titre
+{
+    font-size:350%; 
+    text-align: center;
+    font-weight: bold;
 }
