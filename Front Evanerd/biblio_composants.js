@@ -36,9 +36,9 @@ var JFooterMail=$("<img>").addClass(["footer-icon", "left"]).data("type","footer
 var JHeader =$("<nav>").addClass(["navbar", "header"]).data("type","header");
 var JHeaderLogo = $("<img>").addClass(["rounded-circle", "left", "header-icon"]).data("type","header_logo").attr('src','Ressources/Header/logo.png');//TODO :rajouter des données pour quand on clique 
 var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon",'profile']).on("click",function(context){AfficherProfile(context.target);}).data("type","header_profile");//TODO :rajouter des données pour quand on clique 
-var JHeaderTag=$("<button>").addClass(["btn btn-primary dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie");
-var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu');
-var JHeaderItem=$("<input>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").attr("type","checkbox").data("type",'header_item');
+var JHeaderTag=$("<button>").addClass(["btn btn-danger dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie").attr("id","dropdownMenuButton").attr("data-toggle","dropdown").attr("aria-haspopup","true").attr("aria-expanded","false");
+var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu').attr("aria-labelledby","dropdownMenuButton");
+var JHeaderItem=$("<a>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").data("type",'header_item').attr("href","#");
 var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher");
 
 //variables pour les Convs
@@ -113,7 +113,8 @@ var JProfileActivite=$("<nav>").addClass("navbar Activite").data("type","activit
 var JProfileActiviteContent=$("<p>").attr("type","activite_context").addClass("activite-content");
 var JProfileActiviteImage=$("<img>").addClass("activite-img");
 var JProfileReglage=$("<img>").attr("src","Ressources/Profile/reglage.png").addClass("profile-reglage");
-
+var JProfileDivActivite=$("<div>").addClass("div-profile-activite");
+var JProfileArrow=$("<img>").attr("src","Ressources/Profile/arrow.png").addClass("profile-arrow");
 
 //variables pour la vue message
 var JMessageHeader = $("<nav>").addClass("navbar MessageHeader");
@@ -331,7 +332,8 @@ function JcreerHeader(Reponse){
     var JCloneHeaderSearch=JHeaderSearch.clone(true,true);
     var JCloneHeaderTag=JHeaderTag.clone(true,true);
     var JCloneHeaderMenu=JHeaderMenu.clone(true,true);
-    var JCloneHeaderItem=JHeaderItem.clone(true,true);
+    var JCloneHeaderItem=JHeaderItem.clone(true,true).text("blabla");
+    JCloneHeaderMenu.append(JCloneHeaderItem);
 
     if (Reponse==null)
     {
@@ -781,12 +783,15 @@ function JCreerPostCreer(){
 
 function JCreerProfile(Reponse){
     var JCloneProfileReglage=JProfileReglage.clone(true,true);
-    $("#page").append(JCloneProfileReglage);
+    var JCloneProfileArrow=JProfileArrow.clone(true,true).on("click",function(){JRevenirProfile();});
+    $("#page").append([JCloneProfileArrow,JCloneProfileReglage]);
 
     var JCloneProfileProgress=JProfileProgress.clone(true,true);
     var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
     var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
     var JCloneProfileNom=JProfileNom.clone(true,true).text(Reponse.firstName +" "+ Reponse.lastName);  
+var JCloneProfileDivActivite=JProfileDivActivite.clone(true,true);
+
 
     if(Reponse.pourcentage<33)
             JCloneProfilePourcentage.css('background-color','red');
@@ -811,7 +816,7 @@ function JCreerProfile(Reponse){
 
 
     $("#page").append(JCloneProfileProgress.append(JCloneProfilePourcentage));
-
+    $("#page").append(JCloneProfileDivActivite);
     for(i=0;i<Reponse.activity.length;i++)
     {var activity = {"nom":Reponse.firstName,"prenom":Reponse.lastName,"activites":Reponse.activity[i],};
     JCreerProfileActivite(activity);}
@@ -847,7 +852,7 @@ function JCreerProfileActivite(Reponse){
     JCloneProfileActiviteContent=ajouterTextOverflow(JCloneProfileActiviteContent,80);
     JCloneProfileActiviteContent.on("click",function(context){afficherToutleText(context);})
     JCloneProfileActivite.append([JCloneProfileActiviteContent,JCloneProfileActiviteImage]);
-    $("#page").append(JCloneProfileActivite);
+    $(".div-profile-activite").append(JCloneProfileActivite);
 }
 
 
@@ -1233,13 +1238,13 @@ JCloneReaction.fadeIn(1000);
 
 
 
-function JClickProfile(){
 
 
 
-
-
-
-
+function JRevenirProfile(){
+    if($("#Accueil").attr("src")=="Ressources/Footer/accueilGris.png")
+    {  AfficherAccueil(); }
+    else
+    AfficherMessagerie();
 
 }
