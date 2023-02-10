@@ -13,6 +13,8 @@
 
 
 <script>
+
+
     var Reponse={
                  'firstName':'Jean',
                  'lastName':'Michel',
@@ -551,7 +553,7 @@ JcreerHeader(Reponse);
 
 //JCreerMessage(conv2);
 
-
+//JCreerProfile(Reponse);
 
 AfficherAccueil();
 //AfficherAccueil();
@@ -583,8 +585,16 @@ JCreerAppel(appel);*/
 
 JcreerFooter(Reponse);
 
-});
 
+
+
+
+});
+function AfficherProfile(){
+    //appel ajax pour récupérer les infos du profil
+    $("#page").empty();
+    JCreerProfile(Reponse);
+}
 
 function CommentairesPosts(){
 
@@ -625,6 +635,8 @@ for(i; i<posts.posts.length;i++)
 
 
 }
+
+
 
 
 

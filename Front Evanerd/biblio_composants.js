@@ -18,7 +18,7 @@ var JPostTitre=$("<h2>").addClass(["post-titre","card-title"]).data('type','post
 var JPostBody=$("<div>").addClass("card-body").data('type','post_body');
 var JPostImage=$("<img>").addClass("card-img-top").data('type','post_image');
 var JPostDescription=$("<p>").addClass(["post-description", "card-text"]).data('type','post_text');
-var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle']).data("type","post_profile");//TODO :rajouter des données pour quand on clique
+var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle','profile']).data("type","post_profile").on("click",function(context){AfficherProfile(context.target);});//TODO :rajouter des données pour quand on clique
 var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').on("click",function(context){JclickEpingle(context.target);});
 var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png').on("click",function(context){JClickLike(context.target);});
 var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png').on("click",function(context){JCreerReactionLayout(context.target);});
@@ -35,7 +35,7 @@ var JFooterMail=$("<img>").addClass(["footer-icon", "left"]).data("type","footer
 //variables pour le header
 var JHeader =$("<nav>").addClass(["navbar", "header"]).data("type","header");
 var JHeaderLogo = $("<img>").addClass(["rounded-circle", "left", "header-icon"]).data("type","header_logo").attr('src','Ressources/Header/logo.png');//TODO :rajouter des données pour quand on clique 
-var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon"]).data("type","header_profile");//TODO :rajouter des données pour quand on clique 
+var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon",'profile']).on("click",function(context){AfficherProfile(context.target);}).data("type","header_profile");//TODO :rajouter des données pour quand on clique 
 var JHeaderTag=$("<button>").addClass(["btn btn-primary dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie");
 var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu');
 var JHeaderItem=$("<input>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").attr("type","checkbox").data("type",'header_item');
@@ -129,7 +129,7 @@ var JMessageDown=$("<div>").addClass("Message-Down");
 
 //variables pour les messages créé par des participants
 var JMessageParticipantDiv=$("<div>").addClass("Participant-Div");
-var JMessageParticipantProfile=$("<img>").addClass("Participant-Profile rounded-circle");
+var JMessageParticipantProfile=$("<img>").addClass("Participant-Profile rounded-circle profile").on("click",function(context){AfficherProfile(context.target);});
 var JMessageParticipantTitre=$("<p>").addClass("Participant-Titre");
 var JMessageParticipantRep=$("<img>").addClass("Participant-Rep").attr("src","Ressources/Message/rep.png").on("click",function(context){JclickRep(context.target);});
 var JMessageParticipantEpingle=$("<img>").addClass("Participant-Epingle").attr("src","Ressources/Message/epingle.png").on("click",function(context){JclickEpingle(context.target);});
@@ -1229,4 +1229,17 @@ JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle]);
 JCloneReaction.hide();
 $("#page").append(JCloneReaction);
 JCloneReaction.fadeIn(1000);
+}
+
+
+
+function JClickProfile(){
+
+
+
+
+
+
+
+
 }
