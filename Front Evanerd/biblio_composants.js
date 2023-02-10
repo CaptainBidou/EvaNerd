@@ -112,7 +112,7 @@ var JProfileProgress = $("<div>").attr("type","concert_progress").addClass("prog
 var JProfileActivite=$("<nav>").addClass("navbar Activite").data("type","activite");
 var JProfileActiviteContent=$("<p>").attr("type","activite_context").addClass("activite-content");
 var JProfileActiviteImage=$("<img>").addClass("activite-img");
-var JProfileReglage=$("<img>").attr("src","Ressources/Profile/reglage.png").addClass("profile-reglage");
+var JProfileReglage=$("<img>").attr("src","Ressources/Profile/reglage.png").addClass("profile-reglage").on("click",function(){JReglageProfile();});
 var JProfileDivActivite=$("<div>").addClass("div-profile-activite");
 var JProfileArrow=$("<img>").attr("src","Ressources/Profile/arrow.png").addClass("profile-arrow");
 
@@ -186,6 +186,15 @@ var JReactionMiddle=$("<div>").addClass("Reaction-Mid");
 var JReactionCroix=$("<img>").addClass("Reaction-cross").attr("src","Ressources/Accueil/croix.png").on("click",function(){$(".card").css("filter","blur(0)");$(".Reaction").remove();})
 
 
+//variables pour les reglages du profil
+var JReglageProfileDiv=$("<div>").addClass("Reglage-Profil-Layout").attr("type","divisionReglage");
+var JReglageProfileImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Profil-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;});
+var JReglageProfileImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit").html("Ajouter une Image").on("click",function(context){});
+var JReglageProfileSelectTelMail=$("<select>").addClass("form-control Reglage-Profil-Select-Tel-Mail").attr("id","exampleFormControlSelect1").append($("<option>").text("Mail").addClass("option")).append($("<option>").text("Telephone").addClass("option"));;
+var JReglageProfileInputTelMail=$("<input>").addClass("form-control Reglage-Profil-Input-Tel-Mail").attr("type","text").attr("placeholder","Mail ou Telephone");
+var JReglageProfileSubmitTelMail=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit").html("Ajouter un Mail ou un Telephone").on("click",function(context){});
+var JReglageProfileTagSelect=$("<select>").addClass("form-control Reglage-Profil-Select-Tag").attr("id","exampleFormControlSelect1").append($("<option>").text("Tag").addClass("option"));
+var JReglageProfileTagSubmit=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit").html("Ajouter un Tag").on("click",function(context){});
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
@@ -803,10 +812,7 @@ var JCloneProfileDivActivite=JProfileDivActivite.clone(true,true);
             JCloneProfilePourcentage.css('background-color','green');
 
 
-        if (JCouleur == 'silver')
-            JCouleur='Lightgray';
-        else
-            JCouleur='silver';
+        
 
     $("#page").append(JCloneProfileImage);
     $("#page").append(JCloneProfileNom);
@@ -846,13 +852,17 @@ function JCreerProfileTag(Reponse){
  * Reponse={"nom":jean,"prenom":"pierre","activites":[{"nom":"repetition tutti"},{"nom":"repetition haut bois"}]} 
  */
 function JCreerProfileActivite(Reponse){
-    var JCloneProfileActivite=JProfileActivite.clone(true,true);
+    var JCloneProfileActivite=JProfileActivite.clone(true,true).css("background-color",JCouleur);
     var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true).attr("src","Ressources/Footer/calendrier.png");
     var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.nom);
     JCloneProfileActiviteContent=ajouterTextOverflow(JCloneProfileActiviteContent,80);
     JCloneProfileActiviteContent.on("click",function(context){afficherToutleText(context);})
     JCloneProfileActivite.append([JCloneProfileActiviteContent,JCloneProfileActiviteImage]);
     $(".div-profile-activite").append(JCloneProfileActivite);
+    if (JCouleur == 'silver')
+    JCouleur='Lightgray';
+else
+    JCouleur='silver';
 }
 
 
@@ -1246,5 +1256,39 @@ function JRevenirProfile(){
     {  AfficherAccueil(); }
     else
     AfficherMessagerie();
+
+}
+
+
+function JReglageProfile()
+{
+if($(".Reglage-Profil-Layout").attr("type")=="divisionReglage")
+    {   
+        $(".Reglage-Profil-Layout").remove();
+        console.log("sdfsdf");
+        return;
+    }
+
+
+
+
+
+var JCloneReglageProfile=JReglageProfileDiv.clone(true,true);
+var JCloneReglageProfileImage=JReglageProfileImage.clone(true,true);
+var JCloneReglageProfileImageSubmit=JReglageProfileImageSubmit.clone(true,true);
+var JCloneReglageProfileSelectTelMail=JReglageProfileSelectTelMail.clone(true,true);
+var JCloneReglageProfileInputTelMail=JReglageProfileInputTelMail.clone(true,true).hide();
+var JCloneReglageProfileSubmitTelMail=JReglageProfileSubmitTelMail.clone(true,true);
+var JCloneReglageProfileTagSelect=JReglageProfileTagSelect.clone(true,true);
+var JCloneReglageProfileTagSubmit=JReglageProfileTagSubmit.clone(true,true);
+
+
+
+JCloneReglageProfile.append([JCloneReglageProfileImage,JCloneReglageProfileImageSubmit,JCloneReglageProfileSelectTelMail,JCloneReglageProfileInputTelMail,JCloneReglageProfileSubmitTelMail,JCloneReglageProfileTagSelect,JCloneReglageProfileTagSubmit]);
+
+
+$("#page").append(JCloneReglageProfile);
+
+
 
 }
