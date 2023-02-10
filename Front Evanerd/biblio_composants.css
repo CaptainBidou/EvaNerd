@@ -808,7 +808,15 @@ margin-top:5%;
 
 .Reglage-Profil-label
 {
-    font-size:250%; 
+    font-size:300%; 
     font-weight: bold;
     margin:2%;
+}
+
+
+.Reglage-Profil-Titre
+{
+    font-size:350%; 
+    text-align: center;
+    font-weight: bold;
 }

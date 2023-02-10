@@ -1281,19 +1281,22 @@ if($(".Reglage-Profil-Layout").attr("type-position")=="hide")
 
 
 
-
+var JCloneReglageLabel=JReglageProfileLabel.clone(true,true).text("Configuration").addClass("Reglage-Profil-Titre");
 var JCloneReglageProfile=JReglageProfileDiv.clone(true,true).attr("type-position","visible");
+var JCloneReglageChangerImage=JReglageProfileLabel.clone(true,true).text("Changer d'image de profile");
 var JCloneReglageProfileImage=JReglageProfileImage.clone(true,true);
 var JCloneReglageProfileImageSubmit=JReglageProfileImageSubmit.clone(true,true).hide();
+var JCloneReglageLabelMailTel=JReglageProfileLabel.clone(true,true).text("Changer d'adresse mail ou de téléphone");
 var JCloneReglageProfileSelectTelMail=JReglageProfileSelectTelMail.clone(true,true);
 var JCloneReglageProfileInputTelMail=JReglageProfileInputTelMail.clone(true,true).hide();
 var JCloneReglageProfileSubmitTelMail=JReglageProfileSubmitTelMail.clone(true,true).hide();
+var JCloneReglageLabelTag=JReglageProfileLabel.clone(true,true).text("Ajouter un Tag");
 var JCloneReglageProfileTagSelect=JReglageProfileTagSelect.clone(true,true);
 var JCloneReglageProfileTagSubmit=JReglageProfileTagSubmit.clone(true,true).hide();
 
 
 
-JCloneReglageProfile.append([JCloneReglageProfileImage,JCloneReglageProfileImageSubmit,JCloneReglageProfileSelectTelMail,JCloneReglageProfileInputTelMail,JCloneReglageProfileSubmitTelMail,JCloneReglageProfileTagSelect,JCloneReglageProfileTagSubmit]);
+JCloneReglageProfile.append([JCloneReglageLabel,JCloneReglageChangerImage,JCloneReglageProfileImage,JCloneReglageProfileImageSubmit,JCloneReglageLabelMailTel,JCloneReglageProfileSelectTelMail,JCloneReglageProfileInputTelMail,JCloneReglageProfileSubmitTelMail,JCloneReglageLabelTag,JCloneReglageProfileTagSelect,JCloneReglageProfileTagSubmit]);
 
 
 $("#page").append(JCloneReglageProfile);
