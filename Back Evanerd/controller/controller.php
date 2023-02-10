@@ -701,7 +701,20 @@ function listAgendaEventCalls($data, $idTabs, $authKey) {
 }
 
 function postAgenda($data, $queryString, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+    if($authKey) {
+        $uidConn = validUser(authToId($authKey));
+        //TODO : faire les permissions
+        //TODO : ajouter l'uid
+        if($title = validString(htmlspecialchars(valider("title", $queryString)), 30, 1))
+        if($extra = valider("type", $queryString)) {
+            $extra = ($extra == "intra") ? 0 : 1;
+            $aid = insertAgenda($title, $extra, $uidConn);
+            $data["agenda"] = ["id"=>$aid, "title" => $title, "extra" => $extra];
+            sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+        }
+        sendError("Requête invalide !", HTTP_BAD_REQUEST);
+    }
+    sendError("Vous être identifié !", HTTP_UNAUTHORIZED);
 }
 
 function postAgendasEvent($data, $idTabs, $queryString, $authKey) {
