@@ -752,29 +752,6 @@ function listParticipations($data, $idTabs, $authKey) {
     sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
 
-function postParticipations($data, $idTabs, $queryString, $authKey) {
-    if($authKey) {
-        $aid = $idTabs[0];
-        $eid = $idTabs[1];
-        $uidConn = validUser(authToId($authKey));
-        // Vérifier les droits de l'utilisateur connecté (droit de lecture !)
-        $agendasData = selectCalendar($uidConn, $aid);
-        // Vérifier que la querystring envoie les 3 caractères possibles
-        $participation = validString(valider("answer", $queryString), 1, 1);
-        if(!$participation) sendError("Il faut spécifier la réponse !", HTTP_FORBIDDEN);
-        // Si l'utilisateur ne peut pas voir l'évenement
-        if(!$agendasData) sendError("Vous n'avez pas les permissions !", HTTP_UNAUTHORIZED);
-        // Vérifier que l'utilisateur n'a pas déjà donnée une réponse
-        if(selectParticipations($eid, $uidConn)) sendError("Vous avez déjà répondu !", HTTP_FORBIDDEN);
-        insertParticipation($uidConn, $eid, $participation);
-        $data["agendasId"] = $aid;
-        $data["eventId"] = $eid;
-        $data["participaiton"] = selectParticipations($eid, $uidConn)[0]["participation"];
-        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);           
-    }
-    sendError("Vous devez vous identifier !", HTTP_UNAUTHORIZED);
-}
-
 function getUserRoles($data, $idTabs) {
     $uid = validUser($idTabs[0]);
     if(!selectUser($uid)) sendError("Cet utilisateur n'existe pas !", HTTP_FORBIDDEN);
@@ -857,7 +834,7 @@ function postPost($data, $authKey,$queryString) {
         if($content = validString(valider("content"), 300, 0));
         if(($pinned = valider("visible", $queryString)) !== false)
         if(($visible = valider("pinned", $queryString)) !== false)
-        if($_FILES["banner"]) {
+        if(isset($_FILES["banner"])) {
             if(!is_dir($dir)) mkdir($dir);
             $imageInfo = uploadImage("$dir/image", $_FILES["banner"]);
             if($imageInfo["code"] != 1 )  sendError($imageInfo["message"], HTTP_BAD_REQUEST);
@@ -926,7 +903,20 @@ function postPostPinned($data, $idTabs, $authKey) { // A TESTER
 
 
 function postEventParticipations($data, $idTabs, $queryString, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+    if($authKey) {
+        $uidConn = validUser(authToId($authKey));
+        $eid = $idTabs[0];
+        $event = selectEvent($eid, "extra");
+        if(!$event) sendError("Vous ne pouvez répondre à cette événement !", HTTP_FORBIDDEN);
+        if(selectParticipations($eid, $uidConn)) sendError("Vous avez déjà répondu !", HTTP_FORBIDDEN);
+        $participation = validString(valider("participation", $queryString), 1, 1);
+        if($participation != "y" && $participation != "n" && $participation != "j")
+            $participation = "n";
+        insertParticipation($uidConn, $eid, $participation);
+        $data["participation"] = ["uid" => $uidConn, "participation" => $participation, "eid" => $eid];
+        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+    }
+    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
 
 function postEventCalls($data, $idTabs, $queryString, $authKey) {
@@ -942,7 +932,16 @@ function listEventCalls($data, $idTabs, $authKey) {
 }
 
 function listEvent($data, $queryString, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+    if($authKey) {
+        $uidConn = validUser(authToId($authKey));
+        $type = valider("extra", $queryString);
+        if(!$type) $type = "extra";
+        //TODO : coder la requête SQL
+        $agendaEvents = selectEvents(null, $uidConn, $type);
+        $data["events"] = $agendaEvents;
+        sendResponse($data, [getStatusHeader()]);
+    }
+    sendError("Vous devez vous identifier", HTTP_UNAUTHORIZED);
 }
 
 function postAgendasPermissions($data, $idTabs, $queryString, $authKey) {

@@ -702,4 +702,26 @@ function insertAgenda($title, $extra, $uid) {
 
     return $db->SQLInsert($sql, $params);
 }
+
+function selectEvent($eid, $type) {
+    //TODO : refacto
+    $db = Config::getDatabase();
+    $params = [$eid];
+    if($type == "extra") {
+        $sql = "SELECT Agenda_Events.*
+        FROM Agenda_Events JOIN Agendas ON Agendas.id = Agenda_Events.aid
+        WHERE Agenda_Events.id = ? AND Agendas.extra = 1 
+            AND DATE(Agenda_Events.endDate) >= DATE(CURRENT_DATE);";
+        
+    }
+    else {
+        $sql = "SELECT DISTINCT Agenda_Events.*, MAX(Agenda_perms.read) AS `read`, MAX(Agenda_perms.write) AS `write`
+                FROM Agenda_Events JOIN Agendas ON Agendas.id = Agenda_Events.aid
+                JOIN Agenda_Perms ON Agenda_Perms.aid = Agendas.id JOIN User_Roles ON User_Roles.rid = Agenda_Perms.rid
+                WHERE Agenda_Events.id = ? AND Agendas.extra = 0 
+                AND DATE(Agenda_Events.endDate) >= DATE(CURRENT_DATE);";
+    }
+    return Database::parcoursRs($db->SQLSelect($sql, $params));
+}
+
 ?>

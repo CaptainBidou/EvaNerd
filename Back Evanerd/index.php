@@ -149,7 +149,7 @@ switch($action) {
         postMessageReactions($data, $idTabs, $authKey, $queryString);
         break;
 
-    case "POST groups/ID/messages/ID/pinned":
+    case "POST /groups/ID/messages/ID/pinned":
         postPostPinned($data, $idTabs, $authKey);
         break;
     
@@ -218,12 +218,8 @@ switch($action) {
         break;
     /* Participation */
 
-    case "GET agendas/ID/events/ID/participations":
+    case "GET /agendas/ID/events/ID/participations":
         listParticipations($data, $idTabs, $authKey);
-        break;
-
-    case "POST /agendas/ID/events/ID/participations":
-        postParticipations($data, $idTabs, $queryString, $authKey);
         break;
     
     default:
