@@ -673,33 +673,6 @@ function listAgendaEvents($data, $idTabs, $authKey) {
     sendError("Vous devez vous identifier", HTTP_UNAUTHORIZED);
 }
 
-function listAgendaEventCalls($data, $idTabs, $authKey) {
-    if($authKey) {
-        $i = 0;
-        $uidConn = validUser(authToId($authKey));
-        $aid = $idTabs[0];
-        $eid = $idTabs[1];
-        $rolesConn = selectUserRoles($uidConn);
-        if(!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
-
-        $data["agendasId"] = $aid;
-        $data["eventId"] = $eid;
-        $data["calls"] = array();
-        $callsData = selectCallMembers($eid);
-        foreach($callsData as $calls) {
-            $data["calls"][$i]["user"] = array("uid" => $calls["uid"], "firstName" => $calls["firstName"], "lastName" => $calls["lastName"]);
-            $data["calls"][$i]["present"] = $calls["present"];
-            if(!$calls["present"]) {
-                $data["calls"][$i]["reason_desc"] = $calls["reason_desc"];
-            }
-            $i++;
-
-        }
-        sendResponse($data, [getStatusHeader()]);
-    }
-    sendError("Il faut vous identifier", HTTP_UNAUTHORIZED);
-}
-
 function postAgenda($data, $queryString, $authKey) {
     if($authKey) {
         $uidConn = validUser(authToId($authKey));
@@ -923,6 +896,7 @@ function postEventCalls($data, $idTabs, $queryString, $authKey) {
     if($authKey) {
         $uidConn = validUser(authToId($authKey));
         $eid = $idTabs[0];
+        //TODO : vérifier les permissions d'écriture
         $event = selectEvent($eid, "intra");
         if(!$event) sendError("Vous ne pouvez répondre à cette événement !", HTTP_FORBIDDEN);
         if(selectCallMembers($eid, $uidConn)) sendError("Vous avez déjà répondu !", HTTP_FORBIDDEN);
@@ -944,8 +918,28 @@ function listEventParticipations($data, $idTabs, $authKey) {
 }
 
 function listEventCalls($data, $idTabs, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND); 
-}
+    if($authKey) {
+        $i = 0;
+        $uidConn = validUser(authToId($authKey));
+        $eid = $idTabs[0];
+        if(!selectEvent($eid,"intra", $uidConn)[0]["read"]) sendError("Vous n'avez pas les droits !", HTTP_FORBIDDEN);
+        $data["eventId"] = $eid;
+        $data["calls"] = array();
+        $callsData = selectCallMembers($eid);
+        foreach($callsData as $calls) {
+            $data["calls"][$i]["user"] = array("uid" => $calls["uid"], "firstName" => $calls["firstName"], "lastName" => $calls["lastName"]);
+            $data["calls"][$i]["present"] = $calls["present"];
+            if(!$calls["present"]) {
+                $data["calls"][$i]["reason_desc"] = $calls["reason_desc"];
+            }
+            $i++;
+
+        }
+        sendResponse($data, [getStatusHeader()]);
+    }
+    sendError("Il faut vous identifier", HTTP_UNAUTHORIZED);
+} 
+
 
 function listEvent($data, $queryString, $authKey) {
     if($authKey) {

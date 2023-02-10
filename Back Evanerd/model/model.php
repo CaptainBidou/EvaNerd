@@ -708,10 +708,11 @@ function insertAgenda($title, $extra, $uid) {
     return $db->SQLInsert($sql, $params);
 }
 
-function selectEvent($eid, $type) {
+function selectEvent($eid, $type, $uid = null) {
     //TODO : refacto
     $db = Config::getDatabase();
     $params = [$eid];
+    $sqlUid = "";
     if($type == "extra") {
         $sql = "SELECT Agenda_Events.*
         FROM Agenda_Events JOIN Agendas ON Agendas.id = Agenda_Events.aid
@@ -720,11 +721,15 @@ function selectEvent($eid, $type) {
         
     }
     else {
+        if($uid) {
+            array_push($params, $uid);
+            $sqlUid = " AND User_Roles.uid = ?";
+        }
         $sql = "SELECT DISTINCT Agenda_Events.*, MAX(Agenda_perms.read) AS `read`, MAX(Agenda_perms.write) AS `write`
                 FROM Agenda_Events JOIN Agendas ON Agendas.id = Agenda_Events.aid
                 JOIN Agenda_Perms ON Agenda_Perms.aid = Agendas.id JOIN User_Roles ON User_Roles.rid = Agenda_Perms.rid
                 WHERE Agenda_Events.id = ? AND Agendas.extra = 0 
-                AND DATE(Agenda_Events.endDate) >= DATE(CURRENT_DATE);";
+                AND DATE(Agenda_Events.endDate) >= DATE(CURRENT_DATE) $sqlUid;";
     }
     return Database::parcoursRs($db->SQLSelect($sql, $params));
 }
