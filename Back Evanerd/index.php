@@ -171,7 +171,6 @@ switch($action) {
         break;
     
     /* Agendas */
-
     case "GET /agendas":
         listAgendas($data, $queryString, $authKey);
         break;
@@ -179,19 +178,44 @@ switch($action) {
     case "GET /agendas/ID/events":
         listAgendaEvents($data, $idTabs, $authKey);
         break;
-
+    /*
     case "GET /agendas/ID/events/ID/calls":
         listAgendaEventCalls($data, $idTabs, $authKey);
         break;
-    
+    */
+
     case "POST /agendas":
         postAgenda($data, $queryString, $authKey);
+        break;
+
+    case "POST /agendas/ID/permissions":
+        postAgendasPermissions($data, $idTabs, $queryString, $authKey);
         break;
 
     case "POST /agendas/ID/events":
         postAgendasEvent($data, $idTabs, $queryString, $authKey);
         break;
+    
+    /* Event */
+    case "GET /events/":
+        listEvent($data, $queryString, $authKey);
+        break;
 
+    case "GET /events/ID/calls":
+        listEventCalls($data, $idTabs, $authKey);
+        break;
+
+    case "GET /events/ID/participations":
+        listEventParticipations($data, $idTabs, $authKey);
+        break;
+    
+    case "POST /events/ID/calls";
+        postEventCalls($data, $idTabs, $queryString, $authKey);
+        break;
+
+    case "POST /events/ID/participations":
+        postEventParticipations($data, $idTabs, $queryString, $authKey);
+        break;
     /* Participation */
 
     case "GET agendas/ID/events/ID/participations":
