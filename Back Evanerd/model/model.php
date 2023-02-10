@@ -1,9 +1,5 @@
 <?php
-
-use function PHPSTORM_META\type;
-
 include_once("includes/Config.php");
-
 
 function phoneToUid($tel) {
     $db = Config::getDatabase();
@@ -193,52 +189,6 @@ function updateUser($idUser,$mail = false,$tel = false,$age = false,$studies = f
             
     return $db->SQLUpdate($sql, $params);
 }
-/*
-function deleteUser($idUser){
-    $db = Config::getDatabase();
-
-    $user = getUser($idUser);
-
-    $Tabpid = getPostIds($idUser);
-
-    Suppression des posts concernant l'utilisateur et des commentaires et réaction de ces posts 
-    foreach($Tabpid as $post){
-        $params = [$post];
-        // Suppression Likes de Posts
-        $sql = "DELETE * FROM Post_Likes WHERE pid = ?";
-        $db->SQLDelete($sql, $params);
-
-        // Suppression Commentaires des Posts de l'utilisateur
-        $sql = "DELETE * FROM Post_Commentaires WHERE pid = ?";
-        $db->SQLDelete($sql, $params);
-
-        // Suppression des Reactions aux Posts de l'utilisateur 
-        $sql = "DELETE * FROM Post_Commentaires WHERE pid = ?";
-        $db->SQLDelete($sql, $params);
-
-    }
-
-    $params = [$idUser];
-
-    // Suppression Likes posts de l'utilisateur
-    $sql = "DELETE * FROM Post_Likes WHERE uid = ?";
-    $db->SQLDelete($sql, $params);
-    
-    // Suppression Commentaires Posts de l'utilisateur
-    $sql = "DELETE * FROM Post_Commentaires WHERE uid = ?";
-    $db->SQLDelete($sql, $params);
-    
-    // Suppression des Reactions Posts de l'utilisateur 
-    $sql = "DELETE * FROM Post_Commentaires WHERE uid = ?";
-    $db->SQLDelete($sql, $params);
-
-    // Suppression des Posts de l'utilisateur 
-    $sql = "DELETE * FROM Posts WHERE uid = ?";
-    $db->SQLDelete($sql, $params);
-
-    /************************************************************************************************/
-    /* Suppression des posts concernant l'utilisateur et des commentaires et réaction de ces posts 
-}*/
 
 function insertUser($firstname,$lastname,$mail,$tel,$password,$age,$confirmToken,$studies = "" , $sex = 0, $image = "default.png"){
     $db = Config::getDatabase();
@@ -690,7 +640,7 @@ function liked($pid, $uid, $liked){
     return $db->SQLUpdate($sql, $param);
 }
 
-function insertPost($title, $content, $image, $pinned, $visible, $author) {
+function insertPost($content, $image, $pinned, $visible, $author) {
     $db = Config::getDatabase();
     $param = [$author, $content, $image, $pinned, $visible];
     $sql = "INSERT INTO Posts(author, content, banner, pinned, visible) VALUES (?,?,?,?,?);";
@@ -744,4 +694,12 @@ function deleteGroupMessageReaction($mid, $uid, $emoji) {
     return $db->SQLDelete($sql, $params);
 }
 
+function insertAgenda($title, $extra, $uid) {
+    //TODO : ajouter l'uid
+    $db = Config::getDatabase();
+    $params = [$title, $extra];
+    $sql = "INSERT INTO Agendas(title, extra) VALUES (?,?);";
+
+    return $db->SQLInsert($sql, $params);
+}
 ?>
