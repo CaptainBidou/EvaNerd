@@ -220,7 +220,7 @@ function JcreerPost(Reponse,membre){
     var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner);
     var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
     jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
-    var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.author.photo);
+    var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.author.photo).attr("id-profile",Reponse.author.id);
 
     var jClonePost2=JPost.clone(true,true).addClass("fixed-banner");
     var jClonePostBody2=JPostBody.clone(true,true);
@@ -343,7 +343,7 @@ function JcreerHeader(Reponse){
 
 
     if(Reponse.photo!=null){
-        var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.photo);
+        var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.photo).attr("id-profile",Reponse.id);
     }
     else{
         var JCloneHeaderProfile=null;
@@ -922,7 +922,7 @@ function JCreerMessageParticipant(Reponse,div,rep)
     return;
     }
 
-    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo);
+    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo).attr("id-profile",Reponse.author.id);
     
     var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true).attr("id_message",Reponse.id);
    
@@ -971,7 +971,7 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
     $(div).append(JCloneMessageActifDiv);
     return;
     }
-    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo);
+    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo).attr("id-profile",Reponse.author.id);
     if(rep==2)
     {   JCloneMessageActifDiv.addClass("Commentaire-message-layout");
    JCloneMessageActifDiv.attr("reference", JCloneMessageActifDiv.attr("id"));
