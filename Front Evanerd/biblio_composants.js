@@ -21,7 +21,7 @@ var JPostDescription=$("<p>").addClass(["post-description", "card-text"]).data('
 var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle']).data("type","post_profile");//TODO :rajouter des données pour quand on clique
 var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').on("click",function(context){JclickEpingle(context.target);});
 var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png').on("click",function(context){JClickLike(context.target);});
-var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png');
+var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png').on("click",function(context){JCreerReactionLayout(context.target);});
 var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts();});
 
 //variables pour le footer
@@ -175,6 +175,14 @@ var JCommentairesCroix=$("<img>").addClass("commentaires-cross").attr("src","Res
 var JCommentaireInput=$("<textarea>").attr('type','text').addClass("form-control Commentaire-Input").attr("placeholder","Votre commentaire");
 var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerCommentaire(context.target);});
 var JCommentaireDown=$("<div>").addClass("Commentaire-Down");
+
+
+
+// varuables pour les reactions des posts
+var JReaction=$("<div>").addClass("Reaction");
+var JReactionUp=$("<div>").addClass("Reaction-Up");
+var JReactionMiddle=$("<div>").addClass("Reaction-Mid");
+var JReactionCroix=$("<img>").addClass("Reaction-cross").attr("src","Ressources/Accueil/croix.png").on("click",function(){$(".card").css("filter","blur(0)");$(".Reaction").remove();})
 
 
 /************************************************************************/
@@ -1174,15 +1182,16 @@ JCloneCommentaireDown.append([JCloneCommentaireSend,JCloneCommentaireInput]);
 JCloneCommentaires.append([JCloneCommentaireUp,JCloneCommentairesMiddle,JCloneCommentaireDown]);
 
 
-
-
+JCloneCommentaires.hide();
+$(".commentaires").css("filter","blur(0px)");
+$(".commentaires-layout-message").css("filter","blur(0px)");
 
 
 
 
 $("#page").append(JCloneCommentaires);
 
-
+JCloneCommentaires.fadeIn(1000);
 
 
 
@@ -1203,4 +1212,21 @@ function JClickLike(target){
 
 
 
+}
+
+
+function JCreerReactionLayout(Reponse){
+
+
+    $(".card").css("filter","blur(20px)")
+var JCloneReactionUp=JReactionUp.clone(true,true);
+var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
+var JCloneReactionCroix=JReactionCroix.clone(true,true);
+var JCloneReaction =JReaction.clone(true,true);
+
+JCloneReactionUp.append(JCloneReactionCroix);
+JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle]);
+JCloneReaction.hide();
+$("#page").append(JCloneReaction);
+JCloneReaction.fadeIn(1000);
 }
