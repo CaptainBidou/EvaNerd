@@ -13,6 +13,8 @@
 
 
 <script>
+
+
     var Reponse={
                  'firstName':'Jean',
                  'lastName':'Michel',
@@ -27,7 +29,7 @@
                 'pourcentage':'85',
                 'tag':[{"nom":"Haut bois","couleur":"blue"},{"nom":"Chant","couleur":"purple"},{"nom":"ocarina","couleur":"green"},{"nom":"CA","couleur":"red"}],
                 'activity':[{"nom":"repetition tutti"},{"nom":"repetition haut bois"},{"nom":"repetition chant"},{"nom":"réunion CA"}],
-                
+                'id':"1",
              };
 
 
@@ -396,7 +398,7 @@ var comm={
                 "id": 1,
                 "firstName": "Lukas",
                 "lastName": "Grando",
-                "photo": "http://localhost/EvaNerd/Back Evanerd/ressources/users/1/image.jpeg"
+                "photo": "Ressources/Test/profile4.png"
             },
             "content": "Super ce post !",
             "pinned": 0,
@@ -408,7 +410,103 @@ var comm={
                 "id": 2,
                 "firstName": "Tomas",
                 "lastName": "Treny",
-                "photo": "http://localhost/EvaNerd/Back Evanerd/ressources/users/2/default.png"
+                "photo": "Ressources/Test/profile4.png"
+            },
+            "content": "ratio",
+            "pinned": 1,
+            "answerTo": 1
+        },
+        {
+            "id": 1,
+            "author": {
+                "id": 1,
+                "firstName": "Lukas",
+                "lastName": "Grando",
+                "photo": "Ressources/Test/profile4.png"
+            },
+            "content": "Super ce post !",
+            "pinned": 0,
+            "answerTo": null
+        },
+        {
+            "id": 2,
+            "author": {
+                "id": 2,
+                "firstName": "Tomas",
+                "lastName": "Treny",
+                "photo": "Ressources/Test/profile4.png"
+            },
+            "content": "ratio",
+            "pinned": 1,
+            "answerTo": 1
+        },
+        {
+            "id": 1,
+            "author": {
+                "id": 1,
+                "firstName": "Lukas",
+                "lastName": "Grando",
+                "photo": "Ressources/Test/profile4.png"
+            },
+            "content": "Super ce post !",
+            "pinned": 0,
+            "answerTo": null
+        },
+        {
+            "id": 2,
+            "author": {
+                "id": 2,
+                "firstName": "Tomas",
+                "lastName": "Treny",
+                "photo": "Ressources/Test/profile4.png"
+            },
+            "content": "ratio",
+            "pinned": 1,
+            "answerTo": 1
+        },
+        {
+            "id": 1,
+            "author": {
+                "id": 1,
+                "firstName": "Lukas",
+                "lastName": "Grando",
+                "photo": "Ressources/Test/profile4.png"
+            },
+            "content": "Super ce post !",
+            "pinned": 0,
+            "answerTo": null
+        },
+        {
+            "id": 2,
+            "author": {
+                "id": 2,
+                "firstName": "Tomas",
+                "lastName": "Treny",
+                "photo": "Ressources/Test/profile4.png"
+            },
+            "content": "ratio",
+            "pinned": 1,
+            "answerTo": 1
+        },
+        {
+            "id": 1,
+            "author": {
+                "id": 1,
+                "firstName": "Lukas",
+                "lastName": "Grando",
+                "photo": "Ressources/Test/profile4.png"
+            },
+            "content": "Super ce post !",
+            "pinned": 0,
+            "answerTo": null
+        },
+        {
+            "id": 2,
+            "author": {
+                "id": 2,
+                "firstName": "Tomas",
+                "lastName": "Treny",
+                "photo": "Ressources/Test/profile4.png"
             },
             "content": "ratio",
             "pinned": 1,
@@ -441,7 +539,7 @@ $(document).ready(function(){
 JCreerConcert(concert);
 JCreerConcert(concert);*/
 
-
+//JCreerMessage(conv2);
 
 
 //JCreerConnexion();
@@ -455,7 +553,7 @@ JcreerHeader(Reponse);
 
 //JCreerMessage(conv2);
 
-
+//JCreerProfile(Reponse);
 
 AfficherAccueil();
 //AfficherAccueil();
@@ -487,10 +585,32 @@ JCreerAppel(appel);*/
 
 JcreerFooter(Reponse);
 
+
+
+
+
 });
+function AfficherProfile(target){
+    //appel ajax pour récupérer les infos du profil
+
+
+    var idProfile=$(target).attr("id-profile");
+    console.log(idProfile);
+    $("#page").empty();
+    JCreerProfile(Reponse);
+}
+
+function CommentairesPosts(){
+
+    JCreerCommentaireLayout(comm);
+
+
+}
+
+
 
 function JRecupMessages(){
-
+    $("#page").empty();
     JCreerMessage(conv2);
 }
 
@@ -519,6 +639,8 @@ for(i; i<posts.posts.length;i++)
 
 
 }
+
+
 
 
 

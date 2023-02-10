@@ -18,11 +18,11 @@ var JPostTitre=$("<h2>").addClass(["post-titre","card-title"]).data('type','post
 var JPostBody=$("<div>").addClass("card-body").data('type','post_body');
 var JPostImage=$("<img>").addClass("card-img-top").data('type','post_image');
 var JPostDescription=$("<p>").addClass(["post-description", "card-text"]).data('type','post_text');
-var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle']).data("type","post_profile");//TODO :rajouter des données pour quand on clique
+var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle','profile']).data("type","post_profile").on("click",function(context){AfficherProfile(context.target);});//TODO :rajouter des données pour quand on clique
 var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').on("click",function(context){JclickEpingle(context.target);});
-var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png');
-var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png');
-var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%');
+var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png').on("click",function(context){JClickLike(context.target);});
+var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png').on("click",function(context){JCreerReactionLayout(context.target);});
+var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts();});
 
 //variables pour le footer
 var JFooter =$("<nav>").addClass(["footer","navbar"]).data("type","footer").on("click",function(context){JClickFooter(context);});
@@ -35,7 +35,7 @@ var JFooterMail=$("<img>").addClass(["footer-icon", "left"]).data("type","footer
 //variables pour le header
 var JHeader =$("<nav>").addClass(["navbar", "header"]).data("type","header");
 var JHeaderLogo = $("<img>").addClass(["rounded-circle", "left", "header-icon"]).data("type","header_logo").attr('src','Ressources/Header/logo.png');//TODO :rajouter des données pour quand on clique 
-var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon"]).data("type","header_profile");//TODO :rajouter des données pour quand on clique 
+var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon",'profile']).on("click",function(context){AfficherProfile(context.target);}).data("type","header_profile");//TODO :rajouter des données pour quand on clique 
 var JHeaderTag=$("<button>").addClass(["btn btn-primary dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie");
 var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu');
 var JHeaderItem=$("<input>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").attr("type","checkbox").data("type",'header_item');
@@ -129,7 +129,7 @@ var JMessageDown=$("<div>").addClass("Message-Down");
 
 //variables pour les messages créé par des participants
 var JMessageParticipantDiv=$("<div>").addClass("Participant-Div");
-var JMessageParticipantProfile=$("<img>").addClass("Participant-Profile rounded-circle");
+var JMessageParticipantProfile=$("<img>").addClass("Participant-Profile rounded-circle profile").on("click",function(context){AfficherProfile(context.target);});
 var JMessageParticipantTitre=$("<p>").addClass("Participant-Titre");
 var JMessageParticipantRep=$("<img>").addClass("Participant-Rep").attr("src","Ressources/Message/rep.png").on("click",function(context){JclickRep(context.target);});
 var JMessageParticipantEpingle=$("<img>").addClass("Participant-Epingle").attr("src","Ressources/Message/epingle.png").on("click",function(context){JclickEpingle(context.target);});
@@ -162,6 +162,28 @@ var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger Reglage-Me
 var JReglageMessagePerson=$("<input>").addClass("form-control Message-Personne-Reglage").attr("type","text").attr("placeholder","Nom de la personne");
 var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Personne").on("click",function(context){});
 var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
+
+
+
+
+
+//VARRIABLES pour les comms des posts
+var JCommentaires = $("<div>").addClass("commentaires");
+var JCommentairesUp=$("<div>").addClass("commentaires-Up");
+var JCommentairesMiddle=$("<div>").addClass("commentaires-Mid");
+var JCommentairesCroix=$("<img>").addClass("commentaires-cross").attr("src","Ressources/Accueil/croix.png").on("click",function(){$(".card").css("filter","blur(0)");$(".commentaires").remove();})
+var JCommentaireInput=$("<textarea>").attr('type','text').addClass("form-control Commentaire-Input").attr("placeholder","Votre commentaire");
+var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerCommentaire(context.target);});
+var JCommentaireDown=$("<div>").addClass("Commentaire-Down");
+
+
+
+// varuables pour les reactions des posts
+var JReaction=$("<div>").addClass("Reaction");
+var JReactionUp=$("<div>").addClass("Reaction-Up");
+var JReactionMiddle=$("<div>").addClass("Reaction-Mid");
+var JReactionCroix=$("<img>").addClass("Reaction-cross").attr("src","Ressources/Accueil/croix.png").on("click",function(){$(".card").css("filter","blur(0)");$(".Reaction").remove();})
+
 
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
@@ -198,9 +220,9 @@ function JcreerPost(Reponse,membre){
     var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner);
     var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
     jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
-    var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.author.photo);
+    var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.author.photo).attr("id-profile",Reponse.author.id);
 
-    var jClonePost2=JPost.clone(true,true);
+    var jClonePost2=JPost.clone(true,true).addClass("fixed-banner");
     var jClonePostBody2=JPostBody.clone(true,true);
 
 
@@ -321,7 +343,7 @@ function JcreerHeader(Reponse){
 
 
     if(Reponse.photo!=null){
-        var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.photo);
+        var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.photo).attr("id-profile",Reponse.id);
     }
     else{
         var JCloneHeaderProfile=null;
@@ -851,9 +873,9 @@ function JCreerMessage(Reponse){
     $("#page").append(JCloneMessage);
     JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
     $("#page").append(JCloneMessageDown);
-    var i;
+    var i=0;
     console.log(Reponse.messages.length);
-var j;
+var j=0;
     for(i=0;i<Reponse.messages.length;i++)
     {
         if(Reponse.messages[i].answerTo!=null)
@@ -900,7 +922,7 @@ function JCreerMessageParticipant(Reponse,div,rep)
     return;
     }
 
-    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo);
+    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo).attr("id-profile",Reponse.author.id);
     
     var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true).attr("id_message",Reponse.id);
    
@@ -949,6 +971,18 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
     $(div).append(JCloneMessageActifDiv);
     return;
     }
+    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo).attr("id-profile",Reponse.author.id);
+    if(rep==2)
+    {   JCloneMessageActifDiv.addClass("Commentaire-message-layout");
+   JCloneMessageActifDiv.attr("reference", JCloneMessageActifDiv.attr("id"));
+   JCloneMessageActifDiv.attr("id","");
+   $(div).append(JCloneMessageActifProfile);
+    JCloneMessageActifDiv.append([JCloneMessageActifTitre,JCloneMessageActifContent]);
+    $(div).append(JCloneMessageActifDiv);
+    return;
+    }
+
+
 
     if(div.data("type")=="layout")
     {   JCloneMessageActifDiv.addClass("messages-layout-pinned");
@@ -956,7 +990,7 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
     $(div).append(JCloneMessageActifDiv);
     return;
     }
-    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo);
+    
     
     var JCloneMessageActifRep=JMessageActifRep.clone(true,true).attr("id_message",Reponse.id);
     var JCloneMessageActifEpingle=JMessageActifEpingle.clone(true,true).attr("id_message",Reponse.id);
@@ -1116,3 +1150,96 @@ $(".Reglage-Message-Layout").animate({left: '25%'});
 
 }
 
+function JCreerCommentaireLayout(Reponse){
+
+
+var JCloneCommentaireUp=JCommentairesUp.clone(true,true);
+var JCloneCommentairesMiddle=JCommentairesMiddle.clone(true,true);
+
+$(".card").css("filter","blur(20px)");
+var JCloneCommentairesCroix=JCommentairesCroix.clone(true,true);
+var JCloneCommentaires =JCommentaires.clone(true,true).css("filter","blur(0)");
+
+
+JCloneCommentaireUp.append(JCloneCommentairesCroix);
+
+var i;
+for(i=0;i<Reponse.comments.length;i++)
+{
+
+    JCreerMessageActif(Reponse.comments[i],JCloneCommentairesMiddle,"lightblue",2);
+
+}
+var JCloneCommentaireInput=JCommentaireInput.clone(true,true);
+var JCloneCommentaireSend=JCommentaireSend.clone(true,true);
+var JCloneCommentaireDown=JCommentaireDown.clone(true,true);
+
+
+
+JCloneCommentaireDown.append([JCloneCommentaireSend,JCloneCommentaireInput]);
+
+
+JCloneCommentaires.append([JCloneCommentaireUp,JCloneCommentairesMiddle,JCloneCommentaireDown]);
+
+
+JCloneCommentaires.hide();
+$(".commentaires").css("filter","blur(0px)");
+$(".commentaires-layout-message").css("filter","blur(0px)");
+
+
+
+
+$("#page").append(JCloneCommentaires);
+
+JCloneCommentaires.fadeIn(1000);
+
+
+
+
+}
+
+
+
+
+function JClickLike(target){
+    if($(target).attr("src")=="Ressources/Accueil/like.png")
+    { 
+    $(target).attr("src","Ressources/Accueil/likeBlanc.png");}
+    
+    else
+    {//TODO RAJOUTER ANIMATION
+    $(target).attr("src","Ressources/Accueil/like.png");}
+
+
+
+}
+
+
+function JCreerReactionLayout(Reponse){
+
+
+    $(".card").css("filter","blur(20px)")
+var JCloneReactionUp=JReactionUp.clone(true,true);
+var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
+var JCloneReactionCroix=JReactionCroix.clone(true,true);
+var JCloneReaction =JReaction.clone(true,true);
+
+JCloneReactionUp.append(JCloneReactionCroix);
+JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle]);
+JCloneReaction.hide();
+$("#page").append(JCloneReaction);
+JCloneReaction.fadeIn(1000);
+}
+
+
+
+function JClickProfile(){
+
+
+
+
+
+
+
+
+}
