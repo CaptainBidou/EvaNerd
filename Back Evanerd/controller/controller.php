@@ -815,7 +815,7 @@ function postMessageReactions($data, $idTabs, $authKey, $queryString) {
             $msg = selectGroupMessage($mid, $gid);
             $reac = selectGroupReaction($mid, $uidConn, $emoji);
             $data["reaction"] = ["uid" => $uidConn, "mid" => $mid];
-
+            if(haveGroupPermission($uidConn, $gid)) sendError("VOus n'avez pas les permissions !", HTTP_FORBIDDEN);
             if(!$msg) sendError("Ce message n'existe pas !", HTTP_BAD_REQUEST);
             $data["groupId"] = $gid;
             $data["messageId"] = $mid;
@@ -841,7 +841,6 @@ function postPost($data, $authKey,$queryString) {
         $dir = DIR_POSTS . $newId;
         $uidConn = validUser(authToId($authKey));
         if(searchRole("Non Membre", selectUserRoles($uidConn))) sendError("Vous n'avez pas la permission !", HTTP_UNAUTHORIZED);
-        if($title = validString(valider("title", $queryString), 70, 3))
         if($content = validString(valider("content"), 300, 0));
         if(($pinned = valider("visible", $queryString)) !== false)
         if(($visible = valider("pinned", $queryString)) !== false)
@@ -850,7 +849,7 @@ function postPost($data, $authKey,$queryString) {
             $imageInfo = uploadImage("$dir/image", $_FILES["banner"]);
             if($imageInfo["code"] != 1 )  sendError($imageInfo["message"], HTTP_BAD_REQUEST);
             $image = basename($imageInfo["filename"]);
-            $pid = insertPost($title, $content, $image, $pinned, $visible, $uidConn);
+            $pid = insertPost($content, $image, $pinned, $visible, $uidConn);
             $data["post"] = selectPost($pid)[0];
             sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
         }
@@ -911,3 +910,29 @@ function postPostPinned($data, $idTabs, $authKey) { // A TESTER
     }
     sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
+
+
+function postEventParticipations($data, $idTabs, $queryString, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+}
+
+function postEventCalls($data, $idTabs, $queryString, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);  
+}
+
+function listEventParticipations($data, $idTabs, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);  
+}
+
+function listEventCalls($data, $idTabs, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND); 
+}
+
+function listEvent($data, $queryString, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+}
+
+function postAgendasPermissions($data, $idTabs, $queryString, $authKey) {
+    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+}
+
