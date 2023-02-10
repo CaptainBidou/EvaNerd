@@ -920,7 +920,23 @@ function postEventParticipations($data, $idTabs, $queryString, $authKey) {
 }
 
 function postEventCalls($data, $idTabs, $queryString, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);  
+    if($authKey) {
+        $uidConn = validUser(authToId($authKey));
+        $eid = $idTabs[0];
+        $event = selectEvent($eid, "intra");
+        if(!$event) sendError("Vous ne pouvez répondre à cette événement !", HTTP_FORBIDDEN);
+        if(selectCallMembers($eid, $uidConn)) sendError("Vous avez déjà répondu !", HTTP_FORBIDDEN);
+        if(($present = valider("present", $queryString)) !== false) {
+            $reason_desc = validString(htmlspecialchars(valider("reason")), 180, 0);
+            if(!$present && !$reason_desc) sendError("Motif obligateur en cas d'absence !", HTTP_FORBIDDEN);
+            if($present) $reason_desc = null;
+            insertCall($uidConn, $eid,$present, $reason_desc);
+            $data["call"] = ["uid" => $uidConn, "present" => $present, "eid" => $eid, "reason_desc" => $reason_desc];
+            sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+        }
+        sendError("Requête invalide !", HTTP_BAD_REQUEST);
+    }
+    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);  
 }
 
 function listEventParticipations($data, $idTabs, $authKey) {

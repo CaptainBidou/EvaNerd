@@ -576,14 +576,19 @@ function selectEvents($aid, $uid){
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
-function selectCallMembers($aeid){
+function selectCallMembers($aeid, $uid = null){
     $db = Config::getDatabase();
     $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
     $params = [$aeid];
+    $sqlUid = "";
+    if($uid) {
+        $sqlUid = " AND Agenda_Event_Calls.uid = ?";
+        array_push($params,$uid);
+    }
     $sql = "SELECT Agenda_Event_Calls.*, Users.id, Users.firstName, Users.lastName, $photo
             FROM Agenda_Event_Calls
             JOIN Users ON Users.id = Agenda_Event_Calls.uid
-            WHERE Agenda_Event_Calls.aeid = ?;";
+            WHERE Agenda_Event_Calls.aeid = ? $sqlUid;";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
@@ -724,4 +729,10 @@ function selectEvent($eid, $type) {
     return Database::parcoursRs($db->SQLSelect($sql, $params));
 }
 
+function insertCall($uid, $eid, $present, $reason_desc) {
+    $db = Config::getDatabase();
+    $params = [$uid, $eid, $present, $reason_desc];
+    $sql = "INSERT INTO Agenda_Event_Calls(uid, aeid, present, reason_desc) VALUE (?,?,?,?)";
+    $db->SQLInsert($sql, $params);
+}
 ?>
