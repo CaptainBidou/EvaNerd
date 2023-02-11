@@ -695,37 +695,6 @@ function postAgendasEvent($data, $idTabs, $queryString, $authKey) {
     sendError("Not implemented yet !", HTTP_NOT_FOUND);
 }
 
-function listAgendaEventParticipation($data, $idTabs, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);
-
-}
-
-function listParticipations($data, $idTabs, $authKey) {
-    if($authKey) {
-        $aid = $idTabs[0];
-        $eid = $idTabs[1];
-        $uidConn = validUser(authToId($authKey));
-        $agendaData = selectCalendar($uidConn, $aid);
-        if(!$agendaData) sendError("Vous n'avez pas les permissions !", HTTP_UNAUTHORIZED);
-        $data["agendasId"] = $aid;
-        $data["eventId"] = $eid;
-        $agendaData = groupby(selectParticipations($eid), "participation");
-        foreach ($agendaData as $key => $participationData) {
-            $i = 0;
-            $data["participations"][$key] = array();
-            foreach ($participationData as $agenda) {
-                $data["participations"][$key][$i]["user"] = ["id" => $agenda["uid"], "firstName" => $agenda["firstName"], "lastName" => $agenda["lastName"], "photo" => $agenda["photo"]];
-                $i++;
-            }
-        }
-        sendResponse($data, [getStatusHeader(HTTP_OK)]);
-        
-
-        
-    }
-    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
-}
-
 function getUserRoles($data, $idTabs) {
     $uid = validUser($idTabs[0]);
     if(!selectUser($uid)) sendError("Cet utilisateur n'existe pas !", HTTP_FORBIDDEN);
@@ -915,7 +884,24 @@ function postEventCalls($data, $idTabs, $queryString, $authKey) {
 }
 
 function listEventParticipations($data, $idTabs, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);  
+    if($authKey) {
+        $eid = $idTabs[0];
+        validUser(authToId($authKey));
+        $event = selectEvent($eid, "extra");
+        if(!$event) sendError("Vous n'avez pas accès à cet évenement", HTTP_FORBIDDEN);
+        $data["eventId"] = $eid;
+        $agendaData = groupby(selectParticipations($eid), "participation");
+        foreach ($agendaData as $key => $participationData) {
+            $i = 0;
+            $data["participations"][$key] = array();
+            foreach ($participationData as $agenda) {
+                $data["participations"][$key][$i]["user"] = ["id" => $agenda["uid"], "firstName" => $agenda["firstName"], "lastName" => $agenda["lastName"], "photo" => $agenda["photo"]];
+                $i++;
+            }
+        }
+        sendResponse($data, [getStatusHeader(HTTP_OK)]);
+    }
+    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
 
 function listEventCalls($data, $idTabs, $authKey) {
