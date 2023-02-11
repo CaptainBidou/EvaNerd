@@ -192,7 +192,7 @@ switch($action) {
         break;
     
     /* Event */
-    case "GET /events/":
+    case "GET /events":
         listEvent($data, $queryString, $authKey);
         break;
 
