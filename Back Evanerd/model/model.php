@@ -564,17 +564,23 @@ function selectCalendar($uid, $aid = null, $type = "intra"){
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
-// TODO : eventuellement rendre uid optionnelle
-function selectEvents($aid, $uid){
+function selectEvents($uid, $type){
+    //TODO : params pour afficher seulement les events en cours
     $db = Config::getDatabase();
-    $params = [$aid, $uid];
-    $sql = "SELECT Agenda_Events.*
+    $type = $type == "extra" ? 1 : 0;
+    $params = [$type];
+    $joinStmt = "";
+    $readPerms = "";
+    if($type == "intra") {
+        $joinStmt = "JOIN Agenda_Perms ON Agenda_Events.aid = Agenda_Perms.aid
+                     JOIN User_Roles ON User_Roles.rid = Agenda_Perms.rid";
+        $readPerms = "AND Agenda_Perms.read = 1 AND User_Roles.uid = ?;";
+        array_push($params,$uid);
+    }
+    $sql = "SELECT DISTINCT Agenda_Events.*
             FROM Agenda_Events
-            JOIN Agenda_Perms 
-            ON Agenda_Events.aid = Agenda_Perms.aid
-            JOIN User_Roles
-            ON User_Roles.rid = Agenda_Perms.rid
-            WHERE Agenda_Perms.read = 1 AND Agenda_Events.aid = ? AND User_Roles.uid = ?;";
+            JOIN Agendas ON Agendas.id = Agenda_Events.aid $joinStmt
+            WHERE Agendas.extra = ? $readPerms";
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
