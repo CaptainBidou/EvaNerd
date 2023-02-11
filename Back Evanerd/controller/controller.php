@@ -580,7 +580,7 @@ function listPosts($data, $authKey) {
         if($uidConn === false) sendError("Token invalide !", HTTP_FORBIDDEN);
         $role = selectUserRoles($uidConn);
         $notAMember = (array_search("Non Membre", array_column($role, "label")) !== false) ? 1 : 0;
-        $postData = selectPosts($notAMember);
+        $postData = selectPosts($notAMember, $uidConn);
         // On regoupe par emoji
         /*
         $reactionData = groupby(selectPostReactions(), "pid");
@@ -595,6 +595,7 @@ function listPosts($data, $authKey) {
             $data["posts"][$i]["pinned"] = $post["pinned"];
             $data["posts"][$i]["visible"] = $post["visible"];
             $data["posts"][$i]["banner"] = $post["banner"];
+            $data["posts"][$i]["liked"] = $post["liked"];
             /*
             if(isset($reactionData[$post["id"]]))
                 $data["posts"][$i]["reactions"] = $reactionData[$post["id"]];
