@@ -34,9 +34,9 @@ var JFooterMail=$("<img>").addClass(["footer-icon", "left"]).data("type","footer
 
 //variables pour le header
 var JHeader =$("<nav>").addClass(["navbar", "header"]).data("type","header");
-var JHeaderLogo = $("<img>").addClass(["rounded-circle", "left", "header-icon"]).data("type","header_logo").attr('src','Ressources/Header/logo.png');//TODO :rajouter des données pour quand on clique 
+var JHeaderLogo = $("<img>").addClass(["rounded-circle", "left", "header-icon"]).data("type","header_logo").attr('src','Ressources/Header/logo.png').on("click",function(){JCreerGreetingsLayout();});//TODO :rajouter des données pour quand on clique 
 var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon",'profile']).on("click",function(context){AfficherProfile(context.target);}).data("type","header_profile");//TODO :rajouter des données pour quand on clique 
-var JHeaderTag=$("<button>").addClass(["btn btn-danger dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie").attr("id","dropdownMenuButton").attr("data-toggle","dropdown").attr("aria-haspopup","true").attr("aria-expanded","false");
+var JHeaderTag=$("<button>").addClass(["btn btn-danger dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie").attr("id","dropdownMenuButton").attr("data-toggle","dropdown").attr("aria-haspopup","true").attr("aria-expanded","false").on("click",function(context){RolesMenu(context.target);});
 var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu').attr("aria-labelledby","dropdownMenuButton");
 var JHeaderItem=$("<a>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").data("type",'header_item').attr("href","#");
 var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher");
@@ -196,6 +196,27 @@ var JReglageProfileInputTelMail=$("<input>").addClass("form-control Reglage-Prof
 var JReglageProfileSubmitTelMail=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit Submit-Reglage-Profile-mailTel").html("Ajouter un Mail ou un Telephone");
 var JReglageProfileTagSelect=$("<select>").addClass("form-control Reglage-Profil-Select-Tag").attr("id","exampleFormControlSelect1").append($("<option>").text("Tag").addClass("option")).on("change",function(context){$(".Reglage-Profil-Input-tag").fadeIn(1000);});
 var JReglageProfileTagSubmit=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit Reglage-Profil-Input-tag").html("Ajouter un Tag").on("click",function(context){});
+
+
+
+
+//variables pour les remerciements 
+var JGreetings=$("<div>").addClass("Greetings");
+var JGreetingsParagraphe=$("<p>").addClass("Greetings-Paragraphe");
+
+
+
+//variable pour les categories
+var JCategorie=$("<div>").addClass("Categorie");
+var JCategorieSelect=$("<select>").addClass("Categorie-Select");
+var JCategorieOption=$("<option>").addClass("Categorie-Option");
+
+
+
+
+
+
+
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
@@ -1302,5 +1323,99 @@ JCloneReglageProfile.append([JCloneReglageLabel,JCloneReglageChangerImage,JClone
 $("#page").append(JCloneReglageProfile);
 JCloneReglageProfile.animate({left: '25%'});
 
+
+}
+
+
+
+
+
+function JCreerGreetingsLayout(Reponse){
+
+
+if($(".Greetings").attr("visible")=="true")
+{   
+
+    $(".Greetings").animate({right: '100%'});
+    $(".Greetings").attr("visible","false");
+    return;
+}
+if($(".Greetings").attr("visible")=="false")
+{
+    
+        $(".Greetings").animate({right: '25%'});
+        $(".Greetings").attr("visible","true");
+        return;
+}
+
+
+var JCloneGreetings=JGreetings.clone(true,true).attr("visible","true");
+
+var JCloneGreetingsParagraphe0=JGreetingsParagraphe.clone(true,true).text("Remerciements").addClass("Greetings-Titre");
+JCloneGreetings.append(JCloneGreetingsParagraphe0);
+
+
+var JCloneGreetingsParagraphe=JGreetingsParagraphe.clone(true,true).text("Design, Programmation et Graphisme par Lukas Grando, Tomás Salvado Robalo, Tomas Treny et Alexandre Fizel.");
+JCloneGreetings.append(JCloneGreetingsParagraphe);
+
+var JCloneGreetingsParagraphe2=JGreetingsParagraphe.clone(true,true).text("Projet Réalisé dans le cadre du Projet Informatique de 2ème année de IG2I Centrale Lille en 2022-2023");
+JCloneGreetings.append(JCloneGreetingsParagraphe2);
+
+var JCloneGreetingsParagraphe3=JGreetingsParagraphe.clone(true,true).text("Les icones ont été prises sur le site flaticon et réalisées par des artistes");
+JCloneGreetings.append(JCloneGreetingsParagraphe3);
+
+
+$("#page").append(JCloneGreetings);
+JCloneGreetings.animate({right: '25%'});
+
+
+
+}
+
+
+
+function JClickHeaderMenu(Reponse){
+
+
+if($(".Categorie").attr("affichage")=="true")
+{
+    $(".Categorie").attr("affichage","false");
+    $(".Categorie").hide();
+    return;
+}
+
+if($(".Categorie").attr("affichage")=="false")
+{
+    $(".Categorie").attr("affichage","true");
+    $(".Categorie").show();
+    return;
+}
+
+
+
+var JCloneCategorie=JCategorie.clone(true,true).attr("affichage","true");
+//var JCloneCategorieSelect=JCategorieSelect.clone(true,true);
+
+var i=0;
+
+for(i=0;i<Reponse.roles.length;i++)
+{
+    JAddOptionsCategorie(JCloneCategorie,Reponse.roles[i]);
+}
+
+
+
+//JCloneCategorie.append(JCloneCategorieSelect);
+$("#page").append(JCloneCategorie);
+
+
+}
+
+
+function JAddOptionsCategorie(div,Reponse){
+
+    var JCloneCategorieOption=JCategorieOption.clone(true,true);
+    JCloneCategorieOption.text(Reponse.label);
+    div.append(JCloneCategorieOption).on("click",function(){JClickHeaderMenu(null);});
 
 }
