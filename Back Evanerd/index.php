@@ -193,7 +193,7 @@ switch($action) {
     
     /* Event */
     case "GET /events":
-        listEvent($data, $queryString, $authKey);
+        listEvents($data, $queryString, $authKey);
         break;
 
     case "GET /events/ID/calls":
