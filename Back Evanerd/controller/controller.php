@@ -931,10 +931,9 @@ function listEventCalls($data, $idTabs, $authKey) {
 function listEvent($data, $queryString, $authKey) {
     if($authKey) {
         $uidConn = validUser(authToId($authKey));
-        $type = valider("extra", $queryString);
+        $type = valider("type", $queryString);
         if(!$type) $type = "extra";
-        //TODO : coder la requête SQL
-        $agendaEvents = selectEvents(null, $uidConn, $type);
+        $agendaEvents = selectEvents($uidConn, $type);
         $data["events"] = $agendaEvents;
         sendResponse($data, [getStatusHeader()]);
     }
