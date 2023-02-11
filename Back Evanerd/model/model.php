@@ -492,18 +492,20 @@ function insertGroupMessage($uid,$gid,$content,$answerTo = null){
 }
 
 
-function selectPosts($notAMember){
+function selectPosts($notAMember, $uid){
     $db = Config::getDatabase();
+    $params = [$uid];
     $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
     $banner = "CONCAT(CONCAT(\"" . getBaseLink() . "/posts/\"" . ", Posts.id), CONCAT(\"/\", Posts.banner)) AS banner";
-    $sql = "SELECT Posts.id, Posts.content, $banner, Posts.pinned, Posts.visible, Users.id AS uid, Users.firstName, Users.lastName, $photo
+    $sql = "SELECT Posts.id, Posts.content, $banner, Posts.pinned, Posts.visible, Users.id AS uid, Users.firstName, Users.lastName, $photo,IFNULL(Post_Likes.liked,0) AS liked
             FROM Posts
-            JOIN Users ON Users.id = Posts.author";
+            JOIN Users ON Users.id = Posts.author
+            LEFT JOIN Post_LIkes ON Post_Likes.pid = Posts.id AND Post_Likes.uid = ?";
     $whereStm = " WHERE Posts.visible = 1";
 
     if($notAMember) $sql .= $whereStm;
 
-    return Database::parcoursRs(($db->SQLSelect($sql)));
+    return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
 function selectPost($pid){
