@@ -857,3 +857,37 @@ margin-top:5%;
 {
     margin:5%;
 }
+
+.Categorie{
+    position: fixed;
+    overflow-y: scroll;
+    scrollbar-color: rebeccapurple green;
+    padding:5%;
+    border-radius: 20px 20px 20px 20px ;
+    background-color: darkred;
+    top:7.3%;
+    right:19%;
+    z-index: 10;
+    font-size: 100%;
+    width: 60%;
+}
+
+
+.Categorie-Option
+{
+font-size: 150%;
+background-color: silver;
+border-radius: 10px;
+margin: 2%;
+padding:5%;
+text-align: center;
+
+
+}
+
+
+.Categorie-Option:hover
+{
+    background-color: gray;
+    color: white;
+}
