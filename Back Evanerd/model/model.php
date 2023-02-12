@@ -500,7 +500,7 @@ function selectPosts($notAMember, $uid){
     $sql = "SELECT Posts.id, Posts.content, $banner, Posts.pinned, Posts.visible, Users.id AS uid, Users.firstName, Users.lastName, $photo,IFNULL(Post_Likes.liked,0) AS liked
             FROM Posts
             JOIN Users ON Users.id = Posts.author
-            LEFT JOIN Post_LIkes ON Post_Likes.pid = Posts.id AND Post_Likes.uid = ?";
+            LEFT JOIN Post_Likes ON Post_Likes.pid = Posts.id AND Post_Likes.uid = ?";
     $whereStm = " WHERE Posts.visible = 1";
 
     if($notAMember) $sql .= $whereStm;
