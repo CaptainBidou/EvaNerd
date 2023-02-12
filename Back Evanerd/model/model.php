@@ -517,17 +517,19 @@ function selectPost($pid){
 
 function selectPostReactions($pid = null){
     $db = Config::getDatabase();
+    $sqlPid = "";
+    $whereStm = "";
     $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
     $params = [$pid];
-    $sql = "SELECT Post_Reactions.emoji, Post_Reactions.pid, Users.id AS uid, Users.firstName, Users.lastName, $photo
-            FROM Post_Reactions
-            JOIN Users ON Post_Reactions.uid = Users.id";
-    
-    $whereStm = " WHERE pid = ? ";
     if($pid == null) {
         $params =[];
+        $sqlPid = "Post_Reactions.pid,";
     }
-    else $sql .= $whereStm;
+    else $whereStm = " WHERE Post_Reactions.pid = ?";
+
+    $sql = "SELECT Post_Reactions.emoji, $sqlPid Users.id AS uid, Users.firstName, Users.lastName, $photo
+            FROM Post_Reactions
+            JOIN Users ON Post_Reactions.uid = Users.id $whereStm";
 
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
