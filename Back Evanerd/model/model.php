@@ -398,8 +398,8 @@ function selectGroups($uid){
     $params = [$uid];
     $sql = "SELECT DISTINCT Groups.id, Groups.titre, $image
             FROM User_Groups
-            JOIN Groups ON Groups.id = User_Groups.gid; 
-            WHERE uid = ?";
+            JOIN Groups ON Groups.id = User_Groups.gid 
+            WHERE uid = ?;";
             
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
