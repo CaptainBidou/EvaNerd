@@ -9,6 +9,7 @@ DEFINE("HTTP_BAD_REQUEST", 400);
 DEFINE("HTTP_UNAUTHORIZED", 401);
 DEFINE("HTTP_FORBIDDEN", 403);
 DEFINE("HTTP_NOT_FOUND", 404);
+DEFINE("HTTP_METHOD_NOT_ALLOW", 405);
 
 DEFINE("API_NAME", "EVANERD API");
 DEFINE("VERSION", "1.0");
@@ -126,6 +127,7 @@ function getStatusHeader($status = 200) {
         case HTTP_UNAUTHORIZED: return "HTTP/1.0 401 Unauthorized";
         case HTTP_FORBIDDEN: return "HTTP/1.0 403 Forbidden";
         case HTTP_NOT_FOUND: return "HTTP/1.0 404 Not Found";
+        case HTTP_METHOD_NOT_ALLOW: return "HTTP/1.0 405 Method Not Allowed";
 
         default: return "HTTP/1.0 200 OK";
             
