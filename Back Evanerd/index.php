@@ -9,6 +9,10 @@ $data = genereAPIInfo();
 $authKey = getAuthHeader();
 $queryString = getRequestParams();
 $requestType = getRequestType();
+
+// Compatibilité avec CORS
+if($requestType == "OPTIONS") sendResponse($data, [getStatusHeader(HTTP_OK)]);
+
 $idTabs = array();
 
 if(isset($queryString["request"])) $request = $queryString["request"]; // rendre plus robuste
@@ -162,6 +166,10 @@ switch($action) {
         listPostsMessages($data, $idTabs, $authKey);
         break;
     
+    case "GET /posts/ID/reactions":
+        listPostReactions($data, $idTabs, $authKey);
+        break;
+
     case "POST /posts":
         postPost($data, $authKey,$queryString);
         break;
