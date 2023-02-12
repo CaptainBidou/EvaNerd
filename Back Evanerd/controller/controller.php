@@ -520,19 +520,12 @@ function addUsersGroups($data, $idTabs, $authKey) {
         $uidToAdd = $idTabs[1]; // uid de l'utilisateur à ajouter
         $gid = $idTabs[0];
         $user = selectUser($uidToAdd);
-        
-        if($user) {
-            if(isInGroup($uidConn, $gid) || haveGroupPermission($uidConn, $gid)){
-                if(!isInGroup($uidToAdd, $gid)) {
-                    insertIntoGroup($uidToAdd, $gid);
-                    $data["user"] = $user[0];
-                    sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
-                }
-                sendError("Cet utilisateur est déjà dans ce groupe", HTTP_UNAUTHORIZED);
-            }
-            sendError("Vous ne pouvez pas ajouter un membre dans ce groupe !" , HTTP_UNAUTHORIZED);
-        }
-        sendError("Cet utilisateur n'existe pas" , HTTP_BAD_REQUEST);
+        if(!$user) sendError("Cet utilisateur n'existe pas" , HTTP_BAD_REQUEST);
+        if(!isInGroup($uidConn, $gid) && !haveGroupPermission($uidConn, $gid)) sendError("Vous ne pouvez pas ajouter un membre dans ce groupe !" , HTTP_UNAUTHORIZED);
+        if(isInGroup($uidToAdd, $gid)) sendError("Cet utilisateur est déjà dans ce groupe", HTTP_UNAUTHORIZED);
+        insertIntoGroup($uidToAdd, $gid);
+        $data["user"] = $user[0];
+        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
     }
     sendError("Vous devez vous identifier !", HTTP_UNAUTHORIZED);
 }
@@ -576,10 +569,8 @@ function postMessagesGroups($data, $idTabs, $authKey, $queryString) {
 function listPosts($data, $authKey) {
     if($authKey) {
         $i = 0;
-        $uidConn = authToId($authKey);
-        if($uidConn === false) sendError("Token invalide !", HTTP_FORBIDDEN);
-        $role = selectUserRoles($uidConn);
-        $notAMember = (array_search("Non Membre", array_column($role, "label")) !== false) ? 1 : 0;
+        $uidConn = validUser(authToId($authKey));
+        $notAMember = searchRole("Non Membre", selectUserRoles($uidConn));
         $postData = selectPosts($notAMember, $uidConn);
         // On regoupe par emoji
         /*
@@ -610,6 +601,21 @@ function listPosts($data, $authKey) {
     sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
 }
 
+function listPostReactions($data, $idTabs, $authKey) {
+    if($authKey) {
+        $uidConn = validUser(authToId($authKey));
+        $pid = $idTabs[0];
+        $notAMember = searchRole("Non Membre", selectUserRoles($uidConn));
+        $postData = selectPost($pid);
+        if(!$postData) sendError("Ce post n'existe pas !", HTTP_BAD_REQUEST);
+        if($notAMember && !$postData[0]["visible"]) sendError("VOus n'avez pas les permissions !", HTTP_FORBIDDEN);
+        $reactionData = groupby(selectPostReactions($pid), "emoji");
+        $data["postId"] = $pid;
+        $data["reactions"] = $reactionData;
+        sendResponse($data, [getStatusHeader(HTTP_OK)]);
+    }
+
+}
 /**
  * Permet d'envoyer un commentaire sous un post
  * @param array $data tableau à completer et envoyé
@@ -869,6 +875,7 @@ function postEventCalls($data, $idTabs, $queryString, $authKey) {
         //TODO : vérifier les permissions d'écriture
         $event = selectEvent($eid, "intra");
         if(!$event) sendError("Vous ne pouvez répondre à cette événement !", HTTP_FORBIDDEN);
+        if(!$event[0]["read"]) sendError("Vous n'avez pas les permissions !", HTTP_FORBIDDEN);
         if(selectCallMembers($eid, $uidConn)) sendError("Vous avez déjà répondu !", HTTP_FORBIDDEN);
         if(($present = valider("present", $queryString)) !== false) {
             $reason_desc = validString(htmlspecialchars(valider("reason")), 180, 0);
@@ -909,7 +916,9 @@ function listEventCalls($data, $idTabs, $authKey) {
         $i = 0;
         $uidConn = validUser(authToId($authKey));
         $eid = $idTabs[0];
-        if(!selectEvent($eid,"intra", $uidConn)[0]["read"]) sendError("Vous n'avez pas les droits !", HTTP_FORBIDDEN);
+        $event = selectEvent($eid,"intra", $uidConn);
+        if(!$event) sendError("Cet évenement n'existe pas !", HTTP_BAD_REQUEST);
+        if(!$event[0]["write"]) sendError("Vous n'avez pas les droits !", HTTP_FORBIDDEN);
         $data["eventId"] = $eid;
         $data["calls"] = array();
         $callsData = selectCallMembers($eid);
@@ -928,7 +937,7 @@ function listEventCalls($data, $idTabs, $authKey) {
 } 
 
 
-function listEvent($data, $queryString, $authKey) {
+function listEvents($data, $queryString, $authKey) {
     if($authKey) {
         $uidConn = validUser(authToId($authKey));
         $type = valider("type", $queryString);
