@@ -739,20 +739,50 @@ function ListPostMessages($pid){
 
 
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
-function ListCalendars($type = "concert"){
+function ListCalendarsEvents($authToken,$type){
     $.ajax({
         type: "GET",
-        url: api + "/agendas/",
-        headers: {"authToken":""}, // données dans les entetes 
+        url: api + "/events/",
+        headers: {"authToken":$authToken}, // données dans les entetes 
+        data: [{"key":"type","value": $type}],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            if ($type == "extra"){
+                oRep["events"].forEach(element => {
+                    element.titre = element.event;
+                    getEventParticipation(element,$authToken);
+                });
+            }
+            else
+            {
+                oRep["events"].forEach(element => {
+                    element.titre = element.event;
+                    JCreerAppel(element);
+                });
+            }
+        },
+        dataType: "json"
+    }); 
+}
+
+
+
+function getEventParticipation(eventInfos,$authToken){
+    $.ajax({
+        type: "GET",
+        url: api + "/events/"+eventInfos.id+"/participations",
+        headers: {"authToken":$authToken}, // données dans les entetes 
         data: [],
         error : function(){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
             console.log(oRep); 
-            oRep["agendas"].forEach(element => {
-                ListCalendarsEvents(element["id"],$type);
-            });
+            eventInfos.pourcentage = 25;
+            JCreerConcert(eventInfos);
         },
         dataType: "json"
     }); 
@@ -762,7 +792,7 @@ function ListCalendars($type = "concert"){
  * Requête permettant de récupérer les événements d'un calendrier
  * @param {*} $aid Identifiant de l'agenda
  */
-
+/*
 function ListCalendarsEvents($authToken,$aid){
     $.ajax({
         type: "GET",
@@ -780,7 +810,7 @@ function ListCalendarsEvents($authToken,$aid){
         },
         dataType: "json"
     }); 
-}
+}*/
 
 
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
