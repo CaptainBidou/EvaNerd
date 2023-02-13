@@ -660,6 +660,9 @@ function AddMsgConv($gid, $informations){
     });
 
 }
+
+
+
 /* GROUPS END */
 
 /* POSTS AJAX FUNC */
@@ -700,7 +703,7 @@ function setLikePost($pid,$authToken) {
             console.log(oRep);
         },
         success: function(oRep){
-            
+
         },
         dataType: "json"
     }); 
@@ -733,20 +736,26 @@ function ListPostReactions($pid){
  * @param {*} $pid identifiant du post
  */
 
-function ListPostMessages($pid){
+function ListPostMessages($pid,$authToken){
     $.ajax({
         type: "GET",
         url: api + "/posts/"+$pid+"/messages",
-        headers: {"authToken":""}, // données dans les entetes 
+        headers: {"authToken":$authToken}, // données dans les entetes 
         data: [],
         error : function(){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
             console.log(oRep); 
+            JCreerCommentaireLayout(oRep);
         },
         dataType: "json"
     });   
+}
+
+
+function addComments($message,) {
+    
 }
 /* POSTS END */
 
