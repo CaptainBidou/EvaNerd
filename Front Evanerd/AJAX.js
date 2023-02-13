@@ -689,6 +689,23 @@ function ListPosts($authToken){
     });   
 }
 
+function setLikePost($pid,$authToken) {
+    $.ajax({
+        type: "POST",
+        url: api + "/posts/"+$pid+"/likes",
+        headers: {"authToken":$authToken}, // données dans les entetes 
+        data: [],
+        error : function(oRep){
+            console.log("Une erreur s'est produite");
+            console.log(oRep);
+        },
+        success: function(oRep){
+            
+        },
+        dataType: "json"
+    }); 
+}
+
 /**
  * Requête permettant de récupérer la liste des réactions envoyés sur un post
  * @param {*} $pid identifiant du post
