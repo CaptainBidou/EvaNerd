@@ -398,8 +398,8 @@ function selectGroups($uid){
     $params = [$uid];
     $sql = "SELECT DISTINCT Groups.id, Groups.titre, $image
             FROM User_Groups
-            JOIN Groups ON Groups.id = User_Groups.gid; 
-            WHERE uid = ?";
+            JOIN Groups ON Groups.id = User_Groups.gid 
+            WHERE uid = ?;";
             
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
@@ -500,7 +500,7 @@ function selectPosts($notAMember, $uid){
     $sql = "SELECT Posts.id, Posts.content, $banner, Posts.pinned, Posts.visible, Users.id AS uid, Users.firstName, Users.lastName, $photo,IFNULL(Post_Likes.liked,0) AS liked
             FROM Posts
             JOIN Users ON Users.id = Posts.author
-            LEFT JOIN Post_LIkes ON Post_Likes.pid = Posts.id AND Post_Likes.uid = ?";
+            LEFT JOIN Post_Likes ON Post_Likes.pid = Posts.id AND Post_Likes.uid = ?";
     $whereStm = " WHERE Posts.visible = 1";
 
     if($notAMember) $sql .= $whereStm;
@@ -517,17 +517,19 @@ function selectPost($pid){
 
 function selectPostReactions($pid = null){
     $db = Config::getDatabase();
+    $sqlPid = "";
+    $whereStm = "";
     $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
     $params = [$pid];
-    $sql = "SELECT Post_Reactions.emoji, Post_Reactions.pid, Users.id AS uid, Users.firstName, Users.lastName, $photo
-            FROM Post_Reactions
-            JOIN Users ON Post_Reactions.uid = Users.id";
-    
-    $whereStm = " WHERE pid = ? ";
     if($pid == null) {
         $params =[];
+        $sqlPid = "Post_Reactions.pid,";
     }
-    else $sql .= $whereStm;
+    else $whereStm = " WHERE Post_Reactions.pid = ?";
+
+    $sql = "SELECT Post_Reactions.emoji, $sqlPid Users.id AS uid, Users.firstName, Users.lastName, $photo
+            FROM Post_Reactions
+            JOIN Users ON Post_Reactions.uid = Users.id $whereStm";
 
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
