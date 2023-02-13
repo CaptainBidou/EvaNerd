@@ -245,7 +245,7 @@ var JCategorieOption=$("<option>").addClass("Categorie-Option");
 
 
 
-function JcreerPost(Reponse,membre){
+function JcreerPost(Reponse,membre,admin){
     var jClonePost=JPost.clone(true,true);
     var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.author.firstName+" "+Reponse.author.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
     var jClonePostBody=JPostBody.clone(true,true);
@@ -265,7 +265,7 @@ function JcreerPost(Reponse,membre){
 
     }
     var jClonePostComm=JPostCommentaire.clone(true,true);
-    var jClonePostLike=JPostLike.clone(true,true);
+    var jClonePostLike=JPostLike.clone(true,true).attr("id_post",Reponse.id);
     var jClonePostReact=JPostReaction.clone(true,true);
 
 
@@ -284,12 +284,16 @@ function JcreerPost(Reponse,membre){
 
     if(membre==1)
     {
-    jClonePostBody2.append(jClonePostEpingle);
+  
     jClonePostBody.append(jClonePostComm).append(jClonePostLike).append(jClonePostReact);
     }
 
     if(membre==0){
 
+    }
+    if(admin==1)
+    {
+  jClonePostBody2.append(jClonePostEpingle);
     }
 
 
@@ -1241,7 +1245,8 @@ JCloneCommentaires.fadeIn(1000);
 function JClickLike(target){
     if($(target).attr("src")=="Ressources/Accueil/like.png")
     { 
-    $(target).attr("src","Ressources/Accueil/likeBlanc.png");}
+    $(target).attr("src","Ressources/Accueil/likeBlanc.png");
+    LikerPost($(target).attr("id_post"));}
     
     else
     {//TODO RAJOUTER ANIMATION

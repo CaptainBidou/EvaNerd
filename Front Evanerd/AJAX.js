@@ -39,6 +39,7 @@ function auth($tel,$password){
             authcode = oRep.authToken;
             member = !oRep["user"].noMember;
             pdp = oRep["user"].photo;
+            admin = oRep["user"].admin;
         },
         dataType: "json"
     }).done(function launchAPP(){
@@ -678,9 +679,9 @@ function ListPosts($authToken){
             console.log(oRep);
             oRep["posts"].sort(function compare(e1,e2) { return e2.pinned - e1.pinned });
             oRep["posts"].forEach(element => {
-                element["membre"] = 1
+                element["membre"] = 1;
                 if (element.visible == 1)
-                    JcreerPost(element);
+                    JcreerPost(element,member,admin);
             });
 
         },

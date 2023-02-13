@@ -24,6 +24,7 @@ $(document).ready(function(){
 
 
 function AfficherAccueil(){
+    
     $("#page").html("");
     ListPosts(authcode);
 }
@@ -102,7 +103,9 @@ function EnvoyerMessage(groupId,message,rep){
     AddMsgConv(groupId, informations);
 }
 
-
+function    LikerPost(idPost){
+    LikePost(idPost);
+}
 
 
 
