@@ -40,7 +40,7 @@ function AfficherMessagerie(){
 
 function AfficherAppel(){
     $("#page").html("");
-    ListCalendarsEvents(authcode, 1);
+    ListCalendarsEvents(authcode, "intra");
     /* var appel={"titre":"Répétition tutti","date":"01/12/2019","commentaire":"Répétitions au capitole à 18h c'est très important de venir","sex":"0"};
     JCreerAppel(appel);
     JCreerAppel(appel);
@@ -55,10 +55,7 @@ function AfficherAppel(){
 function AfficherCalendrier(){
     $("#page").html("");
     //ici obtenir la réponse de la requête 
-    JCreerConcert(concert);
-    JCreerConcert(concert);
-    JCreerConcert(concert);
-
+    ListCalendarsEvents(authcode, "extra");
 
 }
 
