@@ -59,6 +59,13 @@ function AfficherCalendrier(){
 
 }
 
+function CommentairesPosts($id = 1){
+    ListPostMessages($id,authcode);
+}
+
+function JEnvoyerCommentaire($commentaires){
+    console.log($($commentaires).data());
+}
 
 function AfficherCreer(){
     //ici obtenir la réponse de la requête
