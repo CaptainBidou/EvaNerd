@@ -742,9 +742,9 @@ function ListPostMessages($pid){
 function ListCalendarsEvents($authToken,$type){
     $.ajax({
         type: "GET",
-        url: api + "/events/",
+        url: api + "/events/?type=" + $type,
         headers: {"authToken":$authToken}, // données dans les entetes 
-        data: [{"key":"type","value": $type}],
+        data: [],
         error : function(){
             console.log("Une erreur s'est produite");
         },
@@ -753,7 +753,7 @@ function ListCalendarsEvents($authToken,$type){
             if ($type == "extra"){
                 oRep["events"].forEach(element => {
                     element.titre = element.event;
-                    getEventParticipation(element,$authToken);
+                    JCreerConcert(element);
                 });
             }
             else
@@ -768,7 +768,7 @@ function ListCalendarsEvents($authToken,$type){
     }); 
 }
 
-
+/*
 
 function getEventParticipation(eventInfos,$authToken){
     $.ajax({
@@ -781,32 +781,7 @@ function getEventParticipation(eventInfos,$authToken){
         },
         success: function(oRep){
             console.log(oRep); 
-            eventInfos.pourcentage = 25;
-            JCreerConcert(eventInfos);
-        },
-        dataType: "json"
-    }); 
-}
 
-/**
- * Requête permettant de récupérer les événements d'un calendrier
- * @param {*} $aid Identifiant de l'agenda
- */
-/*
-function ListCalendarsEvents($authToken,$aid){
-    $.ajax({
-        type: "GET",
-        url: api + "/agendas/"+$aid +"/events",
-        headers: {"authToken":$authToken}, // données dans les entetes 
-        data: [],
-        error : function(){
-            console.log("Une erreur s'est produite");
-        },
-        success: function(oRep){
-            console.log(oRep);
-            oRep["events"].forEach(element => {
-                JCreerAppel(element);
-            });
         },
         dataType: "json"
     }); 
