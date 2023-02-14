@@ -775,26 +775,24 @@ function postMessageReactions($data, $idTabs, $authKey, $queryString) {
 }
 
 function postPost($data, $authKey,$queryString) {
-    if($authKey) {
-        $newId = getNewPid();
-        $dir = DIR_POSTS . $newId;
-        $uidConn = validUser(authToId($authKey));
-        if(searchRole("Non Membre", selectUserRoles($uidConn))) sendError("Vous n'avez pas la permission !", HTTP_UNAUTHORIZED);
-        if($content = validString(valider("content"), 300, 0));
-        if(($pinned = valider("visible", $queryString)) !== false)
-        if(($visible = valider("pinned", $queryString)) !== false)
-        if(isset($_FILES["banner"])) {
-            if(!is_dir($dir)) mkdir($dir);
+    if($authKey) sendError("Vous devez être identifié", HTTP_UNAUTHORIZED);
+    $newId = getNewPid();
+    $dir = DIR_POSTS . $newId;
+    $uidConn = validUser(authToId($authKey));
+    if (searchRole("Non Membre", selectUserRoles($uidConn))) sendError("Vous n'avez pas la permission !", HTTP_UNAUTHORIZED);
+    if ($content = validString(valider("content"), 300, 0));
+    if (($pinned = valider("visible", $queryString)) !== false)
+    if (($visible = valider("pinned", $queryString)) !== false)
+        if (isset($_FILES["banner"])) {
+            if (!is_dir($dir)) mkdir($dir);
             $imageInfo = uploadImage("$dir/image", $_FILES["banner"]);
-            if($imageInfo["code"] != 1 )  sendError($imageInfo["message"], HTTP_BAD_REQUEST);
+            if ($imageInfo["code"] != 1)  sendError($imageInfo["message"], HTTP_BAD_REQUEST);
             $image = basename($imageInfo["filename"]);
             $pid = insertPost($content, $image, $pinned, $visible, $uidConn);
             $data["post"] = selectPost($pid)[0];
             sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
         }
-        sendError("Paramètres invalide !", HTTP_BAD_REQUEST);
-    }
-    sendError("Vous devez être identifié", HTTP_UNAUTHORIZED);
+    sendError("Paramètres invalide !", HTTP_BAD_REQUEST);
 }
 
 function postPostLike($data, $idTabs, $authKey) {
@@ -803,7 +801,6 @@ function postPostLike($data, $idTabs, $authKey) {
         $pid = $idTabs[0];
         $post = selectPost($pid);
         $like = selectLiked($pid,$uidConn);
-        print_r($like);
         $data["like"] = ["uid" => $uidConn, "pid" => $pid];
         // TODO : vérifier que l'user oeut voir le post (ajouter un param optionnel à selectPost)
         if (!$post) sendError("Le post n'existe pas !", HTTP_BAD_REQUEST);
@@ -830,7 +827,6 @@ function postPostPinned($data, $idTabs, $authKey) { // A TESTER
         $mid = $idTabs[1];
         $msg = selectGroupMessage($mid, $gid);
         $pin = selectPinned($mid, $uidConn, $gid);
-        print_r($pin);
         $data["pin"] = ["mid" => $mid, "uid" => $uidConn, "gid" => $gid];
 
         if (!$msg)
@@ -891,65 +887,75 @@ function postEventCalls($data, $idTabs, $queryString, $authKey) {
 }
 
 function listEventParticipations($data, $idTabs, $authKey) {
-    if($authKey) {
-        $eid = $idTabs[0];
-        validUser(authToId($authKey));
-        $event = selectEvent($eid, "extra");
-        if(!$event) sendError("Vous n'avez pas accès à cet évenement", HTTP_FORBIDDEN);
-        $data["eventId"] = $eid;
-        $agendaData = groupby(selectParticipations($eid), "participation");
-        foreach ($agendaData as $key => $participationData) {
-            $i = 0;
-            $data["participations"][$key] = array();
-            foreach ($participationData as $agenda) {
-                $data["participations"][$key][$i]["user"] = ["id" => $agenda["uid"], "firstName" => $agenda["firstName"], "lastName" => $agenda["lastName"], "photo" => $agenda["photo"]];
-                $i++;
-            }
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $eid = $idTabs[0];
+    validUser(authToId($authKey));
+    $event = selectEvent($eid, "extra");
+    if (!$event) sendError("Vous n'avez pas accès à cet évenement", HTTP_FORBIDDEN);
+    $data["eventId"] = $eid;
+    $agendaData = groupby(selectParticipations($eid), "participation");
+    foreach ($agendaData as $key => $participationData) {
+        $i = 0;
+        $data["participations"][$key] = array();
+        foreach ($participationData as $agenda) {
+            $data["participations"][$key][$i]["user"] = ["id" => $agenda["uid"], "firstName" => $agenda["firstName"], "lastName" => $agenda["lastName"], "photo" => $agenda["photo"]];
+            $i++;
         }
-        sendResponse($data, [getStatusHeader(HTTP_OK)]);
     }
-    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    sendResponse($data, [getStatusHeader(HTTP_OK)]);
 }
 
 function listEventCalls($data, $idTabs, $authKey) {
-    if($authKey) {
-        $i = 0;
-        $uidConn = validUser(authToId($authKey));
-        $eid = $idTabs[0];
-        $event = selectEvent($eid,"intra", $uidConn);
-        if(!$event) sendError("Cet évenement n'existe pas !", HTTP_BAD_REQUEST);
-        if(!$event[0]["write"]) sendError("Vous n'avez pas les droits !", HTTP_FORBIDDEN);
-        $data["eventId"] = $eid;
-        $data["calls"] = array();
-        $callsData = selectCallMembers($eid);
-        foreach($callsData as $calls) {
-            $data["calls"][$i]["user"] = array("uid" => $calls["uid"], "firstName" => $calls["firstName"], "lastName" => $calls["lastName"]);
-            $data["calls"][$i]["present"] = $calls["present"];
-            if(!$calls["present"]) {
-                $data["calls"][$i]["reason_desc"] = $calls["reason_desc"];
-            }
-            $i++;
-
+    if(!$authKey)  sendError("Il faut vous identifier", HTTP_UNAUTHORIZED);
+    $i = 0;
+    $uidConn = validUser(authToId($authKey));
+    $eid = $idTabs[0];
+    $event = selectEvent($eid, "intra", $uidConn);
+    if (!$event) sendError("Cet évenement n'existe pas !", HTTP_BAD_REQUEST);
+    if (!$event[0]["write"]) sendError("Vous n'avez pas les droits !", HTTP_FORBIDDEN);
+    $data["eventId"] = $eid;
+    $data["calls"] = array();
+    $callsData = selectCallMembers($eid);
+    foreach ($callsData as $calls) {
+        $data["calls"][$i]["user"] = array("uid" => $calls["uid"], "firstName" => $calls["firstName"], "lastName" => $calls["lastName"]);
+        $data["calls"][$i]["present"] = $calls["present"];
+        if (!$calls["present"]) {
+            $data["calls"][$i]["reason_desc"] = $calls["reason_desc"];
         }
-        sendResponse($data, [getStatusHeader()]);
+        $i++;
     }
-    sendError("Il faut vous identifier", HTTP_UNAUTHORIZED);
+    sendResponse($data, [getStatusHeader()]);
 } 
 
 
 function listEvents($data, $queryString, $authKey) {
-    if($authKey) {
-        $uidConn = validUser(authToId($authKey));
-        $type = valider("type", $queryString);
-        if(!$type) $type = "extra";
-        $agendaEvents = selectEvents($uidConn, $type);
-        $data["events"] = $agendaEvents;
-        sendResponse($data, [getStatusHeader()]);
-    }
-    sendError("Vous devez vous identifier", HTTP_UNAUTHORIZED);
+    if(!$authKey) sendError("Vous devez vous identifier", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $type = valider("type", $queryString);
+    if(!$type) $type = "extra";
+    $agendaEvents = selectEvents($uidConn, $type);
+    $data["events"] = $agendaEvents;
+    sendResponse($data, [getStatusHeader()]);
 }
 
 function postAgendasPermissions($data, $idTabs, $queryString, $authKey) {
     sendError("Not implemented yet !", HTTP_NOT_FOUND);
 }
 
+function postPostMessage($data, $idTabs, $authKey, $queryString) {
+    if(!$authKey) sendError("Vous devez être identifié pour envoyer un message", HTTP_UNAUTHORIZED);
+    $pid = $idTabs[0];
+    $uidConn = validUser(authToId($authKey));
+    $notAMember = searchRole("Non Membre", selectUserRoles($uidConn));
+    if(!selectPost($pid, $notAMember)) sendError("Impossible de commenter ce post !", HTTP_FORBIDDEN);
+    
+    if($message = htmlspecialchars(valider("content", $queryString))) 
+    if(strlen($message) <= 300 ) {
+        $answerTo = valider("answerTo", $queryString);
+        selectPostMessage($answerTo, $pid) ? : $answerTo = null;
+        $mid = insertPostMessage($uidConn, $pid, $message, $answerTo);
+        $data["comment"] = ["id" => $mid, "content" => $message, "pinned" => 0, "answerTo" => $answerTo];
+        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+    }
+    sendError("Vous ne pouvez pas envoyé un message vide ", HTTP_BAD_REQUEST);
+}
