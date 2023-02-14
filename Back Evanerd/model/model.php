@@ -508,9 +508,13 @@ function selectPosts($notAMember, $uid){
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
-function selectPost($pid){
+function selectPost($pid, $notAMember = false){
     $db = Config::getDatabase();
-    $sql = "SELECT * FROM Posts WHERE id = ?";
+    $whereStm = "";
+    if($notAMember) {
+        $whereStm = " AND Posts.visible = 1";
+    }
+    $sql = "SELECT * FROM Posts WHERE id = ? $whereStm";
 
     return Database::parcoursRs(($db->SQLSelect($sql, [$pid])));
 }
@@ -573,7 +577,7 @@ function selectEvents($uid, $type){
     $params = [$type];
     $joinStmt = "";
     $readPerms = "";
-    if($type == "intra") {
+    if($type == 0) {
         $joinStmt = "JOIN Agenda_Perms ON Agenda_Events.aid = Agenda_Perms.aid
                      JOIN User_Roles ON User_Roles.rid = Agenda_Perms.rid";
         $readPerms = "AND Agenda_Perms.read = 1 AND User_Roles.uid = ?;";
@@ -748,6 +752,19 @@ function insertCall($uid, $eid, $present, $reason_desc) {
     $db = Config::getDatabase();
     $params = [$uid, $eid, $present, $reason_desc];
     $sql = "INSERT INTO Agenda_Event_Calls(uid, aeid, present, reason_desc) VALUE (?,?,?,?)";
-    $db->SQLInsert($sql, $params);
+    return $db->SQLInsert($sql, $params);
+}
+
+function insertPostMessage($pid, $uid, $content, $answerTo = NULL) {
+    $db = Config::getDatabase();
+    $params = [$pid, $uid, $content, $answerTo];
+    $sql = "INSERT INTO Post_Comments(pid, uid, content, answerTo) VALUES (?,?,?,?)";
+    return $db->SQLInsert($sql, $params);
+}
+
+function selectPostMessage($mid, $pid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM Post_Comments WHERE id = ? AND pid = ?";
+    return Database::parcoursRs($db->SQLSelect($sql, [$mid, $pid]));
 }
 ?>
