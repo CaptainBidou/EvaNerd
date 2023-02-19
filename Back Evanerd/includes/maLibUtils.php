@@ -304,4 +304,16 @@ function isSex($sex) {
 function searchRole($role,$roleData) {
 	return (array_search($role, array_column($roleData, "label")) !== false) ? 1 : 0;
 }
+
+/**
+ * Retourne la date si la date est valide
+ * @param string $date
+ * @return string|false
+ */
+function validDate($date) {
+	$format = 'Y-m-d H:i:s';
+	$d = DateTime::createFromFormat($format, $date);
+	if($d && $d->format($format) === $date) return $date;
+	return false;
+}
 ?>
