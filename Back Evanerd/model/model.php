@@ -767,4 +767,17 @@ function selectPostMessage($mid, $pid) {
     $sql = "SELECT * FROM Post_Comments WHERE id = ? AND pid = ?";
     return Database::parcoursRs($db->SQLSelect($sql, [$mid, $pid]));
 }
+
+function selectAgenda($aid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM Agendas WHERE id = ?";
+    return Database::parcoursRs($db->SQLSelect($sql, [$aid]));
+}
+
+function insertEvent($aid, $event, $startDate, $endDate) {
+    $db = Config::getDatabase();
+    $params = [$aid, $event, $startDate, $endDate];
+    $sql = "INSERT INTO Agenda_Events(aid, event, startDate, endDate) VALUES (?,?,?,?)";
+    return $db->SQLInsert($sql, $params);
+}
 ?>
