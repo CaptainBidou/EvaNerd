@@ -673,29 +673,24 @@ function insertLiked($uid, $pid, $liked) {
     return $db->SQLInsert($sql, $param);
 }
 
-function selectPinned($id, $uid, $gid) {
+function updateMessage($mid, $content =false, $pinned =false) {
+    // Les paramètre peuvent être op
     $db = Config::getDatabase();
-    $param = [$id, $uid, $gid];
-    $sql = "SELECT pinned, pid, uid, id
-            FROM Group_Messages
-            WHERE id= ? AND uid = ? AND pid = ?";
-    return Database::parcoursRs($db->SQLSelect($sql, $param));
-}
-
-function pinned($id, $uid, $gid, $pinned) {
-    $db = Config::getDatabase();
-    $param = [$pinned,$id, $uid, $gid];
-    $sql = "UPDATE Group_Messages
-            SET pinned  = ? 
-            WHERE id = ? AND uid = ? AND gid = ?";
-    return $db->SQLUpdate($sql, $param);
-}
-
-function insertPinned($id, $uid, $gid, $pinned) {
-    $db = Config::getDatabase();
-    $param = [$pinned,$id, $uid, $gid];
-    $sql = "INSERT INTO Group_Messages(id, uid, gid, pinned) VALUES (?, ?, ?, ?)";
-    return $db->SQLInsert($sql, $param);
+    $sql = "UPDATE Group_Messages SET ";
+    $params = [];
+    if($content !== false) {
+        $sql .= "content = ? ";
+        array_push($params, $content);
+    }
+    else $sql .= " content=content,";
+    if($pinned !== false) {
+        $sql .= "pinned = ? ";
+        array_push($params, $pinned);
+    }
+    else $sql .= " pinned = pinned";
+    $sql .= " WHERE id = ?";
+    array_push($params, $mid);
+    return $db->SQLUpdate($sql, $params);
 }
 
 function insertGroupMessageReaction($mid, $uid, $reaction) {
@@ -779,5 +774,30 @@ function insertEvent($aid, $event, $startDate, $endDate) {
     $params = [$aid, $event, $startDate, $endDate];
     $sql = "INSERT INTO Agenda_Events(aid, event, startDate, endDate) VALUES (?,?,?,?)";
     return $db->SQLInsert($sql, $params);
+}
+
+function updatePost($pid, $content = false, $pinned = false, $visible = false) {
+    // Les paramètre peuvent être op
+    $db = Config::getDatabase();
+    $sql = "UPDATE Posts SET ";
+    $params = [];
+    if($content !== false) {
+        $sql .= "content = ?,";
+        array_push($params, $content);
+    }
+    else $sql .= " content=content,";
+    if($pinned !== false) {
+        $sql .= "pinned = ?,";
+        array_push($params, $pinned);
+    }
+    else $sql .= " pinned = pinned,";
+    if($visible !== false) {
+        $sql .= "visible = ?,";
+        array_push($params, $visible);
+    }
+    else $sql .= " visible = visible";
+    $sql .= " WHERE id = ?";
+    array_push($params, $pid);
+    return $db->SQLUpdate($sql, $params);
 }
 ?>
