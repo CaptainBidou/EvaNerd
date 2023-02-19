@@ -154,7 +154,7 @@ switch($action) {
         break;
 
     case "PUT /groups/ID/messages/ID/pinned":
-        postPostPinned($data, $idTabs, $authKey);
+        putMessagePinned($data, $idTabs, $authKey);
         break;
     
     /* Posts */
@@ -182,6 +182,10 @@ switch($action) {
         postPostMessage($data, $idTabs, $authKey, $queryString);
     break;
     
+    case "PUT /posts/ID/pinned":
+        putPostPinned($data, $idTabs, $authKey);
+        break;
+
     /* Agendas */
     case "GET /agendas":
         listAgendas($data, $queryString, $authKey);
