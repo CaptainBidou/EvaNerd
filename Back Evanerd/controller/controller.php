@@ -697,8 +697,26 @@ function postAgenda($data, $queryString, $authKey) {
     sendError("Vous être identifié !", HTTP_UNAUTHORIZED);
 }
 
+/**
+ * Permet d'ajouter un évènement à un agenda
+ * @param array $data tableau à completer et envoyé
+ * @param string $authKey Token d'identification de l'utilisateur
+ * @param array $idTabs paramètre d'url
+ */
 function postAgendasEvent($data, $idTabs, $queryString, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+    //TODO : Vérifier les permissions
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    //$uidConn = validUser(authToId($authKey));
+    $aid = $idTabs[0];
+    if(!selectAgenda($aid)) sendError("Cet agenda n'existe pas !", HTTP_BAD_REQUEST);
+    if($event = validString(htmlspecialchars(valider("event", $queryString)), 30, 1))
+    if($start = validDate(valider("start", $queryString)))
+    if($end = validDate(valider("end", $queryString))) {
+        $eid = insertEvent($aid, $event, $start, $end);
+        $data["event"] = ["id" => $eid, "event" => $event, "start" => $start, "end" => $end];
+        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+    }
+    sendError("Requête invalide !", HTTP_BAD_REQUEST);
 }
 
 function getUserRoles($data, $idTabs) {
