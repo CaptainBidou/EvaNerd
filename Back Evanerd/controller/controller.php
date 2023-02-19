@@ -814,56 +814,55 @@ function postPost($data, $authKey,$queryString) {
 }
 
 function postPostLike($data, $idTabs, $authKey) {
-    if($authKey){
-        $uidConn = validUser(authToId($authKey));
-        $pid = $idTabs[0];
-        $post = selectPost($pid);
-        $like = selectLiked($pid,$uidConn);
-        $data["like"] = ["uid" => $uidConn, "pid" => $pid];
-        // TODO : vérifier que l'user oeut voir le post (ajouter un param optionnel à selectPost)
-        if (!$post) sendError("Le post n'existe pas !", HTTP_BAD_REQUEST);
-        if (!$like) {
-            insertLiked($uidConn, $pid, 1);
-            $data["like"]["liked"] = 1; 
-        } else {
-            if ($like[0]["Liked"])
-                liked($pid, $uidConn, 0);
-            else
-                liked($pid, $uidConn, 1);
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $pid = $idTabs[0];
+    $post = selectPost($pid);
+    $like = selectLiked($pid, $uidConn);
+    $data["like"] = ["uid" => $uidConn, "pid" => $pid];
+    // TODO : vérifier que l'user peut voir le post (ajouter un param optionnel à selectPost)
+    if (!$post) sendError("Le post n'existe pas !", HTTP_BAD_REQUEST);
+    if (!$like) {
+        insertLiked($uidConn, $pid, 1);
+        $data["like"]["liked"] = 1;
+    } else {
+        if ($like[0]["Liked"]) liked($pid, $uidConn, 0);
+        else liked($pid, $uidConn, 1);
 
-            $data["like"]["liked"] = !$like[0]["Liked"];
-        }
-        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+        $data["like"]["liked"] = !$like[0]["Liked"];
     }
-    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
 }
 
-function postPostPinned($data, $idTabs, $authKey) { // A TESTER
-    if($authKey) {
-        $uidConn = validUser(authToId($authKey));
-        $gid = $idTabs[0];
-        $mid = $idTabs[1];
-        $msg = selectGroupMessage($mid, $gid);
-        $pin = selectPinned($mid, $uidConn, $gid);
-        $data["pin"] = ["mid" => $mid, "uid" => $uidConn, "gid" => $gid];
-
-        if (!$msg)
-            sendError("Le message n'existe pas !", HTTP_BAD_REQUEST);
-        if (!$pin) {
-            insertPinned($mid, $uidConn, $gid, 1);
-            $data["pin"]["pinned"] = 1;
-        } else {
-            if ($pin[0]["Pinned"])
-                pinned($mid, $uidConn, $gid, 0);
-            else 
-                pinned($mid, $uidConn, $gid, 1);
-            $data["pin"]["pinned"] = !($pin[0]["Pinned"]);
-        }
-        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
-    }
-    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+function putMessagePinned($data, $idTabs, $authKey) { // A TESTER
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $gid = $idTabs[0]; $mid = $idTabs[1];
+    $uidConn = validUser(authToId($authKey));
+    //TODO : vérifier permissions avec role
+    if(!isInGroup($uidConn, $gid)) sendError("Vous n'avez pas les permissions !", HTTP_FORBIDDEN);
+    $msg = selectGroupMessage($mid, $gid);
+    $pinned = $msg[0]["pinned"];
+    if (!$msg) sendError("Le message n'existe pas !", HTTP_BAD_REQUEST);
+    updateMessage($mid, false, (int) !$pinned);
+    $data["message"] = $msg[0];
+    $data["message"]["pinned"] = (int) !$pinned;
+    sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
 }
 
+function putPostPinned($data, $idTabs, $authKey) {
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $pid = $idTabs[0];
+    $uidConn = validUser(authToId($authKey));
+    if(!searchRole("Membre du CA", selectUserRoles($uidConn))) sendError("Vous n'avez pas les permissions !", HTTP_FORBIDDEN);
+    $post = selectPost($pid);
+    $pinned = $post[0]["pinned"];
+    if (!$post) sendError("Le post n'existe pas !", HTTP_BAD_REQUEST);
+    updatePost($pid, false, (int) !$pinned);
+    $data["post"] = $post[0];
+    $data["post"]["pinned"] = (int) !$pinned;
+    sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+
+}
 
 function postEventParticipations($data, $idTabs, $queryString, $authKey) {
     if($authKey) {
