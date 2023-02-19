@@ -14,6 +14,7 @@ enum COLOR:string{
     case LIGHTGREEN ="#95ff15";
     case GREEN = "#228b22";
     case PINK = "#fc6c9f";
+
 }
 
 /**
@@ -29,6 +30,27 @@ function hexToRGB($hex, &$r, &$g, &$b) {
     $r = hexdec($matches[1]);
     $g = hexdec($matches[2]);
     $b = hexdec($matches[3]);
+}
+
+/**
+ * Génère un objet GD à partir d'un fichier image
+ * @param string $filename chemin du fichier image
+ * @return GdImage|false
+ */
+function genGDObject($filename) {
+    $type = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    switch($type) {
+        case "bmp":
+            return imagecreatefrombmp($filename);
+        case "gif":
+            return imagecreatefromgif($filename);
+        case "jpg":
+            return imagecreatefromjpeg($filename);
+        case "png":
+            return imagecreatefrompng($filename);
+        default:
+            return false;
+    }
 }
 
 /**
@@ -104,5 +126,23 @@ function defaultPicture($output, $firstName, $lastName, $font= "arial.ttf") {
     imagepng($image, $output);
     // Libérer la mémoire utilisée par l'image
     imagedestroy($image);
+}
+/**
+ * Ajoute un bandeau rouge à l'image passé en paramètre
+ * @param string $output chemin de sortie de l'image
+ * @param string $image l'image à modifier
+ * @return void
+ */
+function caPicture($output, $image, $thickness = 10) {
+    $im = genGDObject($image);
+    $width  = imagesx($im);
+    $height = imagesy($im);
+    $darkRed = imagecolorallocate($im, 139,0,0);
+    imagefilledrectangle($im, 0, 0, $thickness, $height, $darkRed); // bordure gauche
+    imagefilledrectangle($im, $width-$thickness, 0, $width, $height, $darkRed); // bordure droite
+    imagefilledrectangle($im, 0, 0, $width, $thickness, $darkRed); // bordure haute
+    imagefilledrectangle($im, 0, $height-$thickness, $width, $height, $darkRed); // bordure basse
+    imagepng($im, $output);
+    imagedestroy($im);
 }
 ?>
