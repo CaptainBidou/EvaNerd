@@ -610,12 +610,13 @@ function selectParticipations($aeid, $uid = null) {
     $db = Config::getDatabase();
     $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
     $params = [$aeid];
+    $ratio = "COUNT(*)/(SELECT COUNT(*) FROM Users WHERE activation = 1) as ratio";
     $sqlUid = "";
     if($uid) {
         $sqlUid = " AND User_Participations.uid = ?";
         array_push($params, $uid);
     }
-    $sql = "SELECT User_Participations.participation, Users.id as uid, Users.firstName, Users.lastName, $photo
+    $sql = "SELECT User_Participations.participation, Users.id as uid, Users.firstName, Users.lastName, $photo, $ratio
             FROM User_Participations
             JOIN Users ON Users.id = User_Participations.uid
             WHERE User_Participations.aeid = ? $sqlUid;";
