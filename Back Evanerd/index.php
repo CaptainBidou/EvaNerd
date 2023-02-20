@@ -21,6 +21,7 @@ else $request = false;
 
 $action = getAction($request, $requestType, $idTabs);
 
+
 switch($action) {
 
     /* Authentification */
@@ -228,6 +229,10 @@ switch($action) {
         postEventParticipations($data, $idTabs, $queryString, $authKey);
         break;
     
+    case "NOT_A_ACTION":
+        sendResponse($data);
+        break;
+
     default:
         notAction($data);
         break;
