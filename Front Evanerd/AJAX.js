@@ -306,6 +306,22 @@ function ListUserInstruments($uid){
     });
 }
 
+function ListUserRoles($uid){
+    $.ajax({
+        type: "GET",
+        url: api + "/users/" + $uid + "/roles",
+        headers: {"authToken" : ""},
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+        },
+        dataType: "json"
+    });
+}
+
 /***** USERS END **********/
 
 /* ROLES AJAX FUNC */
