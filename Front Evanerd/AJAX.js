@@ -754,8 +754,25 @@ function ListPostMessages($pid,$authToken){
 }
 
 
-function addComments($message,) {
+function addComments($message) {
     
+}
+
+
+function UpdateEpinglePost($pid,$authToken){
+    $.ajax({
+        type: "PUT",
+        url: api + "/posts/"+$pid+"/pinned",
+        headers: {"authToken":$authToken}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });  
 }
 /* POSTS END */
 
