@@ -90,8 +90,10 @@ function CommentairesPosts($id){
 }
 
 function JEnvoyerCommentaire($commContent){
-    console.log($commContent);
-    addComments($commContent,currentComm,authcode);
+    console.log($commContent.value);
+    $curText = $commContent.value;
+    $curComm = currentComm;
+    addComments($curText,$curComm,authcode);
 }
 
 function AfficherCreer(){
@@ -134,7 +136,7 @@ function EnvoyerMessage(groupId,message,rep){
     $informations={"content":message,
                     "answerTo":rep,};
                     
-    AddMsgConv(groupId, informations);
+    AddMsgConv(groupId, $informations);
 }
 
 function    LikerPost(idPost){

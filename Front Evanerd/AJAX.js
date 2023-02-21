@@ -656,7 +656,7 @@ function AddUserConv($gid, $uid){
  */
 
 function AddMsgConv($gid, $informations){
-
+    $data=[];
     $data["content"] = $informations["content"];
     if($informations["answerTo"])
         $data["answerTo"] = $informations["answerTo"];
@@ -772,6 +772,7 @@ function ListPostReactions($pid){
  */
 
 function ListPostMessages($pid,$authToken){
+    console.log(currentComm);
     $.ajax({
         type: "GET",
         url: api + "/posts/"+$pid+"/messages",
@@ -792,6 +793,7 @@ function ListPostMessages($pid,$authToken){
 
 function addComments($message,$pid,$authToken) {
     console.log($pid + " && " + $message);
+    console.log(api + "/posts/"+$pid+"/messages?content="+$message)
     $.ajax({
         type: "POST",
         url: api + "/posts/"+$pid+"/messages?content="+$message,
@@ -802,7 +804,8 @@ function addComments($message,$pid,$authToken) {
         },
         success: function(oRep){
             console.log(oRep); 
-            ListPostMessages($pid,$authToken);
+            //$(".card").css("filter","blur(0)");$(".commentaires").remove();
+            ListPostMessages(currentComm,$authToken);
         },
         dataType: "json"
     });
@@ -846,7 +849,7 @@ function ListCalendarsEvents($authToken,$type){
             if ($type == "extra"){
                 oRep["events"].forEach(element => {
                     element.titre = element.event;
-                    JCreerConcert(element);
+                    getEventParticipation(element,$authToken);
                 });
             }
             else
@@ -861,7 +864,7 @@ function ListCalendarsEvents($authToken,$type){
     }); 
 }
 
-/*
+
 
 function getEventParticipation(eventInfos,$authToken){
     $.ajax({
@@ -873,12 +876,13 @@ function getEventParticipation(eventInfos,$authToken){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
-            console.log(oRep); 
-
+            eventInfos["pourcentage"] = parseFloat(oRep.participationsRatio); 
+            console.log(eventInfos); 
+            JCreerConcert(eventInfos);
         },
         dataType: "json"
     }); 
-}*/
+}
 
 
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
