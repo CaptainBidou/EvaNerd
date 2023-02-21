@@ -270,8 +270,6 @@ function JcreerPost(Reponse,membre,admin){
 
 
 
-
-
     //.append(jClonePostProfile)
     jClonePostBody2.append(jClonePostProfile).append(jClonePostTitre).css("vertical-align","middle");
 
@@ -987,8 +985,8 @@ function JCreerMessageParticipant(Reponse,div,rep)
 }
 
 function JmodifCouleur(Reponse){
-$(".Actif-Div").css("background-color",Reponse);
-$(".reponse-message-linked").css("background-color","blueviolet");
+    $(".Actif-Div").css("background-color",Reponse);
+    $(".reponse-message-linked").css("background-color","blueviolet");
 }
 
 function JCreerMessageActif(Reponse,div,couleur,rep)
@@ -1080,24 +1078,35 @@ function JCreerConnexion(){
 
 
 function JclickEpingle(target){
+    
     if($(target).attr("src")=="Ressources/Message/epingleNOIR.png")
-       { $(target).attr("src","Ressources/Message/epingle.png");
-       DesEpinglerUnMessage($(target).attr("id_message")); }
+    { 
+       $(target).attr("src","Ressources/Message/epingle.png");
+       DesEpinglerUnMessage($(target).attr("id_message")); 
+       return;
+    }
 
     if($(target).attr("src")=="Ressources/Message/epingle.png")
     {
         $(target).attr("src","Ressources/Message/epingleNOIR.png");
         EpinglerUnMessage($(target).attr("id_message"));// à implémenter dans la couche client 
+        return;
     }
 
     if($(target).attr("src")=="Ressources/Accueil/epingleNOIR.png")
-    { $(target).attr("src","Ressources/Accueil/epingle.png");
-    DesEpinglerUnPost($(target).attr("id_post"));                                     }
+    { 
+        $(target).attr("src","Ressources/Accueil/epingle.png");
+        DesEpinglerUnPost($(target).attr("id_post"));
+        return;                                     
+    }
 
 
     if($(target).attr("src")=="Ressources/Accueil/epingle.png")
-    { $(target).attr("src","Ressources/Accueil/epingleNOIR.png");
-    EpinglerUnPost($(target).attr("id_post"));                                      }
+    { 
+        $(target).attr("src","Ressources/Accueil/epingleNOIR.png");
+        EpinglerUnPost($(target).attr("id_post"));
+        return;
+    }
 
 
 }
