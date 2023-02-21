@@ -777,7 +777,7 @@ function ListPostMessages($pid,$authToken){
 
 function addComments($message,$pid,$authToken) {
     console.log($pid + " && " + $message);
-    /*$.ajax({
+    $.ajax({
         type: "POST",
         url: api + "/posts/"+$pid+"/messages?content="+$message,
         headers: {"authToken":$authToken}, // données dans les entetes 
@@ -787,9 +787,10 @@ function addComments($message,$pid,$authToken) {
         },
         success: function(oRep){
             console.log(oRep); 
+            ListPostMessages($pid,$authToken);
         },
         dataType: "json"
-    });   */
+    });
 }
 
 

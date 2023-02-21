@@ -78,6 +78,8 @@ function AfficherCalendrier(){
 }
 
 function CommentairesPosts($id){
+    $id = $($id).attr("id_post");
+    currentComm = $id;
     ListPostMessages($id,authcode);
 }
 
