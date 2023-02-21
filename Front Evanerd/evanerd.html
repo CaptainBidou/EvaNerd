@@ -74,7 +74,7 @@ function EpinglerUnMessage() {
 
 }
 
-function CommentairesPosts($id = 1){
+function CommentairesPosts($id){
     ListPostMessages($id,authcode);
 }
 
@@ -108,6 +108,7 @@ function JRecupMessages(context){
     console.log(id);
     var nomgroupe = $(context.target).text();
     console.log(nomgroupe);
+    currentGroup = id;
     $("#page").html("");
     ListMsgConv(id,nomgroupe,user,authcode);
 }

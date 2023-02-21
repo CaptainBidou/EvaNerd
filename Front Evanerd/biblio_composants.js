@@ -22,7 +22,7 @@ var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle','profil
 var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').on("click",function(context){JclickEpingle(context.target);});
 var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png').on("click",function(context){JClickLike(context.target);});
 var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png').on("click",function(context){JCreerReactionLayout(context.target);});
-var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts();});
+var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts(context.target);});
 
 //variables pour le footer
 var JFooter =$("<nav>").addClass(["footer","navbar"]).data("type","footer").on("click",function(context){JClickFooter(context);});
@@ -264,7 +264,7 @@ function JcreerPost(Reponse,membre,admin){
         jClonePostEpingle.attr("src","Ressources/Accueil/epingleNOIR.png")
 
     }
-    var jClonePostComm=JPostCommentaire.clone(true,true);
+    var jClonePostComm=JPostCommentaire.clone(true,true).attr("id_post",Reponse.id);
     var jClonePostLike=JPostLike.clone(true,true).attr("id_post",Reponse.id);
     var jClonePostReact=JPostReaction.clone(true,true);
 
