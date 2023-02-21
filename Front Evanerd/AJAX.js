@@ -6,6 +6,7 @@ var member = 0;
 var pdp = "";
 var user = "";
 var currentComm = 0;
+var currentGroup = 0;
 
 
 /* AUTHENTIFICATION AJAX FUNC */
@@ -757,7 +758,8 @@ function ListPostMessages($pid,$authToken){
 
 
 function addComments($message,$pid,$authToken) {
-    $.ajax({
+    console.log($pid + " && " + $message);
+    /*$.ajax({
         type: "POST",
         url: api + "/posts/"+$pid+"/messages?content="+$message,
         headers: {"authToken":$authToken}, // données dans les entetes 
@@ -769,7 +771,7 @@ function addComments($message,$pid,$authToken) {
             console.log(oRep); 
         },
         dataType: "json"
-    });   
+    });   */
 }
 
 
