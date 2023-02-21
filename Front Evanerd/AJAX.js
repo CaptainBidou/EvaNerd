@@ -8,7 +8,6 @@ var user = "";
 var currentComm = 0;
 var currentGroup = 0;
 
-
 /* AUTHENTIFICATION AJAX FUNC */
 
 /**
@@ -257,7 +256,7 @@ function AddserInstruments($iid){
 function AddserAchievement($aid){
     $.ajax({
         type: "POST",
-        url: api + "/users/instruments",
+        url: api + "/users/achievements",
         headers: {"authToken":""}, // données dans les entetes 
         data: [     
             {
@@ -289,6 +288,22 @@ function VerifMail(){
         },
         dataType: "json"
     });   
+}
+
+function ListUserInstruments($uid){
+    $.ajax({
+        type: "GET",
+        url: api + "/users/" + $uid + "/instruments",
+        headers: {"authToken" : ""},
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+        },
+        dataType: "json"
+    });
 }
 
 /***** USERS END **********/
