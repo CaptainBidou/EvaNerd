@@ -36,7 +36,16 @@ function AfficherMessagerie(){
     ListConv(authcode);
 }
 
+function EpinglerUnPost($postID) { 
+    console.log("epingle");
+    UpdateEpinglePost($postID,authcode);
+}
 
+
+function DesEpinglerUnPost($postID){
+    console.log("desepingle");
+    UpdateEpinglePost($postID,authcode);
+}
 
 function AfficherAppel(){
     $("#page").html("");
