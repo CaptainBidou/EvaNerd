@@ -5,6 +5,8 @@ var authcode = "";
 var member = 0;
 var pdp = "";
 var user = "";
+var currentComm = 0;
+var currentGroup = 0;
 
 
 /* AUTHENTIFICATION AJAX FUNC */
@@ -661,6 +663,24 @@ function AddMsgConv($gid, $informations){
 
 }
 
+function EpinglerMsgConv($mid, currentGroup, $authToken){
+
+    $.ajax({
+        type: "PUT",
+        url: api + "/groups/" + currentGroup + "/messages/" + $mid + "/pinned",
+        headers : {"authToken" : $authToken},
+        data: [],
+        error: function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep)
+        },
+        dataType: "json"
+    });
+
+}
+
 
 
 /* GROUPS END */
@@ -737,6 +757,7 @@ function ListPostReactions($pid){
  */
 
 function ListPostMessages($pid,$authToken){
+    console.log(currentComm);
     $.ajax({
         type: "GET",
         url: api + "/posts/"+$pid+"/messages",
@@ -748,14 +769,48 @@ function ListPostMessages($pid,$authToken){
         success: function(oRep){
             console.log(oRep); 
             JCreerCommentaireLayout(oRep);
+            currentComm = $pid;
         },
         dataType: "json"
     });   
 }
 
 
-function addComments($message,) {
-    
+function addComments($message,$pid,$authToken) {
+    console.log($pid + " && " + $message);
+    console.log(api + "/posts/"+$pid+"/messages?content="+$message)
+    $.ajax({
+        type: "POST",
+        url: api + "/posts/"+$pid+"/messages?content="+$message,
+        headers: {"authToken":$authToken}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            //$(".card").css("filter","blur(0)");$(".commentaires").remove();
+            ListPostMessages(currentComm,$authToken);
+        },
+        dataType: "json"
+    });
+}
+
+
+function UpdateEpinglePost($pid,$authToken){
+    $.ajax({
+        type: "PUT",
+        url: api + "/posts/"+$pid+"/pinned",
+        headers: {"authToken":$authToken}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });  
 }
 /* POSTS END */
 

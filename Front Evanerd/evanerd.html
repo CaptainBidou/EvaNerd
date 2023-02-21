@@ -36,7 +36,25 @@ function AfficherMessagerie(){
     ListConv(authcode);
 }
 
+function EpinglerUnPost($postID) { 
+    console.log("epingle");
+    UpdateEpinglePost($postID,authcode);
+}
 
+
+function DesEpinglerUnPost($postID){
+    console.log("desepingle");
+    UpdateEpinglePost($postID,authcode);
+}
+
+function EpinglerUnMessage($mid){
+    EpinglerMsgConv($mid, currentGroup, authcode);
+    
+}
+
+function DesEpinglerUnMessage($mid){
+    EpinglerUnMessage($mid);
+}
 
 function AfficherAppel(){
     $("#page").html("");
@@ -59,12 +77,16 @@ function AfficherCalendrier(){
 
 }
 
-function CommentairesPosts($id = 1){
+function CommentairesPosts($id){
+    $id = $($id).attr("id_post");
+    currentComm = $id;
     ListPostMessages($id,authcode);
 }
 
-function JEnvoyerCommentaire($commentaires){
-    console.log($($commentaires).data());
+function JEnvoyerCommentaire($commContent){
+    console.log($commContent);
+    $curComm = currentComm;
+    addComments($commContent,$curComm,authcode);
 }
 
 function AfficherCreer(){
@@ -92,6 +114,7 @@ function JRecupMessages(context){
     console.log(id);
     var nomgroupe = $(context.target).text();
     console.log(nomgroupe);
+    currentGroup = id;
     $("#page").html("");
     ListMsgConv(id,nomgroupe,user,authcode);
 }

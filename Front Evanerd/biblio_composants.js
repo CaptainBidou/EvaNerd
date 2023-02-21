@@ -22,7 +22,7 @@ var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle','profil
 var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').on("click",function(context){JclickEpingle(context.target);});
 var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png').on("click",function(context){JClickLike(context.target);});
 var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png').on("click",function(context){JCreerReactionLayout(context.target);});
-var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts();});
+var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts(context.target);});
 
 //variables pour le footer
 var JFooter =$("<nav>").addClass(["footer","navbar"]).data("type","footer").on("click",function(context){JClickFooter(context);});
@@ -174,7 +174,7 @@ var JCommentairesUp=$("<div>").addClass("commentaires-Up");
 var JCommentairesMiddle=$("<div>").addClass("commentaires-Mid");
 var JCommentairesCroix=$("<img>").addClass("commentaires-cross").attr("src","Ressources/Accueil/croix.png").on("click",function(){$(".card").css("filter","blur(0)");$(".commentaires").remove();})
 var JCommentaireInput=$("<textarea>").attr('type','text').addClass("form-control Commentaire-Input").attr("placeholder","Votre commentaire");
-var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerCommentaire(context.target);});
+var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerCommentaire($(".Commentaire-Input")[0].value);});
 var JCommentaireDown=$("<div>").addClass("Commentaire-Down");
 
 
@@ -264,11 +264,9 @@ function JcreerPost(Reponse,membre,admin){
         jClonePostEpingle.attr("src","Ressources/Accueil/epingleNOIR.png")
 
     }
-    var jClonePostComm=JPostCommentaire.clone(true,true);
+    var jClonePostComm=JPostCommentaire.clone(true,true).attr("id_post",Reponse.id);
     var jClonePostLike=JPostLike.clone(true,true).attr("id_post",Reponse.id);
     var jClonePostReact=JPostReaction.clone(true,true);
-
-
 
 
 
@@ -987,8 +985,8 @@ function JCreerMessageParticipant(Reponse,div,rep)
 }
 
 function JmodifCouleur(Reponse){
-$(".Actif-Div").css("background-color",Reponse);
-$(".reponse-message-linked").css("background-color","blueviolet");
+    $(".Actif-Div").css("background-color",Reponse);
+    $(".reponse-message-linked").css("background-color","blueviolet");
 }
 
 function JCreerMessageActif(Reponse,div,couleur,rep)
@@ -1077,27 +1075,36 @@ function JCreerConnexion(){
 
 
 
-
-
 function JclickEpingle(target){
+    
     if($(target).attr("src")=="Ressources/Message/epingleNOIR.png")
-       { $(target).attr("src","Ressources/Message/epingle.png");
-       DesEpinglerUnMessage($(target).attr("id_message")); }
+    { 
+       $(target).attr("src","Ressources/Message/epingle.png");
+       DesEpinglerUnMessage($(target).attr("id_message")); 
+       return;
+    }
 
     if($(target).attr("src")=="Ressources/Message/epingle.png")
     {
         $(target).attr("src","Ressources/Message/epingleNOIR.png");
         EpinglerUnMessage($(target).attr("id_message"));// à implémenter dans la couche client 
+        return;
     }
 
     if($(target).attr("src")=="Ressources/Accueil/epingleNOIR.png")
-    { $(target).attr("src","Ressources/Accueil/epingle.png");
-    DesEpinglerUnPost($(target).attr("id_post"));                                     }
+    { 
+        $(target).attr("src","Ressources/Accueil/epingle.png");
+        DesEpinglerUnPost($(target).attr("id_post"));
+        return;                                     
+    }
 
 
     if($(target).attr("src")=="Ressources/Accueil/epingle.png")
-    { $(target).attr("src","Ressources/Accueil/epingleNOIR.png");
-    EpinglerUnPost($(target).attr("id_post"));                                      }
+    { 
+        $(target).attr("src","Ressources/Accueil/epingleNOIR.png");
+        EpinglerUnPost($(target).attr("id_post"));
+        return;
+    }
 
 
 }
@@ -1258,19 +1265,17 @@ function JClickLike(target){
 
 
 function JCreerReactionLayout(Reponse){
-
-
     $(".card").css("filter","blur(20px)")
-var JCloneReactionUp=JReactionUp.clone(true,true);
-var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
-var JCloneReactionCroix=JReactionCroix.clone(true,true);
-var JCloneReaction =JReaction.clone(true,true);
+    var JCloneReactionUp=JReactionUp.clone(true,true);
+    var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
+    var JCloneReactionCroix=JReactionCroix.clone(true,true);
+    var JCloneReaction =JReaction.clone(true,true);
 
-JCloneReactionUp.append(JCloneReactionCroix);
-JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle]);
-JCloneReaction.hide();
-$("#page").append(JCloneReaction);
-JCloneReaction.fadeIn(1000);
+    JCloneReactionUp.append(JCloneReactionCroix);
+    JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle]);
+    JCloneReaction.hide();
+    $("#page").append(JCloneReaction);
+    JCloneReaction.fadeIn(1000);
 }
 
 
