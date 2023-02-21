@@ -47,6 +47,8 @@ function DesEpinglerUnPost($postID){
     UpdateEpinglePost($postID,authcode);
 }
 
+
+
 function AfficherAppel(){
     $("#page").html("");
     ListCalendarsEvents(authcode, "intra");
@@ -72,8 +74,9 @@ function CommentairesPosts($id = 1){
     ListPostMessages($id,authcode);
 }
 
-function JEnvoyerCommentaire($commentaires){
-    console.log($($commentaires).data());
+function JEnvoyerCommentaire($commContent){
+    console.log($commContent);
+    addComments($commContent,currentComm,authcode);
 }
 
 function AfficherCreer(){
