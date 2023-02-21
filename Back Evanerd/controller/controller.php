@@ -132,39 +132,35 @@ function listGroups($data, $queryString, $authKey) {
  * @param string $authKey Token d'identification de l'utilisateur
  */
 function listGroupMessages($data, $idTabs, $authKey) {
-    if($authKey) {
-        $gid  = $idTabs[0]; 
-        $uidConn = validUser(authToId($authKey));
-        // Si il est dans le groupe ou que son role permet d'acceder au groupe
-        // Alors il a le droit d'accéder au message du groupe
-        if(isInGroup($uidConn, $gid) || haveGroupPermission($uidConn, $gid)) {
-            $i = 0;
-            $data["groupId"] = $gid;
-            $data["messages"] = array();
-            $reactionData = groupby(selectGroupReactions($gid), "mid");
-            // On regoupe par emoji
-            foreach($reactionData as $mid => $reactionstab) {
-                $reactionData[$mid] = groupby($reactionstab, "emoji");
-            }
-            // on recupére les messages
-            $messagesData = selectGroupMessages($gid);
-            // Pour chaque message on construit un json et on lui associe ses emojis
-            foreach($messagesData as $message) {
-                $data["messages"][$i]["id"] = $message["id"];
-                $data["messages"][$i]["author"] = ["id" => $message["uid"], "firstName" => $message["firstName"], "lastName" => $message["lastName"], "photo" => $message["photo"]];
-                $data["messages"][$i]["content"] = $message["content"];
-                $data["messages"][$i]["pinned"] = $message["pinned"];
-                $data["messages"][$i]["answerTo"] = $message["answerTo"];
-                if(isset($reactionData[$message["id"]])) {
-                    $data["messages"][$i]["reactions"] = $reactionData[$message["id"]];
-                }
-                $i++;
-            }
-            sendResponse($data, [getStatusHeader(HTTP_OK)]);
+    if(!$authKey) sendError("Il faut vous identifié !", HTTP_UNAUTHORIZED);
+    $gid  = $idTabs[0];
+    $uidConn = validUser(authToId($authKey));
+    // Si il est dans le groupe ou que son role permet d'acceder au groupe
+    // Alors il a le droit d'accéder au message du groupe
+    if (!isInGroup($uidConn, $gid) && !haveGroupPermission($uidConn, $gid)) sendError("Vous devez être dans le groupe !", HTTP_FORBIDDEN);
+        $i = 0;
+        $data["groupId"] = $gid;
+        $data["messages"] = array();
+        $reactionData = groupby(selectGroupReactions($gid), "mid");
+        // On regoupe par emoji
+        foreach ($reactionData as $mid => $reactionstab) {
+            $reactionData[$mid] = groupby($reactionstab, "emoji");
         }
-        sendError("Vous devez être dans le groupe !", HTTP_FORBIDDEN);
-    }
-    sendError("Il faut vous identifié !", HTTP_UNAUTHORIZED);
+        // on recupére les messages
+        $messagesData = selectGroupMessages($gid);
+        // Pour chaque message on construit un json et on lui associe ses emojis
+        foreach ($messagesData as $message) {
+            $data["messages"][$i]["id"] = $message["id"];
+            $data["messages"][$i]["author"] = ["id" => $message["uid"], "firstName" => $message["firstName"], "lastName" => $message["lastName"], "photo" => $message["photo"]];
+            $data["messages"][$i]["content"] = $message["content"];
+            $data["messages"][$i]["pinned"] = $message["pinned"];
+            $data["messages"][$i]["answerTo"] = $message["answerTo"];
+            if (isset($reactionData[$message["id"]])) {
+                $data["messages"][$i]["reactions"] = $reactionData[$message["id"]];
+            }
+            $i++;
+        }
+        sendResponse($data, [getStatusHeader(HTTP_OK)]);
 }
 
 /**
@@ -637,20 +633,18 @@ function listAgendaEvents($data, $idTabs, $authKey) {
 }
 
 function postAgenda($data, $queryString, $authKey) {
-    if($authKey) {
-        $uidConn = validUser(authToId($authKey));
-        //TODO : faire les permissions
-        //TODO : ajouter l'uid
-        if($title = validString(htmlspecialchars(valider("title", $queryString)), 30, 1))
-        if($extra = valider("type", $queryString)) {
+    if(!$authKey) sendError("Vous être identifié !", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    //TODO : faire les permissions
+    //TODO : ajouter l'uid
+    if ($title = validString(htmlspecialchars(valider("title", $queryString)), 30, 1))
+        if ($extra = valider("type", $queryString)) {
             $extra = ($extra == "intra") ? 0 : 1;
             $aid = insertAgenda($title, $extra, $uidConn);
-            $data["agenda"] = ["id"=>$aid, "title" => $title, "extra" => $extra];
+            $data["agenda"] = ["id" => $aid, "title" => $title, "extra" => $extra];
             sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
         }
-        sendError("Requête invalide !", HTTP_BAD_REQUEST);
-    }
-    sendError("Vous être identifié !", HTTP_UNAUTHORIZED);
+    sendError("Requête invalide !", HTTP_BAD_REQUEST);
 }
 
 /**
@@ -662,7 +656,7 @@ function postAgenda($data, $queryString, $authKey) {
 function postAgendasEvent($data, $idTabs, $queryString, $authKey) {
     //TODO : Vérifier les permissions
     if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
-    //$uidConn = validUser(authToId($authKey));
+    validUser(authToId($authKey));
     $aid = $idTabs[0];
     if(!selectAgenda($aid)) sendError("Cet agenda n'existe pas !", HTTP_BAD_REQUEST);
     if($event = validString(htmlspecialchars(valider("event", $queryString)), 30, 1))
@@ -904,7 +898,13 @@ function listEvents($data, $queryString, $authKey) {
 }
 
 function postAgendasPermissions($data, $idTabs, $queryString, $authKey) {
-    sendError("Not implemented yet !", HTTP_NOT_FOUND);
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $aid = $idTabs[0];
+    $agenda = selectAgenda($aid, $uidConn);
+    if (!$agenda) sendError("Ce calendrier n'existe pas !", HTTP_FORBIDDEN);
+    //TODO : à finir
+    sendError("NOT IMPLEMENTED", HTTP_NOT_FOUND);
 }
 
 function postPostMessage($data, $idTabs, $authKey, $queryString) {
@@ -914,11 +914,10 @@ function postPostMessage($data, $idTabs, $authKey, $queryString) {
     $notAMember = searchRole("Non Membre", selectUserRoles($uidConn));
     if(!selectPost($pid, $notAMember)) sendError("Impossible de commenter ce post !", HTTP_FORBIDDEN);
     
-    if($message = htmlspecialchars(valider("content", $queryString))) 
-    if(strlen($message) <= 300 ) {
+    if($message = validString(htmlspecialchars(valider("content", $queryString)), 180, 0)) {
         $answerTo = valider("answerTo", $queryString);
         selectPostMessage($answerTo, $pid) ? : $answerTo = null;
-        $mid = insertPostMessage($uidConn, $pid, $message, $answerTo);
+        $mid = insertPostMessage($pid, $uidConn, $message, $answerTo);
         $data["comment"] = ["id" => $mid, "content" => $message, "pinned" => 0, "answerTo" => $answerTo];
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
     }
