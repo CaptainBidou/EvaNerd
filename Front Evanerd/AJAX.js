@@ -663,13 +663,21 @@ function AddMsgConv($gid, $informations){
 
 }
 
-function EpinglerMsgConv($mid){
+function EpinglerMsgConv($mid, currentGroup, $authToken){
 
     $.ajax({
         type: "PUT",
-        url: api + "/groups/" + $gid + "/messages/" + $mid + "/pinned",
-        headers : {"authToken" : ""},
-    })
+        url: api + "/groups/" + currentGroup + "/messages/" + $mid + "/pinned",
+        headers : {"authToken" : $authToken},
+        data: [],
+        error: function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep)
+        },
+        dataType: "json"
+    });
 
 }
 

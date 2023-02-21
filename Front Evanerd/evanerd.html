@@ -47,7 +47,14 @@ function DesEpinglerUnPost($postID){
     UpdateEpinglePost($postID,authcode);
 }
 
+function EpinglerUnMessage($mid){
+    EpinglerMsgConv($mid, currentGroup, authcode);
+    
+}
 
+function DesEpinglerUnMessage($mid){
+    EpinglerUnMessage($mid);
+}
 
 function AfficherAppel(){
     $("#page").html("");
@@ -67,10 +74,6 @@ function AfficherCalendrier(){
     $("#page").html("");
     //ici obtenir la réponse de la requête 
     ListCalendarsEvents(authcode, "extra");
-
-}
-
-function EpinglerUnMessage() {
 
 }
 
