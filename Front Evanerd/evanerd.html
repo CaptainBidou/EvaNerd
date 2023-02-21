@@ -85,7 +85,8 @@ function CommentairesPosts($id){
 
 function JEnvoyerCommentaire($commContent){
     console.log($commContent);
-    addComments($commContent,currentComm,authcode);
+    $curComm = currentComm;
+    addComments($commContent,$curComm,authcode);
 }
 
 function AfficherCreer(){
