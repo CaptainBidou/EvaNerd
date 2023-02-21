@@ -5,6 +5,7 @@ var authcode = "";
 var member = 0;
 var pdp = "";
 var user = "";
+var currentComm = 0;
 
 
 /* AUTHENTIFICATION AJAX FUNC */
@@ -748,14 +749,27 @@ function ListPostMessages($pid,$authToken){
         success: function(oRep){
             console.log(oRep); 
             JCreerCommentaireLayout(oRep);
+            currentComm = $pid;
         },
         dataType: "json"
     });   
 }
 
 
-function addComments($message) {
-    
+function addComments($message,$pid,$authToken) {
+    $.ajax({
+        type: "POST",
+        url: api + "/posts/"+$pid+"/messages?content="+$message,
+        headers: {"authToken":$authToken}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    });   
 }
 
 
