@@ -174,7 +174,7 @@ var JCommentairesUp=$("<div>").addClass("commentaires-Up");
 var JCommentairesMiddle=$("<div>").addClass("commentaires-Mid");
 var JCommentairesCroix=$("<img>").addClass("commentaires-cross").attr("src","Ressources/Accueil/croix.png").on("click",function(){$(".card").css("filter","blur(0)");$(".commentaires").remove();})
 var JCommentaireInput=$("<textarea>").attr('type','text').addClass("form-control Commentaire-Input").attr("placeholder","Votre commentaire");
-var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerCommentaire(context.target);});
+var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerCommentaire($(".Commentaire-Input")[0].value);});
 var JCommentaireDown=$("<div>").addClass("Commentaire-Down");
 
 
@@ -1075,8 +1075,6 @@ function JCreerConnexion(){
 
 
 
-
-
 function JclickEpingle(target){
     
     if($(target).attr("src")=="Ressources/Message/epingleNOIR.png")
@@ -1267,19 +1265,17 @@ function JClickLike(target){
 
 
 function JCreerReactionLayout(Reponse){
-
-
     $(".card").css("filter","blur(20px)")
-var JCloneReactionUp=JReactionUp.clone(true,true);
-var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
-var JCloneReactionCroix=JReactionCroix.clone(true,true);
-var JCloneReaction =JReaction.clone(true,true);
+    var JCloneReactionUp=JReactionUp.clone(true,true);
+    var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
+    var JCloneReactionCroix=JReactionCroix.clone(true,true);
+    var JCloneReaction =JReaction.clone(true,true);
 
-JCloneReactionUp.append(JCloneReactionCroix);
-JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle]);
-JCloneReaction.hide();
-$("#page").append(JCloneReaction);
-JCloneReaction.fadeIn(1000);
+    JCloneReactionUp.append(JCloneReactionCroix);
+    JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle]);
+    JCloneReaction.hide();
+    $("#page").append(JCloneReaction);
+    JCloneReaction.fadeIn(1000);
 }
 
 
