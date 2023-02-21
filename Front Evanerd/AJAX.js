@@ -663,6 +663,16 @@ function AddMsgConv($gid, $informations){
 
 }
 
+function EpinglerMsgConv($mid){
+
+    $.ajax({
+        type: "PUT",
+        url: api + "/groups/" + $gid + "/messages/" + $mid + "/pinned",
+        headers : {"authToken" : ""},
+    })
+
+}
+
 
 
 /* GROUPS END */
