@@ -33,7 +33,7 @@ function AfficherProfile(context){
     $("#page").html("");
     $uid = $(context).data("id-profile");
     console.log(context);
-    
+    ListUserRoles($uid)
     ListUserInstruments($uid);
 
     ListUserParticipation($uid, 0, authcode);
@@ -42,7 +42,7 @@ function AfficherProfile(context){
 }
 
 function RolesMenu(context){
-    $uid = $(context).data().uid;
+    $uid = $(context).data("id-profile");
     console.log(context);
     ListUserRoles($uid);
 }
