@@ -377,6 +377,8 @@ function JcreerHeader(Reponse){
     var JCloneHeaderItem=JHeaderItem.clone(true,true).text("blabla");
     JCloneHeaderMenu.append(JCloneHeaderItem);
 
+
+    JCloneHeaderProfile.data("id-profile",Reponse.id);
     if (Reponse==null)
     {
        JCloneHeader.append(JCloneHeaderLogo);
@@ -387,7 +389,7 @@ function JcreerHeader(Reponse){
 
 
     if(Reponse.photo!=null){
-        var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.photo).attr("id-profile",Reponse.id);
+        var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.photo);
     }
     else{
         var JCloneHeaderProfile=null;
