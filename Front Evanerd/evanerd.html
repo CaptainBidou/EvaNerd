@@ -37,6 +37,12 @@ function AfficherProfile(context){
 
 }
 
+function RolesMenu(context){
+    $uid = $(context).data().uid;
+    console.log(context);
+    ListUserRoles($uid);
+}
+
 function AfficherMessagerie(){
     $("#page").html("");
     ListConv(authcode);
