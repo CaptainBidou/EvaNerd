@@ -1261,14 +1261,13 @@ JCloneCommentaires.fadeIn(1000);
 function JClickLike(target){
     if($(target).attr("src")=="Ressources/Accueil/like.png")
     { 
-    $(target).attr("src","Ressources/Accueil/likeBlanc.png");
-    LikerPost($(target).attr("id_post"));}
+    $(target).attr("src","Ressources/Accueil/likeBlanc.png");}
     
     else
     {//TODO RAJOUTER ANIMATION
     $(target).attr("src","Ressources/Accueil/like.png");}
 
-
+    LikerPost($(target).attr("id_post"));
 
 }
 
