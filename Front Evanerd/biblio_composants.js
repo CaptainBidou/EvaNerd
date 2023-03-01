@@ -342,10 +342,10 @@ function JcreerFooter(Reponse){
 
 
 
-    if(Reponse.membre==1){
-        JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);}
-        $("#footer").append(JCloneFooter);
-        if(Reponse.membre==0)
+    if(Reponse.membre==true){
+        JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);
+        $("#footer").append(JCloneFooter);}
+        if(Reponse.membre==false)
         {
             JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAgenda).append(JCloneFooterMail);
             $("#footer").append(JCloneFooter);

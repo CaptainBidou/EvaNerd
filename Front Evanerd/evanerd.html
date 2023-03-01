@@ -14,7 +14,7 @@
 
 
 $(document).ready(function(){
-    JCreerConnexion(); // pour afficher la connexion
+    ConnexionAuto(); // pour afficher la connexion
     //AfficherAccueil();
 });
 
@@ -160,6 +160,42 @@ function AjouterUtilisateur(context){
     //AddUserConv(currentGroup,);
 }
 
+
+function ConnexionAuto(){
+    
+   /* console.log("connexion auto");
+    console.log(user);
+    console.log(pdp);
+    console.log(member);
+     authcode = localStorage.getItem("authToken");
+     user = localStorage.getItem("user");
+    member = localStorage.getItem("member");
+     pdp = localStorage.getItem("pdp");
+     admin = localStorage.getItem("admin");*/
+
+     var tel = localStorage.getItem("tel");
+     var passwd = localStorage.getItem("passwd");
+
+     //return JCreerConnexion();
+    /*if(authcode!=null && user!=null && member!=null && pdp!=null && admin!=null)
+    {
+
+     JcreerHeader({"photo" : pdp,"id" : user,"member" : member,"admin" : admin});
+        AfficherAccueil();
+        JcreerFooter({"membre" : member});
+    }
+    else{*/
+
+        if(tel!=null && passwd!=null){
+            auth(tel,passwd);
+        }
+        else
+        JCreerConnexion();
+        
+
+    //}
+  
+}
 
 
 </script>
