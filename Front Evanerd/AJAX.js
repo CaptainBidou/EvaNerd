@@ -2,11 +2,13 @@
 //var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
 var api ="https://evanerds.fr/api/v1";
 var authcode = ""; //Code d'auth de l'utilisateur
-var member = 0; 
+var member = false; 
 var pdp = "";
 var user = ""; 
+var admin = 0;
 var currentComm = 0;
 var currentGroup = 0;
+
 
 /* AUTHENTIFICATION AJAX FUNC */
 
@@ -17,6 +19,8 @@ var currentGroup = 0;
  */
 
 function auth($tel,$password){
+    localStorage.setItem('tel',$tel);
+    localStorage.setItem('passwd',$password);
     $.ajax({
         type: "POST",
         url: api + "/auth?"+ "tel="+$tel+"&password="+$password,
@@ -37,10 +41,20 @@ function auth($tel,$password){
         success: function(oRep){
             console.log(oRep); 
             user = oRep["user"].id;
+           
             authcode = oRep.authToken;
+           
+            
             member = !oRep["user"].noMember;
+           
             pdp = oRep["user"].photo;
+        
             admin = oRep["user"].admin;
+            localStorage.setItem('admin',admin);
+            localStorage.setItem('user',user);
+            localStorage.setItem('authToken',authcode);
+            localStorage.setItem('member',member);
+            localStorage.setItem('pdp',pdp);
         },
         dataType: "json"
     }).done(function launchAPP(){
@@ -730,8 +744,13 @@ function ListPosts($authToken){
         error : function(oRep){
             console.log("Une erreur s'est produite");
             console.log(oRep);
+            $("#page").html("");
+            $("#header").html("");
+            $("#footer").html("");
+            JCreerConnexion();
         },
         success: function(oRep){
+            $("#page").html("");
             console.log(oRep);
             oRep["posts"].sort(function compare(e1,e2) { return e2.pinned - e1.pinned });
             oRep["posts"].forEach(element => {
