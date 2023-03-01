@@ -320,15 +320,22 @@ function validDate($date) {
 
 /**
  * Permet de modifier la template mail passé en paramètre avec les données fournis
+ * Le template doit être un fichier texte avec les variables à remplacer entre accolades double {{variable}}
+ * Les données doivent être un tableau associatif avec la clé du tableau comme nom de la variable dans le template
+ * Exemple : {{nom}} {{prenom}}
+ * $data = ["nom" => "Dupont", "prenom" => "Jean"];
  * @param string $template template du mail
  * @param array $data tableau associatif des données à remplacer dans le template, la clé du tableau est le nom de la variable dans le template
  * @return string template rempli
  */
 function fillTemplate($template, $data) {
+	$template = file_get_contents($template); // on récupère le template
 	$keys = array_keys($data);
+	// on ajoute les accolades autour des clés
 	$keys = array_map(function($item) {
 		return "{{" . $item . "}}";
 	}, $keys);
+	// on remplace les clés par les valeurs
 	return str_replace($keys, array_values($data), $template);	
 }
 

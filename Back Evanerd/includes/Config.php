@@ -12,15 +12,16 @@ class Config {
     // DATABASE CONFIG
     private static $BDD_host="localhost"; // Host de la base de donnée (généralement localhost)
     private static $BDD_user="root"; // Nom de l'utilisateur de la base de donnée
-    private static $BDD_password="password"; // Mot de passe du compte utilisateur
+    private static $BDD_password=""; // Mot de passe du compte utilisateur
     private static $BDD_base="evanerd"; // nom de la base de donnée 
     private static $db = null; // attribut contenant l'instance de la base de donnée une fois initialisé
     
     // SMTP CONFIG
-    private static $SMTP_HOST = "localhost"; // Specify main SMTP server
-    private static $SMTP_USERNAME = "root"; 
-    private static $SMTP_PASSWORD = "password";
-    private static $SMTP_PORT = 25;
+    private static $SMTP_HOST = "mail.evanerds.fr"; // Specify main SMTP server
+    private static $SMTP_USERNAME = "lukas"; 
+    private static $SMTP_PASSWORD = "PASSWORD HERE";
+    private static $SMTP_SENDER = "lukas@evanerds.fr";
+    private static $SMTP_PORT = 587;
     private static $email = null;
 
     /**
@@ -36,7 +37,7 @@ class Config {
 
     static function getEmail() {
         if(!self::$email) {
-            self::$email = new Email(self::$SMTP_HOST, self::$SMTP_USERNAME, self::$SMTP_PASSWORD, self::$SMTP_PORT, 1);
+            self::$email = new Email(self::$SMTP_HOST, self::$SMTP_USERNAME, self::$SMTP_PASSWORD, self::$SMTP_PORT, self::$SMTP_SENDER);
         }
 
         return self::$email;

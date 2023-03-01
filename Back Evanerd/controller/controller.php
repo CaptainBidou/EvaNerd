@@ -90,7 +90,6 @@ function postUser($data, $queryString) {
             $imageData = uploadImage($dir . "/image", $_FILES["image"]);
             if($imageData["code"] != 1) sendError($imageData["message"], HTTP_BAD_REQUEST);
             $image = basename($imageData["filename"]);
-            echo $image;
         }
         else {
             // Si il n'y pas d'image on en génére une
@@ -101,8 +100,8 @@ function postUser($data, $queryString) {
         $token = generateEmailConfirmToken($tel);
         // Enfin si tout est bon alors on créer l'utilisateur en base et on le renvoie en réponse
         $idUser = insertUser($firstName, $lastName, $mail, $tel, $password, $age,$token, $studies, $sex, $image);
-        // TODO : Récupérer l'objet mail pour envoyer le mail avec le lien de confirmation
-
+        $body = fillTemplate(DIR_MAIL_TEMPLATES . "confirm_mail.html", ["LASTNAME" => $lastName, "FIRSTNAME" => $firstName, "TOKEN" => $token]);
+        Config::getEmail()->sendMail($mail, "[OSET] Confirmation de votre compte", $body);
         // On envoie l'utilisateur créé
         $data["user"] = selectUser($idUser)[0]; 
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
