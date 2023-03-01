@@ -14,7 +14,7 @@
 
 
 $(document).ready(function(){
-    JCreerConnexion(); // pour afficher la connexion
+    ConnexionAuto(); // pour afficher la connexion
     //AfficherAccueil();
 });
 
@@ -31,10 +31,19 @@ function AfficherAccueil(){
 
 function AfficherProfile(context){
     $("#page").html("");
-    $uid = $(context).data().uid;
+    $uid = $(context).data("id-profile");
     console.log(context);
-    ListUserInstruments($uid);
 
+    ListUserRoles($uid)
+    ListUserInstruments($uid);
+    // TODO : Lister activité utilisateur
+    
+}
+
+function RolesMenu(context){
+    $uid = $(context).data("id-profile");
+    console.log(context);
+    ListerRoles();
 }
 
 function AfficherMessagerie(){
@@ -139,6 +148,54 @@ function LikerPost(idPost){
     setLikePost(idPost,authcode);
 }
 
+function CreerEvent(context){
+    console.log(context);
+    CreateEventCalendars(1, authcode);
+}
+
+function AjouterUtilisateur(context){
+    console.log(context);
+    // TODO : Trouver l'utilisateur dans le champ à ajouter
+    // Puis renvoyer son uid
+    //AddUserConv(currentGroup,);
+}
+
+
+function ConnexionAuto(){
+    
+   /* console.log("connexion auto");
+    console.log(user);
+    console.log(pdp);
+    console.log(member);
+     authcode = localStorage.getItem("authToken");
+     user = localStorage.getItem("user");
+    member = localStorage.getItem("member");
+     pdp = localStorage.getItem("pdp");
+     admin = localStorage.getItem("admin");*/
+
+     var tel = localStorage.getItem("tel");
+     var passwd = localStorage.getItem("passwd");
+
+     //return JCreerConnexion();
+    /*if(authcode!=null && user!=null && member!=null && pdp!=null && admin!=null)
+    {
+
+     JcreerHeader({"photo" : pdp,"id" : user,"member" : member,"admin" : admin});
+        AfficherAccueil();
+        JcreerFooter({"membre" : member});
+    }
+    else{*/
+
+        if(tel!=null && passwd!=null){
+            auth(tel,passwd);
+        }
+        else
+        JCreerConnexion();
+        
+
+    //}
+  
+}
 
 
 </script>

@@ -98,7 +98,7 @@ var JCreerEventFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-con
 var JCreerEventFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description de l'évènement");
 var JCreerEventDate=$("<input>").attr("type","datetime-local");
 var JCreerEventDuree=$("<input>").attr("type","time").addClass("divFormEventDate");
-var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){return null;});
+var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){CreerEvent($(this))});
 
 
 
@@ -161,7 +161,7 @@ var JReglageMessageColor=$("<input>").attr("type","color").addClass("Message-Per
 var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Changer de couleur").on("click",function(context){ var couleur=$(".Message-Personne-Color").val();
                                                                                                                                                         JmodifCouleur(couleur);});
 var JReglageMessagePerson=$("<input>").addClass("form-control Message-Personne-Reglage").attr("type","text").attr("placeholder","Nom de la personne");
-var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Personne").on("click",function(context){});
+var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Personne").on("click",function(context){AjouterUtilisateur($(this))});
 var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 
 
@@ -249,7 +249,7 @@ function JcreerPost(Reponse,membre,admin){
     var jClonePost=JPost.clone(true,true);
     var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.author.firstName+" "+Reponse.author.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
     var jClonePostBody=JPostBody.clone(true,true);
-    var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner);
+    var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner).attr("id-profile",Reponse.author.id);
     var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
     jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
     var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.author.photo).attr("id-profile",Reponse.author.id);
@@ -266,6 +266,15 @@ function JcreerPost(Reponse,membre,admin){
     }
     var jClonePostComm=JPostCommentaire.clone(true,true).attr("id_post",Reponse.id);
     var jClonePostLike=JPostLike.clone(true,true).attr("id_post",Reponse.id);
+    if(Reponse.liked==1)
+    {jClonePostLike.attr("src","Ressources/Accueil/likeBlanc.png");}
+
+    //qsdqsdqd
+
+
+
+
+
     var jClonePostReact=JPostReaction.clone(true,true);
 
 
@@ -333,10 +342,10 @@ function JcreerFooter(Reponse){
 
 
 
-    if(Reponse.membre==1){
-        JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);}
-        $("#footer").append(JCloneFooter);
-        if(Reponse.membre==0)
+    if(Reponse.membre==true){
+        JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);
+        $("#footer").append(JCloneFooter);}
+        if(Reponse.membre==false)
         {
             JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAgenda).append(JCloneFooterMail);
             $("#footer").append(JCloneFooter);
@@ -368,6 +377,8 @@ function JcreerHeader(Reponse){
     var JCloneHeaderItem=JHeaderItem.clone(true,true).text("blabla");
     JCloneHeaderMenu.append(JCloneHeaderItem);
 
+
+    
     if (Reponse==null)
     {
        JCloneHeader.append(JCloneHeaderLogo);
@@ -378,11 +389,13 @@ function JcreerHeader(Reponse){
 
 
     if(Reponse.photo!=null){
-        var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.photo).attr("id-profile",Reponse.id);
+        var JCloneHeaderProfile=JHeaderProfile.clone(true,true).attr('src',Reponse.photo);
     }
     else{
         var JCloneHeaderProfile=null;
     }
+
+    JCloneHeaderProfile.data("id-profile",Reponse.id);
 
     if (Reponse=null)
     {
@@ -961,7 +974,7 @@ function JCreerMessageParticipant(Reponse,div,rep)
     return;
     }
 
-    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo).attr("id-profile",Reponse.author.id);
+    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo).data("id-profile",Reponse.author.id);
     
     var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true).attr("id_message",Reponse.id);
    
@@ -1010,7 +1023,7 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
     $(div).append(JCloneMessageActifDiv);
     return;
     }
-    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo).attr("id-profile",Reponse.author.id);
+    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo).data("id-profile",Reponse.author.id);
     if(rep==2)
     {   JCloneMessageActifDiv.addClass("Commentaire-message-layout");
    JCloneMessageActifDiv.attr("reference", JCloneMessageActifDiv.attr("id"));
@@ -1252,14 +1265,13 @@ JCloneCommentaires.fadeIn(1000);
 function JClickLike(target){
     if($(target).attr("src")=="Ressources/Accueil/like.png")
     { 
-    $(target).attr("src","Ressources/Accueil/likeBlanc.png");
-    LikerPost($(target).attr("id_post"));}
+    $(target).attr("src","Ressources/Accueil/likeBlanc.png");}
     
     else
     {//TODO RAJOUTER ANIMATION
     $(target).attr("src","Ressources/Accueil/like.png");}
 
-
+    LikerPost($(target).attr("id_post"));
 
 }
 
