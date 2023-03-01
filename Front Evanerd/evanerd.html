@@ -33,14 +33,17 @@ function AfficherProfile(context){
     $("#page").html("");
     $uid = $(context).data("id-profile");
     console.log(context);
-    ListUserInstruments($uid);
 
+    ListUserRoles($uid)
+    ListUserInstruments($uid);
+    // TODO : Lister activité utilisateur
+    
 }
 
 function RolesMenu(context){
-    $uid = $(context).data().uid;
+    $uid = $(context).data("id-profile");
     console.log(context);
-    ListUserRoles($uid);
+    ListerRoles();
 }
 
 function AfficherMessagerie(){
@@ -143,6 +146,18 @@ function EnvoyerMessage(groupId,message,rep){
 
 function LikerPost(idPost){
     setLikePost(idPost,authcode);
+}
+
+function CreerEvent(context){
+    console.log(context);
+    CreateEventCalendars(aid);
+}
+
+function AjouterUtilisateur(context){
+    console.log(context);
+    // TODO : Trouver l'utilisateur dans le champ à ajouter
+    // Puis renvoyer son uid
+    //AddUserConv(currentGroup,);
 }
 
 

@@ -355,6 +355,7 @@ function ListerRoles($active){
         },
         success: function(oRep){
             console.log(oRep); 
+            JClickHeaderMenu(oRep);
         },
         dataType: "json"
     });   
