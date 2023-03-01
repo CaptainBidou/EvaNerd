@@ -31,10 +31,14 @@ function AfficherAccueil(){
 
 function AfficherProfile(context){
     $("#page").html("");
-    $uid = $(context).data().uid;
+    $uid = $(context).data("id-profile");
     console.log(context);
+    
     ListUserInstruments($uid);
 
+    ListUserParticipation($uid, 0, authcode);
+    ListUserParticipation($uid, 1, authcode);
+    
 }
 
 function RolesMenu(context){
