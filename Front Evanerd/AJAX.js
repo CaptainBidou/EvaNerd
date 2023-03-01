@@ -1,10 +1,10 @@
 
 //var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
 var api ="https://evanerds.fr/api/v1";
-var authcode = "";
-var member = 0;
+var authcode = ""; //Code d'auth de l'utilisateur
+var member = 0; 
 var pdp = "";
-var user = "";
+var user = ""; 
 var currentComm = 0;
 var currentGroup = 0;
 
@@ -869,6 +869,7 @@ function ListCalendarsEvents($authToken,$type){
             if ($type == "extra"){
                 oRep["events"].forEach(element => {
                     element.titre = element.event;
+                    console.log("extra")
                     getEventParticipation(element,$authToken);
                 });
             }
@@ -887,6 +888,7 @@ function ListCalendarsEvents($authToken,$type){
 
 
 function getEventParticipation(eventInfos,$authToken){
+    console.log(eventInfos);
     $.ajax({
         type: "GET",
         url: api + "/events/"+eventInfos.id+"/participations",
@@ -972,11 +974,11 @@ function CreateEventCalendars($aid){
  * @param {*} $uid Identifiant de l'utilisateur
  * @param {*} $aeid Identifiant de l'évenement dans l'agenda
  */
-function ListUserParticipation($uid,$aeid){
+function ListUserParticipation($uid,$aeid,$authToken){
     $.ajax({
         type: "GET",
         url: api + "/users/"+$uid+"/agendas/"+$aeid+"/participations",
-        headers: {"authToken":""}, // données dans les entetes 
+        headers: {"authToken":$authToken}, // données dans les entetes 
         data: [],
         error : function(){
             console.log("Une erreur s'est produite");
