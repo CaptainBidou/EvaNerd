@@ -29,7 +29,13 @@ function AfficherAccueil(){
     ListPosts(authcode);
 }
 
+function AfficherProfile(context){
+    $("#page").html("");
+    $uid = $(context).data().uid;
+    console.log(context);
+    ListUserInstruments($uid);
 
+}
 
 function AfficherMessagerie(){
     $("#page").html("");
@@ -49,7 +55,7 @@ function DesEpinglerUnPost($postID){
 
 function EpinglerUnMessage($mid){
     EpinglerMsgConv($mid, currentGroup, authcode);
-    
+
 }
 
 function DesEpinglerUnMessage($mid){
@@ -84,20 +90,16 @@ function CommentairesPosts($id){
 }
 
 function JEnvoyerCommentaire($commContent){
-    console.log($commContent);
+    console.log($commContent.value);
+    $curText = $commContent.value;
     $curComm = currentComm;
-    addComments($commContent,$curComm,authcode);
+    addComments($curText,$curComm,authcode);
 }
 
 function AfficherCreer(){
     //ici obtenir la réponse de la requête
     JCreerDropUpCreer();   
 }
-
-function LikePost($idPost){
-    setLikePost($idPost,authcode);
-}
-
 
 function Connexion(){
     var tel=$("#tel").val();
@@ -120,20 +122,21 @@ function JRecupMessages(context){
 }
 
 function JRecupId(){
-
     //var aid = 1;
     //ListCalendarsEvents(authcode,aid);
     //ListCallMembers(authcode,aid,eid);
 }
+
 function EnvoyerMessage(groupId,message,rep){
+    console.log(message);
     $informations={"content":message,
                     "answerTo":rep,};
                     
-    AddMsgConv(groupId, informations);
+    AddMsgConv(groupId, $informations,authcode);
 }
 
-function    LikerPost(idPost){
-    LikePost(idPost);
+function LikerPost(idPost){
+    setLikePost(idPost,authcode);
 }
 
 

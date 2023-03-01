@@ -1,13 +1,12 @@
 
 //var api = "http://localhost/EvaNerd/Back%20Evanerd/api";
-var api ="http://51.68.231.61/api/v1";
-var authcode = "";
-var member = 0;
+var api ="https://evanerds.fr/api/v1";
+var authcode = ""; //Code d'auth de l'utilisateur
+var member = 0; 
 var pdp = "";
-var user = "";
+var user = ""; 
 var currentComm = 0;
 var currentGroup = 0;
-
 
 /* AUTHENTIFICATION AJAX FUNC */
 
@@ -257,7 +256,7 @@ function AddserInstruments($iid){
 function AddserAchievement($aid){
     $.ajax({
         type: "POST",
-        url: api + "/users/instruments",
+        url: api + "/users/achievements",
         headers: {"authToken":""}, // données dans les entetes 
         data: [     
             {
@@ -289,6 +288,38 @@ function VerifMail(){
         },
         dataType: "json"
     });   
+}
+
+function ListUserInstruments($uid){
+    $.ajax({
+        type: "GET",
+        url: api + "/users/" + $uid + "/instruments",
+        headers: {"authToken" : ""},
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+        },
+        dataType: "json"
+    });
+}
+
+function ListUserRoles($uid){
+    $.ajax({
+        type: "GET",
+        url: api + "/users/" + $uid + "/roles",
+        headers: {"authToken" : ""},
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+        },
+        dataType: "json"
+    });
 }
 
 /***** USERS END **********/
@@ -640,23 +671,25 @@ function AddUserConv($gid, $uid){
  * @param {*} $informations Contenu du message & Identifiant du message cible
  */
 
-function AddMsgConv($gid, $informations){
-
-    $data["content"] = $informations["content"];
-    if($informations["answerTo"])
-        $data["answerTo"] = $informations["answerTo"];
-    
+function AddMsgConv($gid, $informations,$authToken){
+    $data=[];
+    $data["content"] = $informations.content;
+    $url = api + "/groups/" + $gid + "/messages?content=" + $data["content"];
+    if($informations["answerTo"]){
+        $data["answerTo"] = $informations.rep;
+        $url += "&answerTo" +  $data["answerTo"];
+    }
+    console.log($data);
     $.ajax({
         type: "POST",
-        url: api + "/groups/" + $gid + "/messages",
-        headers: {"authToken" : ""},
+        url: $url,
+        headers: {"authToken" : $authToken},
         data: $data,
         error: function(){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
             console.log(oRep);
-            // JAjouterMsg
         },
         dataType: "json"
     });
@@ -711,6 +744,7 @@ function ListPosts($authToken){
         dataType: "json"
     });   
 }
+
 
 function setLikePost($pid,$authToken) {
     $.ajax({
@@ -768,6 +802,7 @@ function ListPostMessages($pid,$authToken){
         },
         success: function(oRep){
             console.log(oRep); 
+            oRep["comments"].sort(function func(e1,e2){ return e1.id - e2.id});
             JCreerCommentaireLayout(oRep);
             currentComm = $pid;
         },
@@ -834,7 +869,8 @@ function ListCalendarsEvents($authToken,$type){
             if ($type == "extra"){
                 oRep["events"].forEach(element => {
                     element.titre = element.event;
-                    JCreerConcert(element);
+                    console.log("extra")
+                    getEventParticipation(element,$authToken);
                 });
             }
             else
@@ -849,9 +885,10 @@ function ListCalendarsEvents($authToken,$type){
     }); 
 }
 
-/*
+
 
 function getEventParticipation(eventInfos,$authToken){
+    console.log(eventInfos);
     $.ajax({
         type: "GET",
         url: api + "/events/"+eventInfos.id+"/participations",
@@ -861,12 +898,13 @@ function getEventParticipation(eventInfos,$authToken){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
-            console.log(oRep); 
-
+            eventInfos["pourcentage"] = parseFloat(oRep.participationsRatio); 
+            console.log(eventInfos); 
+            JCreerConcert(eventInfos);
         },
         dataType: "json"
     }); 
-}*/
+}
 
 
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
@@ -936,11 +974,11 @@ function CreateEventCalendars($aid){
  * @param {*} $uid Identifiant de l'utilisateur
  * @param {*} $aeid Identifiant de l'évenement dans l'agenda
  */
-function ListUserParticipation($uid,$aeid){
+function ListUserParticipation($uid,$aeid,$authToken){
     $.ajax({
         type: "GET",
         url: api + "/users/"+$uid+"/agendas/"+$aeid+"/participations",
-        headers: {"authToken":""}, // données dans les entetes 
+        headers: {"authToken":$authToken}, // données dans les entetes 
         data: [],
         error : function(){
             console.log("Une erreur s'est produite");
