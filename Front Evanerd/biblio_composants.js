@@ -266,6 +266,13 @@ function JcreerPost(Reponse,membre,admin){
     }
     var jClonePostComm=JPostCommentaire.clone(true,true).attr("id_post",Reponse.id);
     var jClonePostLike=JPostLike.clone(true,true).attr("id_post",Reponse.id);
+    if(Reponse.liked==1)
+    {jClonePostLike.src("Ressources/Accueil/likeNOIR.png");}
+    
+
+
+
+
     var jClonePostReact=JPostReaction.clone(true,true);
 
 
