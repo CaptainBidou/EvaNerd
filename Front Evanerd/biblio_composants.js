@@ -13,6 +13,7 @@ src="evanerd.html";
 
 var scroll;
 var windowscroll;
+var nbmessages=0;
 //variables pour les posts
 var JPost =$("<div>").addClass(["card", "post"]).data('type','post');
 var JPostTitre=$("<h2>").addClass(["post-titre","card-title"]).data('type','post_titre');//TODO :rajouter des données pour quand on clique
@@ -923,6 +924,12 @@ var j=0;
 
 
         }
+
+    
+        
+
+
+
         
         if(Reponse.messages[i].pinned==1)
             JCreerMessageActif(Reponse.messages[i],JCloneMessageLayout,Reponse.color,0);
@@ -936,8 +943,22 @@ var j=0;
         JCreerMessageParticipant(Reponse.messages[i],JCloneMessage,0);
     
     
+    
     }
 
+    if(i==nbmessages)
+    {
+        return ; }
+    if(i>nbmessages)
+    {
+        nbmessages=i;
+        window.scrollTo(0, 400000000000000);
+
+    }
+    else
+    {
+        nbmessages=i;
+    return;}
 
     JCloneMessage.animate({scrollTop:0,})
    // JCloneMessage.on("click",function(){scroll=false;});
