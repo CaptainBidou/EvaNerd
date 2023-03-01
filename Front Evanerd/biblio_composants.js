@@ -11,7 +11,8 @@ src="evanerd.html";
 /*                 DECLARATION DES VARIABLES                           */
 /***********************************************************************/
 
-
+var scroll;
+var windowscroll;
 //variables pour les posts
 var JPost =$("<div>").addClass(["card", "post"]).data('type','post');
 var JPostTitre=$("<h2>").addClass(["post-titre","card-title"]).data('type','post_titre');//TODO :rajouter des données pour quand on clique
@@ -862,7 +863,8 @@ var JCloneProfileDivActivite=JProfileDivActivite.clone(true,true);
     $("#page").append(JCloneProfileDivActivite);
     for(i=0;i<Reponse.activity.length;i++)
     {var activity = {"nom":Reponse.firstName,"prenom":Reponse.lastName,"activites":Reponse.activity[i],};
-    JCreerProfileActivite(activity);}
+    JCreerProfileActivite(activity);
+    }
 
 }
 
@@ -902,29 +904,10 @@ else
     JCouleur='silver';
 }
 
+function JRefreshMessage(Reponse,JCloneMessageLayout,JCloneMessage){
+JCloneMessageLayout.html("");
+JCloneMessage.html("");
 
-function JCreerMessage(Reponse){
-    var JCloneMessageHeader = JMessageHeader.clone(true,true);
-    var JCloneMessageFleche =JMessageFleche.clone(true,true);
-    var JCloneMessageReglage=JMessageReglage.clone(true,true);
-    var JCloneMessageEpingle=JMessageEpingle.clone(true,true).show();
-    var JCloneMessageLayout=JMessageLayout.clone(true,true);
-
-    var JCloneMessageParticipant=JMessageParticipant.clone(true,true).text(Reponse.titre);
-
-    var JCloneMessage=JMessage.clone(true,true);
-
-    var JCloneMessageDown=JMessageDown.clone(true,true);
-    var JCloneMessageInput=JMessageInput.clone(true,true);
-    var JCloneMessageSend=JMessageSend.clone(true,true).attr("groupId",Reponse.groupId);
-
-    JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,55);
-    
-    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageReglage,JCloneMessageEpingle,JCloneMessageLayout]);
-    $("#page").append(JCloneMessageHeader);
-    $("#page").append(JCloneMessage);
-    JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
-    $("#page").append(JCloneMessageDown);
     var i=0;
     console.log(Reponse.messages.length);
 var j=0;
@@ -954,8 +937,95 @@ var j=0;
     
     
     }
-    console.log($("#"+i).scrollTop());
+
+
     JCloneMessage.animate({scrollTop:0,})
+   // JCloneMessage.on("click",function(){scroll=false;});
+
+ 
+
+
+    //JCloneMessage.scrollBottom = JCloneMessage.scrollHeight;
+    //JCloneMessage.scrollTop = JCloneMessage.scrollHeight;
+}
+
+
+
+
+
+
+function JCreerMessage(Reponse){
+    var JCloneMessageHeader = JMessageHeader.clone(true,true);
+    var JCloneMessageFleche =JMessageFleche.clone(true,true);
+    var JCloneMessageReglage=JMessageReglage.clone(true,true);
+    var JCloneMessageEpingle=JMessageEpingle.clone(true,true).show();
+    var JCloneMessageLayout=JMessageLayout.clone(true,true);
+
+    var JCloneMessageParticipant=JMessageParticipant.clone(true,true).text(Reponse.titre);
+
+    var JCloneMessage=JMessage.clone(true,true);
+
+    var JCloneMessageDown=JMessageDown.clone(true,true);
+    var JCloneMessageInput=JMessageInput.clone(true,true);
+    var JCloneMessageSend=JMessageSend.clone(true,true).attr("groupId",Reponse.groupId);
+
+    JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,55);
+    
+    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageReglage,JCloneMessageEpingle,JCloneMessageLayout]);
+    $("#page").append(JCloneMessageHeader);
+    $("#page").append(JCloneMessage);
+    JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
+    $("#page").append(JCloneMessageDown);
+    
+    JCloneMessageLayout.html("");
+JCloneMessage.html("");
+
+    var i=0;
+    console.log(Reponse.messages.length);
+var j=0;
+    for(i=0;i<Reponse.messages.length;i++)
+    {
+        if(Reponse.messages[i].answerTo!=null)
+        {   
+            for(j=0;j<Reponse.messages.length;j++)
+            {
+                if(Reponse.messages[i].answerTo==Reponse.messages[j].id)
+                    Reponse.messages[i].answerTo=Reponse.messages[j];
+            }
+
+
+        }
+        
+        if(Reponse.messages[i].pinned==1)
+            JCreerMessageActif(Reponse.messages[i],JCloneMessageLayout,Reponse.color,0);
+
+        if(Reponse.messages[i].author.id==Reponse.id)
+        {
+            JCreerMessageActif(Reponse.messages[i],JCloneMessage,Reponse.color,0);
+        }
+        
+        else
+        JCreerMessageParticipant(Reponse.messages[i],JCloneMessage,0);
+    
+    
+    }
+
+
+    JCloneMessage.animate({scrollTop:0,})
+
+    JCloneMessage.click(function(){window.scroll(0, 0);});
+
+
+    window.scrollTo(0, 400000000000000);
+    //je met le scroll en bas
+    
+    //cela ne fonctionne pas
+    //met le scroll en haut
+
+
+
+    //console.log($("#"+i).scrollTop());
+    //JCloneMessage.animate({scrollTop:0,})
 
 }
 
@@ -1167,7 +1237,7 @@ $(".Actif-Div",".Message-Down").attr("id","null");
 
 
 $(target).attr("message",$(".Message-Input").val()).attr("rep",$(".Actif-Div",".Message-Down").attr("id"));
-
+$(".Message-Input").val("");
 
 console.log($(target).attr("groupId"));
 

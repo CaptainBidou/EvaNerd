@@ -589,7 +589,7 @@ function ListPermsConv($gid){
  * Requête permettant de récupérer la liste des messages d'un groupe
  * @param {*} $gid Identifiant du groupe
  */
-function ListMsgConv($gid,$title,$currentuser,$authToken){
+function ListMsgConv($gid,$title,$currentuser,$authToken,mode){
     $.ajax({
         type : "GET",
         url : api + "/groups/" + $gid + "/messages",
@@ -600,11 +600,23 @@ function ListMsgConv($gid,$title,$currentuser,$authToken){
             console.log(err);
         },
         success : function(oRep){
+            if(mode == "NORMAL")
+            {
             console.log(oRep);
             oRep.titre = $title;
             oRep.id = $currentuser;
             oRep["messages"].sort(function func(e1,e2){ return e1.id - e2.id ;});
-            JCreerMessage(oRep);
+            JCreerMessage(oRep);}
+
+            if(mode == "REC")
+            {
+                oRep.titre = $title;
+                oRep.id = $currentuser;
+                oRep["messages"].sort(function func(e1,e2){ return e1.id - e2.id ;});
+                JRefreshMessage(oRep,$(".Message-Layout"),$("#DivMessage"));
+
+            }
+
         },
         dataType: "json"
     });

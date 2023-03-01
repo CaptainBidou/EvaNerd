@@ -127,7 +127,16 @@ function JRecupMessages(context){
     console.log(nomgroupe);
     currentGroup = id;
     $("#page").html("");
-    ListMsgConv(id,nomgroupe,user,authcode);
+    ListMsgConv(id,nomgroupe,user,authcode,"NORMAL");
+
+    let refresh = setInterval(function() {
+        if($("#DivMessage").attr("class")!="Message")
+            clearTimeout(refresh);
+
+        ListMsgConv(id,nomgroupe,user,authcode,'REC')
+
+
+    }, 1000);
 }
 
 function JRecupId(){
