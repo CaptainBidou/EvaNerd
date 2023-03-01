@@ -98,7 +98,7 @@ var JCreerEventFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-con
 var JCreerEventFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description de l'évènement");
 var JCreerEventDate=$("<input>").attr("type","datetime-local");
 var JCreerEventDuree=$("<input>").attr("type","time").addClass("divFormEventDate");
-var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){return null;});
+var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){CreerEvent($(this))});
 
 
 
@@ -161,7 +161,7 @@ var JReglageMessageColor=$("<input>").attr("type","color").addClass("Message-Per
 var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Changer de couleur").on("click",function(context){ var couleur=$(".Message-Personne-Color").val();
                                                                                                                                                         JmodifCouleur(couleur);});
 var JReglageMessagePerson=$("<input>").addClass("form-control Message-Personne-Reglage").attr("type","text").attr("placeholder","Nom de la personne");
-var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Personne").on("click",function(context){});
+var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Personne").on("click",function(context){AjouterUtilisateur($(this))});
 var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 
 

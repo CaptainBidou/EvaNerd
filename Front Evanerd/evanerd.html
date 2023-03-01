@@ -36,9 +36,7 @@ function AfficherProfile(context){
 
     ListUserRoles($uid)
     ListUserInstruments($uid);
-
-    ListUserParticipation($uid, 0, authcode);
-    ListUserParticipation($uid, 1, authcode);
+    // TODO : Lister activité utilisateur
     
 }
 
@@ -148,6 +146,18 @@ function EnvoyerMessage(groupId,message,rep){
 
 function LikerPost(idPost){
     setLikePost(idPost,authcode);
+}
+
+function CreerEvent(context){
+    console.log(context);
+    CreateEventCalendars(aid);
+}
+
+function AjouterUtilisateur(context){
+    console.log(context);
+    // TODO : Trouver l'utilisateur dans le champ à ajouter
+    // Puis renvoyer son uid
+    //AddUserConv(currentGroup,);
 }
 
 
