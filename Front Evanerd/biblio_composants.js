@@ -378,7 +378,7 @@ function JcreerHeader(Reponse){
     JCloneHeaderMenu.append(JCloneHeaderItem);
 
 
-    JCloneHeaderProfile.data("id-profile",Reponse.id);
+    
     if (Reponse==null)
     {
        JCloneHeader.append(JCloneHeaderLogo);
@@ -394,7 +394,7 @@ function JcreerHeader(Reponse){
     else{
         var JCloneHeaderProfile=null;
     }
-
+JCloneHeaderProfile.data("id-profile",Reponse.id);
     if (Reponse=null)
     {
        JCloneHeader.append(JCloneHeaderLogo);
