@@ -100,9 +100,7 @@ function postUser($data, $queryString) {
         $token = generateEmailConfirmToken($tel);
         // Enfin si tout est bon alors on créer l'utilisateur en base et on le renvoie en réponse
         $idUser = insertUser($firstName, $lastName, $mail, $tel, $password, $age,$token, $studies, $sex, $image);
-        // TODO : Récupérer l'objet mail pour envoyer le mail avec le lien de confirmation
-        $template = file_get_contents(DIR_MAIL_TEMPLATES . "confirm_mail.html");
-        $body = fillTemplate($template, ["LASTNAME" => $lastName, "FIRSTNAME" => $firstName, "TOKEN" => $token]);
+        $body = fillTemplate(DIR_MAIL_TEMPLATES . "confirm_mail.html", ["LASTNAME" => $lastName, "FIRSTNAME" => $firstName, "TOKEN" => $token]);
         Config::getEmail()->sendMail($mail, "[OSET] Confirmation de votre compte", $body);
         // On envoie l'utilisateur créé
         $data["user"] = selectUser($idUser)[0]; 
