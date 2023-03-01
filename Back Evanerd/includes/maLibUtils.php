@@ -12,6 +12,7 @@ define("DIR_RESSOURCES", "/EvaNerd/Back Evanerd/ressources"); // Répertoire dep
 define("DIR_USERS", "./ressources/users/");
 define("DIR_GROUPS", "./ressources/groups/");
 define("DIR_POSTS", "./ressources/posts/");
+define("DIR_MAIL_TEMPLATES", "./ressources/mail_templates/");
 /**
  * Vérifie l'existence (isset) et la taille (non vide) d'un paramétre dans un des tableaux GET, POST, COOKIES, SESSION
  * Renvoie false si le paramétre est vide ou absent
@@ -316,4 +317,19 @@ function validDate($date) {
 	if($d && $d->format($format) === $date) return $date;
 	return false;
 }
+
+/**
+ * Permet de modifier la template mail passé en paramètre avec les données fournis
+ * @param string $template template du mail
+ * @param array $data tableau associatif des données à remplacer dans le template, la clé du tableau est le nom de la variable dans le template
+ * @return string template rempli
+ */
+function fillTemplate($template, $data) {
+	$keys = array_keys($data);
+	$keys = array_map(function($item) {
+		return "{{" . $item . "}}";
+	}, $keys);
+	return str_replace($keys, array_values($data), $template);	
+}
+
 ?>

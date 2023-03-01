@@ -101,11 +101,6 @@ function AfficherCreer(){
     JCreerDropUpCreer();   
 }
 
-function LikePost($idPost){
-    setLikePost($idPost,authcode);
-}
-
-
 function Connexion(){
     var tel=$("#tel").val();
     var mdp=$("#pwd").val();
@@ -127,20 +122,21 @@ function JRecupMessages(context){
 }
 
 function JRecupId(){
-
     //var aid = 1;
     //ListCalendarsEvents(authcode,aid);
     //ListCallMembers(authcode,aid,eid);
 }
+
 function EnvoyerMessage(groupId,message,rep){
+    console.log(message);
     $informations={"content":message,
                     "answerTo":rep,};
                     
-    AddMsgConv(groupId, $informations);
+    AddMsgConv(groupId, $informations,authcode);
 }
 
-function    LikerPost(idPost){
-    LikePost(idPost);
+function LikerPost(idPost){
+    setLikePost(idPost,authcode);
 }
 
 
