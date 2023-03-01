@@ -249,7 +249,7 @@ function JcreerPost(Reponse,membre,admin){
     var jClonePost=JPost.clone(true,true);
     var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.author.firstName+" "+Reponse.author.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
     var jClonePostBody=JPostBody.clone(true,true);
-    var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner);
+    var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner).attr("id-profile",Reponse.author.id);
     var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
     jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
     var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.author.photo).attr("id-profile",Reponse.author.id);
@@ -394,7 +394,9 @@ function JcreerHeader(Reponse){
     else{
         var JCloneHeaderProfile=null;
     }
-JCloneHeaderProfile.data("id-profile",Reponse.id);
+
+    JCloneHeaderProfile.data("id-profile",Reponse.id);
+
     if (Reponse=null)
     {
        JCloneHeader.append(JCloneHeaderLogo);
@@ -972,7 +974,7 @@ function JCreerMessageParticipant(Reponse,div,rep)
     return;
     }
 
-    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo).attr("id-profile",Reponse.author.id);
+    var JCloneMessageParticipantProfile=JMessageParticipantProfile.clone(true,true).attr("src",Reponse.author.photo).data("id-profile",Reponse.author.id);
     
     var JCloneMessageParticipantRep=JMessageParticipantRep.clone(true,true).attr("id_message",Reponse.id);
    
@@ -1021,7 +1023,7 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
     $(div).append(JCloneMessageActifDiv);
     return;
     }
-    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo).attr("id-profile",Reponse.author.id);
+    var JCloneMessageActifProfile=JMessageActifProfile.clone(true,true).attr("src",Reponse.author.photo).data("id-profile",Reponse.author.id);
     if(rep==2)
     {   JCloneMessageActifDiv.addClass("Commentaire-message-layout");
    JCloneMessageActifDiv.attr("reference", JCloneMessageActifDiv.attr("id"));
