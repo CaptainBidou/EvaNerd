@@ -671,23 +671,25 @@ function AddUserConv($gid, $uid){
  * @param {*} $informations Contenu du message & Identifiant du message cible
  */
 
-function AddMsgConv($gid, $informations){
+function AddMsgConv($gid, $informations,$authToken){
     $data=[];
-    $data["content"] = $informations["content"];
-    if($informations["answerTo"])
-        $data["answerTo"] = $informations["answerTo"];
-    
+    $data["content"] = $informations.content;
+    $url = api + "/groups/" + $gid + "/messages?content=" + $data["content"];
+    if($informations["answerTo"]){
+        $data["answerTo"] = $informations.rep;
+        $url += "&answerTo" +  $data["answerTo"];
+    }
+    console.log($data);
     $.ajax({
         type: "POST",
-        url: api + "/groups/" + $gid + "/messages",
-        headers: {"authToken" : ""},
+        url: $url,
+        headers: {"authToken" : $authToken},
         data: $data,
         error: function(){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
             console.log(oRep);
-            // JAjouterMsg
         },
         dataType: "json"
     });
@@ -742,6 +744,7 @@ function ListPosts($authToken){
         dataType: "json"
     });   
 }
+
 
 function setLikePost($pid,$authToken) {
     $.ajax({
@@ -799,6 +802,7 @@ function ListPostMessages($pid,$authToken){
         },
         success: function(oRep){
             console.log(oRep); 
+            oRep["comments"].sort(function func(e1,e2){ return e1.id - e2.id});
             JCreerCommentaireLayout(oRep);
             currentComm = $pid;
         },
