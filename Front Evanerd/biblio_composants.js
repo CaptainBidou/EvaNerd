@@ -95,12 +95,12 @@ var JCreerPostFormLabel=$("<p>").addClass("labelTypeForm");
 //variables pour la page de création d'évènements
 var JCreerEventForm=$("<div>").addClass("divFormPost");
 var JCreerEventFormLabel=$("<p>").addClass("labelTypeForm");
-var JCreerEventFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control"]).attr("placeholder","Nom de l'évènement");
+var JCreerEventFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control","divFormEventTitre"]).attr("placeholder","Nom de l'évènement");
 var JCreerEventFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Concert").addClass("option")).append($("<option>").text("Evènement intraorchestre").addClass("option"));
 var JCreerEventFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description de l'évènement");
-var JCreerEventDate=$("<input>").attr("type","datetime-local");
+var JCreerEventDate=$("<input>").attr("type","datetime-local").addClass("divFormEventDuree");
 var JCreerEventDuree=$("<input>").attr("type","time").addClass("divFormEventDate");
-var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){CreerEvent($(this))});
+var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){JCreerEventPublier(context.target)});
 
 
 
@@ -1558,6 +1558,11 @@ function JAddOptionsCategorie(div,Reponse){
 }
 
 
+
+//TODO à regarder pour comprendre comment je vous envoie les données
+
+
+
 function JCreerPostPublier(target){
 
 $(target).data("titre",$(".divFormPostTitre").val());
@@ -1565,6 +1570,28 @@ $(target).data("description",$(".divFormPostContent").val());
 $(target).data("visibilite",$(".divFormPostCheckbox").val());
 $(target).data("image",$(".form-control-file").val());
 
-console.log($(target).data());
+
+
+//TODO rajouter la fonction qui créé les posts 
+
 
 }
+
+
+
+function JCreerEventPublier(target){
+
+    $(target).data("titre",$(".divFormEventTitre").val());
+    $(target).data("type",$(".divFormPostCheckBox").val());
+    $(target).data("description",$(".divFormPostContent").val());
+    $(target).data("date",$(".divFormEventDuree").val());
+    $(target).data("duree",$(".divFormEventDate").val());
+    
+
+    
+    CreerEvent(target);
+    
+    //TODO rajouter la fonction qui créé les posts 
+    
+    
+    }
