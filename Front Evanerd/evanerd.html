@@ -167,21 +167,20 @@ function LikerPost(idPost){
 
 function CreerEvent(context){
     console.log($(context).data());
-var json={
+    var json={
             "titre":$(context).data("titre"),
             "date":$(context).data("date"),
             "duree":$(context).data("duree"),
             "type": $(context).data("type"),
             "description": $(context).data("description"),
+    }
 
-}
-
-// a vous de jouer ;-)
-console.log(json);
-
+    // a vous de jouer ;-)
+    console.log(json);
 
 
-    CreateEventCalendars(1, authcode);
+
+    CreateEventCalendars(1,json, authcode);
 }
 
 function AjouterUtilisateur(context){
