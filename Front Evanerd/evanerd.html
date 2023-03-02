@@ -106,11 +106,10 @@ function CommentairesPosts($id){
     }, 1000);*/
 }
 
-function JEnvoyerCommentaire($commContent){
+function EnvoyerCommentaire($commContent){
     console.log($commContent.value);
-    $curText = $commContent.value;
-    $curComm = currentComm;
-    addComments($curText,$curComm,authcode);
+    addComments($commContent.value,currentComm,authcode);
+    $commContent.value ="";
 }
 
 function AfficherCreer(){
@@ -153,12 +152,13 @@ function JRecupId(){
     //ListCallMembers(authcode,aid,eid);
 }
 
-function EnvoyerMessage(groupId,message,rep){
-    console.log(message);
-    $informations={"content":message,
-                    "answerTo":rep,};
+function EnvoyerMessage(message,rep){
+    $informations={"content":message.value};
                     
-    AddMsgConv(groupId, $informations,authcode);
+    if (rep != undefined){
+        $informations.answerTo = rep.id;
+    }
+   AddMsgConv(currentGroup, $informations,authcode);
 }
 
 function LikerPost(idPost){
@@ -166,8 +166,21 @@ function LikerPost(idPost){
 }
 
 function CreerEvent(context){
-    console.log(context);
-    CreateEventCalendars(1, authcode);
+    console.log($(context).data());
+    var json={
+            "titre":$(context).data("titre"),
+            "date":$(context).data("date"),
+            "duree":$(context).data("duree"),
+            "type": $(context).data("type"),
+            "description": $(context).data("description"),
+    }
+
+    // a vous de jouer ;-)
+    console.log(json);
+
+
+
+    CreateEventCalendars(1,json, authcode);
 }
 
 function AjouterUtilisateur(context){
@@ -181,12 +194,12 @@ function AjouterUtilisateur(context){
 function ConnexionAuto(){
     
    
-     authcode = localStorage.getItem("authToken");
-     user = parseInt(localStorage.getItem("user"));
+    authcode = localStorage.getItem("authToken");
+    user = parseInt(localStorage.getItem("user"));
     member = localStorage.getItem("member") == "true" ? true : false;
-     pdp = localStorage.getItem("pdp");
-     admin = localStorage.getItem("admin");
-     console.log("connexion auto");
+    pdp = localStorage.getItem("pdp");
+    admin = localStorage.getItem("admin");
+    console.log("connexion auto");
     console.log(user);
     console.log(admin);
     console.log(pdp);

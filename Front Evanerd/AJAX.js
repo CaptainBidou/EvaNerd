@@ -702,9 +702,10 @@ function AddMsgConv($gid, $informations,$authToken){
     $data=[];
     $data["content"] = $informations.content;
     $url = api + "/groups/" + $gid + "/messages?content=" + $data["content"];
-    if($informations["answerTo"]){
-        $data["answerTo"] = $informations.rep;
-        $url += "&answerTo" +  $data["answerTo"];
+    console.log($informations);
+    if($informations.answerTo){
+        $data["answerTo"] = $informations.answerTo;
+        $url += "&answerTo=" +  $data["answerTo"];
     }
     console.log($data);
     $.ajax({
@@ -856,7 +857,7 @@ function addComments($message,$pid,$authToken) {
         },
         success: function(oRep){
             console.log(oRep); 
-            //$(".card").css("filter","blur(0)");$(".commentaires").remove();
+            $(".card").css("filter","blur(0)");$(".commentaires").remove();
             ListPostMessages(currentComm,$authToken);
         },
         dataType: "json"
@@ -982,10 +983,10 @@ function CreateCalendars(){
  * Requête permettant de créer un nouvel évenement dans le calendrier
  * @param {*} $aid Identifiant du calendrier
  */
-function CreateEventCalendars($aid, $authToken){
+function CreateEventCalendars($aid,$infos, $authToken){
     $.ajax({
         type: "POST",
-        url: api + "/agendas/"+$aid+"/events",
+        url: api + "/agendas/"+$aid+"/events?titre="+ $infos.titre + "&debut=" + $infos.debut + "",
         headers: {"authToken":$authToken}, // données dans les entetes 
         data: [],
         error : function(){

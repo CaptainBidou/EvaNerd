@@ -95,12 +95,12 @@ var JCreerPostFormLabel=$("<p>").addClass("labelTypeForm");
 //variables pour la page de création d'évènements
 var JCreerEventForm=$("<div>").addClass("divFormPost");
 var JCreerEventFormLabel=$("<p>").addClass("labelTypeForm");
-var JCreerEventFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control"]).attr("placeholder","Nom de l'évènement");
+var JCreerEventFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control","divFormEventTitre"]).attr("placeholder","Nom de l'évènement");
 var JCreerEventFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Concert").addClass("option")).append($("<option>").text("Evènement intraorchestre").addClass("option"));
 var JCreerEventFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description de l'évènement");
-var JCreerEventDate=$("<input>").attr("type","datetime-local");
+var JCreerEventDate=$("<input>").attr("type","datetime-local").addClass("divFormEventDuree");
 var JCreerEventDuree=$("<input>").attr("type","time").addClass("divFormEventDate");
-var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){CreerEvent($(this))});
+var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){JCreerEventPublier(context.target)});
 
 
 
@@ -126,8 +126,8 @@ var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addC
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
 var JMessageLayout=$("<div>").addClass("Message-Layout scroller").data("type","layout");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
-var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message").on("keyup",function(context){if (context.which==13){JEnvoyerMessage($(".Message-Send"));}});
-var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerMessage(context.target);});
+var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message").on("keyup",function(context){if (context.which==13){JEnvoyerMessage($(".Message-Send")[0]);}});
+var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){EnvoyerMessage($(".Message-Input")[0],$(".Reponse-Message-layup")[0]);$(".Reponse-Message-layup").remove();$(".Message-Input").val("");});
 var JMessageDown=$("<div>").addClass("Message-Down");
 
 //variables pour les messages créé par des participants
@@ -176,7 +176,7 @@ var JCommentairesUp=$("<div>").addClass("commentaires-Up");
 var JCommentairesMiddle=$("<div>").addClass("commentaires-Mid");
 var JCommentairesCroix=$("<img>").addClass("commentaires-cross").attr("src","Ressources/Accueil/croix.png").on("click",function(){$(".card").css("filter","blur(0)");$(".commentaires").remove();})
 var JCommentaireInput=$("<textarea>").attr('type','text').addClass("form-control Commentaire-Input").attr("placeholder","Votre commentaire");
-var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerCommentaire($(".Commentaire-Input")[0].value);});
+var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){EnvoyerCommentaire($(".Commentaire-Input")[0]);});
 var JCommentaireDown=$("<div>").addClass("Commentaire-Down");
 
 
@@ -1553,6 +1553,11 @@ function JAddOptionsCategorie(div,Reponse){
 }
 
 
+
+//TODO à regarder pour comprendre comment je vous envoie les données
+
+
+
 function JCreerPostPublier(target){
 
 $(target).data("titre",$(".divFormPostTitre").val());
@@ -1560,6 +1565,28 @@ $(target).data("description",$(".divFormPostContent").val());
 $(target).data("visibilite",$(".divFormPostCheckbox").val());
 $(target).data("image",$(".form-control-file").val());
 
-console.log($(target).data());
+
+
+//TODO rajouter la fonction qui créé les posts 
+
 
 }
+
+
+
+function JCreerEventPublier(target){
+
+    $(target).data("titre",$(".divFormEventTitre").val());
+    $(target).data("type",$(".divFormPostCheckBox").val());
+    $(target).data("description",$(".divFormPostContent").val());
+    $(target).data("date",$(".divFormEventDuree").val());
+    $(target).data("duree",$(".divFormEventDate").val());
+    
+
+    
+    CreerEvent(target);
+    
+    //TODO rajouter la fonction qui créé les posts 
+    
+    
+    }

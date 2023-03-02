@@ -574,19 +574,20 @@ function selectEvents($uid, $type){
     //TODO : params pour afficher seulement les events en cours
     $db = Config::getDatabase();
     $type = $type == "extra" ? 1 : 0;
-    $params = [$type];
-    $joinStmt = "";
-    $readPerms = "";
+    $params = [$uid];
     if($type == 0) {
-        $joinStmt = "JOIN Agenda_Perms ON Agenda_Events.aid = Agenda_Perms.aid
-                     JOIN User_Roles ON User_Roles.rid = Agenda_Perms.rid";
-        $readPerms = "AND Agenda_Perms.read = 1 AND User_Roles.uid = ?;";
-        array_push($params,$uid);
+        $sql = "SELECT DISTINCT Agenda_Events.*
+                FROM Agenda_Events
+                JOIN Agendas ON Agendas.id = Agenda_Events.aid JOIN Agenda_Perms ON Agenda_Events.aid = Agenda_Perms.aid
+                JOIN User_Roles ON User_Roles.rid = Agenda_Perms.rid
+                WHERE Agendas.extra = 0 AND Agenda_Perms.read = 1 AND User_Roles.uid = ?;";
     }
-    $sql = "SELECT DISTINCT Agenda_Events.*
-            FROM Agenda_Events
-            JOIN Agendas ON Agendas.id = Agenda_Events.aid $joinStmt
-            WHERE Agendas.extra = ? $readPerms";
+    else {
+        $sql = "SELECT Agenda_Events.*, User_Participations.participation AS voted FROM Agenda_Events
+                JOIN Agendas ON Agendas.id = Agenda_Events.aid
+                LEFT JOIN User_Participations ON User_Participations.aeid = Agenda_Events.id AND User_Participations.uid = ?;
+                ";
+    }
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
@@ -609,8 +610,8 @@ function selectCallMembers($aeid, $uid = null){
 function selectParticipations($aeid, $uid = null) {
     $db = Config::getDatabase();
     $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
-    $params = [$aeid];
-    $ratio = "COUNT(*)/(SELECT COUNT(*) FROM Users WHERE activation = 1) as ratio";
+    $params = [$aeid, $aeid];
+    $ratio = "(SELECT COUNT(*) FROM User_Participations WHERE User_Participations.aeid = ? AND User_Participations.participation = 'y')/(SELECT COUNT(*) FROM Users WHERE activation = 1) as ratio";
     $sqlUid = "";
     if($uid) {
         $sqlUid = " AND User_Participations.uid = ?";
@@ -620,7 +621,6 @@ function selectParticipations($aeid, $uid = null) {
             FROM User_Participations
             JOIN Users ON Users.id = User_Participations.uid
             WHERE User_Participations.aeid = ? $sqlUid;";
-
     return Database::parcoursRs($db->SQLSelect($sql, $params));
 }
 
@@ -735,7 +735,7 @@ function selectEvent($eid, $type, $uid = null) {
             array_push($params, $uid);
             $sqlUid = " AND User_Roles.uid = ?";
         }
-        $sql = "SELECT DISTINCT Agenda_Events.*, MAX(Agenda_perms.read) AS `read`, MAX(Agenda_perms.write) AS `write`
+        $sql = "SELECT DISTINCT Agenda_Events.*, MAX(Agenda_Perms.read) AS `read`, MAX(Agenda_Perms.write) AS `write`
                 FROM Agenda_Events JOIN Agendas ON Agendas.id = Agenda_Events.aid
                 JOIN Agenda_Perms ON Agenda_Perms.aid = Agendas.id JOIN User_Roles ON User_Roles.rid = Agenda_Perms.rid
                 WHERE Agenda_Events.id = ? AND Agendas.extra = 0 
