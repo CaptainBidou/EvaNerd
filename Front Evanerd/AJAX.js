@@ -702,9 +702,10 @@ function AddMsgConv($gid, $informations,$authToken){
     $data=[];
     $data["content"] = $informations.content;
     $url = api + "/groups/" + $gid + "/messages?content=" + $data["content"];
-    if($informations["answerTo"]){
-        $data["answerTo"] = $informations.rep;
-        $url += "&answerTo" +  $data["answerTo"];
+    console.log($informations);
+    if($informations.answerTo){
+        $data["answerTo"] = $informations.answerTo;
+        $url += "&answerTo=" +  $data["answerTo"];
     }
     console.log($data);
     $.ajax({
