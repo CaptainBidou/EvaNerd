@@ -127,7 +127,7 @@ var JMessageParticipant=$("<p>").addClass("Message-Participant");
 var JMessageLayout=$("<div>").addClass("Message-Layout scroller").data("type","layout");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
 var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message").on("keyup",function(context){if (context.which==13){JEnvoyerMessage($(".Message-Send")[0]);}});
-var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerMessage(context.target);});
+var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){EnvoyerMessage($(".Message-Input")[0],$(".Reponse-Message-layup")[0]);});
 var JMessageDown=$("<div>").addClass("Message-Down");
 
 //variables pour les messages créé par des participants
