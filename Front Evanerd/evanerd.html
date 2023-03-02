@@ -167,21 +167,20 @@ function LikerPost(idPost){
 
 function CreerEvent(context){
     console.log($(context).data());
-var json={
+    var json={
             "titre":$(context).data("titre"),
             "date":$(context).data("date"),
             "duree":$(context).data("duree"),
             "type": $(context).data("type"),
             "description": $(context).data("description"),
+    }
 
-}
-
-// a vous de jouer ;-)
-console.log(json);
-
+    // a vous de jouer ;-)
+    console.log(json);
 
 
-    CreateEventCalendars(1, authcode);
+
+    CreateEventCalendars(1,json, authcode);
 }
 
 function AjouterUtilisateur(context){
@@ -230,12 +229,15 @@ function ConnexionAuto(){
 }
 
 function EnvoyerJustif(context){
-    console.log(context);
-    console.log($(context).data("valeur"));
-    console.log($(context).data("motif"));
-    $eid = 3;
-    $present = 0;
-    $justif = "justif";
+    $present = $(context).data("valeur");
+    console.log($present);
+    
+    $present = $present == "present" ? 1 : 0;
+
+    console.log($present);
+
+    $justif = $(context).data("motif");
+    $eid = $(context).data("type_id");
     PostEventJustif($eid, authcode, $present, $justif);
 }
 

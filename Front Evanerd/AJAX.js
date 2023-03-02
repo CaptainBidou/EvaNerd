@@ -988,10 +988,10 @@ function CreateCalendars(){
  * Requête permettant de créer un nouvel évenement dans le calendrier
  * @param {*} $aid Identifiant du calendrier
  */
-function CreateEventCalendars($aid, $authToken){
+function CreateEventCalendars($aid,$infos, $authToken){
     $.ajax({
         type: "POST",
-        url: api + "/agendas/"+$aid+"/events",
+        url: api + "/agendas/"+$aid+"/events?titre="+ $infos.titre + "&debut=" + $infos.debut + "",
         headers: {"authToken":$authToken}, // données dans les entetes 
         data: [],
         error : function(){
@@ -1007,9 +1007,9 @@ function CreateEventCalendars($aid, $authToken){
 function PostEventJustif($eid,$authToken,$present,$justif){
     $.ajax({
         type: "POST",
-        url: api + "/events/"+$eid+"/calls",
+        url: api + "/events/"+$eid+"/calls?present="+$present+"&reason="+$justif,
         headers: {"authToken":$authToken},
-        data: {"present" : $present, "justification" : $justif},
+        data: {"present" : $present, "reason" : $justif},
         error : function(oRep){
             console.log("Une erreur s'est produite");
             console.log(oRep);
