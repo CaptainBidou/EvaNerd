@@ -1597,5 +1597,5 @@ function JCreerEventPublier(target){
         var JCloneCreerConvImg=JCreerConvImg.clone(true,true);
 
 
-        $("body").append(JCloneCreerConvImg);
+        $("#page").append(JCloneCreerConvImg);
     }
