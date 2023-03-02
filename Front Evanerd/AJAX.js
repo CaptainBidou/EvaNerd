@@ -997,6 +997,23 @@ function CreateEventCalendars($aid, $authToken){
         dataType: "json"
     }); 
 }
+
+function PostEventJustif($eid,$authToken){
+    $.ajax({
+        type: "POST",
+        url: api + "/events/"+$eid+"/calls",
+        headers: {"authToken":$authToken},
+        data: [],
+        error : function(oRep){
+            console.log("Une erreur s'est produite");
+            console.log(oRep);
+        },
+        success : function(oRep){
+            console.log(oRep);
+        },
+        dataType : "json"
+    });
+}
 /* END AGENDAS */
 
 /* PARTCIPATIONS AJAX FUNC */
