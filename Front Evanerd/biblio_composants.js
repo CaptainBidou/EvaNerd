@@ -126,7 +126,7 @@ var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addC
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
 var JMessageLayout=$("<div>").addClass("Message-Layout scroller").data("type","layout");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
-var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message").on("keyup",function(context){if (context.which==13){JEnvoyerMessage($(".Message-Send"));}});
+var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message").on("keyup",function(context){if (context.which==13){JEnvoyerMessage($(".Message-Send")[0]);}});
 var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerMessage(context.target);});
 var JMessageDown=$("<div>").addClass("Message-Down");
 
@@ -176,7 +176,7 @@ var JCommentairesUp=$("<div>").addClass("commentaires-Up");
 var JCommentairesMiddle=$("<div>").addClass("commentaires-Mid");
 var JCommentairesCroix=$("<img>").addClass("commentaires-cross").attr("src","Ressources/Accueil/croix.png").on("click",function(){$(".card").css("filter","blur(0)");$(".commentaires").remove();})
 var JCommentaireInput=$("<textarea>").attr('type','text').addClass("form-control Commentaire-Input").attr("placeholder","Votre commentaire");
-var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerCommentaire($(".Commentaire-Input")[0].value);});
+var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){EnvoyerCommentaire($(".Commentaire-Input")[0]);});
 var JCommentaireDown=$("<div>").addClass("Commentaire-Down");
 
 
