@@ -119,8 +119,8 @@ function defaultPicture($output, $firstName, $lastName, $font= "arial.ttf") {
     $textWidth = $textInfo["width"];
     $fontSize = $textInfo["fontSize"];
     // Ajouter le text à l'image
-    imagettftext($image, $fontSize, 0, (450/2 - $textWidth/2) + $textWidth*0.05, 450/2 + $textHeight/2, $borderColor, $font, $initials);
-    imagettftext($image, $fontSize, 0, 450/2 - $textWidth/2, 450/2 + $textHeight/2, $textColor, $font, $initials);
+    imagettftext($image, $fontSize, 0, (450/2 - (int) $textWidth/2) + (int) $textWidth*0.05, 450/2 + (int) $textHeight/2, $borderColor, $font, $initials);
+    imagettftext($image, $fontSize, 0, 450/2 - $textWidth/2, 450/2 + (int) $textHeight/2, $textColor, $font, $initials);
     // Ajouter un contour autour du texte
     // Enregistrer l'image
     imagepng($image, $output);
