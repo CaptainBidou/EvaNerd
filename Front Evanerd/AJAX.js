@@ -589,7 +589,7 @@ function ListPermsConv($gid){
  * Requête permettant de récupérer la liste des messages d'un groupe
  * @param {*} $gid Identifiant du groupe
  */
-function ListMsgConv($gid,$title,$currentuser,$authToken){
+function ListMsgConv($gid,$title,$currentuser,$authToken,mode){
     $.ajax({
         type : "GET",
         url : api + "/groups/" + $gid + "/messages",
@@ -600,11 +600,23 @@ function ListMsgConv($gid,$title,$currentuser,$authToken){
             console.log(err);
         },
         success : function(oRep){
+            if(mode == "NORMAL")
+            {
             console.log(oRep);
             oRep.titre = $title;
             oRep.id = $currentuser;
             oRep["messages"].sort(function func(e1,e2){ return e1.id - e2.id ;});
-            JCreerMessage(oRep);
+            JCreerMessage(oRep);}
+
+            if(mode == "REC")
+            {
+                oRep.titre = $title;
+                oRep.id = $currentuser;
+                oRep["messages"].sort(function func(e1,e2){ return e1.id - e2.id ;});
+                JRefreshMessage(oRep,$(".Message-Layout"),$("#DivMessage"));
+
+            }
+
         },
         dataType: "json"
     });
@@ -690,9 +702,10 @@ function AddMsgConv($gid, $informations,$authToken){
     $data=[];
     $data["content"] = $informations.content;
     $url = api + "/groups/" + $gid + "/messages?content=" + $data["content"];
-    if($informations["answerTo"]){
-        $data["answerTo"] = $informations.rep;
-        $url += "&answerTo" +  $data["answerTo"];
+    console.log($informations);
+    if($informations.answerTo){
+        $data["answerTo"] = $informations.answerTo;
+        $url += "&answerTo=" +  $data["answerTo"];
     }
     console.log($data);
     $.ajax({
@@ -823,7 +836,7 @@ function ListPostMessages($pid,$authToken){
         success: function(oRep){
             console.log(oRep); 
             oRep["comments"].sort(function func(e1,e2){ return e1.id - e2.id});
-            JCreerCommentaireLayout(oRep);
+            JCreerCommentaireLayout(oRep,user);
             currentComm = $pid;
         },
         dataType: "json"
@@ -844,7 +857,7 @@ function addComments($message,$pid,$authToken) {
         },
         success: function(oRep){
             console.log(oRep); 
-            //$(".card").css("filter","blur(0)");$(".commentaires").remove();
+            $(".card").css("filter","blur(0)");$(".commentaires").remove();
             ListPostMessages(currentComm,$authToken);
         },
         dataType: "json"
@@ -984,6 +997,23 @@ function CreateEventCalendars($aid, $authToken){
         },
         dataType: "json"
     }); 
+}
+
+function PostEventJustif($eid,$authToken,$present,$justif){
+    $.ajax({
+        type: "POST",
+        url: api + "/events/"+$eid+"/calls",
+        headers: {"authToken":$authToken},
+        data: {"present" : $present, "justification" : $justif},
+        error : function(oRep){
+            console.log("Une erreur s'est produite");
+            console.log(oRep);
+        },
+        success : function(oRep){
+            console.log(oRep);
+        },
+        dataType : "json"
+    });
 }
 /* END AGENDAS */
 

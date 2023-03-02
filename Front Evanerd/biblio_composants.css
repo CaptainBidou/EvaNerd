@@ -458,13 +458,13 @@ margin-right: 5%;
 
 .Participant-Profile{
 width:20%;
-margin-top: 5%;
+/*margin-top: 5%;*/
 float: left;
 
 }
 .Actif-Profile{
     width:20%;
-    margin-top: 5%;
+   /* margin-bottom: 1%;*/
     float: right;
 }
 .Participant-Rep,.Actif-Rep
@@ -890,4 +890,10 @@ text-align: center;
 {
     background-color: gray;
     color: white;
+}
+
+
+.reponse-commentaire
+{
+    font-size: 150%;
 }

@@ -96,13 +96,20 @@ function CommentairesPosts($id){
     $id = $($id).attr("id_post");
     currentComm = $id;
     ListPostMessages($id,authcode);
+    /*let refresh = setInterval(function() {
+        if($("#DivMessage").attr("class")!="Message")
+            clearTimeout(refresh);
+
+        ListMsgConv(id,nomgroupe,user,authcode,'REC')
+
+
+    }, 1000);*/
 }
 
-function JEnvoyerCommentaire($commContent){
+function EnvoyerCommentaire($commContent){
     console.log($commContent.value);
-    $curText = $commContent.value;
-    $curComm = currentComm;
-    addComments($curText,$curComm,authcode);
+    addComments($commContent.value,currentComm,authcode);
+    $commContent.value ="";
 }
 
 function AfficherCreer(){
@@ -127,7 +134,16 @@ function JRecupMessages(context){
     console.log(nomgroupe);
     currentGroup = id;
     $("#page").html("");
-    ListMsgConv(id,nomgroupe,user,authcode);
+    ListMsgConv(id,nomgroupe,user,authcode,"NORMAL");
+
+    let refresh = setInterval(function() {
+        if($("#DivMessage").attr("class")!="Message")
+            clearTimeout(refresh);
+
+        ListMsgConv(id,nomgroupe,user,authcode,'REC')
+
+
+    }, 1000);
 }
 
 function JRecupId(){
@@ -136,12 +152,13 @@ function JRecupId(){
     //ListCallMembers(authcode,aid,eid);
 }
 
-function EnvoyerMessage(groupId,message,rep){
-    console.log(message);
-    $informations={"content":message,
-                    "answerTo":rep,};
+function EnvoyerMessage(message,rep){
+    $informations={"content":message.value};
                     
-    AddMsgConv(groupId, $informations,authcode);
+    if (rep != undefined){
+        $informations.answerTo = rep.id;
+    }
+   AddMsgConv(currentGroup, $informations,authcode);
 }
 
 function LikerPost(idPost){
@@ -149,7 +166,21 @@ function LikerPost(idPost){
 }
 
 function CreerEvent(context){
-    console.log(context);
+    console.log($(context).data());
+var json={
+            "titre":$(context).data("titre"),
+            "date":$(context).data("date"),
+            "duree":$(context).data("duree"),
+            "type": $(context).data("type"),
+            "description": $(context).data("description"),
+
+}
+
+// a vous de jouer ;-)
+console.log(json);
+
+
+
     CreateEventCalendars(1, authcode);
 }
 
@@ -163,38 +194,49 @@ function AjouterUtilisateur(context){
 
 function ConnexionAuto(){
     
-   /* console.log("connexion auto");
+   
+    authcode = localStorage.getItem("authToken");
+    user = parseInt(localStorage.getItem("user"));
+    member = localStorage.getItem("member") == "true" ? true : false;
+    pdp = localStorage.getItem("pdp");
+    admin = localStorage.getItem("admin");
+    console.log("connexion auto");
     console.log(user);
+    console.log(admin);
     console.log(pdp);
     console.log(member);
-     authcode = localStorage.getItem("authToken");
-     user = localStorage.getItem("user");
-    member = localStorage.getItem("member");
-     pdp = localStorage.getItem("pdp");
-     admin = localStorage.getItem("admin");*/
-
-     var tel = localStorage.getItem("tel");
-     var passwd = localStorage.getItem("passwd");
+    // var tel = localStorage.getItem("tel");
+     //var passwd = localStorage.getItem("passwd");
 
      //return JCreerConnexion();
-    /*if(authcode!=null && user!=null && member!=null && pdp!=null && admin!=null)
+    if(authcode!=null && user!=null && member!=null && pdp!=null && admin!=null)
     {
 
-     JcreerHeader({"photo" : pdp,"id" : user,"member" : member,"admin" : admin});
+     JcreerHeader({"photo" : pdp,"id" : user,"member" : !member,"admin" : admin});
         AfficherAccueil();
         JcreerFooter({"membre" : member});
     }
-    else{*/
+    else{
 
-        if(tel!=null && passwd!=null){
+        /*if(tel!=null && passwd!=null){
             auth(tel,passwd);
         }
-        else
+        else*/
         JCreerConnexion();
         
 
-    //}
+    }
   
+}
+
+function EnvoyerJustif(context){
+    console.log(context);
+    console.log($(context).data("valeur"));
+    console.log($(context).data("motif"));
+    $eid = 3;
+    $present = 0;
+    $justif = "justif";
+    PostEventJustif($eid, authcode, $present, $justif);
 }
 
 

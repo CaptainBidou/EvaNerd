@@ -11,7 +11,9 @@ src="evanerd.html";
 /*                 DECLARATION DES VARIABLES                           */
 /***********************************************************************/
 
-
+var scroll;
+var windowscroll;
+var nbmessages=0;
 //variables pour les posts
 var JPost =$("<div>").addClass(["card", "post"]).data('type','post');
 var JPostTitre=$("<h2>").addClass(["post-titre","card-title"]).data('type','post_titre');//TODO :rajouter des données pour quand on clique
@@ -66,7 +68,7 @@ var JRepetitionCommentaire=$("<p>").addClass("navbar-text left repetition-commen
 var JRepetitionPresent=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Present").attr("type","present");
 var JRepetitionAbsent=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Absent").attr("type","absent");
 var JRepetitionJustificationText=$("<textarea>").addClass("form-control repetition-justification").attr("placeholder","Motif de l'absence").attr("type","motif");
-var JRepetitionEnvoyer=$("<button>").data("type","button").attr("id","envoyer").addClass("btn btn-danger repetition-bouton").val("Envoyer").html("Envoyer").attr("type","envoyer");
+var JRepetitionEnvoyer=$("<button>").data("type","button").attr("id","envoyer").addClass("btn btn-danger repetition-bouton").val("Envoyer").html("Envoyer").attr("type","envoyer").on("click", function(){EnvoyerJustif(this);});
 var JRepetitionDiv=$("<div>").css("width","100%");
 var JRepetitionRetour=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Retour").html("Retour").attr("type","retour");
 
@@ -85,7 +87,7 @@ var JCreerPostForm=$("<div>").addClass("divFormPost");
 var JCreerPostFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control"]).attr("placeholder","Titre du post");
 var JCreerPostFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description du post");
 var JCreerPostFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Visible pour tout le monde").addClass("option")).append($("<option>").text("Visible seulement pour les membres").addClass("option"));
-var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){return null;});
+var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){JCreerPostPublier(context.target);});
 var JCreerPostFormImage=$("<input>").addClass("btn btn-danger form-control-file").attr("type","file").text("Ajouter une image").addClass("buttonAddImage").on("click",function(){return null;});
 var JCreerPostFormLabel=$("<p>").addClass("labelTypeForm");
 
@@ -93,12 +95,12 @@ var JCreerPostFormLabel=$("<p>").addClass("labelTypeForm");
 //variables pour la page de création d'évènements
 var JCreerEventForm=$("<div>").addClass("divFormPost");
 var JCreerEventFormLabel=$("<p>").addClass("labelTypeForm");
-var JCreerEventFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control"]).attr("placeholder","Nom de l'évènement");
+var JCreerEventFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control","divFormEventTitre"]).attr("placeholder","Nom de l'évènement");
 var JCreerEventFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Concert").addClass("option")).append($("<option>").text("Evènement intraorchestre").addClass("option"));
 var JCreerEventFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description de l'évènement");
-var JCreerEventDate=$("<input>").attr("type","datetime-local");
+var JCreerEventDate=$("<input>").attr("type","datetime-local").addClass("divFormEventDuree");
 var JCreerEventDuree=$("<input>").attr("type","time").addClass("divFormEventDate");
-var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){CreerEvent($(this))});
+var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){JCreerEventPublier(context.target)});
 
 
 
@@ -124,8 +126,8 @@ var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addC
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
 var JMessageLayout=$("<div>").addClass("Message-Layout scroller").data("type","layout");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
-var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message");
-var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerMessage(context.target);});
+var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message").on("keyup",function(context){if (context.which==13){JEnvoyerMessage($(".Message-Send")[0]);}});
+var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){EnvoyerMessage($(".Message-Input")[0],$(".Reponse-Message-layup")[0]);});
 var JMessageDown=$("<div>").addClass("Message-Down");
 
 //variables pour les messages créé par des participants
@@ -174,7 +176,7 @@ var JCommentairesUp=$("<div>").addClass("commentaires-Up");
 var JCommentairesMiddle=$("<div>").addClass("commentaires-Mid");
 var JCommentairesCroix=$("<img>").addClass("commentaires-cross").attr("src","Ressources/Accueil/croix.png").on("click",function(){$(".card").css("filter","blur(0)");$(".commentaires").remove();})
 var JCommentaireInput=$("<textarea>").attr('type','text').addClass("form-control Commentaire-Input").attr("placeholder","Votre commentaire");
-var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerCommentaire($(".Commentaire-Input")[0].value);});
+var JCommentaireSend=$("<img>").addClass("Commentaire-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){EnvoyerCommentaire($(".Commentaire-Input")[0]);});
 var JCommentaireDown=$("<div>").addClass("Commentaire-Down");
 
 
@@ -340,12 +342,13 @@ function JcreerFooter(Reponse){
     var JCloneFooterAgenda=JFooterAgenda.clone('true','true');
     var JCloneFooterMail=JFooterMail.clone('true','true');
 
-
+console.log(Reponse.membre);
 
     if(Reponse.membre==true){
         JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);
-        $("#footer").append(JCloneFooter);}
-        if(Reponse.membre==false)
+        $("#footer").append(JCloneFooter);
+        }
+    if(Reponse.membre==false)
         {
             JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAgenda).append(JCloneFooterMail);
             $("#footer").append(JCloneFooter);
@@ -541,6 +544,8 @@ function JCreerConcert(Reponse){
     var JCloneJevienspeutetre =JConcertJevienspeutetre.clone(true,true);
 
     var JCloneProgress=JConcertProgress.clone(true,true);
+    Reponse.pourcentage=Reponse.pourcentage*100;
+
     var JClonepourcentage=JConcertpourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
 
     JCloneJeviens.on("click",function(){
@@ -651,7 +656,7 @@ function JCreerAppel(Reponse){
     if($(context.target).attr("type")=="envoyer"){
         
         //TODO placer la requete ici
-        JCloneRepetitionEnvoyer.data("motif",$(context.target).text());
+        JCloneRepetitionEnvoyer.data("motif",$(context.target).val());
         JRecupId(context.target);
         JCloneRepetition.hide();
     
@@ -862,7 +867,8 @@ var JCloneProfileDivActivite=JProfileDivActivite.clone(true,true);
     $("#page").append(JCloneProfileDivActivite);
     for(i=0;i<Reponse.activity.length;i++)
     {var activity = {"nom":Reponse.firstName,"prenom":Reponse.lastName,"activites":Reponse.activity[i],};
-    JCreerProfileActivite(activity);}
+    JCreerProfileActivite(activity);
+    }
 
 }
 
@@ -902,6 +908,75 @@ else
     JCouleur='silver';
 }
 
+function JRefreshMessage(Reponse,JCloneMessageLayout,JCloneMessage){
+JCloneMessageLayout.html("");
+JCloneMessage.html("");
+
+    var i=0;
+    console.log(Reponse.messages.length);
+var j=0;
+    for(i=0;i<Reponse.messages.length;i++)
+    {
+        if(Reponse.messages[i].answerTo!=null)
+        {   
+            for(j=0;j<Reponse.messages.length;j++)
+            {
+                if(Reponse.messages[i].answerTo==Reponse.messages[j].id)
+                    Reponse.messages[i].answerTo=Reponse.messages[j];
+            }
+
+
+        }
+
+    
+        
+
+
+
+        
+        if(Reponse.messages[i].pinned==1)
+            JCreerMessageActif(Reponse.messages[i],JCloneMessageLayout,Reponse.color,0);
+
+        if(Reponse.messages[i].author.id==Reponse.id)
+        {
+            JCreerMessageActif(Reponse.messages[i],JCloneMessage,Reponse.color,0);
+        }
+        
+        else
+        JCreerMessageParticipant(Reponse.messages[i],JCloneMessage,0);
+    
+    
+    
+    }
+
+    if(i==nbmessages)
+    {
+        return ; }
+    if(i>nbmessages)
+    {
+        nbmessages=i;
+        window.scrollTo(0, 4000000000000000000000000);
+
+    }
+    else
+    {
+        nbmessages=i;
+    return;}
+
+    JCloneMessage.animate({scrollTop:0,})
+   // JCloneMessage.on("click",function(){scroll=false;});
+
+ 
+
+
+    //JCloneMessage.scrollBottom = JCloneMessage.scrollHeight;
+    //JCloneMessage.scrollTop = JCloneMessage.scrollHeight;
+}
+
+
+
+
+
 
 function JCreerMessage(Reponse){
     var JCloneMessageHeader = JMessageHeader.clone(true,true);
@@ -925,6 +1000,10 @@ function JCreerMessage(Reponse){
     $("#page").append(JCloneMessage);
     JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
     $("#page").append(JCloneMessageDown);
+    
+    JCloneMessageLayout.html("");
+JCloneMessage.html("");
+
     var i=0;
     console.log(Reponse.messages.length);
 var j=0;
@@ -954,17 +1033,38 @@ var j=0;
     
     
     }
-    console.log($("#"+i).scrollTop());
+
+
     JCloneMessage.animate({scrollTop:0,})
+
+    JCloneMessage.click(function(){window.scroll(0, 0);});
+
+
+    window.scrollTo(0, 400000000000000);
+    //je met le scroll en bas
+    
+    //cela ne fonctionne pas
+    //met le scroll en haut
+
+
+
+    //console.log($("#"+i).scrollTop());
+    //JCloneMessage.animate({scrollTop:0,})
 
 }
 
-function JCreerMessageParticipant(Reponse,div,rep)
+function JCreerMessageParticipant(Reponse,div,rep,Comm)
 {   
     
     var JCloneMessageParticipantDiv=JMessageParticipantDiv.clone(true,true).css("background-color","lightgray").attr("id",Reponse.id);
     var JCloneMessageParticipantTitre=JMessageParticipantTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
     var JCloneMessageParticipantContent=JMessageParticipantContent.clone(true,true).text(Reponse.content);
+   
+if(Comm==1)
+    {   JCloneMessageParticipantDiv.addClass("reponse-commentaire");
+
+}
+
     if(rep==1)
     {   JCloneMessageParticipantDiv.addClass("reponse-message-linked");
     JCloneMessageParticipantDiv.attr("href","#"+ JCloneMessageParticipantDiv.attr("id"));
@@ -982,14 +1082,24 @@ function JCreerMessageParticipant(Reponse,div,rep)
     if(Reponse.pinned==1)
     JCloneMessageParticipantEpingle.attr("src","Ressources/Message/epingleNOIR.png")
 
+   
     
 
     if(Reponse.answerTo!=null)
         { var answer=Reponse.answerTo;
             Reponse.answerTo=null;
             JCloneMessageParticipantDiv.append("<a>");
-            $("a",JCloneMessageParticipantDiv).attr("href","#"+answer.id).addClass("lien-message");
+            $("a",JCloneMessageParticipantDiv).addClass("lien-message").attr("href","#"+answer.id);
         JCreerMessageActif(answer,$("a",JCloneMessageParticipantDiv),"blueviolet",1);}
+
+        if(Comm==1)
+        {   JCloneMessageParticipantDiv.addClass("reponse-commentaire");
+    
+        JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantContent]);
+        $(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]); 
+        return;       
+        }
+
 
     JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantContent,JCloneMessageParticipantRep,JCloneMessageParticipantEpingle]);
     $(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]);
@@ -1126,17 +1236,18 @@ function JclickEpingle(target){
 
 function JclickRep(target){
     var id = $(target).attr("id_message");
+    nbmessages--;
+    $(".Message-Down").empty();
+    var JCloneMessageEnReponse=$("#"+id).clone(true,true).css("background-color","blueviolet").css("margin","0").css("margin-bottom","1%").addClass("Reponse-Message-layup");
+    $("a",JCloneMessageEnReponse).remove();
+    $(".Participant-Rep",JCloneMessageEnReponse).remove();
+    $(".Participant-Epingle",JCloneMessageEnReponse).remove();
+    var JCloneCroix=$("<img>").attr("src","Ressources/Message/croix.png").addClass("Croix-Message-Reponse Reponse-Message-layup").clone(true,true).on("click",function(){$(".Reponse-Message-layup").remove();});
+    var JCloneMessageInput=JMessageInput.clone(true,true);
+    var JCloneMessageSend=JMessageSend.clone(true,true);
+    $(".Message-Down").append([JCloneMessageEnReponse,JCloneCroix,JCloneMessageSend,JCloneMessageInput]);
 
-$(".Message-Down").empty();
-var JCloneMessageEnReponse=$("#"+id).clone(true,true).css("background-color","blueviolet").css("margin","0").css("margin-bottom","1%").addClass("Reponse-Message-layup");
-$("a",JCloneMessageEnReponse).remove();
-$(".Participant-Rep",JCloneMessageEnReponse).remove();
-$(".Participant-Epingle",JCloneMessageEnReponse).remove();
-var JCloneCroix=$("<img>").attr("src","Ressources/Message/croix.png").addClass("Croix-Message-Reponse Reponse-Message-layup").clone(true,true).on("click",function(){$(".Reponse-Message-layup").remove();
-});
-var JCloneMessageInput=JMessageInput.clone(true,true);
-var JCloneMessageSend=JMessageSend.clone(true,true);
-$(".Message-Down").append([JCloneMessageEnReponse,JCloneCroix,JCloneMessageSend,JCloneMessageInput]);
+
 
 }
 
@@ -1167,7 +1278,7 @@ $(".Actif-Div",".Message-Down").attr("id","null");
 
 
 $(target).attr("message",$(".Message-Input").val()).attr("rep",$(".Actif-Div",".Message-Down").attr("id"));
-
+$(".Message-Input").val("");
 
 console.log($(target).attr("groupId"));
 
@@ -1211,8 +1322,9 @@ $(".Reglage-Message-Layout").animate({left: '25%'});
 
 }
 
-function JCreerCommentaireLayout(Reponse){
-
+function JCreerCommentaireLayout(Reponse,user){
+console.log("Reponse="+Reponse );
+console.log(Reponse );
 
 var JCloneCommentaireUp=JCommentairesUp.clone(true,true);
 var JCloneCommentairesMiddle=JCommentairesMiddle.clone(true,true);
@@ -1228,7 +1340,10 @@ var i;
 for(i=0;i<Reponse.comments.length;i++)
 {
 
+    if(user==Reponse.comments[i].author.id)
     JCreerMessageActif(Reponse.comments[i],JCloneCommentairesMiddle,"lightblue",2);
+    else
+    JCreerMessageParticipant(Reponse.comments[i],JCloneCommentairesMiddle,"lightblue",1);
 
 }
 var JCloneCommentaireInput=JCommentaireInput.clone(true,true);
@@ -1256,7 +1371,7 @@ JCloneCommentaires.fadeIn(1000);
 
 
 
-
+window.scrollTo(0, 400000000000000);
 }
 
 
@@ -1441,3 +1556,42 @@ function JAddOptionsCategorie(div,Reponse){
     div.append(JCloneCategorieOption).on("click",function(){JClickHeaderMenu(null);});
 
 }
+
+
+
+//TODO à regarder pour comprendre comment je vous envoie les données
+
+
+
+function JCreerPostPublier(target){
+
+$(target).data("titre",$(".divFormPostTitre").val());
+$(target).data("description",$(".divFormPostContent").val());
+$(target).data("visibilite",$(".divFormPostCheckbox").val());
+$(target).data("image",$(".form-control-file").val());
+
+
+
+//TODO rajouter la fonction qui créé les posts 
+
+
+}
+
+
+
+function JCreerEventPublier(target){
+
+    $(target).data("titre",$(".divFormEventTitre").val());
+    $(target).data("type",$(".divFormPostCheckBox").val());
+    $(target).data("description",$(".divFormPostContent").val());
+    $(target).data("date",$(".divFormEventDuree").val());
+    $(target).data("duree",$(".divFormEventDate").val());
+    
+
+    
+    CreerEvent(target);
+    
+    //TODO rajouter la fonction qui créé les posts 
+    
+    
+    }
