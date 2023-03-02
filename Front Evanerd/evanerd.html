@@ -96,6 +96,14 @@ function CommentairesPosts($id){
     $id = $($id).attr("id_post");
     currentComm = $id;
     ListPostMessages($id,authcode);
+    /*let refresh = setInterval(function() {
+        if($("#DivMessage").attr("class")!="Message")
+            clearTimeout(refresh);
+
+        ListMsgConv(id,nomgroupe,user,authcode,'REC')
+
+
+    }, 1000);*/
 }
 
 function JEnvoyerCommentaire($commContent){
