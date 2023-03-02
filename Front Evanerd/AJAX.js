@@ -835,7 +835,7 @@ function ListPostMessages($pid,$authToken){
         success: function(oRep){
             console.log(oRep); 
             oRep["comments"].sort(function func(e1,e2){ return e1.id - e2.id});
-            JCreerCommentaireLayout(oRep);
+            JCreerCommentaireLayout(oRep,user);
             currentComm = $pid;
         },
         dataType: "json"

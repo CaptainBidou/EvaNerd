@@ -955,7 +955,7 @@ var j=0;
     if(i>nbmessages)
     {
         nbmessages=i;
-        window.scrollTo(0, 400000000000000);
+        window.scrollTo(0, 4000000000000000000000000);
 
     }
     else
@@ -1053,14 +1053,17 @@ var j=0;
 
 }
 
-function JCreerMessageParticipant(Reponse,div,rep)
+function JCreerMessageParticipant(Reponse,div,rep,Comm)
 {   
     
     var JCloneMessageParticipantDiv=JMessageParticipantDiv.clone(true,true).css("background-color","lightgray").attr("id",Reponse.id);
     var JCloneMessageParticipantTitre=JMessageParticipantTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
     var JCloneMessageParticipantContent=JMessageParticipantContent.clone(true,true).text(Reponse.content);
    
+if(Comm==1)
+    {   JCloneMessageParticipantDiv.addClass("reponse-commentaire");
 
+}
 
     if(rep==1)
     {   JCloneMessageParticipantDiv.addClass("reponse-message-linked");
@@ -1079,6 +1082,7 @@ function JCreerMessageParticipant(Reponse,div,rep)
     if(Reponse.pinned==1)
     JCloneMessageParticipantEpingle.attr("src","Ressources/Message/epingleNOIR.png")
 
+   
     
 
     if(Reponse.answerTo!=null)
@@ -1087,6 +1091,15 @@ function JCreerMessageParticipant(Reponse,div,rep)
             JCloneMessageParticipantDiv.append("<a>");
             $("a",JCloneMessageParticipantDiv).addClass("lien-message").attr("href","#"+answer.id);
         JCreerMessageActif(answer,$("a",JCloneMessageParticipantDiv),"blueviolet",1);}
+
+        if(Comm==1)
+        {   JCloneMessageParticipantDiv.addClass("reponse-commentaire");
+    
+        JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantContent]);
+        $(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]); 
+        return;       
+        }
+
 
     JCloneMessageParticipantDiv.append([JCloneMessageParticipantTitre,JCloneMessageParticipantContent,JCloneMessageParticipantRep,JCloneMessageParticipantEpingle]);
     $(div).append([JCloneMessageParticipantProfile,JCloneMessageParticipantDiv]);
@@ -1309,8 +1322,9 @@ $(".Reglage-Message-Layout").animate({left: '25%'});
 
 }
 
-function JCreerCommentaireLayout(Reponse){
-
+function JCreerCommentaireLayout(Reponse,user){
+console.log("Reponse="+Reponse );
+console.log(Reponse );
 
 var JCloneCommentaireUp=JCommentairesUp.clone(true,true);
 var JCloneCommentairesMiddle=JCommentairesMiddle.clone(true,true);
@@ -1326,7 +1340,10 @@ var i;
 for(i=0;i<Reponse.comments.length;i++)
 {
 
+    if(user==Reponse.comments[i].author.id)
     JCreerMessageActif(Reponse.comments[i],JCloneCommentairesMiddle,"lightblue",2);
+    else
+    JCreerMessageParticipant(Reponse.comments[i],JCloneCommentairesMiddle,"lightblue",1);
 
 }
 var JCloneCommentaireInput=JCommentaireInput.clone(true,true);
@@ -1354,7 +1371,7 @@ JCloneCommentaires.fadeIn(1000);
 
 
 
-
+window.scrollTo(0, 400000000000000);
 }
 
 
