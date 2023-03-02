@@ -555,7 +555,12 @@ function ListConv($authToken){
             console.log(oRep);
         },
         success: function(oRep){
-            console.log(oRep); 
+            console.log(oRep);
+            if(member==1)
+            {
+                JCreerCreerConv();
+            }
+            
             oRep["groups"].forEach(element => {
                 JCreerConv(element);
             });

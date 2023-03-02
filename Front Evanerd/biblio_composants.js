@@ -214,7 +214,8 @@ var JCategorieSelect=$("<select>").addClass("Categorie-Select");
 var JCategorieOption=$("<option>").addClass("Categorie-Option");
 
 
-
+//variables pour la création de conv
+var JCreerConvImg=$("<img>").addClass(["Creer-Conv-Img","rounded-circle"]).attr("src","Ressources/Message/startWrite.png");
 
 
 
@@ -1594,4 +1595,12 @@ function JCreerEventPublier(target){
     //TODO rajouter la fonction qui créé les posts 
     
     
+    }
+
+
+    function JCreerCreerConv(){
+        var JCloneCreerConvImg=JCreerConvImg.clone(true,true);
+
+
+        $("body").append(JCloneCreerConvImg);
     }
