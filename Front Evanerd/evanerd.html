@@ -106,11 +106,10 @@ function CommentairesPosts($id){
     }, 1000);*/
 }
 
-function JEnvoyerCommentaire($commContent){
+function EnvoyerCommentaire($commContent){
     console.log($commContent.value);
-    $curText = $commContent.value;
-    $curComm = currentComm;
-    addComments($curText,$curComm,authcode);
+    addComments($commContent.value,currentComm,authcode);
+    $commContent.value ="";
 }
 
 function AfficherCreer(){
@@ -217,8 +216,12 @@ function ConnexionAuto(){
 
 function EnvoyerJustif(context){
     console.log(context);
+    console.log($(context).data("valeur"));
+    console.log($(context).data("motif"));
     $eid = 3;
-    PostEventJustif($eid, authcode);
+    $present = 0;
+    $justif = "justif";
+    PostEventJustif($eid, authcode, $present, $justif);
 }
 
 

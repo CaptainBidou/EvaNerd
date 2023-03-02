@@ -19,8 +19,8 @@ var currentGroup = 0;
  */
 
 function auth($tel,$password){
-    //localStorage.setItem('tel',$tel);
-    //localStorage.setItem('passwd',$password);
+    localStorage.setItem('tel',$tel);
+    localStorage.setItem('passwd',$password);
     $.ajax({
         type: "POST",
         url: api + "/auth?"+ "tel="+$tel+"&password="+$password,
@@ -856,7 +856,7 @@ function addComments($message,$pid,$authToken) {
         },
         success: function(oRep){
             console.log(oRep); 
-            //$(".card").css("filter","blur(0)");$(".commentaires").remove();
+            $(".card").css("filter","blur(0)");$(".commentaires").remove();
             ListPostMessages(currentComm,$authToken);
         },
         dataType: "json"
@@ -998,12 +998,12 @@ function CreateEventCalendars($aid, $authToken){
     }); 
 }
 
-function PostEventJustif($eid,$authToken){
+function PostEventJustif($eid,$authToken,$present,$justif){
     $.ajax({
         type: "POST",
         url: api + "/events/"+$eid+"/calls",
         headers: {"authToken":$authToken},
-        data: [],
+        data: {"present" : $present, "justification" : $justif},
         error : function(oRep){
             console.log("Une erreur s'est produite");
             console.log(oRep);
