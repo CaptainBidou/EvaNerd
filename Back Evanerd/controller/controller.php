@@ -635,7 +635,6 @@ function postAgenda($data, $queryString, $authKey) {
     if(!$authKey) sendError("Vous être identifié !", HTTP_UNAUTHORIZED);
     $uidConn = validUser(authToId($authKey));
     //TODO : faire les permissions
-    //TODO : ajouter l'uid
     if ($title = validString(htmlspecialchars(valider("title", $queryString)), 30, 1))
         if ($extra = valider("type", $queryString)) {
             $extra = ($extra == "intra") ? 0 : 1;
