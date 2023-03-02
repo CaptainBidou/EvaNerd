@@ -106,11 +106,10 @@ function CommentairesPosts($id){
     }, 1000);*/
 }
 
-function JEnvoyerCommentaire($commContent){
+function EnvoyerCommentaire($commContent){
     console.log($commContent.value);
-    $curText = $commContent.value;
-    $curComm = currentComm;
-    addComments($curText,$curComm,authcode);
+    addComments($commContent.value,currentComm,authcode);
+    $commContent.value ="";
 }
 
 function AfficherCreer(){
