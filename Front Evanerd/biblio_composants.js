@@ -87,7 +87,7 @@ var JCreerPostForm=$("<div>").addClass("divFormPost");
 var JCreerPostFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control"]).attr("placeholder","Titre du post");
 var JCreerPostFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description du post");
 var JCreerPostFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Visible pour tout le monde").addClass("option")).append($("<option>").text("Visible seulement pour les membres").addClass("option"));
-var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(){return null;});
+var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){JCreerPostPublier(context.target);});
 var JCreerPostFormImage=$("<input>").addClass("btn btn-danger form-control-file").attr("type","file").text("Ajouter une image").addClass("buttonAddImage").on("click",function(){return null;});
 var JCreerPostFormLabel=$("<p>").addClass("labelTypeForm");
 
@@ -656,7 +656,7 @@ function JCreerAppel(Reponse){
     if($(context.target).attr("type")=="envoyer"){
         
         //TODO placer la requete ici
-        JCloneRepetitionEnvoyer.data("motif",$(context.target).text());
+        JCloneRepetitionEnvoyer.data("motif",$(context.target).val());
         JRecupId(context.target);
         JCloneRepetition.hide();
     
@@ -1554,5 +1554,17 @@ function JAddOptionsCategorie(div,Reponse){
     var JCloneCategorieOption=JCategorieOption.clone(true,true);
     JCloneCategorieOption.text(Reponse.label);
     div.append(JCloneCategorieOption).on("click",function(){JClickHeaderMenu(null);});
+
+}
+
+
+function JCreerPostPublier(target){
+
+$(target).data("titre",$(".divFormPostTitre").val());
+$(target).data("description",$(".divFormPostContent").val());
+$(target).data("visibilite",$(".divFormPostCheckbox").val());
+$(target).data("image",$(".form-control-file").val());
+
+console.log($(target).data());
 
 }
