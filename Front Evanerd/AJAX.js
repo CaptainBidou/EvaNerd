@@ -983,10 +983,10 @@ function CreateCalendars(){
  * Requête permettant de créer un nouvel évenement dans le calendrier
  * @param {*} $aid Identifiant du calendrier
  */
-function CreateEventCalendars($aid, $authToken){
+function CreateEventCalendars($aid,$infos, $authToken){
     $.ajax({
         type: "POST",
-        url: api + "/agendas/"+$aid+"/events",
+        url: api + "/agendas/"+$aid+"/events?titre="+ $infos.titre + "&debut=" + $infos.debut + "",
         headers: {"authToken":$authToken}, // données dans les entetes 
         data: [],
         error : function(){
