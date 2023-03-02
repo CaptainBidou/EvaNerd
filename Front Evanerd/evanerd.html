@@ -216,12 +216,15 @@ function ConnexionAuto(){
 }
 
 function EnvoyerJustif(context){
-    console.log(context);
-    console.log($(context).data("valeur"));
-    console.log($(context).data("motif"));
-    $eid = 3;
-    $present = 0;
-    $justif = "justif";
+    $present = $(context).data("valeur");
+    console.log($present);
+    
+    $present = $present == "present" ? 1 : 0;
+
+    console.log($present);
+
+    $justif = $(context).data("motif");
+    $eid = $(context).data("type_id");
     PostEventJustif($eid, authcode, $present, $justif);
 }
 

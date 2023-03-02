@@ -68,7 +68,7 @@ var JRepetitionCommentaire=$("<p>").addClass("navbar-text left repetition-commen
 var JRepetitionPresent=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Present").attr("type","present");
 var JRepetitionAbsent=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Absent").attr("type","absent");
 var JRepetitionJustificationText=$("<textarea>").addClass("form-control repetition-justification").attr("placeholder","Motif de l'absence").attr("type","motif");
-var JRepetitionEnvoyer=$("<button>").data("type","button").attr("id","envoyer").addClass("btn btn-danger repetition-bouton").val("Envoyer").html("Envoyer").attr("type","envoyer").on("click", function(){EnvoyerJustif(this);});
+var JRepetitionEnvoyer=$("<button>").data("type","button").attr("id","envoyer").addClass("btn btn-danger repetition-bouton").val("Envoyer").html("Envoyer").attr("type","envoyer");
 var JRepetitionDiv=$("<div>").css("width","100%");
 var JRepetitionRetour=$("<button>").data("type","button").addClass("btn btn-danger repetition-bouton").val("Retour").html("Retour").attr("type","retour");
 
@@ -605,16 +605,10 @@ function JCreerConcert(Reponse){
 function JCreerAppel(Reponse){
     var JCloneRepetition=JRepetition.clone(true,true).css("background-color",JCouleur);
 
-    if (JCouleur == 'silver')
-        JCouleur='Lightgray';
-    else
-        JCouleur='silver';
-
-    var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide().attr("type_id",Reponse.id);
+    JCouleur = JCouleur == "silver" ? "Lightgray" : "silver";
+    var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide().data("type_id",Reponse.id);
     var JCloneRepetitionRetour=JRepetitionRetour.clone(true,true).hide();
-
-
-    var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true).attr("type_id","Reponse.id");
+    var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true).data("type_id",Reponse.id);
     var JCloneRepetitionTitre = JRepetitionTitre.clone(true,true).text(Reponse.titre);
     var JCloneRepetitionDate= JRepetitionDate.clone(true,true).text(Reponse.date);
     var JCloneRepetitionCommentaire=JRepetitionCommentaire.clone(true,true).text(Reponse.commentaire);
@@ -622,10 +616,8 @@ function JCreerAppel(Reponse){
     var JCloneRepetitionPresent=JRepetitionPresent.clone(true,true);
     var JCloneRepetitionAbsent=JRepetitionAbsent.clone(true,true);
     var JCloneRepetitionJustification2=JRepetitionJustificationText.clone(true,true).hide();
-
-
+    // EVENT CLICK
     JCloneRepetition.on("click",function(context){
-        
     //if($(context.target).prev().prop('tagName')=="INPUT" ||$(context.target).prev().prop('tagName')=="TEXTAREA"||$(context.target).prev().prop('tagName')=="LABEL")
     if($(context.target).attr("type")=="present")
     {
@@ -656,9 +648,12 @@ function JCreerAppel(Reponse){
     if($(context.target).attr("type")=="envoyer"){
         
         //TODO placer la requete ici
-        JCloneRepetitionEnvoyer.data("motif",$(context.target).val());
+        console.log($(".repetition-justification").val());
+        JCloneRepetitionEnvoyer.data("motif",$(".repetition-justification").val());
         JRecupId(context.target);
         JCloneRepetition.hide();
+
+        EnvoyerJustif(JCloneRepetitionEnvoyer);
     
     }
     if($(context.target).attr("type")=="retour"){

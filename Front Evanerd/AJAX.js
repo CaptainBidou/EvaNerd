@@ -1001,9 +1001,9 @@ function CreateEventCalendars($aid, $authToken){
 function PostEventJustif($eid,$authToken,$present,$justif){
     $.ajax({
         type: "POST",
-        url: api + "/events/"+$eid+"/calls",
+        url: api + "/events/"+$eid+"/calls?present="+$present+"&reason="+$justif,
         headers: {"authToken":$authToken},
-        data: {"present" : $present, "justification" : $justif},
+        data: {"present" : $present, "reason" : $justif},
         error : function(oRep){
             console.log("Une erreur s'est produite");
             console.log(oRep);
