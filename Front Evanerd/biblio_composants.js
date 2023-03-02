@@ -342,12 +342,13 @@ function JcreerFooter(Reponse){
     var JCloneFooterAgenda=JFooterAgenda.clone('true','true');
     var JCloneFooterMail=JFooterMail.clone('true','true');
 
-
+console.log(Reponse.membre);
 
     if(Reponse.membre==true){
         JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);
-        $("#footer").append(JCloneFooter);}
-        if(Reponse.membre==false)
+        $("#footer").append(JCloneFooter);
+        }
+    if(Reponse.membre==false)
         {
             JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAgenda).append(JCloneFooterMail);
             $("#footer").append(JCloneFooter);

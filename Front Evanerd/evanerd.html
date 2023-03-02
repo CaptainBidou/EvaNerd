@@ -172,37 +172,38 @@ function AjouterUtilisateur(context){
 
 function ConnexionAuto(){
     
-   /* console.log("connexion auto");
+   
+     authcode = localStorage.getItem("authToken");
+     user = parseInt(localStorage.getItem("user"));
+    member = localStorage.getItem("member") == "true" ? true : false;
+     pdp = localStorage.getItem("pdp");
+     admin = localStorage.getItem("admin");
+     console.log("connexion auto");
     console.log(user);
+    console.log(admin);
     console.log(pdp);
     console.log(member);
-     authcode = localStorage.getItem("authToken");
-     user = localStorage.getItem("user");
-    member = localStorage.getItem("member");
-     pdp = localStorage.getItem("pdp");
-     admin = localStorage.getItem("admin");*/
-
-     var tel = localStorage.getItem("tel");
-     var passwd = localStorage.getItem("passwd");
+    // var tel = localStorage.getItem("tel");
+     //var passwd = localStorage.getItem("passwd");
 
      //return JCreerConnexion();
-    /*if(authcode!=null && user!=null && member!=null && pdp!=null && admin!=null)
+    if(authcode!=null && user!=null && member!=null && pdp!=null && admin!=null)
     {
 
-     JcreerHeader({"photo" : pdp,"id" : user,"member" : member,"admin" : admin});
+     JcreerHeader({"photo" : pdp,"id" : user,"member" : !member,"admin" : admin});
         AfficherAccueil();
         JcreerFooter({"membre" : member});
     }
-    else{*/
+    else{
 
-        if(tel!=null && passwd!=null){
+        /*if(tel!=null && passwd!=null){
             auth(tel,passwd);
         }
-        else
+        else*/
         JCreerConnexion();
         
 
-    //}
+    }
   
 }
 
