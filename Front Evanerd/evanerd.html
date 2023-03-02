@@ -152,12 +152,13 @@ function JRecupId(){
     //ListCallMembers(authcode,aid,eid);
 }
 
-function EnvoyerMessage(groupId,message,rep){
-    console.log(message);
-    $informations={"content":message,
-                    "answerTo":rep,};
+function EnvoyerMessage(message,rep){
+    $informations={"content":message.value};
                     
-    AddMsgConv(groupId, $informations,authcode);
+    if (rep != undefined){
+        $informations.answerTo = rep.id;
+    }
+   AddMsgConv(currentGroup, $informations,authcode);
 }
 
 function LikerPost(idPost){
@@ -180,12 +181,12 @@ function AjouterUtilisateur(context){
 function ConnexionAuto(){
     
    
-     authcode = localStorage.getItem("authToken");
-     user = parseInt(localStorage.getItem("user"));
+    authcode = localStorage.getItem("authToken");
+    user = parseInt(localStorage.getItem("user"));
     member = localStorage.getItem("member") == "true" ? true : false;
-     pdp = localStorage.getItem("pdp");
-     admin = localStorage.getItem("admin");
-     console.log("connexion auto");
+    pdp = localStorage.getItem("pdp");
+    admin = localStorage.getItem("admin");
+    console.log("connexion auto");
     console.log(user);
     console.log(admin);
     console.log(pdp);
