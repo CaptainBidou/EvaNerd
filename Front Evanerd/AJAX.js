@@ -856,7 +856,7 @@ function addComments($message,$pid,$authToken) {
         },
         success: function(oRep){
             console.log(oRep); 
-            //$(".card").css("filter","blur(0)");$(".commentaires").remove();
+            $(".card").css("filter","blur(0)");$(".commentaires").remove();
             ListPostMessages(currentComm,$authToken);
         },
         dataType: "json"
