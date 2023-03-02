@@ -19,8 +19,8 @@ var currentGroup = 0;
  */
 
 function auth($tel,$password){
-    localStorage.setItem('tel',$tel);
-    localStorage.setItem('passwd',$password);
+    //localStorage.setItem('tel',$tel);
+    //localStorage.setItem('passwd',$password);
     $.ajax({
         type: "POST",
         url: api + "/auth?"+ "tel="+$tel+"&password="+$password,
