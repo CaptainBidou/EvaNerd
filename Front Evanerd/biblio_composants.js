@@ -215,11 +215,14 @@ var JCategorieOption=$("<option>").addClass("Categorie-Option");
 
 
 //variables pour la création de conv
-var JCreerConvImg=$("<img>").addClass(["Creer-Conv-Img","rounded-circle"]).attr("src","Ressources/Message/startWrite.png");
+var JCreerConvImg=$("<img>").addClass(["Creer-Conv-Img","rounded-circle"]).attr("src","Ressources/Message/startWrite.png").on("click",function(context){JCreerConvCreer();});
 
-
-
-
+//variables pour la vue de création de conv 
+var JConvCreer = $("<div>").addClass("Conv-Creer");
+var JConvCreerTitre=$("<input>").attr("type","text").addClass("Conv-Creer-Titre").attr("placeholder","Titre de la conversation");
+var JConvCreerMembre=$("<input>").attr("type","text").addClass("Conv-Creer-Membre").attr("placeholder","Membre de la conversation");
+var JConvCreerMembreSubmit=$("<button>").addClass("btn btn-danger Conv-Creer-Submit").html("Ajouter un membre").on("click",function(context){JAjouterUtilisateurConv($(this))});
+var JConvCreerSubmit=$("<button>").addClass("btn btn-danger Conv-Creer-Submit").html("Créer la conversation").on("click",function(context){JCreerCreerConvSubmit($(this))});
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
@@ -1598,4 +1601,16 @@ function JCreerEventPublier(target){
 
 
         $("#page").append(JCloneCreerConvImg);
+    }
+
+    function JCreerConvCreer(){
+        $("#page").empty();
+        var JCloneConvCreer=JConvCreer.clone(true,true);
+        var JCloneConvCreerTitre = JConvCreerTitre.clone(true,true);
+        var JCloneconvCreerMembreSubmit=JConvCreerMembreSubmit.clone(true,true).hide();
+        var JCloneConvCreerMembre=JConvCreerMembre.clone(true,true);
+        var JCloneConvCreerSubmit=JConvCreerSubmit.clone(true,true).hide();
+
+        $("#page").append([JCloneConvCreer,JCloneConvCreerTitre,JCloneConvCreerMembre,JCloneconvCreerMembreSubmit,JCloneConvCreerSubmit]);
+
     }

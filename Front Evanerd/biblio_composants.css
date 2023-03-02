@@ -906,7 +906,8 @@ width:15%;
 margin:2%;
 padding:3%;
 background-color: lightgray;
-
+/*border:black solid 3px;*/
+box-shadow: 0px 0px 10px black;
 
 
 
