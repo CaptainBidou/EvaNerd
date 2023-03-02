@@ -126,7 +126,7 @@ var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addC
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
 var JMessageLayout=$("<div>").addClass("Message-Layout scroller").data("type","layout");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
-var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message");
+var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message").on("keyup",function(context){if (context.which==13){JEnvoyerMessage($(".Message-Send"));}});
 var JMessageSend=$("<img>").addClass("Message-Send ").attr("src","Ressources/Message/send.png").on("click",function(context){JEnvoyerMessage(context.target);});
 var JMessageDown=$("<div>").addClass("Message-Down");
 
@@ -544,6 +544,8 @@ function JCreerConcert(Reponse){
     var JCloneJevienspeutetre =JConcertJevienspeutetre.clone(true,true);
 
     var JCloneProgress=JConcertProgress.clone(true,true);
+    Reponse.pourcentage=Reponse.pourcentage*100;
+
     var JClonepourcentage=JConcertpourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
 
     JCloneJeviens.on("click",function(){
