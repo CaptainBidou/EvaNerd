@@ -179,7 +179,22 @@ function CreerEvent(context){
     // a vous de jouer ;-)
     console.log(json);
 
+    time = json.date.split('T');
+    hours = json.duree.split(':');
+    json.date = time[0] + ' ' + time[1] + ':00'; 
+    console.log(hours);
+    var d = new Date(json.date);
+    if (d.getMinutes() + parseInt(hours[1]) >= 60)
+        d.setHours(d.getHours() + 1);
+    d.setMinutes(d.getMinutes() + parseInt(hours[1]));
+    d.setHours(d.getHours() + parseInt(hours[0]));
 
+    endtime = d.toISOString();
+
+    time2 = endtime.split('T'); 
+    json.end = time2[0] + ' ' + time2[1].replace('Z','')
+
+    //console.log(json);
 
     CreateEventCalendars(1,json, authcode);
 }
