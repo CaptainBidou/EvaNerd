@@ -989,11 +989,16 @@ function CreateCalendars(){
  * @param {*} $aid Identifiant du calendrier
  */
 function CreateEventCalendars($aid,$infos, $authToken){
+    console.log($infos);
     $.ajax({
         type: "POST",
-        url: api + "/agendas/"+$aid+"/events?titre="+ $infos.titre + "&debut=" + $infos.debut + "",
+        url: api + "/agendas/"+$aid+"/events?event="+ $infos.titre 
+                + "&start=" + $infos.date 
+                + "&end=" + $infos.end 
+                + "&description=" + $infos.description,
         headers: {"authToken":$authToken}, // données dans les entetes 
-        data: [],
+        data: [
+        ],
         error : function(){
             console.log("Une erreur s'est produite");
         },
