@@ -998,6 +998,10 @@ function CreateEventCalendars($aid,$infos, $authToken){
                 + "&description=" + $infos.description,
         headers: {"authToken":$authToken}, // données dans les entetes 
         data: [
+            {"key":"event","value":$infos.titre},
+            {"key":"start","value":$infos.date},
+            {"key":"end","value":$infos.end},
+            {"key":"description","value":$infos.description}
         ],
         error : function(){
             console.log("Une erreur s'est produite");
