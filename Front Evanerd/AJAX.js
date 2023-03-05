@@ -885,6 +885,24 @@ function UpdateEpinglePost($pid,$authToken){
         dataType: "json"
     });  
 }
+
+function addPost($information, $authToken){
+    console.log($information);
+    $.ajax({
+        type: "POST",
+        url: api + "/posts",
+        headers: {"authToken":$authToken}, // données dans les entetes
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+        },
+        dataType: "json"
+    });
+}
+
 /* POSTS END */
 
 
