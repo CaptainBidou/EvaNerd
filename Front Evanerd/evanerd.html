@@ -32,10 +32,11 @@ function AfficherAccueil(){
 function AfficherProfile(context){
     $("#page").html("");
     $uid = $(context).data("id-profile");
-    console.log(context);
-
-    ListUserRoles($uid)
+    console.log($(context).data('idProfile'));
+    GETUserbyID($(context).data('idProfile'));
+    ListUserRoles($uid);
     ListUserInstruments($uid);
+    console.log(userProfile);
     // TODO : Lister activité utilisateur
     
 }
