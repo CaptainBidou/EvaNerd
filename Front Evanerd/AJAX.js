@@ -888,13 +888,22 @@ function UpdateEpinglePost($pid,$authToken){
     });  
 }
 
-function addPost($information, $authToken){
-    console.log($information);
+function addPost($information,$visible = 0, $authToken){
+
+    $data = [];
+
+    if($information["description"] != undefined)
+        $data["content"] = $information["description"];
+    $data["visible"] = $visible;
+
+    $data["content"] = $information["description"];
+    console.log($data["content"]);
+
     $.ajax({
         type: "POST",
-        url: api + "/posts",
+        url: api + "/posts?content="+$data["content"]+"&visible="+$data["visible"],
         headers: {"authToken":$authToken}, // données dans les entetes
-        data: [],
+        data: $data,
         error : function(){
             console.log("Une erreur s'est produite");
         },
