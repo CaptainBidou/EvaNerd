@@ -30,13 +30,40 @@ function AfficherAccueil(){
 }
 
 function AfficherProfile(context){
+    var i = 0;
     $("#page").html("");
     $uid = $(context).data("id-profile");
     console.log($(context).data('idProfile'));
     GETUserbyID($(context).data('idProfile'));
     ListUserRoles($uid);
     ListUserInstruments($uid);
+
     console.log(userProfile);
+
+    json = {};
+    console.log("hey");
+    console.log(userProfile["user"]);
+    //json.photo = userProfile.user.photo ;
+    //json.pourcentage = 90;
+    //json.firstName = userProfile.user.firstName;
+    //json.lastName = userProfile.user.lastName;
+    json.activity = [];
+    json.tag = [];
+
+
+    for (let index = 0; index < userProfile.Roles.length; index++) {
+        json.tag[i].nom = userProfile.Roles[index].label;
+        json.tag[i].couleur = "red";
+        i++;
+    };
+
+    for (let index = 0; index < userProfile.instruments.length; index++) {
+    json.tag[i].nom = userProfile.instruments[index].label;
+        json.tag[i].couleur = "blue";
+        i++;
+    }
+    console.log(json);
+    //JCreerProfile(json)
     // TODO : Lister activité utilisateur
     
 }
