@@ -288,14 +288,20 @@ function postUserAchievement($data, $authKey, $queryString) {
     // TODO : Faire les conditions pour les achievement
     if(!$authKey) sendError("Il faut être identifié !", HTTP_UNAUTHORIZED);
     $uidConn = validUser(authToId($authKey));
-    if ($aid = valider("achievement", $queryString)) {
-        if (updateUserAchievement($uidConn, $aid)) {
-            $data["achivement"] = $aid;
-            sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
-        }
-        sendError("L'utilisateur a déjà l'achievement", HTTP_FORBIDDEN);
-    }
-    sendError("Aucun achievement a été fourni",HTTP_FORBIDDEN);
+    // On récupère l'achievement id aid
+    // On vérifie que l'achievement existe
+    // On vérifie que l'utilisateur n'a pas déjà l'achievement
+    // On vérifie que l'utilisateur a les conditions pour avoir l'achievement
+    // On ajoute l'achievement à l'utilisateur
+    // On renvoie l'achievement
+    $aid = valider("aid", $queryString);
+    $achievement = selectAchievement($aid);
+    if (!$achievement) sendError("Cet achievement n'existe pas !", HTTP_BAD_REQUEST);
+    if (haveAchievement($uidConn, $aid)) sendError("Vous avez déjà cet achievement !", HTTP_FORBIDDEN);
+    if (!haveAchievementConditions($uidConn, $aid)) sendError("Vous n'avez pas les conditions pour avoir cet achievement !", HTTP_FORBIDDEN);
+    insertUserAchievement($aid, $uidConn);
+    $data["achievement"] = $achievement[0];
+    sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
 }
 
 function delUserAchievement($data, $authKey, $queryString) {
