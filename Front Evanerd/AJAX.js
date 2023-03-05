@@ -777,8 +777,7 @@ function ListPosts($authToken){
             oRep["posts"].sort(function compare(e1,e2) { return e2.pinned - e1.pinned });
             oRep["posts"].forEach(element => {
                 element["membre"] = 1;
-                if (element.visible == 1)
-                    JcreerPost(element,member,admin);
+                JcreerPost(element,member,admin);
             });
 
         },
@@ -899,11 +898,19 @@ function addPost($visible, $content, $authToken, $img){
         url: api + "/posts?titre=defaut&content="+$content+"&visible="+$visible+"&pinned=0",
         headers: {"authToken":$authToken}, // données dans les entetes
         data: formData,
+        processData: false,
+        contentType: false,
         error : function(){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
             console.log(oRep);
+        },
+
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
         },
         dataType: "json"
     });
@@ -963,6 +970,9 @@ function getEventParticipation(eventInfos,$authToken){
             eventInfos["pourcentage"] = parseFloat(oRep.participationsRatio); 
             console.log(eventInfos); 
             JCreerConcert(eventInfos);
+        },
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
         },
         dataType: "json"
     }); 

@@ -296,12 +296,12 @@ function CreerPost(context){
     //console.log($(context).data("titre"));
     $desc = $(context).data("description");
     $visibilite = console.log($(context).data("visibilite"));
-    $img = $(context).data("image");
+    $img = $(".buttonAddImage").prop("files")[0];
 
     console.log($img);
 
     if($desc != "") {  
-        $visibilite = $visibilite == "Visible pour tout le monde" ? 0 : 1;
+        $visibilite = $visibilite == "Visible pour tout le monde" ? 1 : 0;
         addPost($visibilite, $desc ,authcode, $img);
     } else {
         console.log("Pas de contenu !");
