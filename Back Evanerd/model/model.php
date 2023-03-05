@@ -816,4 +816,39 @@ function updatePost($pid, $content = false, $pinned = false, $visible = false) {
     array_push($params, $pid);
     return $db->SQLUpdate($sql, $params);
 }
+
+function selectAchievement($aid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM Achievements WHERE id = ?";
+    return Database::parcoursRs($db->SQLSelect($sql, [$aid]));
+}
+
+function haveAchievement($uid, $aid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM User_Achievements WHERE uid = ? AND aid = ?";
+    return Database::parcoursRs($db->SQLSelect($sql, [$uid, $aid]));
+}
+
+function countUserMessage($uid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT COUNT(*) AS `count` FROM Group_Messages WHERE uid = ?";
+    return $db->SQLGetChamp($sql, [$uid]);
+}
+
+function countLoveReacts($uid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT COUNT(*) AS `count` FROM Group_Message_Reactions WHERE uid = ? AND emoji = ?";
+    return $db->SQLGetChamp($sql, [$uid, "❤️"]);
+}
+
+function countLaughtReceived($uid) {
+    //TODO
+}
+
+function insertUserAchievement($uid, $aid) {
+    $db = Config::getDatabase();
+    $sql = "INSERT INTO User_Achievements(uid, aid) VALUES (?,?)";
+    return $db->SQLInsert($sql, [$uid, $aid]);
+}
+
 ?>
