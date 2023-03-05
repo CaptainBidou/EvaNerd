@@ -7,13 +7,38 @@ define("IMAGE_ERR_SIZE", -2);
 define("IMAGE_ERR_BADEXTENSION", -3);
 define("IMAGE_ERR_UPLOAD", -4);
 
-// CONSTANTE DIR
+// CONSTANTES DIR
 define("DIR_RESSOURCES", "/EvaNerd/Back Evanerd/ressources"); // Répertoire depuis localhost/
 define("DIR_USERS", "./ressources/users/");
 define("DIR_GROUPS", "./ressources/groups/");
 define("DIR_POSTS", "./ressources/posts/");
 define("DIR_MAIL_TEMPLATES", "./ressources/mail_templates/");
-/**
+
+// CONSTANTES ACHIEVEMENTS
+// todo : à déplacer dans une autre classe
+define("ACHIV_BAVARD", 10);
+define("ACHIV_LOQUACE", 11);
+define("ACHIV_PROLICE", 12);
+define("ACHIV_COCASSE", 20);
+define("ACHIV_BURLESQUE", 21);
+define("ACHIV_CLOWN", 22);
+define("ACHIV_LOVER", 30);
+define("ACHIV_SENTIMENTAL", 31);
+define("ACHIV_CUPIDON", 32);
+
+define("ACHIV_CONDITIONS", [
+	ACHIV_BAVARD => 100,
+	ACHIV_LOQUACE => 500,
+	ACHIV_PROLICE => 1000,
+	ACHIV_COCASSE => 100,
+	ACHIV_BURLESQUE => 1000,
+	ACHIV_CLOWN => 5000,
+	ACHIV_LOVER => 100,
+	ACHIV_SENTIMENTAL => 500,
+	ACHIV_CUPIDON => 1000
+]);
+
+/*
  * Vérifie l'existence (isset) et la taille (non vide) d'un paramétre dans un des tableaux GET, POST, COOKIES, SESSION
  * Renvoie false si le paramétre est vide ou absent
  * @note l'utilisation de empty est critique : 0 est empty !!
@@ -339,4 +364,25 @@ function fillTemplate($template, $data) {
 	return str_replace($keys, array_values($data), $template);	
 }
 
+// TODO : à déplacer car fait appel à model.php
+function haveAchievementConditions($aid, $uid) {
+	if(!isset(ACHIV_CONDITIONS[$aid])) return 0;
+	$conditions = ACHIV_CONDITIONS[$aid];
+
+	// ACHIV_BAVARD
+	if($aid - ACHIV_BAVARD >= 0 && $aid - ACHIV_BAVARD < 10) {
+		$score = countUserMessage($uid);
+	}
+	
+	if($aid - ACHIV_COCASSE >= 0 && $aid - ACHIV_COCASSE < 10) {
+		$score = countLaughtReceived($uid);
+	}
+
+	if($aid - ACHIV_LOVER >= 0 && $aid - ACHIV_LOVER < 10) {
+		$score = countLoveReacts($uid);
+	}
+	
+	if($score >= $conditions) return 1;
+	return 0;
+}
 ?>
