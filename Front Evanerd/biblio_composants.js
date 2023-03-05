@@ -21,7 +21,7 @@ var JPostTitre=$("<h2>").addClass(["post-titre","card-title"]).data('type','post
 var JPostBody=$("<div>").addClass("card-body").data('type','post_body');
 var JPostImage=$("<img>").addClass("card-img-top").data('type','post_image');
 var JPostDescription=$("<p>").addClass(["post-description", "card-text"]).data('type','post_text');
-var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle','profile']).data("type","post_profile").on("click",function(context){AfficherProfile(context.target);});//TODO :rajouter des données pour quand on clique
+var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle','profile']).on("click",function(context){AfficherProfile(context.target);}).data("type","post_profile");//TODO :rajouter des données pour quand on clique
 var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').on("click",function(context){JclickEpingle(context.target);});
 var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png').on("click",function(context){JClickLike(context.target);});
 var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png').on("click",function(context){JCreerReactionLayout(context.target);});
@@ -271,11 +271,9 @@ function JcreerPost(Reponse,membre,admin){
     var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner).attr("id-profile",Reponse.author.id);
     var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
     jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
-    var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.author.photo).attr("id-profile",Reponse.author.id);
-
+    var jClonePostProfile=JPostProfile.clone(true,true).attr('src',Reponse.author.photo).data("id-profile",Reponse.author.id);
     var jClonePost2=JPost.clone(true,true).addClass("fixed-banner");
     var jClonePostBody2=JPostBody.clone(true,true);
-
 
     var jClonePostEpingle=JPostEpingle.clone(true,true).attr("id_post",Reponse.id);
     if(Reponse.pinned==1)
@@ -305,6 +303,7 @@ function JcreerPost(Reponse,membre,admin){
 
 
 
+
     jClonePost2.append(jClonePostBody2).css("width","100%").css("background-color","lightgray").css("border-radius","5px 5px 0 0");
     jClonePostBody.append(jClonePostImage).append(jClonePostDescription);
 
@@ -319,7 +318,7 @@ function JcreerPost(Reponse,membre,admin){
     }
     if(admin==1)
     {
-  jClonePostBody2.append(jClonePostEpingle);
+        jClonePostBody2.append(jClonePostEpingle);
     }
 
 
