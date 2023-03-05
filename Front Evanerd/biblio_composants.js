@@ -1567,12 +1567,15 @@ function JAddOptionsCategorie(div,Reponse){
 
 function JCreerPostPublier(target){
 
-$(target).data("titre",$(".divFormPostTitre").val());
-$(target).data("description",$(".divFormPostContent").val());
-$(target).data("visibilite",$(".divFormPostCheckbox").val());
-$(target).data("image",$(".form-control-file").val());
+    console.log("oui salut !!");
+    CreerPost(target);
 
-console.log("blavla");
+    $(target).data("titre",$(".divFormPostTitre").val());
+    $(target).data("description",$(".divFormPostContent").val());
+    $(target).data("visibilite",$(".divFormPostCheckbox").val());
+    $(target).data("image",$(".form-control-file").val());
+
+
 
 //TODO rajouter la fonction qui créé les posts 
 
