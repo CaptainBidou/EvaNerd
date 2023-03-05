@@ -733,7 +733,9 @@ function EpinglerMsgConv($mid, currentGroup, $authToken){
 
     $.ajax({
         type: "PUT",
-        url: api + "/groups/" + currentGroup + "/messages/" + $mid + "/pinned",
+        url: api + "/groups/" + currentGroup 
+        + "/messages/" + $mid 
+        + "/pinned",
         headers : {"authToken" : $authToken},
         data: [],
         error: function(){
