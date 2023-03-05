@@ -885,7 +885,6 @@ var JCloneProfileDivActivite=JProfileDivActivite.clone(true,true);
 
 }
 
-
 /**
  * 
  * @param {*} Reponse
