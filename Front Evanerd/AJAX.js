@@ -1103,7 +1103,29 @@ function AddUserParticipation($uid,$aeid,$partcipe){
 /* PARTICIPATION END */
 
 
+function ListUser($idRole)
+{
+    $.ajax({
+        type: "GET",
+        url: api + "/users" ,
+        headers: {"authToken":""}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            JRechercheDeProfil(oRep.users);
 
+
+        },
+        dataType: "json"
+    }); 
+
+
+
+
+}
 
 
 
