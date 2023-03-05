@@ -733,7 +733,9 @@ function EpinglerMsgConv($mid, currentGroup, $authToken){
 
     $.ajax({
         type: "PUT",
-        url: api + "/groups/" + currentGroup + "/messages/" + $mid + "/pinned",
+        url: api + "/groups/" + currentGroup 
+        + "/messages/" + $mid 
+        + "/pinned",
         headers : {"authToken" : $authToken},
         data: [],
         error: function(){
@@ -1007,11 +1009,20 @@ function CreateCalendars(){
  * @param {*} $aid Identifiant du calendrier
  */
 function CreateEventCalendars($aid,$infos, $authToken){
+    console.log($infos);
     $.ajax({
         type: "POST",
-        url: api + "/agendas/"+$aid+"/events?titre="+ $infos.titre + "&debut=" + $infos.debut + "",
+        url: api + "/agendas/"+$aid+"/events?event="+ $infos.titre 
+                + "&start=" + $infos.date 
+                + "&end=" + $infos.end 
+                + "&description=" + $infos.description,
         headers: {"authToken":$authToken}, // données dans les entetes 
-        data: [],
+        data: [
+            {"key":"event","value":$infos.titre},
+            {"key":"start","value":$infos.date},
+            {"key":"end","value":$infos.end},
+            {"key":"description","value":$infos.description}
+        ],
         error : function(){
             console.log("Une erreur s'est produite");
         },

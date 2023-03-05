@@ -659,9 +659,10 @@ function postAgendasEvent($data, $idTabs, $queryString, $authKey) {
     if(!selectAgenda($aid)) sendError("Cet agenda n'existe pas !", HTTP_BAD_REQUEST);
     if($event = validString(htmlspecialchars(valider("event", $queryString)), 30, 1))
     if($start = validDate(valider("start", $queryString)))
-    if($end = validDate(valider("end", $queryString))) {
-        $eid = insertEvent($aid, $event, $start, $end);
-        $data["event"] = ["id" => $eid, "event" => $event, "start" => $start, "end" => $end];
+    if($end = validDate(valider("end", $queryString))) 
+    if($desc = validString(htmlspecialchars(valider("description", $queryString)), 150, 0)) {
+        $eid = insertEvent($aid, $event, $desc, $start, $end);
+        $data["event"] = ["id" => $eid, "event" => $event, "description"=>$desc, "start" => $start, "end" => $end];
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
     }
     sendError("Requête invalide !", HTTP_BAD_REQUEST);
@@ -830,7 +831,7 @@ function postEventCalls($data, $idTabs, $queryString, $authKey) {
     if (!$event) sendError("Vous ne pouvez répondre à cette événement !", HTTP_FORBIDDEN);
     if (!$event[0]["read"]) sendError("Vous n'avez pas les permissions !", HTTP_FORBIDDEN);
     if (selectCallMembers($eid, $uidConn)) sendError("Vous avez déjà répondu !", HTTP_FORBIDDEN);
-    if (($present = valider("present", $queryString)) !== false) {
+    if (($present = intval(valider("present", $queryString))) !== false) {
         $reason_desc = validString(htmlspecialchars(valider("reason")), 180, 0);
         if (!$present && !$reason_desc) sendError("Motif obligateur en cas d'absence !", HTTP_FORBIDDEN);
         if ($present) $reason_desc = null;
