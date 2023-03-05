@@ -14,6 +14,7 @@ src="evanerd.html";
 var scroll;
 var windowscroll;
 var nbmessages=0;
+var usersLocal;
 //variables pour les posts
 var JPost =$("<div>").addClass(["card", "post"]).data('type','post');
 var JPostTitre=$("<h2>").addClass(["post-titre","card-title"]).data('type','post_titre');//TODO :rajouter des données pour quand on clique
@@ -41,7 +42,7 @@ var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon"
 var JHeaderTag=$("<button>").addClass(["btn btn-danger dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie").attr("id","dropdownMenuButton").attr("data-toggle","dropdown").attr("aria-haspopup","true").attr("aria-expanded","false").on("click",function(context){RolesMenu(context.target);});
 var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu').attr("aria-labelledby","dropdownMenuButton");
 var JHeaderItem=$("<a>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").data("type",'header_item').attr("href","#");
-var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher");
+var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher").on("click",function(context){ListUser();}).on("keyup",function(context){JAjoutdesProfilRecherche($(".header-search").val());});
 
 //variables pour les Convs
 var JConv =$("<nav>").addClass("navbar conversation").data("type","conv").on("click",function(context){JRecupMessages(context);});//TODO ICI TU APPELLE TA FONCTION
@@ -1572,7 +1573,6 @@ function JCreerPostPublier(target){
     $(target).data("visibilite",$(".divFormPostCheckbox").val());
     $(target).data("image",$(".form-control-file").val());
 
-    CreerPost(target);
 }
 
 
@@ -1621,4 +1621,19 @@ function JCreerEventPublier(target){
 
         JCloneConvCreer.animate({top: '10%'});
         
+    }
+
+
+
+    function JRechercheDeProfil(Reponse)
+    {
+        console.log(Reponse);
+        usersLocal=Reponse.users;
+    }
+
+    function JAjoutdesProfilRecherche(text)
+    {
+        
+
+
     }
