@@ -1121,11 +1121,11 @@ function AddUserParticipation($uid,$aeid,$partcipe){
 /* PARTICIPATION END */
 
 
-function ListUser($idRole)
+function ListUser($name,$idRole)
 {
     $.ajax({
         type: "GET",
-        url: api + "/users" ,
+        url: api + "/users?name="+$name,
         headers: {"authToken":""}, // données dans les entetes 
         data: [],
         error : function(){
@@ -1133,7 +1133,9 @@ function ListUser($idRole)
         },
         success: function(oRep){
             console.log(oRep); 
-            JRechercheDeProfil(oRep.users);
+            $(".Recherche-Profil").empty().show();
+            for(var i = 0; i < oRep.users.length; i++){
+            JCreerProfilRecherche(oRep.users[i]);}
 
 
         },
