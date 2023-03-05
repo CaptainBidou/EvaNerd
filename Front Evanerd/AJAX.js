@@ -8,6 +8,7 @@ var user = "";
 var admin = 0;
 var currentComm = 0;
 var currentGroup = 0;
+var userProfile= {};
 
 
 /* AUTHENTIFICATION AJAX FUNC */
@@ -103,6 +104,7 @@ function GETUserbyID($id){
         },
         success: function(oRep){
             console.log(oRep); 
+            userProfile.user = oRep.user;
             return oRep;
 
         },
@@ -315,6 +317,7 @@ function ListUserInstruments($uid){
         },
         success: function(oRep){
             console.log(oRep);
+            userProfile.instruments = oRep.instruments;
         },
         dataType: "json"
     });
@@ -331,6 +334,7 @@ function ListUserRoles($uid){
         },
         success: function(oRep){
             console.log(oRep);
+            userProfile.Roles = oRep.roles
         },
         dataType: "json"
     });
