@@ -8,7 +8,7 @@ var user = "";
 var admin = 0;
 var currentComm = 0;
 var currentGroup = 0;
-var userProfile= {};
+var userProfile = {};
 
 
 /* AUTHENTIFICATION AJAX FUNC */
