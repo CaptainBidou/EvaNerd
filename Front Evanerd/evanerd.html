@@ -193,10 +193,15 @@ function CreerEvent(context){
 
     time2 = endtime.split('T'); 
     json.end = time2[0] + ' ' + time2[1].replace('Z','')
+    cut = json.end.split('.');
+    json.end = cut[0];
+    console.log(json);
 
-    //console.log(json);
-
-    CreateEventCalendars(1,json, authcode);
+    
+    if (json.type == "Concert")
+        CreateEventCalendars(1,json, authcode);
+    else 
+        CreateEventCalendars(2,json,authcode);
 }
 
 function AjouterUtilisateur(context){
