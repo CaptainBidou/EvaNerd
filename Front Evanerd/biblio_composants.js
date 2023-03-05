@@ -1004,11 +1004,11 @@ function JCreerMessage(Reponse){
     $("#page").append(JCloneMessageDown);
     
     JCloneMessageLayout.html("");
-JCloneMessage.html("");
+    JCloneMessage.html("");
 
     var i=0;
     console.log(Reponse.messages.length);
-var j=0;
+    var j=0;
     for(i=0;i<Reponse.messages.length;i++)
     {
         if(Reponse.messages[i].answerTo!=null)
