@@ -132,18 +132,33 @@ function getUserCredentials($tel) {
  * @param int $idRole permet de filtrer par role
  * @return array
  */
-function selectUsers($idRole=null){
+function selectUsers($idRole=false, $name=false){
     $db = Config::getDatabase();
-    // TODO : serait-il plus sage de le faire autre part.
     $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", U.id), CONCAT(\"/\", U.photo)) AS photo";
-    $sql = "SELECT U.id, U.firstName, U.lastName, U.sex, U.age, U.studies, $photo, U.activation FROM Users AS U";
-    if ($idRole != null) {
-        $sql .= " JOIN User_Roles AS UR ON U.id = UR.uid WHERE UR.rid = ? ";
-        $params = [$idRole];
-        return Database::ParcoursRs($db->SQLSelect($sql, $params));
-    } else {
-        return Database::ParcoursRs($db->SQLSelect($sql));
+    $params = [];
+    $whereStm = "";
+    $joinStm = "";
+    // Si on veut filtrer par role et par nom
+    if($idRole && $name){
+        $joinStm = "JOIN User_Roles AS UR";
+        $whereStm = "WHERE U.id = UR.uid AND UR.rid = ? AND (U.firstName LIKE ? OR U.lastName LIKE ?)";
+        $params = [$idRole, "%$name%", "%$name%"];
     }
+    // Si on veut filtrer par role
+    else if($idRole){
+        $joinStm = "JOIN User_Roles AS UR";
+        $whereStm = "WHERE U.id = UR.uid AND UR.rid = ?";
+        $params = [$idRole];
+    }
+    // Si on veut filtrer par nom
+    else if($name){
+        $whereStm = "WHERE (U.firstName LIKE ? OR U.lastName LIKE ?)";
+        $params = ["%$name%", "%$name%"];
+    }
+    // TODO : serait-il plus sage de le faire autre part.
+    $sql = "SELECT U.id, U.firstName, U.lastName, U.sex, U.age, U.studies, $photo, U.activation 
+            FROM Users AS U $joinStm $whereStm";
+    return Database::ParcoursRs($db->SQLSelect($sql, $params));
 }
 /**
  * Récupère un utilisateur spécifique
@@ -770,10 +785,10 @@ function selectAgenda($aid) {
     return Database::parcoursRs($db->SQLSelect($sql, [$aid]));
 }
 
-function insertEvent($aid, $event, $startDate, $endDate) {
+function insertEvent($aid, $event, $desc, $startDate, $endDate) {
     $db = Config::getDatabase();
-    $params = [$aid, $event, $startDate, $endDate];
-    $sql = "INSERT INTO Agenda_Events(aid, event, startDate, endDate) VALUES (?,?,?,?)";
+    $params = [$aid, $event, $desc, $startDate, $endDate];
+    $sql = "INSERT INTO Agenda_Events(aid, event, description, startDate, endDate) VALUES (?,?,?,?,?)";
     return $db->SQLInsert($sql, $params);
 }
 
@@ -801,4 +816,39 @@ function updatePost($pid, $content = false, $pinned = false, $visible = false) {
     array_push($params, $pid);
     return $db->SQLUpdate($sql, $params);
 }
+
+function selectAchievement($aid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM Achievements WHERE id = ?";
+    return Database::parcoursRs($db->SQLSelect($sql, [$aid]));
+}
+
+function haveAchievement($uid, $aid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM User_Achievements WHERE uid = ? AND achivid = ?";
+    return Database::parcoursRs($db->SQLSelect($sql, [$uid, $aid]));
+}
+
+function countUserMessage($uid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT COUNT(*) AS `count` FROM Group_Messages WHERE uid = ?";
+    return $db->SQLGetChamp($sql, [$uid]);
+}
+
+function countLoveReacts($uid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT COUNT(*) AS `count` FROM Group_Message_Reactions WHERE uid = ? AND emoji = ?";
+    return $db->SQLGetChamp($sql, [$uid, "❤️"]);
+}
+
+function countLaughtReceived($uid) {
+    //TODO
+}
+
+function insertUserAchievement($uid, $aid) {
+    $db = Config::getDatabase();
+    $sql = "INSERT INTO User_Achievements(uid, aid) VALUES (?,?)";
+    return $db->SQLInsert($sql, [$uid, $aid]);
+}
+
 ?>

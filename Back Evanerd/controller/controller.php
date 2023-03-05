@@ -39,11 +39,14 @@ function authUser($data, $queryString) {
  */
 function listUsers($data, $queryString) {
     $idRole = null;
-    if($idRole = valider("idRole", $queryString)) 
+    if($idRole = valider("idRole", $queryString))
         if(!is_id($idRole)) sendError("identifiant role attendu !", HTTP_BAD_REQUEST);
-    $data["users"] = selectUsers($idRole);
+    
+    $name = valider("name", $queryString);
+
+    $data["users"] = selectUsers($idRole, $name);
     if(!$data["users"]) 
-        sendError("Aucun enregistrement trouvé : idRole invalide !", HTTP_NOT_FOUND);
+        sendError("Aucun enregistrement trouvé !", HTTP_NOT_FOUND);
 
     sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
 }
@@ -285,14 +288,20 @@ function postUserAchievement($data, $authKey, $queryString) {
     // TODO : Faire les conditions pour les achievement
     if(!$authKey) sendError("Il faut être identifié !", HTTP_UNAUTHORIZED);
     $uidConn = validUser(authToId($authKey));
-    if ($aid = valider("achievement", $queryString)) {
-        if (updateUserAchievement($uidConn, $aid)) {
-            $data["achivement"] = $aid;
-            sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
-        }
-        sendError("L'utilisateur a déjà l'achievement", HTTP_FORBIDDEN);
-    }
-    sendError("Aucun achievement a été fourni",HTTP_FORBIDDEN);
+    // On récupère l'achievement id aid
+    // On vérifie que l'achievement existe
+    // On vérifie que l'utilisateur n'a pas déjà l'achievement
+    // On vérifie que l'utilisateur a les conditions pour avoir l'achievement
+    // On ajoute l'achievement à l'utilisateur
+    // On renvoie l'achievement
+    $aid = valider("aid", $queryString);
+    $achievement = selectAchievement($aid);
+    if (!$achievement) sendError("Cet achievement n'existe pas !", HTTP_BAD_REQUEST);
+    if (haveAchievement($uidConn, $aid)) sendError("Vous avez déjà cet achievement !", HTTP_FORBIDDEN);
+    if (!haveAchievementConditions($uidConn, $aid)) sendError("Vous n'avez pas les conditions pour avoir cet achievement !", HTTP_FORBIDDEN);
+    insertUserAchievement($aid, $uidConn);
+    $data["achievement"] = $achievement[0];
+    sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
 }
 
 function delUserAchievement($data, $authKey, $queryString) {
@@ -364,25 +373,19 @@ function listInstruments($data) {
 }
 
 function putInstruments($data, $idTabs, $authKey, $queryString) {
-    if($authKey){
-        $uidConn = validUser(authToId($authKey));
-        $rolesConn = selectUserRoles($uidConn);
-        $instrument = $idTabs[0];
-        if(!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
-
-        if($label = htmlspecialchars(valider("label", $queryString))) {
+    if(!$authKey) sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $rolesConn = selectUserRoles($uidConn);
+    $instrument = $idTabs[0];
+    if(!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
+    if($label = htmlspecialchars(valider("label", $queryString))) {
             if(updateInstruments($instrument,$label)) {
                 $data["instrument"] = array("id" => $instrument, "label" => $label);
                 sendResponse($data, [getStatusHeader(201)]);
             }
-            else
-                sendError("Erreur lors de la modification", HTTP_FORBIDDEN);
-        }
-        sendError("Il faut spécifier le nom de l'instrument", HTTP_FORBIDDEN);
-
-
+            sendError("Erreur lors de la modification", HTTP_FORBIDDEN);
     }
-    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
+    sendError("Il faut spécifier le nom de l'instrument", HTTP_FORBIDDEN);
 }
 
 function postInstruments($data, $authKey, $queryString) {
@@ -413,73 +416,60 @@ function listAchievements($data) {
 }
 
 function putAchievements($data, $idTabs, $authKey, $queryString) {
-    if($authKey){
-        $uidConn = validUser(authToId($authKey));
-        $rolesConn = selectUserRoles($uidConn);
-        if(!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
-        if($label = htmlspecialchars(valider("label", $queryString))) {
-            if(insertAchievement($label)) {
-                $data["achievements"] = array("id" => insertInstruments($label), "label" => $label);
-                sendResponse($data, [getStatusHeader(201)]);
-            }
-            else
-                sendError("Erreur lors de la modification", HTTP_FORBIDDEN);
+    if(!$authKey) sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $aid = $idTabs[0];
+    $rolesConn = selectUserRoles($uidConn);
+    if (!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
+    if ($label = htmlspecialchars(valider("label", $queryString))) {
+        if (updateAchievements($aid, $label)) {
+            $data["achievements"] = array("id" => insertInstruments($label), "label" => $label);
+            sendResponse($data, [getStatusHeader(201)]);
         }
-        sendError("Il faut spécifier le nom de l'instrument", HTTP_FORBIDDEN);
-
-
+        sendError("Erreur lors de la modification", HTTP_FORBIDDEN);
     }
-    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);   
-
+    sendError("Il faut spécifier le nom de l'instrument", HTTP_FORBIDDEN);  
 }
 
 function listGroupsPerms($data, $idTabs, $authKey) {
-    if($authKey) {
-        $gid  = $idTabs[0]; 
-        $idUser = authToId($authKey);
-        if(isInGroup($idUser, $gid) || haveGroupPermission($idUser, $gid)) {
-            $groupsPermsData = selectGroupsPerm($idTabs);
-            $data["permissions"] = $groupsPermsData;
-            sendResponse($data, [getStatusHeader()]);
-        }
+    if(!$authKey) sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
+    $gid  = $idTabs[0];
+    $idUser = validUser(authToId($authKey));
+    if (isInGroup($idUser, $gid) || haveGroupPermission($idUser, $gid)) {
+        $groupsPermsData = selectGroupsPerm($idTabs);
+        $data["permissions"] = $groupsPermsData;
+        sendResponse($data, [getStatusHeader()]);
     }
-    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
 }
 
 function listGroupsReacts($data, $idTabs, $authKey) {
-    if($authKey) {
-        $gid  = $idTabs[0]; 
-        $idUser = authToId($authKey);
-        if(isInGroup($idUser, $gid) || haveGroupPermission($idUser, $gid)) {
-            $groupsReactsData = selectGroupReaction($idTabs);
-            $data["reactions"] = $groupsReactsData;
-            sendResponse($data, [getStatusHeader()]);
-        }
+    if($authKey) sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
+    $gid  = $idTabs[0];
+    $idUser = validUser(authToId($authKey));
+    if (isInGroup($idUser, $gid) || haveGroupPermission($idUser, $gid)) {
+        $groupsReactsData = selectGroupReaction($idTabs);
+        $data["reactions"] = $groupsReactsData;
+        sendResponse($data, [getStatusHeader()]);
     }
-    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
-
 }
 
 function createUserGroups($data, $authKey, $queryString) {
-    if($authKey) {
-        $newId = getNewGid();
-        $dir = DIR_GROUPS . $newId;
-        $uidConn = validUser(authToId($authKey));
-        $image = "default.png";
-        if(!is_dir($dir)) mkdir($dir);
-        if($title = validString(valider("title", $queryString), 70, 3)) {
-            if(isset($_FILES["image"])) {
-                $imageInfo = uploadImage("$dir/image", $_FILES["image"]);
-                if($imageInfo["code"] != 1) sendError($imageInfo["message"], HTTP_FORBIDDEN);
-                $image = basename($imageInfo["filename"]);
-            }
-            $gid = insertGroup($uidConn, $image, $title);
-            $data["group"] = selectGroup($gid)[0];
-            sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+    if(!$authKey) sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
+    $newId = getNewGid();
+    $dir = DIR_GROUPS . $newId;
+    $uidConn = validUser(authToId($authKey));
+    $image = "default.png";
+    if (!is_dir($dir)) mkdir($dir);
+    if ($title = validString(valider("title", $queryString), 70, 3)) {
+        if (isset($_FILES["image"])) {
+            $imageInfo = uploadImage("$dir/image", $_FILES["image"]);
+            if ($imageInfo["code"] != 1) sendError($imageInfo["message"], HTTP_FORBIDDEN);
+            $image = basename($imageInfo["filename"]);
         }
-        else sendError("il faut spécifier un titre", HTTP_FORBIDDEN);
-    }
-    sendError("il faut être identifié !", HTTP_UNAUTHORIZED);
+        $gid = insertGroup($uidConn, $image, $title);
+        $data["group"] = selectGroup($gid)[0];
+        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+    } sendError("il faut spécifier un titre", HTTP_FORBIDDEN);
 }
 
 /**
@@ -488,21 +478,17 @@ function createUserGroups($data, $authKey, $queryString) {
  * @param string $authKey Token d'identification de l'utilisateur
  */
 function addUsersGroups($data, $idTabs, $authKey) {
-    if($authKey) {
-        $uidConn = authToId($authKey); // uid de l'utilisateur connecté
-        if($uidConn === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
-
-        $uidToAdd = $idTabs[1]; // uid de l'utilisateur à ajouter
-        $gid = $idTabs[0];
-        $user = selectUser($uidToAdd);
-        if(!$user) sendError("Cet utilisateur n'existe pas" , HTTP_BAD_REQUEST);
-        if(!isInGroup($uidConn, $gid) && !haveGroupPermission($uidConn, $gid)) sendError("Vous ne pouvez pas ajouter un membre dans ce groupe !" , HTTP_UNAUTHORIZED);
-        if(isInGroup($uidToAdd, $gid)) sendError("Cet utilisateur est déjà dans ce groupe", HTTP_UNAUTHORIZED);
-        insertIntoGroup($uidToAdd, $gid);
-        $data["user"] = $user[0];
-        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
-    }
-    sendError("Vous devez vous identifier !", HTTP_UNAUTHORIZED);
+    if(!$authKey) sendError("Vous devez vous identifier !", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey)); // uid de l'utilisateur connecté
+    $uidToAdd = $idTabs[1]; // uid de l'utilisateur à ajouter
+    $gid = $idTabs[0];
+    $user = selectUser($uidToAdd);
+    if (!$user) sendError("Cet utilisateur n'existe pas", HTTP_BAD_REQUEST);
+    if (!isInGroup($uidConn, $gid) && !haveGroupPermission($uidConn, $gid)) sendError("Vous ne pouvez pas ajouter un membre dans ce groupe !", HTTP_UNAUTHORIZED);
+    if (isInGroup($uidToAdd, $gid)) sendError("Cet utilisateur est déjà dans ce groupe", HTTP_UNAUTHORIZED);
+    insertIntoGroup($uidToAdd, $gid);
+    $data["user"] = $user[0];
+    sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
 }
 
 /**
@@ -575,60 +561,52 @@ function listPostReactions($data, $idTabs, $authKey) {
  * 
  */
 function listPostsMessages($data, $idTabs, $authKey) {
-    if($authKey) {
-        $i = 0;
-        $pid = $idTabs[0];
-        $data["idPost"] = $pid;
-        $uidConn = authToId($authKey);
-        if($uidConn === false) sendError("Token invalide !", HTTP_FORBIDDEN);
-        // Récupération des infos sur le post et l'utilisateur connecté
-        $post = selectPost($pid);
-        $role = selectUserRoles($uidConn);
-        $notAMember = (array_search("Non Membre", array_column($role, "label")) !== false) ? 1 : 0;
-        // Vérification si le post existe et que l'utilisateur connecté peut le voir
-        if(!$post) sendError("Ce post n'existe pas !", HTTP_BAD_REQUEST);
-        if($notAMember && $post[0]["visible"] != 1) sendError("Vous ne pouvez pas accéder à ce post", HTTP_FORBIDDEN);
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $i = 0;
+    $pid = $idTabs[0];
+    $data["idPost"] = $pid;
+    $uidConn = validUser(authToId($authKey));
+    // Récupération des infos sur le post et l'utilisateur connecté
+    $post = selectPost($pid);
+    $role = selectUserRoles($uidConn);
+    $notAMember = searchRole("Non Membre", $role);
+    // Vérification si le post existe et que l'utilisateur connecté peut le voir
+    if (!$post) sendError("Ce post n'existe pas !", HTTP_BAD_REQUEST);
+    if ($notAMember && $post[0]["visible"] != 1) sendError("Vous ne pouvez pas accéder à ce post", HTTP_FORBIDDEN);
 
-        $messagesData = selectPostMessages($pid);
-        $data["comments"] = array();
-        // Creation de la réponse
-        foreach($messagesData as $message) {
-            $data["comments"][$i]["id"] = $message["id"];
-            $data["comments"][$i]["author"] = ["id" => $message["uid"], "firstName" => $message["firstName"], "lastName" => $message["lastName"], "photo" => $message["photo"]];
-            $data["comments"][$i]["content"] = $message["content"];
-            $data["comments"][$i]["pinned"] = $message["pinned"];
-            $data["comments"][$i]["answerTo"] = $message["answerTo"];
-            $i++;
-
-        }
-        sendResponse($data, getStatusHeader());
+    $messagesData = selectPostMessages($pid);
+    $data["comments"] = array();
+    // Creation de la réponse
+    foreach ($messagesData as $message) {
+        $data["comments"][$i]["id"] = $message["id"];
+        $data["comments"][$i]["author"] = ["id" => $message["uid"], "firstName" => $message["firstName"], "lastName" => $message["lastName"], "photo" => $message["photo"]];
+        $data["comments"][$i]["content"] = $message["content"];
+        $data["comments"][$i]["pinned"] = $message["pinned"];
+        $data["comments"][$i]["answerTo"] = $message["answerTo"];
+        $i++;
     }
-    sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    sendResponse($data, getStatusHeader());
 
 }
 
 function listAgendas($data, $queryString, $authKey) {
-    if($authKey) {
-        $uidConn = validUser(authToId($authKey));
-        $type = valider("type", $queryString);
-        if(!$type) $type = "extra"; 
-        $agendas = selectCalendar($uidConn,null, $type);
-        $data["agendas"] = $agendas;
-        sendResponse($data, [getStatusHeader()]);
-    }
-    sendError("Vous devez vous identifier", HTTP_UNAUTHORIZED);
+    if(!$authKey) sendError("Vous devez vous identifier", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $type = valider("type", $queryString);
+    if (!$type) $type = "extra";
+    $agendas = selectCalendar($uidConn, null, $type);
+    $data["agendas"] = $agendas;
+    sendResponse($data, [getStatusHeader()]);
 }
 
 function listAgendaEvents($data, $idTabs, $authKey) {
-    if($authKey) {
-        $uidConn = validUser(authToId($authKey));
-        $aid = $idTabs[0];
-        $agendaEvents = selectEvents($aid, $uidConn);
-        $data["agendaId"] = $aid;
-        $data["events"] = $agendaEvents;
-        sendResponse($data, [getStatusHeader()]);
-    }
-    sendError("Vous devez vous identifier", HTTP_UNAUTHORIZED);
+    if($authKey) sendError("Vous devez vous identifier", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $aid = $idTabs[0];
+    $agendaEvents = selectEvents($aid, $uidConn);
+    $data["agendaId"] = $aid;
+    $data["events"] = $agendaEvents;
+    sendResponse($data, [getStatusHeader()]);
 }
 
 function postAgenda($data, $queryString, $authKey) {
@@ -736,7 +714,7 @@ function postMessageReactions($data, $idTabs, $authKey, $queryString) {
 }
 
 function postPost($data, $authKey,$queryString) {
-    if($authKey) sendError("Vous devez être identifié", HTTP_UNAUTHORIZED);
+    if(!$authKey) sendError("Vous devez être identifié", HTTP_UNAUTHORIZED);
     $newId = getNewPid();
     $dir = DIR_POSTS . $newId;
     $uidConn = validUser(authToId($authKey));
