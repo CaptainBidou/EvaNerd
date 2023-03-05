@@ -967,3 +967,35 @@ margin-bottom: 7%;
     font-size:100%;
     margin-left: 5%;
 }
+
+
+.Recherche-Profil
+{
+position:fixed;
+width:34.5%;
+background-color: darkgray;
+top:7%;
+right:21.5%;
+padding: 2%;
+}
+
+.Recherche-Profil-Div-User-Img
+{
+    width:25%;
+    float:left;
+}
+
+.Recherche-Profil-Div-User-Nom
+{
+
+font-size: 300%;
+
+}
+
+.Recherche-Profil-Div-User
+{
+    background-color: lightGray;
+    margin-top:1%;
+    border-radius: 5%;
+    box-shadow: black 0px 0px 10px;
+}
