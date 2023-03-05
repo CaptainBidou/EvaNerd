@@ -8,6 +8,7 @@ var user = "";
 var admin = 0;
 var currentComm = 0;
 var currentGroup = 0;
+var userProfile= {};
 
 
 /* AUTHENTIFICATION AJAX FUNC */
@@ -103,6 +104,7 @@ function GETUserbyID($id){
         },
         success: function(oRep){
             console.log(oRep); 
+            userProfile.user = oRep.user;
             return oRep;
 
         },
@@ -315,6 +317,7 @@ function ListUserInstruments($uid){
         },
         success: function(oRep){
             console.log(oRep);
+            userProfile.instruments = oRep.instruments;
         },
         dataType: "json"
     });
@@ -331,6 +334,7 @@ function ListUserRoles($uid){
         },
         success: function(oRep){
             console.log(oRep);
+            userProfile.Roles = oRep.roles
         },
         dataType: "json"
     });
@@ -1130,11 +1134,11 @@ function AddUserParticipation($uid,$aeid,$partcipe){
 /* PARTICIPATION END */
 
 
-function ListUser($idRole)
+function ListUser($name,$idRole)
 {
     $.ajax({
         type: "GET",
-        url: api + "/users" ,
+        url: api + "/users?name="+$name,
         headers: {"authToken":""}, // données dans les entetes 
         data: [],
         error : function(){
@@ -1142,7 +1146,9 @@ function ListUser($idRole)
         },
         success: function(oRep){
             console.log(oRep); 
-            JRechercheDeProfil(oRep.users);
+            $(".Recherche-Profil").empty().show();
+            for(var i = 0; i < oRep.users.length; i++){
+            JCreerProfilRecherche(oRep.users[i]);}
 
 
         },
