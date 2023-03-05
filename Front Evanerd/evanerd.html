@@ -264,8 +264,13 @@ function EnvoyerJustif(context){
 }
 
 function CreerPost(context){
-    console.log(context);
-    addPost(context,authcode);
+    //console.log($(context).data("titre"));
+    console.log($(context).data("description"));
+    $visibilite = console.log($(context).data("visibilite"));
+    
+    $visibilite = $visibilite == "Visible pour tout le monde" ? 0 : 1;
+
+    addPost(context,$visibilite,authcode);
 }
 
 
