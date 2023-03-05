@@ -90,28 +90,6 @@ function GETUsers(){
     return oRep;
 }
 
-
-
-/**  * @param $id Id de l'utilisateur */
-
-function GETUserbyID($id){
-    $.ajax({
-        type: "GET",
-        url: api + "/users/" + $id,
-        headers: {"authToken":""}, // données dans les entetes 
-        error : function(){
-            console.log("Une erreur s'est produite");
-        },
-        success: function(oRep){
-            console.log(oRep); 
-            userProfile.user = oRep.user;
-            return oRep;
-
-        },
-        dataType: "json"
-    });
-}
-
 /**
  * Requête permettant de modifier les informations d'un utilisateur
  * @param $id Id de l'utilisateur
@@ -306,39 +284,58 @@ function VerifMail(){
     });   
 }
 
-function ListUserInstruments($uid){
-    $.ajax({
-        type: "GET",
-        url: api + "/users/" + $uid + "/instruments",
-        headers: {"authToken" : ""},
-        data: [],
-        error : function(){
-            console.log("Une erreur s'est produite");
-        },
-        success: function(oRep){
-            console.log(oRep);
-            userProfile.instruments = oRep.instruments;
-        },
-        dataType: "json"
-    });
-}
 
-function ListUserRoles($uid){
+
+/**  * @param $id Id de l'utilisateur */
+
+function  ChargementInfosProfil($id){
     $.ajax({
         type: "GET",
-        url: api + "/users/" + $uid + "/roles",
-        headers: {"authToken" : ""},
-        data: [],
+        url: api + "/users/" + $id,
+        headers: {"authToken":""}, // données dans les entetes 
         error : function(){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
-            console.log(oRep);
-            userProfile.Roles = oRep.roles
+            console.log(oRep); 
+            userProfile.user = oRep.user;
+            $id = oRep.user.id;
         },
-        dataType: "json"
-    });
-}
+        dataType: "json",
+    }).done(function ListUserInstruments(){
+        console.log($id);
+        $.ajax({
+            type: "GET",
+            url: api + "/users/" + $id + "/instruments",
+            headers: {"authToken" : ""},
+            data: [],
+            error : function(){
+                console.log("Une erreur s'est produite");
+            },
+            success: function(oRep){
+                console.log(oRep);
+                userProfile.instruments = oRep.instruments;
+            },
+            dataType: "json",
+        }).done( function ListUserRoles(){
+            $.ajax({
+                type: "GET",
+                url: api + "/users/" + $id + "/roles",
+                headers: {"authToken" : ""},
+                data: [],
+                error : function(){
+                    console.log("Une erreur s'est produite");
+                },
+                success: function(oRep){
+                    console.log(oRep);
+                    userProfile.Roles = oRep.roles
+                    AfficherProfilCharger();
+                },
+                dataType: "json",
+            });
+            });
+        })
+    }
 
 /***** USERS END **********/
 
