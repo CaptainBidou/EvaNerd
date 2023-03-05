@@ -14,6 +14,7 @@ src="evanerd.html";
 var scroll;
 var windowscroll;
 var nbmessages=0;
+var usersLocal;
 //variables pour les posts
 var JPost =$("<div>").addClass(["card", "post"]).data('type','post');
 var JPostTitre=$("<h2>").addClass(["post-titre","card-title"]).data('type','post_titre');//TODO :rajouter des données pour quand on clique
@@ -41,7 +42,7 @@ var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon"
 var JHeaderTag=$("<button>").addClass(["btn btn-danger dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie").attr("id","dropdownMenuButton").attr("data-toggle","dropdown").attr("aria-haspopup","true").attr("aria-expanded","false").on("click",function(context){RolesMenu(context.target);});
 var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu').attr("aria-labelledby","dropdownMenuButton");
 var JHeaderItem=$("<a>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").data("type",'header_item').attr("href","#");
-var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher");
+var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher").on("click",function(context){ListUser();}).on("keyup",function(context){JAjoutdesProfilRecherche($(".header-search").val());});
 
 //variables pour les Convs
 var JConv =$("<nav>").addClass("navbar conversation").data("type","conv").on("click",function(context){JRecupMessages(context);});//TODO ICI TU APPELLE TA FONCTION
@@ -215,11 +216,16 @@ var JCategorieOption=$("<option>").addClass("Categorie-Option");
 
 
 //variables pour la création de conv
-var JCreerConvImg=$("<img>").addClass(["Creer-Conv-Img","rounded-circle"]).attr("src","Ressources/Message/startWrite.png");
+var JCreerConvImg=$("<img>").addClass(["Creer-Conv-Img","rounded-circle"]).attr("src","Ressources/Message/startWrite.png").on("click",function(context){JCreerConvCreer();});
 
+//variables pour la vue de création de conv 
 
-
-
+var JConvCreer = $("<div>").addClass("Conv-Creer");
+var JConvCreerTitreTitre=$("<h3>").addClass("Conv-Creer-Titre-Titre").html("Création de conversation");
+var JConvCreerTitre=$("<input>").attr("type","text").addClass("Conv-Creer-Titre").attr("placeholder","Titre de la conversation");
+var JConvCreerMembre=$("<input>").attr("type","text").addClass("Conv-Creer-Membre").attr("placeholder","Membre de la conversation");
+var JConvCreerMembreSubmit=$("<button>").addClass("btn btn-danger Conv-Creer-Submit-Membre").html("Ajouter un membre").on("click",function(context){JAjouterUtilisateurConv($(this))});
+var JConvCreerSubmit=$("<button>").addClass("btn btn-danger Conv-Creer-Submit").html("Créer la conversation").on("click",function(context){JCreerCreerConvSubmit($(this))});
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
@@ -1561,10 +1567,13 @@ function JAddOptionsCategorie(div,Reponse){
 
 function JCreerPostPublier(target){
 
-$(target).data("titre",$(".divFormPostTitre").val());
-$(target).data("description",$(".divFormPostContent").val());
-$(target).data("visibilite",$(".divFormPostCheckbox").val());
-$(target).data("image",$(".form-control-file").val());
+    console.log("oui salut !!");
+    CreerPost(target);
+
+    $(target).data("titre",$(".divFormPostTitre").val());
+    $(target).data("description",$(".divFormPostContent").val());
+    $(target).data("visibilite",$(".divFormPostCheckbox").val());
+    $(target).data("image",$(".form-control-file").val());
 
 
 
@@ -1598,4 +1607,40 @@ function JCreerEventPublier(target){
 
 
         $("#page").append(JCloneCreerConvImg);
+    }
+
+
+
+    function JCreerConvCreer(){
+
+        $("#page").empty();
+        
+        var JCloneConvCreer=JConvCreer.clone(true,true);
+        var JCloneConvCreerTitreTitre=JConvCreerTitreTitre.clone(true,true);
+        var JCloneConvCreerTitre = JConvCreerTitre.clone(true,true);
+        var JCloneconvCreerMembreSubmit=JConvCreerMembreSubmit.clone(true,true);
+        var JCloneConvCreerMembre=JConvCreerMembre.clone(true,true);
+        var JCloneConvCreerSubmit=JConvCreerSubmit.clone(true,true);
+
+
+        JCloneConvCreer.append([JCloneConvCreerTitreTitre,JCloneConvCreerTitre,JCloneConvCreerMembre,JCloneconvCreerMembreSubmit,JCloneConvCreerSubmit]);
+        $("#page").append([JCloneConvCreer]);
+
+        JCloneConvCreer.animate({top: '10%'});
+        
+    }
+
+
+
+    function JRechercheDeProfil(Reponse)
+    {
+        console.log(Reponse);
+        usersLocal=Reponse.users;
+    }
+
+    function JAjoutdesProfilRecherche(text)
+    {
+        
+
+
     }
