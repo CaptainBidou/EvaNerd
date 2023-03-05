@@ -825,7 +825,7 @@ function selectAchievement($aid) {
 
 function haveAchievement($uid, $aid) {
     $db = Config::getDatabase();
-    $sql = "SELECT * FROM User_Achievements WHERE uid = ? AND aid = ?";
+    $sql = "SELECT * FROM User_Achievements WHERE uid = ? AND achivid = ?";
     return Database::parcoursRs($db->SQLSelect($sql, [$uid, $aid]));
 }
 
