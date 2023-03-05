@@ -1563,7 +1563,17 @@ $("#page").append(JCloneCategorie);
 
 function JAddOptionsCategorie(div,Reponse){
 
-    var JCloneCategorieOption=JCategorieOption.clone(true,true);
+    var JCloneCategorieOption=JCategorieOption.clone(true,true).on("click",function(context){
+        console.log($(context.target).data("selected"));
+        if( $(context.target).data("selected") == "true")
+            {$(context.target).css("background-color","silver");
+            $(context.target).data("selected","false");}
+        else{$(context.target).css("background-color","gray");
+            $(context.target).data("selected","true");}
+        
+                                                            });
+
+
     JCloneCategorieOption.text(Reponse.label);
     div.append(JCloneCategorieOption).on("click",function(){JClickHeaderMenu(null);});
 
@@ -1582,6 +1592,8 @@ function JCreerPostPublier(target){
     $(target).data("description",$(".divFormPostContent").val());
     $(target).data("visibilite",$(".divFormPostCheckbox").val());
     $(target).data("image",$(".form-control-file").val());
+
+    CreerPost(target);
 
 }
 
@@ -1646,5 +1658,6 @@ function JCreerProfilRecherche(Reponse){
 
     JCloneRechercheProfilDivUser.append([JCloneRechercheProfilDivUserImg,JCloneRechercheProfilDivUserNom]);
     $(".Recherche-Profil").append(JCloneRechercheProfilDivUser);
+
 
 }

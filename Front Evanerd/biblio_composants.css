@@ -862,35 +862,32 @@ margin-top:5%;
     position: fixed;
     overflow-y: scroll;
     scrollbar-color: rebeccapurple green;
-    padding:5%;
-    border-radius: 20px 20px 20px 20px ;
-    background-color: darkred;
+    padding:1%;
+    background-color: darkgray;
     top:7.3%;
-    right:19%;
+    left:16%;
     z-index: 10;
     font-size: 100%;
-    width: 60%;
+    width: 25%;
 }
 
 
 .Categorie-Option
 {
-font-size: 150%;
+font-size: 200%;
 background-color: silver;
 border-radius: 10px;
-margin: 2%;
 padding:5%;
+margin-top:5%;
+margin-top:5%;
 text-align: center;
+box-shadow: black 0px 0px 10px;
 
 
 }
 
 
-.Categorie-Option:hover
-{
-    background-color: gray;
-    color: white;
-}
+
 
 
 .reponse-commentaire
@@ -999,3 +996,4 @@ font-size: 300%;
     border-radius: 5%;
     box-shadow: black 0px 0px 10px;
 }
+
