@@ -1584,6 +1584,8 @@ function JCreerPostPublier(target){
     $(target).data("visibilite",$(".divFormPostCheckbox").val());
     $(target).data("image",$(".form-control-file").val());
 
+    CreerPost(target);
+
 }
 
 

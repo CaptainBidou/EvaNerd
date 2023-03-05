@@ -265,12 +265,19 @@ function EnvoyerJustif(context){
 
 function CreerPost(context){
     //console.log($(context).data("titre"));
-    console.log($(context).data("description"));
+    $desc = $(context).data("description");
     $visibilite = console.log($(context).data("visibilite"));
-    
-    $visibilite = $visibilite == "Visible pour tout le monde" ? 0 : 1;
+    $img = $(context).data("image");
 
-    addPost(context,$visibilite,authcode);
+    console.log($img);
+
+    if($desc != "") {  
+        $visibilite = $visibilite == "Visible pour tout le monde" ? 0 : 1;
+        addPost($visibilite, $desc ,authcode, $img);
+    } else {
+        console.log("Pas de contenu !");
+    }
+    
 }
 
 

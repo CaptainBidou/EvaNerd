@@ -892,22 +892,16 @@ function UpdateEpinglePost($pid,$authToken){
     });  
 }
 
-function addPost($information,$visible = 0, $authToken){
+function addPost($visible, $content, $authToken, $img){
 
-    $data = [];
-
-    if($information["description"] != undefined)
-        $data["content"] = $information["description"];
-    $data["visible"] = $visible;
-
-    $data["content"] = $information["description"];
-    console.log($data["content"]);
-
+    var formData = new FormData();
+    formData.append("banner", $img);
+    
     $.ajax({
         type: "POST",
-        url: api + "/posts?content="+$data["content"]+"&visible="+$data["visible"],
+        url: api + "/posts?titre=defaut&content="+$content+"&visible="+$visible+"&pinned=0",
         headers: {"authToken":$authToken}, // données dans les entetes
-        data: $data,
+        data: formData,
         error : function(){
             console.log("Une erreur s'est produite");
         },
