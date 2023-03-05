@@ -1650,9 +1650,9 @@ function JCreerEventPublier(target){
 function JCreerProfilRecherche(Reponse){
 
     console.log(Reponse);
-    var JCloneRechercheProfilDivUser=JRechercheProfilDivUser.clone().data("id-profile",Reponse.id).on("click",function(){AfficherProfile($(".Recherche-Profil-Div-User"));$(".Recherche-Profil").empty().hide();});
-    var JCloneRechercheProfilDivUserImg=JRechercheProfilDivUserImg.clone().attr("src",Reponse.photo);
-    var JCloneRechercheProfilDivUserNom=JRechercheProfilDivUserNom.clone().text( Reponse.firstName+ " " +Reponse.lastName );
+    var JCloneRechercheProfilDivUser=JRechercheProfilDivUser.clone().data("id-profile",Reponse.id).on("click",function(context){AfficherProfile(context.target);$(".Recherche-Profil").empty().hide();});
+    var JCloneRechercheProfilDivUserImg=JRechercheProfilDivUserImg.clone().attr("src",Reponse.photo).data("id-profile",Reponse.id);
+    var JCloneRechercheProfilDivUserNom=JRechercheProfilDivUserNom.clone().text( Reponse.firstName+ " " +Reponse.lastName ).data("id-profile",Reponse.id);
     ajouterTextOverflow(JCloneRechercheProfilDivUserNom,70);
 
     JCloneRechercheProfilDivUser.append([JCloneRechercheProfilDivUserImg,JCloneRechercheProfilDivUserNom]);
