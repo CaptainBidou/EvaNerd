@@ -30,43 +30,45 @@ function AfficherAccueil(){
 }
 
 function AfficherProfile(context){
-    var i = 0;
+    console.log(context);
+    console.log($(context).data());
+    $uid = $(context).data("idProfile");
     $("#page").html("");
-    $uid = $(context).data("id-profile");
-    console.log($(context).data('idProfile'));
-    GETUserbyID($(context).data('idProfile'));
-    ListUserRoles($uid);
-    ListUserInstruments($uid);
+    ChargementInfosProfil($uid);
+}
 
+function  AfficherProfilCharger() { 
+    var i = 0;
+    var json = {};
     console.log(userProfile);
-
-    json = {};
-    console.log("hey");
-    console.log(userProfile["user"]);
-    //json.photo = userProfile.user.photo ;
-    //json.pourcentage = 90;
-    //json.firstName = userProfile.user.firstName;
-    //json.lastName = userProfile.user.lastName;
-    json.activity = [];
+    json.photo = userProfile.user.photo ;
+    json.pourcentage = 90;
+    json.firstName = userProfile.user.firstName;
+    json.lastName = userProfile.user.lastName;
+    json.activity = new Array();
     json.tag = [];
-
+    var tag = [];
+    var temp = {};
 
     for (let index = 0; index < userProfile.Roles.length; index++) {
-        json.tag[i].nom = userProfile.Roles[index].label;
-        json.tag[i].couleur = "red";
+        temp = {"nom" : userProfile.Roles[index].label,"couleur" : "red"}
+        tag.push(temp);
         i++;
     };
 
     for (let index = 0; index < userProfile.instruments.length; index++) {
-    json.tag[i].nom = userProfile.instruments[index].label;
-        json.tag[i].couleur = "blue";
+        temp = {"nom" : userProfile.instruments[index].label,"couleur" : "blue"}
+        tag.push(temp);
         i++;
     }
+
+    json.tag = tag; 
     console.log(json);
-    //JCreerProfile(json)
+    JCreerProfile(json)
+    userProfile = {};
     // TODO : Lister activité utilisateur
-    
 }
+
 
 function RolesMenu(context){
     $uid = $(context).data("id-profile");
