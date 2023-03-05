@@ -58,7 +58,7 @@ switch($action) {
         postUserInstrument($data, $authKey, $queryString);
         break;
 
-    case "POST /users/achievement":
+    case "POST /users/achievements":
         postUserAchievement($data, $authKey, $queryString);
         break;
 
