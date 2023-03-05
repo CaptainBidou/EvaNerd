@@ -39,11 +39,14 @@ function authUser($data, $queryString) {
  */
 function listUsers($data, $queryString) {
     $idRole = null;
-    if($idRole = valider("idRole", $queryString)) 
+    if($idRole = valider("idRole", $queryString))
         if(!is_id($idRole)) sendError("identifiant role attendu !", HTTP_BAD_REQUEST);
-    $data["users"] = selectUsers($idRole);
+    
+    $name = valider("name", $queryString);
+
+    $data["users"] = selectUsers($idRole, $name);
     if(!$data["users"]) 
-        sendError("Aucun enregistrement trouvé : idRole invalide !", HTTP_NOT_FOUND);
+        sendError("Aucun enregistrement trouvé !", HTTP_NOT_FOUND);
 
     sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
 }
@@ -736,7 +739,8 @@ function postMessageReactions($data, $idTabs, $authKey, $queryString) {
 }
 
 function postPost($data, $authKey,$queryString) {
-    if($authKey) sendError("Vous devez être identifié", HTTP_UNAUTHORIZED);
+    if(!$authKey) sendError("Vous devez être identifié", HTTP_UNAUTHORIZED);
+
     $newId = getNewPid();
     $dir = DIR_POSTS . $newId;
     $uidConn = validUser(authToId($authKey));
