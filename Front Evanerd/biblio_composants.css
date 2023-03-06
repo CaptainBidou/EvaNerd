@@ -184,14 +184,18 @@
 
 .repetition-titre {
     margin-left: 3%;
-    margin-top:3%;
-    font-size:400%;
-    text-decoration:underline;
+    margin-top: 3%;
+    font-size: 400%;
+    width:75%;
+    text-decoration: underline;
 }
 
-.repetition-date {
+.repetition-date { 
+    color:gray;
     font-size: 300%;
-    color:gray;   
+    position:absolute;
+    right:1%;
+    top:0%;  
 }
 
 .repetition-commentaire {

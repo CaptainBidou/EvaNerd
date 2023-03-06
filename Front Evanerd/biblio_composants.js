@@ -636,7 +636,7 @@ function JCreerAppel(Reponse){
     var JCloneRepetitionRetour=JRepetitionRetour.clone(true,true).hide();
     var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true).data("type_id",Reponse.id);
     var JCloneRepetitionTitre = JRepetitionTitre.clone(true,true).text(Reponse.titre);
-    var JCloneRepetitionDate= JRepetitionDate.clone(true,true).text(Reponse.date);
+    var JCloneRepetitionDate= JRepetitionDate.clone(true,true).text(Reponse.startDate);
     var JCloneRepetitionCommentaire=JRepetitionCommentaire.clone(true,true).text(Reponse.description);
     JCloneRepetitionCommentaire=ajouterTextOverflow(JCloneRepetitionCommentaire,80);
     var JCloneRepetitionPresent=JRepetitionPresent.clone(true,true);
