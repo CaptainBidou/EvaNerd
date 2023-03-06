@@ -1039,8 +1039,25 @@ margin-right:5%;
 border-radius: 2%;
 padding:2%;
 padding-bottom: 7%;
-background-color: whitesmoke;
-box-shadow: gray 10px 10px 10px;
 
+/*background-color: darkred;
+box-shadow: gray 10px 10px 10px;*/
+
+
+}
+
+.Appel-Admin-Profil
+{
+    padding:2%;
+    font-size: 350%;
+    margin-bottom: 5%;
+    border-radius: 2%;
+}
+
+
+.Appel-Admin-Profil-Commentaire
+{
+    color:lightgray;
+    font-size: 80%;
 
 }

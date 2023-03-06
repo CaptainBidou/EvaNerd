@@ -240,6 +240,13 @@ var JRechercheProfilDivUserPrenom=$("<p>").addClass("Recherche-Profil-Div-User-P
 var JFlecheAdmin=$("<img>").addClass("Fleche-Admin").attr("src","Ressources/Appel/arrow.png").on("click",function(){AfficherAppel();});
 var JAppelAdminDiv=$("<div>").addClass("Appel-Admin-Div");
 
+
+
+//variables pour la vue profil admin appel
+var JAppelAdminProfil=$("<div>").addClass("Appel-Admin-Profil");
+var JAppelAdminProfilImg=$("<img>").addClass(["Appel-Admin-Profil-Img","rounded-circle"]);
+var JAppelAdminProfilNom=$("<p>").addClass("Appel-Admin-Profil-Nom");
+var JAppelAdminProfilCommentaire=$("<p>").addClass("Appel-Admin-Profil-Commentaire");
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
@@ -649,6 +656,22 @@ function JAppelAdmin(Reponse)
  * 
  * 
  */
+function JCreerProfileAppel(Reponse,present,reason){
+    var comm="";
+if(present==1){present="lightgreen";}
+if(present==0){present="red";comm=reason;}
+    
+    var JCloneAppelAdminProfil=JAppelAdminProfil.clone(true,true).css("background-color",present);
+    var JCloneAppelAdminProfilImg=JAppelAdminProfilImg.clone(true,true);
+    var JCloneAppelAdminProfilNom=JAppelAdminProfilNom.clone(true,true).text(Reponse.firstName+" "+Reponse.lastName);
+    var JCloneAppelAdminProfilCommentaire=JAppelAdminProfilCommentaire.clone(true,true).text(comm);
+    JCloneAppelAdminProfil.append(JCloneAppelAdminProfilImg).append(JCloneAppelAdminProfilNom).append(JCloneAppelAdminProfilCommentaire);
+
+    $(".Appel-Admin-Div").append(JCloneAppelAdminProfil);
+
+}
+
+
 function JCreerAppel(Reponse,VueAdmin){
 
     
@@ -677,6 +700,15 @@ function JCreerAppel(Reponse,VueAdmin){
         
     JCloneRepetition.append(JCloneRepetitionTitre).append(JCloneRepetitionDate).append(JCloneRepetitionCommentaire);
     JCloneRepetition.on("click",function(){
+        $(".Fleche-Admin").off("click");
+        $(".Fleche-Admin").on("click",function(){
+            var JCloneAppelAdminDiv=JAppelAdminDiv.clone(true,true);    
+        
+            $("#page").empty();
+            JCloneFlecheAdmin=JFlecheAdmin.clone(true,true);
+            $("#page").append([JCloneFlecheAdmin,JCloneAppelAdminDiv]);
+            ListCalendarsEvents(authcode,"intra",1); 
+        });
         ListCallMembers(authcode,$(this).data("idEvent"));
         $(".Appel-Admin-Div").empty();
         

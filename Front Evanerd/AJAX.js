@@ -1002,9 +1002,13 @@ function ListCallMembers($authToken,$id){
         },
         success: function(oRep){
             console.log(oRep); 
-            /*oRep["calls"].forEach(element => {
-                JCreerAppel(element);
-            });*/
+
+            oRep["calls"].forEach(element => {
+                if(!element.reason_desc)
+                JCreerProfileAppel(element.user,element.present);
+                else
+                JCreerProfileAppel(element.user,element.present,element.reason_desc);
+            });
         },
         dataType: "json"
     }); 
