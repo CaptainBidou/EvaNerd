@@ -1002,12 +1002,12 @@ function ListCallMembers($authToken,$id){
         },
         success: function(oRep){
             console.log(oRep); 
-
+            var id = oRep.eventId;
             oRep["calls"].forEach(element => {
                 if(!element.reason_desc)
-                JCreerProfileAppel(element.user,element.present);
+                JCreerProfileAppel(element.user,element.present,"",id);
                 else
-                JCreerProfileAppel(element.user,element.present,element.reason_desc);
+                JCreerProfileAppel(element.user,element.present,element.reason_desc,id);
             });
         },
         dataType: "json"

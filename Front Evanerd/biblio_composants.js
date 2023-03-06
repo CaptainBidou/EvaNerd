@@ -88,7 +88,7 @@ var JCreerPostForm=$("<div>").addClass("divFormPost");
 var JCreerPostFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control"]).attr("placeholder","Titre du post");
 var JCreerPostFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description du post");
 var JCreerPostFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Visible pour tout le monde").addClass("option")).append($("<option>").text("Visible seulement pour les membres").addClass("option"));
-var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){JCreerPostPublier(context.target);});
+var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){JCreerPostPublier(context.target);AfficherAccueil();JSetFooterColorBlack();$("#Accueil").attr("src","Ressources/Footer/accueilGris.png");});
 var JCreerPostFormImage=$("<input>").addClass("btn btn-danger form-control-file").attr("type","file").text("Ajouter une image").addClass("buttonAddImage").on("click",function(){return null;});
 var JCreerPostFormLabel=$("<p>").addClass("labelTypeForm");
 
@@ -101,7 +101,18 @@ var JCreerEventFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-con
 var JCreerEventFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description de l'évènement");
 var JCreerEventDate=$("<input>").attr("type","datetime-local").addClass("divFormEventDuree");
 var JCreerEventDuree=$("<input>").attr("type","time").addClass("divFormEventDate");
-var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){JCreerEventPublier(context.target)});
+var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){var bouton=$(".divFormPostCheckBox").val(); JCreerEventPublier(context.target); console.log(bouton); JSetFooterColorBlack();
+        
+if(bouton=="Evènement intraorchestre"){
+    $("#Appel").attr("src",'Ressources/Footer/appelGris.png');
+
+    AfficherAppel();}
+else if(bouton=="Concert"){
+    $("#Calendrier").attr("src",'Ressources/Footer/calendrierGris.png');
+
+    AfficherCalendrier();}
+
+});
 
 
 
@@ -656,13 +667,22 @@ function JAppelAdmin(Reponse)
  * 
  * 
  */
-function JCreerProfileAppel(Reponse,present,reason){
+function JCreerProfileAppel(Reponse,present,reason,eventid){
     var comm="";
-if(present==1){present="lightgreen";}
+    if(present==1){present="lightgreen";}
 if(present==0){present="red";comm=reason;}
+    var JCloneAppelAdminProfil=JAppelAdminProfil.clone(true,true).css("background-color",present).data("statut",present).data("id_event",eventid).on("click",function(){
+        if( $(this).data("statut")=="lightgreen" ){
+            $(this).css("background-color","red");
+            //todo envoyer la requete 
+        }
+
+
+    });
+
     
-    var JCloneAppelAdminProfil=JAppelAdminProfil.clone(true,true).css("background-color",present);
-    var JCloneAppelAdminProfilImg=JAppelAdminProfilImg.clone(true,true);
+    
+    var JCloneAppelAdminProfilImg=JAppelAdminProfilImg.clone(true,true).attr("src",Reponse.photo);
     var JCloneAppelAdminProfilNom=JAppelAdminProfilNom.clone(true,true).text(Reponse.firstName+" "+Reponse.lastName);
     var JCloneAppelAdminProfilCommentaire=JAppelAdminProfilCommentaire.clone(true,true).text(comm);
     JCloneAppelAdminProfil.append(JCloneAppelAdminProfilImg).append(JCloneAppelAdminProfilNom).append(JCloneAppelAdminProfilCommentaire);
