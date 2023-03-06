@@ -652,28 +652,35 @@ function JAppelAdmin(Reponse)
 function JCreerAppel(Reponse,VueAdmin){
 
     
-    
+    var id=Reponse.id;
     var JCloneRepetition=JRepetition.clone(true,true).css("background-color",JCouleur).data("idEvent",Reponse.id);
 
     JCouleur = JCouleur == "silver" ? "Lightgray" : "silver";
-    var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide().data("type_id",Reponse.id);
-    var JCloneRepetitionRetour=JRepetitionRetour.clone(true,true).hide();
-    var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true).data("type_id",Reponse.id);
-    var JCloneRepetitionTitre = JRepetitionTitre.clone(true,true).text(Reponse.titre);
-    var JCloneRepetitionDate= JRepetitionDate.clone(true,true).text(Reponse.startDate);
-    var JCloneRepetitionCommentaire=JRepetitionCommentaire.clone(true,true).text(Reponse.description);
+    var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.hide().data("type_id",Reponse.id).clone(true,true);
+    var JCloneRepetitionRetour=JRepetitionRetour.hide().clone(true,true);
+    var JCloneRepetitionDiv=JRepetitionDiv.data("type_id",Reponse.id).clone(true,true);
+    var JCloneRepetitionTitre = JRepetitionTitre.text(Reponse.titre).data("idEvent",Reponse.id).clone(true,true);
+    var JCloneRepetitionDate= JRepetitionDate.text(Reponse.startDate).data("idEvent",Reponse.id).clone(true,true);
+    var JCloneRepetitionCommentaire=JRepetitionCommentaire.text(Reponse.description).data("idEvent",Reponse.id).clone(true,true);
     JCloneRepetitionCommentaire=ajouterTextOverflow(JCloneRepetitionCommentaire,80);
     var JCloneRepetitionPresent=JRepetitionPresent.clone(true,true);
     var JCloneRepetitionAbsent=JRepetitionAbsent.clone(true,true);
     var JCloneRepetitionJustification2=JRepetitionJustificationText.clone(true,true).hide();
     // EVENT CLICK
+    JCloneRepetitionCommentaire.data("idEvent",id);
+    JCloneRepetitionDate.data("idEvent",id);
+    JCloneRepetitionTitre.data("idEvent",id);
+    JCloneRepetition.data("idEvent",id);
+
     if(VueAdmin==1)
     {
         
     JCloneRepetition.append(JCloneRepetitionTitre).append(JCloneRepetitionDate).append(JCloneRepetitionCommentaire);
-    JCloneRepetition.on("click",function(context){
+    JCloneRepetition.on("click",function(){
+        ListCallMembers(authcode,$(this).data("idEvent"));
         $(".Appel-Admin-Div").empty();
-        ListCallMembers(authcode,JCloneRepetition.data("idEvent"));
+        
+        
     });
 
 
