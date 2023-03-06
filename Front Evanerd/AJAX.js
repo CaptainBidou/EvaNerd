@@ -20,8 +20,8 @@ var userProfile = {};
  */
 
 function auth($tel,$password){
-    localStorage.setItem('tel',$tel);
-    localStorage.setItem('passwd',$password);
+    //localStorage.setItem('tel',$tel);
+    //localStorage.setItem('passwd',$password);
     $.ajax({
         type: "POST",
         url: api + "/auth?"+ "tel="+$tel+"&password="+$password,
@@ -924,16 +924,25 @@ function addPost($visible, $content, $authToken, $img){
 
 
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
-function ListCalendarsEvents($authToken,$type){
+function ListCalendarsEvents($authToken,$type,$all){
+    
     $.ajax({
         type: "GET",
-        url: api + "/events/?type=" + $type,
+        url: api + "/events/?type=" + $type+"&all="+$all,
         headers: {"authToken":$authToken}, // données dans les entetes 
         data: [],
         error: function( jqXhr, textStatus, errorThrown){
             console.log(textStatus, errorThrown, jqXhr);
         },
         success: function(oRep){
+            console.log(oRep); 
+            if($all==1)
+            {
+                oRep["events"].forEach(element => {
+                element.titre = element.event;
+                JCreerAppel(element,1);});
+            return 1;}
+
             console.log(oRep); 
             if ($type == "extra"){
                 oRep["events"].forEach(element => {
@@ -943,7 +952,9 @@ function ListCalendarsEvents($authToken,$type){
                 });
             }
             else
-            {
+            {   
+                if(admin==1)
+                { JAppelAdmin();}
                 oRep["events"].forEach(element => {
                     element.titre = element.event;
                     JCreerAppel(element);
@@ -980,10 +991,10 @@ function getEventParticipation(eventInfos,$authToken){
 
 
 /** Effectue la requete ajax de listage de conversation et lance l'affichage des compo js*/
-function ListCallMembers($authToken,$aid,$eid){
+function ListCallMembers($authToken,$id){
     $.ajax({
         type: "GET",
-        url: api + "/agendas/"+$aid+"/event/"+$eid+"/calls",
+        url: api + "/events/"+$id+"/calls",
         headers: {"authToken": $authToken}, // données dans les entetes 
         data: [],
         error : function(){
@@ -991,8 +1002,12 @@ function ListCallMembers($authToken,$aid,$eid){
         },
         success: function(oRep){
             console.log(oRep); 
+            var id = oRep.eventId;
             oRep["calls"].forEach(element => {
-                JCreerAppel(element);
+                if(!element.reason_desc)
+                JCreerProfileAppel(element.user,element.present,"",id);
+                else
+                JCreerProfileAppel(element.user,element.present,element.reason_desc,id);
             });
         },
         dataType: "json"
@@ -1062,6 +1077,12 @@ function PostEventJustif($eid,$authToken,$present,$justif){
         },
         dataType : "json"
     });
+
+
+
+
+
+
 }
 /* END AGENDAS */
 

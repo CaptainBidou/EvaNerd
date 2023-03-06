@@ -88,7 +88,7 @@ var JCreerPostForm=$("<div>").addClass("divFormPost");
 var JCreerPostFormTitre=$("<input>").attr("type","text").addClass(["divFormPostTitre","form-control"]).attr("placeholder","Titre du post");
 var JCreerPostFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description du post");
 var JCreerPostFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-control").append($("<option>").text("Visible pour tout le monde").addClass("option")).append($("<option>").text("Visible seulement pour les membres").addClass("option"));
-var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){JCreerPostPublier(context.target);});
+var JCreerPostFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){JCreerPostPublier(context.target);AfficherAccueil();JSetFooterColorBlack();$("#Accueil").attr("src","Ressources/Footer/accueilGris.png");});
 var JCreerPostFormImage=$("<input>").addClass("btn btn-danger form-control-file").attr("type","file").text("Ajouter une image").addClass("buttonAddImage").on("click",function(){return null;});
 var JCreerPostFormLabel=$("<p>").addClass("labelTypeForm");
 
@@ -101,7 +101,18 @@ var JCreerEventFormCheckBox=$("<select>").addClass("divFormPostCheckBox form-con
 var JCreerEventFormContent=$("<textarea>").attr("type","text").addClass("divFormPostTitre divFormPostContent form-control").attr("placeholder","Description de l'évènement");
 var JCreerEventDate=$("<input>").attr("type","datetime-local").addClass("divFormEventDuree");
 var JCreerEventDuree=$("<input>").attr("type","time").addClass("divFormEventDate");
-var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){JCreerEventPublier(context.target)});
+var JCreerEventFormPublier=$("<button>").addClass("btn btn-danger ").text("Publier").addClass("buttonPublier").on("click",function(context){var bouton=$(".divFormPostCheckBox").val(); JCreerEventPublier(context.target); console.log(bouton); JSetFooterColorBlack();
+        
+if(bouton=="Evènement intraorchestre"){
+    $("#Appel").attr("src",'Ressources/Footer/appelGris.png');
+
+    AfficherAppel();}
+else if(bouton=="Concert"){
+    $("#Calendrier").attr("src",'Ressources/Footer/calendrierGris.png');
+
+    AfficherCalendrier();}
+
+});
 
 
 
@@ -236,6 +247,17 @@ var JRechercheProfilDivUserNom=$("<p>").addClass("Recherche-Profil-Div-User-Nom"
 var JRechercheProfilDivUserPrenom=$("<p>").addClass("Recherche-Profil-Div-User-Prenom");
 
 
+//variables pour la vue admin des appels
+var JFlecheAdmin=$("<img>").addClass("Fleche-Admin").attr("src","Ressources/Appel/arrow.png").on("click",function(){AfficherAppel();});
+var JAppelAdminDiv=$("<div>").addClass("Appel-Admin-Div");
+
+
+
+//variables pour la vue profil admin appel
+var JAppelAdminProfil=$("<div>").addClass("Appel-Admin-Profil");
+var JAppelAdminProfilImg=$("<img>").addClass(["Appel-Admin-Profil-Img","rounded-circle"]);
+var JAppelAdminProfilNom=$("<p>").addClass("Appel-Admin-Profil-Nom");
+var JAppelAdminProfilCommentaire=$("<p>").addClass("Appel-Admin-Profil-Commentaire");
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
@@ -618,6 +640,23 @@ function JCreerConcert(Reponse){
 
 }
 
+
+function JAppelAdmin(Reponse)
+{
+    var JCloneReglageAdmin=$("<img>").attr("src","Ressources/Appel/Reglage.png").addClass("ReglageAdmin").clone(true,true).on("click",function(){
+    var JCloneAppelAdminDiv=JAppelAdminDiv.clone(true,true);    
+        
+        $("#page").empty();
+        JCloneFlecheAdmin=JFlecheAdmin.clone(true,true);
+        $("#page").append([JCloneFlecheAdmin,JCloneAppelAdminDiv]);
+        ListCalendarsEvents(authcode,"intra",1);
+
+    });
+    
+    $("#page").append(JCloneReglageAdmin);
+}
+
+
 /**
  * 
  * @param {*} Reponse 
@@ -628,23 +667,86 @@ function JCreerConcert(Reponse){
  * 
  * 
  */
-function JCreerAppel(Reponse){
-    var JCloneRepetition=JRepetition.clone(true,true).css("background-color",JCouleur);
+function JCreerProfileAppel(Reponse,present,reason,eventid){
+    var comm="";
+    if(present==1){present="lightgreen";}
+if(present==0){present="red";comm=reason;}
+    var JCloneAppelAdminProfil=JAppelAdminProfil.clone(true,true).css("background-color",present).data("statut",present).data("id_event",eventid).on("click",function(){
+        if( $(this).data("statut")=="lightgreen" ){
+            $(this).css("background-color","red");
+            //todo envoyer la requete 
+        }
+
+
+    });
+
+    
+    
+    var JCloneAppelAdminProfilImg=JAppelAdminProfilImg.clone(true,true).attr("src",Reponse.photo);
+    var JCloneAppelAdminProfilNom=JAppelAdminProfilNom.clone(true,true).text(Reponse.firstName+" "+Reponse.lastName);
+    var JCloneAppelAdminProfilCommentaire=JAppelAdminProfilCommentaire.clone(true,true).text(comm);
+    JCloneAppelAdminProfil.append(JCloneAppelAdminProfilImg).append(JCloneAppelAdminProfilNom).append(JCloneAppelAdminProfilCommentaire);
+
+    $(".Appel-Admin-Div").append(JCloneAppelAdminProfil);
+
+}
+
+
+function JCreerAppel(Reponse,VueAdmin){
+
+    
+    var id=Reponse.id;
+    var JCloneRepetition=JRepetition.clone(true,true).css("background-color",JCouleur).data("idEvent",Reponse.id);
 
     JCouleur = JCouleur == "silver" ? "Lightgray" : "silver";
-    var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide().data("type_id",Reponse.id);
-    var JCloneRepetitionRetour=JRepetitionRetour.clone(true,true).hide();
-    var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true).data("type_id",Reponse.id);
-    var JCloneRepetitionTitre = JRepetitionTitre.clone(true,true).text(Reponse.titre);
-    var JCloneRepetitionDate= JRepetitionDate.clone(true,true).text(Reponse.startDate);
-    var JCloneRepetitionCommentaire=JRepetitionCommentaire.clone(true,true).text(Reponse.description);
+    var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.hide().data("type_id",Reponse.id).clone(true,true);
+    var JCloneRepetitionRetour=JRepetitionRetour.hide().clone(true,true);
+    var JCloneRepetitionDiv=JRepetitionDiv.data("type_id",Reponse.id).clone(true,true);
+    var JCloneRepetitionTitre = JRepetitionTitre.text(Reponse.titre).data("idEvent",Reponse.id).clone(true,true);
+    var JCloneRepetitionDate= JRepetitionDate.text(Reponse.startDate).data("idEvent",Reponse.id).clone(true,true);
+    var JCloneRepetitionCommentaire=JRepetitionCommentaire.text(Reponse.description).data("idEvent",Reponse.id).clone(true,true);
     JCloneRepetitionCommentaire=ajouterTextOverflow(JCloneRepetitionCommentaire,80);
     var JCloneRepetitionPresent=JRepetitionPresent.clone(true,true);
     var JCloneRepetitionAbsent=JRepetitionAbsent.clone(true,true);
     var JCloneRepetitionJustification2=JRepetitionJustificationText.clone(true,true).hide();
     // EVENT CLICK
+    JCloneRepetitionCommentaire.data("idEvent",id);
+    JCloneRepetitionDate.data("idEvent",id);
+    JCloneRepetitionTitre.data("idEvent",id);
+    JCloneRepetition.data("idEvent",id);
+
+    if(VueAdmin==1)
+    {
+        
+    JCloneRepetition.append(JCloneRepetitionTitre).append(JCloneRepetitionDate).append(JCloneRepetitionCommentaire);
+    JCloneRepetition.on("click",function(){
+        $(".Fleche-Admin").off("click");
+        $(".Fleche-Admin").on("click",function(){
+            var JCloneAppelAdminDiv=JAppelAdminDiv.clone(true,true);    
+        
+            $("#page").empty();
+            JCloneFlecheAdmin=JFlecheAdmin.clone(true,true);
+            $("#page").append([JCloneFlecheAdmin,JCloneAppelAdminDiv]);
+            ListCalendarsEvents(authcode,"intra",1); 
+        });
+        ListCallMembers(authcode,$(this).data("idEvent"));
+        $(".Appel-Admin-Div").empty();
+        
+        
+    });
+
+
+    return $(".Appel-Admin-Div").append(JCloneRepetition);
+
+    }
+
+
     JCloneRepetition.on("click",function(context){
     //if($(context.target).prev().prop('tagName')=="INPUT" ||$(context.target).prev().prop('tagName')=="TEXTAREA"||$(context.target).prev().prop('tagName')=="LABEL")
+    
+
+    
+    
     if($(context.target).attr("type")=="present")
     {
         
@@ -718,11 +820,11 @@ function JCreerAppel(Reponse){
         JCloneRepetitionAbsent.text("Absente");
     }
 
-
-
+    
+    
     JCloneRepetitionDiv.append(JCloneRepetitionPresent).append(JCloneRepetitionAbsent).append(JCloneRepetitionJustification2).append(JCloneRepetitionEnvoyer).append(JCloneRepetitionRetour);
     JCloneRepetition.append(JCloneRepetitionTitre).append(JCloneRepetitionDate).append(JCloneRepetitionCommentaire).append(JCloneRepetitionDiv);
-
+    
 
 
     $("#page").append(JCloneRepetition);
@@ -831,8 +933,6 @@ function JCreerPostCreer(){
 
 
     var JCLonePostForme=JCreerPostForm.clone(true,true);
-    var JClonePostFormeTitreLabel=JCreerPostFormLabel.clone(true,true).text("Titre du poste");
-    var JClonePostFormeTitre=JCreerPostFormTitre.clone(true,true);
     var JClonePostFormeContentLabel=JCreerPostFormLabel.clone(true,true).text("Description du poste");
     var JClonePostFormeContent=JCreerPostFormContent.clone(true,true);
     var JClonePostFormeCBLabel=JCreerPostFormLabel.clone(true,true).text("Visibilité du poste").attr("label",".divFormPostCheckBox");
@@ -842,7 +942,7 @@ function JCreerPostCreer(){
 
 
 
-    JCLonePostForme.append([JClonePostFormeTitreLabel,JClonePostFormeTitre,JClonePostFormeContentLabel,JClonePostFormeContent,JClonePostFormeCBLabel,
+    JCLonePostForme.append([JClonePostFormeContentLabel,JClonePostFormeContent,JClonePostFormeCBLabel,
         JClonePostFormeCheckBox,JClonePostFormeImage, JClonePostFormePublier]);
 
         $("#page").append(JCLonePostForme);
@@ -1391,7 +1491,7 @@ JCloneCommentaires.fadeIn(1000);
 
 
 
-window.scrollTo(0, 400000000000000);
+//window.scrollTo(0, 400000000000000);
 }
 
 
