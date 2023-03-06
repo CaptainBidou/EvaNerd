@@ -267,6 +267,10 @@ padding-right:10%;
 .LabelTypeForm
 {
     margin-top: 5%;
+    font-weight: bold;
+    background-color: gray;
+    padding:5%;
+    border-radius: 2%;
 }
 
 .option 
@@ -286,6 +290,7 @@ padding-right:10%;
     font-size: 75%;
     background-color: darkred;
     width:80%;
+    margin-bottom: 5%;
 }
 
 .buttonPublier
@@ -1076,4 +1081,8 @@ box-shadow: gray 10px 10px 10px;*/
     margin-bottom:10%;
     margin-left:35%;
     width:60%;
+}
+.divFormPostCheckBox 
+{
+    height:6%;
 }

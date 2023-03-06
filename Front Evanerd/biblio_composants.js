@@ -933,8 +933,6 @@ function JCreerPostCreer(){
 
 
     var JCLonePostForme=JCreerPostForm.clone(true,true);
-    var JClonePostFormeTitreLabel=JCreerPostFormLabel.clone(true,true).text("Titre du poste");
-    var JClonePostFormeTitre=JCreerPostFormTitre.clone(true,true);
     var JClonePostFormeContentLabel=JCreerPostFormLabel.clone(true,true).text("Description du poste");
     var JClonePostFormeContent=JCreerPostFormContent.clone(true,true);
     var JClonePostFormeCBLabel=JCreerPostFormLabel.clone(true,true).text("Visibilité du poste").attr("label",".divFormPostCheckBox");
@@ -944,7 +942,7 @@ function JCreerPostCreer(){
 
 
 
-    JCLonePostForme.append([JClonePostFormeTitreLabel,JClonePostFormeTitre,JClonePostFormeContentLabel,JClonePostFormeContent,JClonePostFormeCBLabel,
+    JCLonePostForme.append([JClonePostFormeContentLabel,JClonePostFormeContent,JClonePostFormeCBLabel,
         JClonePostFormeCheckBox,JClonePostFormeImage, JClonePostFormePublier]);
 
         $("#page").append(JCLonePostForme);
@@ -1493,7 +1491,7 @@ JCloneCommentaires.fadeIn(1000);
 
 
 
-window.scrollTo(0, 400000000000000);
+//window.scrollTo(0, 400000000000000);
 }
 
 
