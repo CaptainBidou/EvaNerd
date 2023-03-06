@@ -1116,13 +1116,14 @@ function ModifUserParticipation($uid,$aeid,$partcipe){
  * @param {*} $aeid Identifiant de l'évenement dans l'agenda
  * @param {*} $partcipe 
  */
-function AddUserParticipation($uid,$aeid,$partcipe){
+function AddUserParticipation($id,$partcipe){
     $.ajax({
         type: "POST",
-        url: api + "/users/"+$uid+"/agendas/"+$aeid+"/participations?participation="+$partcipe,
-        headers: {"authToken":""}, // données dans les entetes 
-        data: [{"key":"participation","value":$partcipe}],
+        url: api + "/events/"+$id+"/participations?participation="+$partcipe,
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [{}],
         error : function(){
+            
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){

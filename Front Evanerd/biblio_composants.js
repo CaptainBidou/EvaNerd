@@ -551,34 +551,43 @@ function JCreerConv(Reponse){
 
 function JCreerConcert(Reponse){
     var JCloneconcert=JConcert.clone(true,true).css("background-color",JCouleur);
-    var JClonedate=JConcertDate.clone(true,true).text(Reponse.date);
+    var JClonedate=JConcertDate.clone(true,true).text(Reponse.startDate);
     var JCloneTitre= JConcertTitre.clone(true,true).text(Reponse.titre);
-    var JCloneCommentaire= JConcertCommentaire.clone(true,true).text(Reponse.commentaire).css("max-height","20%");
+    //JCloneTitre= ajouterTextOverflow(JCloneTitre,80);
+    var JCloneCommentaire= JConcertCommentaire.clone(true,true).text(Reponse.description).css("max-height","20%");
     JCloneCommentaire= ajouterTextOverflow(JCloneCommentaire,80);
     JCloneCommentaire.on("click",function(context){afficherToutleText(context);})
-    var JCloneJeviens=JConcertJeviens.clone(true,true);
-    var JCloneJevienspas=JConcertJevienspas.clone(true,true);
-    var JCloneJevienspeutetre =JConcertJevienspeutetre.clone(true,true);
+    var JCloneJeviens=JConcertJeviens.clone(true,true).data("id",Reponse.id);
+    var JCloneJevienspas=JConcertJevienspas.clone(true,true).data("id",Reponse.id);
+    var JCloneJevienspeutetre =JConcertJevienspeutetre.clone(true,true).data("id",Reponse.id);
 
     var JCloneProgress=JConcertProgress.clone(true,true);
-    Reponse.pourcentage=Reponse.pourcentage*100;
+    Reponse.pourcentage=Math.trunc(Reponse.pourcentage*100);
+    if(isNaN(Reponse.pourcentage))
+    {
+        Reponse.pourcentage=0;
+    }
 
     var JClonepourcentage=JConcertpourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
 
     JCloneJeviens.on("click",function(){
+
         JCloneJeviens.fadeOut();
         JCloneJevienspas.fadeOut();
         JCloneJevienspeutetre.fadeOut();
+        AddUserParticipation(JCloneJeviens.data("id"),"y")
     });
     JCloneJevienspeutetre.on("click",function(){
         JCloneJeviens.fadeOut();
         JCloneJevienspas.fadeOut();
         JCloneJevienspeutetre.fadeOut();
+        AddUserParticipation(JCloneJevienspeutetre.data("id"),"m");
     });
     JCloneJevienspas.on("click",function(){
         JCloneJeviens.fadeOut();
         JCloneJevienspas.fadeOut();
         JCloneJevienspeutetre.fadeOut();
+        AddUserParticipation(JCloneJevienspas.data("id"),"n");
     });
 
 
@@ -600,7 +609,7 @@ function JCreerConcert(Reponse){
 
     JCloneProgress.append(JClonepourcentage);
 
-    if(Reponse.vote==0)
+    if(Reponse.voted==null)
         JCloneconcert.append(JCloneTitre).append(JClonedate).append(JCloneCommentaire).append(JCloneJeviens).append(JCloneJevienspas).append(JCloneJevienspeutetre).append(JCloneProgress);
     else
         JCloneconcert.append(JCloneTitre).append(JClonedate).append(JCloneCommentaire).append(JCloneProgress);
@@ -628,7 +637,7 @@ function JCreerAppel(Reponse){
     var JCloneRepetitionDiv=JRepetitionDiv.clone(true,true).data("type_id",Reponse.id);
     var JCloneRepetitionTitre = JRepetitionTitre.clone(true,true).text(Reponse.titre);
     var JCloneRepetitionDate= JRepetitionDate.clone(true,true).text(Reponse.date);
-    var JCloneRepetitionCommentaire=JRepetitionCommentaire.clone(true,true).text(Reponse.commentaire);
+    var JCloneRepetitionCommentaire=JRepetitionCommentaire.clone(true,true).text(Reponse.description);
     JCloneRepetitionCommentaire=ajouterTextOverflow(JCloneRepetitionCommentaire,80);
     var JCloneRepetitionPresent=JRepetitionPresent.clone(true,true);
     var JCloneRepetitionAbsent=JRepetitionAbsent.clone(true,true);
