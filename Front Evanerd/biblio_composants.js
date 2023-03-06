@@ -631,12 +631,13 @@ function JAppelAdmin(Reponse)
         $("#page").empty();
         JCloneFlecheAdmin=JFlecheAdmin.clone(true,true);
         $("#page").append([JCloneFlecheAdmin,JCloneAppelAdminDiv]);
-        
+        ListCalendarsEvents(authcode,"intra",1);
 
     });
     
     $("#page").append(JCloneReglageAdmin);
 }
+
 
 /**
  * 
@@ -648,11 +649,11 @@ function JAppelAdmin(Reponse)
  * 
  * 
  */
-function JCreerAppel(Reponse){
+function JCreerAppel(Reponse,VueAdmin){
 
     
     
-    var JCloneRepetition=JRepetition.clone(true,true).css("background-color",JCouleur);
+    var JCloneRepetition=JRepetition.clone(true,true).css("background-color",JCouleur).data("idEvent",Reponse.id);
 
     JCouleur = JCouleur == "silver" ? "Lightgray" : "silver";
     var JCloneRepetitionEnvoyer=JRepetitionEnvoyer.clone(true,true).hide().data("type_id",Reponse.id);
@@ -666,6 +667,21 @@ function JCreerAppel(Reponse){
     var JCloneRepetitionAbsent=JRepetitionAbsent.clone(true,true);
     var JCloneRepetitionJustification2=JRepetitionJustificationText.clone(true,true).hide();
     // EVENT CLICK
+    if(VueAdmin==1)
+    {
+        
+    JCloneRepetition.append(JCloneRepetitionTitre).append(JCloneRepetitionDate).append(JCloneRepetitionCommentaire);
+    JCloneRepetition.on("click",function(context){
+        $(".Appel-Admin-Div").empty();
+        ListCallMembers(authcode,JCloneRepetition.data("idEvent"));
+    });
+
+
+    return $(".Appel-Admin-Div").append(JCloneRepetition);
+
+    }
+
+
     JCloneRepetition.on("click",function(context){
     //if($(context.target).prev().prop('tagName')=="INPUT" ||$(context.target).prev().prop('tagName')=="TEXTAREA"||$(context.target).prev().prop('tagName')=="LABEL")
     
