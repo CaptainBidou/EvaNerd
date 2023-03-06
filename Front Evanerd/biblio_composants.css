@@ -1052,17 +1052,28 @@ box-shadow: gray 10px 10px 10px;*/
     font-size: 350%;
     margin-bottom: 5%;
     border-radius: 2%;
+
 }
 
 
 .Appel-Admin-Profil-Commentaire
 {
-    color:lightgray;
-    font-size: 80%;
+    color:whitesmoke;
+    font-size: 90%;
+    margin-left: 10%;
+    font-weight: bold;
 
 }
 
 .Appel-Admin-Profil-Img
 {
     width:20%;
+    position: absolute;
+    left:10%;
+}
+.Appel-Admin-Profil-Nom{
+    margin-top:10%;
+    margin-bottom:10%;
+    margin-left:35%;
+    width:60%;
 }
