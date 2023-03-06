@@ -930,8 +930,8 @@ function ListCalendarsEvents($authToken,$type){
         url: api + "/events/?type=" + $type,
         headers: {"authToken":$authToken}, // données dans les entetes 
         data: [],
-        error : function(){
-            console.log("Une erreur s'est produite");
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
         },
         success: function(oRep){
             console.log(oRep); 
