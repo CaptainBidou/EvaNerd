@@ -236,6 +236,10 @@ var JRechercheProfilDivUserNom=$("<p>").addClass("Recherche-Profil-Div-User-Nom"
 var JRechercheProfilDivUserPrenom=$("<p>").addClass("Recherche-Profil-Div-User-Prenom");
 
 
+//variables pour la vue admin des appels
+var JFlecheAdmin=$("<img>").addClass("Fleche-Admin").attr("src","Ressources/Appel/arrow.png").on("click",function(){AfficherAppel();});
+var JAppelAdminDiv=$("<div>").addClass("Appel-Admin-Div");
+
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
@@ -618,6 +622,22 @@ function JCreerConcert(Reponse){
 
 }
 
+
+function JAppelAdmin(Reponse)
+{
+    var JCloneReglageAdmin=$("<img>").attr("src","Ressources/Appel/Reglage.png").addClass("ReglageAdmin").clone(true,true).on("click",function(){
+    var JCloneAppelAdminDiv=JAppelAdminDiv.clone(true,true);    
+        
+        $("#page").empty();
+        JCloneFlecheAdmin=JFlecheAdmin.clone(true,true);
+        $("#page").append([JCloneFlecheAdmin,JCloneAppelAdminDiv]);
+        
+
+    });
+    
+    $("#page").append(JCloneReglageAdmin);
+}
+
 /**
  * 
  * @param {*} Reponse 
@@ -629,6 +649,9 @@ function JCreerConcert(Reponse){
  * 
  */
 function JCreerAppel(Reponse){
+
+    
+    
     var JCloneRepetition=JRepetition.clone(true,true).css("background-color",JCouleur);
 
     JCouleur = JCouleur == "silver" ? "Lightgray" : "silver";
@@ -645,6 +668,10 @@ function JCreerAppel(Reponse){
     // EVENT CLICK
     JCloneRepetition.on("click",function(context){
     //if($(context.target).prev().prop('tagName')=="INPUT" ||$(context.target).prev().prop('tagName')=="TEXTAREA"||$(context.target).prev().prop('tagName')=="LABEL")
+    
+
+    
+    
     if($(context.target).attr("type")=="present")
     {
         
@@ -718,11 +745,11 @@ function JCreerAppel(Reponse){
         JCloneRepetitionAbsent.text("Absente");
     }
 
-
-
+    
+    
     JCloneRepetitionDiv.append(JCloneRepetitionPresent).append(JCloneRepetitionAbsent).append(JCloneRepetitionJustification2).append(JCloneRepetitionEnvoyer).append(JCloneRepetitionRetour);
     JCloneRepetition.append(JCloneRepetitionTitre).append(JCloneRepetitionDate).append(JCloneRepetitionCommentaire).append(JCloneRepetitionDiv);
-
+    
 
 
     $("#page").append(JCloneRepetition);

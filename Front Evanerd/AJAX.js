@@ -943,7 +943,9 @@ function ListCalendarsEvents($authToken,$type){
                 });
             }
             else
-            {
+            {   
+                if(admin==1)
+                { JAppelAdmin( JAppelAdmin);}
                 oRep["events"].forEach(element => {
                     element.titre = element.event;
                     JCreerAppel(element);
@@ -1062,6 +1064,12 @@ function PostEventJustif($eid,$authToken,$present,$justif){
         },
         dataType : "json"
     });
+
+
+
+
+
+
 }
 /* END AGENDAS */
 
