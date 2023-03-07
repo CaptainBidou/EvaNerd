@@ -1778,11 +1778,11 @@ function JAddOptionsCategorie(div,Reponse){
         console.log($(context.target).data("selected"));
         if( $(context.target).data("selected") == "true")
         {
-            $(context.target).css("background-color","silver");
+            //$(context.target).css("background-color","silver");
             $(context.target).data("selected","false");
         }
         else{
-            $(context.target).css("background-color","gray");
+            //$(context.target).css("background-color","gray");
             $(context.target).data("selected","true");
         }
         
@@ -1888,10 +1888,11 @@ function JCreerProfilRecherche(div,Reponse){
 }
 
 function changerCategorie(context){
-
+    $(".Categorie-Option").css("background-color","silver");
     $(".Categorie-Option").attr("selected","false");
+
     console.log(context.target); 
-    $(context.target).attr('selected','selected'); 
+    $(context.target).attr('selected','selected').css("background-color","gray"); 
     $("#dropdownMenuButton").attr("value",$(context.target).text());
     $("#dropdownMenuButton").text($(context.target).text());
 }
@@ -1904,8 +1905,20 @@ div.show();
 
 }
 
-function JAjouterUtilisateurConv(context)
+function JCreerCreerConvSubmit(context)
 {
+if($("Conv-Creer-Titre").val() == "" || $(".Conv-Creer-Membre-Div div").length == 0)
+{return;}
 
+
+
+$(".Conv-Creer-Membre-Div div").each(function(){
+
+    
+
+console.log($(this).data("id-profile"));
+
+
+});
 
 }
