@@ -74,15 +74,15 @@ function postUser($data, $queryString) {
     $newId = getNewUid();
     $dir = DIR_USERS . $newId;
     // on récupère tous les champs obligatoire sinon on renvoie une erreur
-    if($firstName = validString(htmlspecialchars(valider("firstName", $queryString)), 30, 3))
-    if($lastName = validString(htmlspecialchars(valider("lastName", $queryString)), 30, 3))
-    if($mail = isEmail(htmlspecialchars(valider("mail", $queryString))))
+    if($firstName = validString(valider("firstName", $queryString), 30, 3))
+    if($lastName = validString(valider("lastName", $queryString), 30, 3))
+    if($mail = isEmail((valider("mail", $queryString))))
     if($tel = isPhoneNumber(valider("tel", $queryString)))
-    if($plainPassword = validString(valider("password", $queryString), 70, 5))
+    if($plainPassword = validString(valider("password", $queryString), 70, 5, false))
     if($age = intval(valider("age", $queryString))) {
         if(phoneToUid($tel) !== false) sendError("Il y a déjà un compte avec ce numéro de téléphone !", HTTP_FORBIDDEN);
         // Récupérations des champs optionnels 
-        ($studies = validString(htmlspecialchars(valider("studies", $queryString)), 50, 0)) ? : $studies = "";
+        ($studies = validString((valider("studies", $queryString)), 50, 0)) ? : $studies = "";
         ($sex = isSex(valider("sex", $queryString))) ? : $sex = 0;
         // On hash le mot de passe avec l'algo bcrypt2 et avec un cout de 10
         $password = password_hash($plainPassword, PASSWORD_BCRYPT, ["cost"=>10]);
@@ -181,11 +181,11 @@ function putUser($data, $idTabs, $authKey,$queryString) {
             sendError("Vous n'avez pas la permissions !", HTTP_UNAUTHORIZED);
 
         // Récupération et validation des infos :
-        $mail = isEmail(htmlspecialchars(valider("mail", $queryString)));
+        $mail = isEmail((valider("mail", $queryString)));
         $tel = isPhoneNumber(valider("tel", $queryString));
         $plainPassword = validString(valider("password", $queryString), 70, 5);
         $age = intval(valider("age", $queryString));
-        $studies = validString(htmlspecialchars(valider("studies", $queryString)), 50, 0);
+        $studies = validString((valider("studies", $queryString)), 50, 0);
         // Vérification que le numéro de téléphone n'est pas déjà utilisé
         if(phoneToUid($tel) !== false) sendError("Il y a déjà un compte avec ce numéro de téléphone !", HTTP_FORBIDDEN);
         // On hash le mot de passe avec l'algo bcrypt2 et avec un cout de 10
@@ -332,7 +332,7 @@ function putRoles($data, $idTabs, $authKey, $queryString) {
     $roleAModif = $idTabs[0];
     if (!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
     (($active = valider("active", $queryString)) !== false) ?: $active = null;
-    ($label = htmlspecialchars(valider("label", $queryString))) != "" ?: $label = null;
+    ($label = (valider("label", $queryString))) != "" ?: $label = null;
     if ($active === null && $label === null) sendError("Il faut modifier au moins 1 paramètre", HTTP_BAD_REQUEST);
     if (updateRole($roleAModif, $label, $active)) {
         $data["role"] = selectRole($roleAModif)[0];
@@ -354,7 +354,7 @@ function postRole($data, $authKey, $queryString) {
     $admin = searchRole("Membre du CA", selectUserRoles($uidConn));
     if(!$admin) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
     $active = valider("active", $queryString) ? 1 : 0;
-    if($label = validString(htmlspecialchars(valider("label", $queryString)), 50, 1)) {
+    if($label = validString((valider("label", $queryString)), 50, 1, true)) {
         $rid = insertRole($label, $active);
         $data["role"] = selectRole($rid)[0];
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
@@ -378,7 +378,7 @@ function putInstruments($data, $idTabs, $authKey, $queryString) {
     $rolesConn = selectUserRoles($uidConn);
     $instrument = $idTabs[0];
     if(!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
-    if($label = htmlspecialchars(valider("label", $queryString))) {
+    if($label = (valider("label", $queryString))) {
             if(updateInstruments($instrument,$label)) {
                 $data["instrument"] = array("id" => $instrument, "label" => $label);
                 sendResponse($data, [getStatusHeader(201)]);
@@ -394,7 +394,7 @@ function postInstruments($data, $authKey, $queryString) {
         $rolesConn = selectUserRoles($uidConn);
         if(!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
 
-        if($label = htmlspecialchars(valider("label", $queryString))) {
+        if($label = (valider("label", $queryString))) {
             $data["instrument"] = array("id" => insertInstruments($label), "label" => $label);
             sendResponse($data, [getStatusHeader(201)]);
         }
@@ -421,7 +421,7 @@ function putAchievements($data, $idTabs, $authKey, $queryString) {
     $aid = $idTabs[0];
     $rolesConn = selectUserRoles($uidConn);
     if (!searchRole("Membre du CA", $rolesConn)) sendError("Vous ne pouvez pas effectuer cette action !", HTTP_FORBIDDEN);
-    if ($label = htmlspecialchars(valider("label", $queryString))) {
+    if ($label = (valider("label", $queryString))) {
         if (updateAchievements($aid, $label)) {
             $data["achievements"] = array("id" => insertInstruments($label), "label" => $label);
             sendResponse($data, [getStatusHeader(201)]);
@@ -505,7 +505,7 @@ function postMessagesGroups($data, $idTabs, $authKey, $queryString) {
     $uidConn = authToId($authKey);
     if ($uidConn === false) sendError("Token invalide !", HTTP_UNAUTHORIZED);
     if (!isInGroup($uidConn, $gid) && !haveGroupPermission($uidConn, $gid)) sendError("Vous devez être dans le groupe pour pouvoir envoyer un message", HTTP_BAD_REQUEST);
-    if ($message = validString(htmlspecialchars(valider("content", $queryString)), 300, 1)) {
+    if ($message = validString(valider("content", $queryString), 300, 1)) {
         $answerTo = valider("answerTo", $queryString);
         selectGroupMessage($answerTo, $gid) ?: $answerTo = null;
         $mid = insertGroupMessage($uidConn, $gid, $message, $answerTo);
@@ -613,7 +613,7 @@ function postAgenda($data, $queryString, $authKey) {
     if(!$authKey) sendError("Vous être identifié !", HTTP_UNAUTHORIZED);
     $uidConn = validUser(authToId($authKey));
     //TODO : faire les permissions
-    if ($title = validString(htmlspecialchars(valider("title", $queryString)), 30, 1))
+    if ($title = validString((valider("title", $queryString)), 30, 1, true))
         if ($extra = valider("type", $queryString)) {
             $extra = ($extra == "intra") ? 0 : 1;
             $aid = insertAgenda($title, $extra, $uidConn);
@@ -635,10 +635,10 @@ function postAgendasEvent($data, $idTabs, $queryString, $authKey) {
     validUser(authToId($authKey));
     $aid = $idTabs[0];
     if(!selectAgenda($aid)) sendError("Cet agenda n'existe pas !", HTTP_BAD_REQUEST);
-    if($event = validString(htmlspecialchars(valider("event", $queryString)), 30, 1))
+    if($event = validString(valider("event", $queryString), 30, 1, true))
     if($start = validDate(valider("start", $queryString)))
     if($end = validDate(valider("end", $queryString))) 
-    if($desc = validString(htmlspecialchars(valider("description", $queryString)), 150, 0)) {
+    if($desc = validString((valider("description", $queryString)), 150, 0)) {
         $eid = insertEvent($aid, $event, $desc, $start, $end);
         $data["event"] = ["id" => $eid, "event" => $event, "description"=>$desc, "start" => $start, "end" => $end];
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
@@ -793,7 +793,7 @@ function postEventParticipations($data, $idTabs, $queryString, $authKey) {
     if (!$event) sendError("Vous ne pouvez répondre à cette événement !", HTTP_FORBIDDEN);
     if (selectParticipations($eid, $uidConn)) sendError("Vous avez déjà répondu !", HTTP_FORBIDDEN);
     $participation = validString(valider("participation", $queryString), 1, 1);
-    if ($participation != "y" && $participation != "n" && $participation != "j")
+    if ($participation != "y" && $participation != "n" && $participation != "m")
         $participation = "n";
     insertParticipation($uidConn, $eid, $participation);
     $data["participation"] = ["uid" => $uidConn, "participation" => $participation, "eid" => $eid];
@@ -810,7 +810,7 @@ function postEventCalls($data, $idTabs, $queryString, $authKey) {
     if (!$event[0]["read"]) sendError("Vous n'avez pas les permissions !", HTTP_FORBIDDEN);
     if (selectCallMembers($eid, $uidConn)) sendError("Vous avez déjà répondu !", HTTP_FORBIDDEN);
     if (($present = intval(valider("present", $queryString))) !== false) {
-        $reason_desc = validString(htmlspecialchars(valider("reason")), 180, 0);
+        $reason_desc = validString(valider("reason"), 180, 0, true);
         if (!$present && !$reason_desc) sendError("Motif obligateur en cas d'absence !", HTTP_FORBIDDEN);
         if ($present) $reason_desc = null;
         insertCall($uidConn, $eid, $present, $reason_desc);
@@ -853,7 +853,7 @@ function listEventCalls($data, $idTabs, $authKey) {
     $data["calls"] = array();
     $callsData = selectCallMembers($eid);
     foreach ($callsData as $calls) {
-        $data["calls"][$i]["user"] = array("uid" => $calls["uid"], "firstName" => $calls["firstName"], "lastName" => $calls["lastName"]);
+        $data["calls"][$i]["user"] = array("uid" => $calls["uid"], "firstName" => $calls["firstName"], "lastName" => $calls["lastName"], "photo" => $calls["photo"]);
         $data["calls"][$i]["present"] = $calls["present"];
         if (!$calls["present"]) {
             $data["calls"][$i]["reason_desc"] = $calls["reason_desc"];
@@ -868,8 +868,10 @@ function listEvents($data, $queryString, $authKey) {
     if(!$authKey) sendError("Vous devez vous identifier", HTTP_UNAUTHORIZED);
     $uidConn = validUser(authToId($authKey));
     $type = valider("type", $queryString);
+    $all = valider("all", $queryString);
+    $all = $all ? true : false;
     if(!$type) $type = "extra";
-    $agendaEvents = selectEvents($uidConn, $type);
+    $agendaEvents = selectEvents($uidConn, $type, $all);
     $data["events"] = $agendaEvents;
     sendResponse($data, [getStatusHeader()]);
 }
@@ -891,7 +893,7 @@ function postPostMessage($data, $idTabs, $authKey, $queryString) {
     $notAMember = searchRole("Non Membre", selectUserRoles($uidConn));
     if(!selectPost($pid, $notAMember)) sendError("Impossible de commenter ce post !", HTTP_FORBIDDEN);
     
-    if($message = validString(htmlspecialchars(valider("content", $queryString)), 180, 0)) {
+    if($message = validString(valider("content", $queryString), 180, 0, true)) {
         $answerTo = valider("answerTo", $queryString);
         selectPostMessage($answerTo, $pid) ? : $answerTo = null;
         $mid = insertPostMessage($pid, $uidConn, $message, $answerTo);

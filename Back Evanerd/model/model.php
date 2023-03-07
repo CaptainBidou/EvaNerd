@@ -519,6 +519,7 @@ function selectPosts($notAMember, $uid){
     $whereStm = " WHERE Posts.visible = 1";
 
     if($notAMember) $sql .= $whereStm;
+    $sql .= " ORDER BY Posts.pinned DESC, Posts.id DESC";
 
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
@@ -585,23 +586,37 @@ function selectCalendar($uid, $aid = null, $type = "intra"){
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
 
-function selectEvents($uid, $type){
+function selectEvents($uid, $type, $all = false){
     //TODO : params pour afficher seulement les events en cours
     $db = Config::getDatabase();
     $type = $type == "extra" ? 1 : 0;
     $params = [$uid];
+    $dateCondition = " AND Agenda_Events.endDate >=  NOW()";
+    $noAnswerCondition = " AND Agenda_Event_Calls.present IS NULL";
+    $leftJoin = "LEFT JOIN Agenda_Event_Calls ON Agenda_Event_Calls.aeid = Agenda_Events.id AND Agenda_Event_Calls.uid = ?";
+    if($all && $type == 0) {
+        $noAnswerCondition = "";
+        $leftJoin = "";
+        array_pop($params);
+
+    }
     if($type == 0) {
         $sql = "SELECT DISTINCT Agenda_Events.*
                 FROM Agenda_Events
                 JOIN Agendas ON Agendas.id = Agenda_Events.aid JOIN Agenda_Perms ON Agenda_Events.aid = Agenda_Perms.aid
                 JOIN User_Roles ON User_Roles.rid = Agenda_Perms.rid
-                WHERE Agendas.extra = 0 AND Agenda_Perms.read = 1 AND User_Roles.uid = ?;";
+                $leftJoin
+                WHERE Agendas.extra = 0 AND Agenda_Perms.read = 1 AND User_Roles.uid = ? $dateCondition $noAnswerCondition
+                ORDER BY Agenda_Events.startDate ASC;";
+        
+        array_push($params, $uid);
     }
     else {
         $sql = "SELECT Agenda_Events.*, User_Participations.participation AS voted FROM Agenda_Events
                 JOIN Agendas ON Agendas.id = Agenda_Events.aid
-                LEFT JOIN User_Participations ON User_Participations.aeid = Agenda_Events.id AND User_Participations.uid = ?;
-                ";
+                LEFT JOIN User_Participations ON User_Participations.aeid = Agenda_Events.id AND User_Participations.uid = ?
+                WHERE Agendas.extra = 1 AND Agenda_Events.endDate >= NOW()
+                ORDER BY Agenda_Events.startDate ASC;";
     }
     return Database::parcoursRs(($db->SQLSelect($sql, $params)));
 }
@@ -741,8 +756,7 @@ function selectEvent($eid, $type, $uid = null) {
     if($type == "extra") {
         $sql = "SELECT Agenda_Events.*
         FROM Agenda_Events JOIN Agendas ON Agendas.id = Agenda_Events.aid
-        WHERE Agenda_Events.id = ? AND Agendas.extra = 1 
-            AND DATE(Agenda_Events.endDate) >= DATE(CURRENT_DATE);";
+        WHERE Agenda_Events.id = ? AND Agendas.extra = 1;";
         
     }
     else {
@@ -753,8 +767,7 @@ function selectEvent($eid, $type, $uid = null) {
         $sql = "SELECT DISTINCT Agenda_Events.*, MAX(Agenda_Perms.read) AS `read`, MAX(Agenda_Perms.write) AS `write`
                 FROM Agenda_Events JOIN Agendas ON Agendas.id = Agenda_Events.aid
                 JOIN Agenda_Perms ON Agenda_Perms.aid = Agendas.id JOIN User_Roles ON User_Roles.rid = Agenda_Perms.rid
-                WHERE Agenda_Events.id = ? AND Agendas.extra = 0 
-                AND DATE(Agenda_Events.endDate) >= DATE(CURRENT_DATE) $sqlUid;";
+                WHERE Agenda_Events.id = ? AND Agendas.extra = 0 $sqlUid;";
     }
     return Database::parcoursRs($db->SQLSelect($sql, $params));
 }

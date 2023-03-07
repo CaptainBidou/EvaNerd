@@ -61,7 +61,7 @@ function valider($nom,$type="REQUEST") {
 	{
 		case 'REQUEST': 
 		if(isset($_REQUEST[$nom]) && !($_REQUEST[$nom] == "")) 	
-			return proteger($_REQUEST[$nom]); 	
+			return $_REQUEST[$nom]; 	
 		break;
 		case 'GET': 	
 		if(isset($_GET[$nom]) && !($_GET[$nom] == "")) 			
@@ -274,9 +274,10 @@ function uploadImage($filename, $imageData) {
  * @param int $min taille minimale de la chaine
  * @param string|false renvoie la chaine ou false
  */
-function validString($string, $max, $min = 0) {
+function validString($string, $max, $min = 0, $html = false) {
 	//TODO : vérifier si $string est une chaine
-	$lenght = strlen($string); 
+	$lenght = strlen($string);
+	if($html) $string = htmlspecialchars($string, ENT_HTML5 | ENT_QUOTES, 'UTF-8', false);
 	if($lenght <= $max && $lenght >= $min) return $string;
 	
 	return false;
