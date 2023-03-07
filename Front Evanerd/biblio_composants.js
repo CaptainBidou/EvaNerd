@@ -42,7 +42,7 @@ var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon"
 var JHeaderTag=$("<button>").addClass(["btn btn-danger dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie").attr("id","dropdownMenuButton").attr("data-toggle","dropdown").attr("aria-haspopup","true").attr("aria-expanded","false").on("click",function(context){RolesMenu(context.target);});
 var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu').attr("aria-labelledby","dropdownMenuButton");
 var JHeaderItem=$("<a>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").data("type",'header_item').attr("href","#");
-var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher").on("keyup",function(context){if($(".header-search").val()==""){$(".Recherche-Profil").empty().hide();return;}ListUser($(".header-search").val(), $(".Categorie-Option").data());});
+var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher").on("keyup",function(context){if($(".header-search").val()==""){$(".Recherche-Profil").empty().hide();return;}ListUser($(".header-search").val(), $(".Categorie-Option:selected").data("id"));});
 
 //variables pour les Convs
 var JConv =$("<nav>").addClass("navbar conversation").data("type","conv").on("click",function(context){JRecupMessages(context);});//TODO ICI TU APPELLE TA FONCTION
@@ -235,7 +235,7 @@ var JGreetingsParagraphe=$("<p>").addClass("Greetings-Paragraphe");
 //variable pour les categories
 var JCategorie=$("<div>").addClass("Categorie");
 var JCategorieSelect=$("<select>").addClass("Categorie-Select");
-var JCategorieOption=$("<option>").addClass("Categorie-Option");
+var JCategorieOption=$("<option>").addClass("Categorie-Option").on("click",changerCategorie);
 
 
 //variables pour la création de conv
@@ -1760,6 +1760,7 @@ function JAddOptionsCategorie(div,Reponse){
 
 
     JCloneCategorieOption.text(Reponse.label);
+    JCloneCategorieOption.data(Reponse);
     div.append(JCloneCategorieOption).on("click",function(){JClickHeaderMenu(null);});
 
 }
@@ -1845,4 +1846,13 @@ function JCreerProfilRecherche(Reponse){
     $(".Recherche-Profil").append(JCloneRechercheProfilDivUser);
 
 
+}
+
+function changerCategorie(context){
+
+    $(".Categorie-Option").attr("selected","false");
+    console.log(context.target); 
+    $(context.target).attr('selected','selected'); 
+    $("#dropdownMenuButton").attr("value",$(context.target).text());
+    $("#dropdownMenuButton").text($(context.target).text());
 }

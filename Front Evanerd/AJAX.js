@@ -1160,7 +1160,10 @@ function AddUserParticipation($id,$partcipe){
 function ListUser($name,$idRole)
 {
     console.log($idRole);
-    
+    if($idRole == undefined){
+        $idRole = "";
+    }
+
     $.ajax({
         type: "GET",
         url: api + "/users?name="+$name+"&idRole="+$idRole,
