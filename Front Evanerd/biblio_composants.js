@@ -183,18 +183,20 @@ var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 var JCréationCompte = $("<div>").addClass("divFormCréationCompte");
 var JCréationCompteAge=$("<input>").addClass("form-control ").attr("placeholder","Age").attr("id","age").attr("type","number");
 var JCréationCompteTelephone=$("<input>").addClass("form-control ").attr("placeholder","Téléphone").attr("id","tel").attr("type","number");
-var JCréationComptePwd=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Mot de passe").attr("id","pwd").attr("type","password");
+var JCréationComptePwd=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Mot de passe").attr("type","password");
 var JCréationCompteSubmit=$("<button>").addClass("btn btn-danger").html("C'est parti !").on("click",function(){CreationCompte();});
 var JCréationCompteP=$("<p>").addClass("Connexion-p");
 var JCréationCompteTitre=$("<h1>").addClass("Connexion-titre");
 var JCréationCompteNom=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Nom").attr("id","Nom");
 var JCréationComptePrenom=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Prénom").attr("id","Prénom");
-var JCréationCompteEtude=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Mes Etude").attr("id","Etudes");
+var JCréationCompteEtude=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Mes Etudes").attr("id","Etudes");
 var JCréationCompteMail=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","ex: JohnSmith@gmail.com").attr("id","Mail");
 var JCréationCompteInstruments=$("<select>").addClass("select").addClass("form-control ").attr("placeholder","Instruments").attr("id","Instrument");
 var JCréationCompteGenre = $("<input>").attr("type","radio").attr("id","genre").addClass("genre");
 var JCréationCompteLabelGenre = $("<label>").addClass("labelCréationGenre");
-var JCréationCompteDivGenre = $("<div>").addClass("divGenre")
+var JCréationCompteDiv = $("<div>").addClass("divCréaCompte");
+
+var JCréationComptePrevious = $("<button>").addClass("button-Prev").attr("id","previous").on("click",function(){ $("#page").html(""); ConnexionAuto(); })
 
 //VARIABLES pour les comms des posts
 var JCommentaires = $("<div>").addClass("commentaires");
@@ -1372,10 +1374,10 @@ function JCreerInscription(){
     var JCloneTelephone= JCréationCompteTelephone.clone(true,true);
     
     var JCloneLegendPwd=JCréationCompteP.clone(true,true).text("Mot de Passe");
-    var JClonePwd=JCréationComptePwd.clone(true,true);
+    var JClonePwd=JCréationComptePwd.clone(true,true).attr("id","mdp1");
 
     var JCloneLegendPwdConf=JCréationCompteP.clone(true,true).text("Confirmer votre mot de passe");
-    var JClonePwdConf=JCréationComptePwd.clone(true,true).text("Confirmation du mot de passe");
+    var JClonePwdConf=JCréationComptePwd.clone(true,true).text("Confirmation du mot de passe").attr("id","mdp2");
 
     var JCloneLegendGenre=JCréationCompteP.clone(true,true).text("Votre Genre");
     var JCloneHomme = JCréationCompteGenre.clone(true,true).attr("value","Homme").attr("id","Homme").data("genre","Homme");
@@ -1384,13 +1386,21 @@ function JCreerInscription(){
     var JCloneLabelHomme = JCréationCompteLabelGenre.clone(true,true).attr("for","Homme").text("Homme");
     var JCloneLabelFemme = JCréationCompteLabelGenre.clone(true,true).attr("for","Femme").text("Femme");
     var JCloneLabelNeutre = JCréationCompteLabelGenre.clone(true,true).attr("for","Neutre").text("Neutre");
-    var JClone1DivGenre = JCréationCompteDivGenre.clone(true,true);
-    var JClone2DivGenre = JCréationCompteDivGenre.clone(true,true);
-    var JClone3DivGenre = JCréationCompteDivGenre.clone(true,true);
+    
+    var JClone1DivGenre = JCréationCompteDiv.clone(true,true).addClass("divgenre");
+    var JClone2DivGenre = JCréationCompteDiv.clone(true,true).addClass("divgenre");
+    var JClone3DivGenre = JCréationCompteDiv.clone(true,true).addClass("divgenre");
+
+    var JClonePrevious = JCréationComptePrevious.clone(true,true).text("Revenir au formulaire de Connexion");
+
+    var JCloneDivButton = JCréationCompteDiv.clone(true,true)
 
     JClone1DivGenre.append([JCloneHomme,JCloneLabelHomme])
     JClone2DivGenre.append([JCloneFemme,JCloneLabelFemme])
-    JClone2DivGenre.append([JCloneNeutre,JCloneLabelNeutre])
+    JClone3DivGenre.append([JCloneNeutre,JCloneLabelNeutre]);
+
+
+    JCloneDivButton.append([JClonePrevious])
 
     JCloneCréationCompte.append([JCloneTitre,
         JCloneLegendNom,
@@ -1414,7 +1424,8 @@ function JCreerInscription(){
         JCloneLegendGenre,
         JClone1DivGenre,
         JClone2DivGenre,
-        JClone1DivGenre
+        JClone3DivGenre,
+        JCloneDivButton
     ]);
     $("#page").append(JCloneCréationCompte);
 }
