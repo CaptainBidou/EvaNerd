@@ -683,12 +683,19 @@ function JAppelAdmin(Reponse)
  * 
  */
 function JCreerProfileAppel(Reponse,present,reason,eventid){
+    console.log(Reponse);
     var comm="";
     if(present==1){present="lightgreen";}
 if(present==0){present="red";comm=reason;}
-    var JCloneAppelAdminProfil=JAppelAdminProfil.clone(true,true).css("background-color",present).data("statut",present).data("id_event",eventid).on("click",function(){
+    var JCloneAppelAdminProfil=JAppelAdminProfil.clone(true,true).css("background-color",present).data("statut",present).data("id_event",eventid).data("id",Reponse.uid).on("click",function(){
         if( $(this).data("statut")=="lightgreen" ){
             $(this).css("background-color","red");
+            console.log($(this).data("id_event"));
+            console.log($(this).data("id"));
+            ChangerUserPresence($(this).data("id"),$(this).data("id_event"));
+            var JCloneAppelAdminProfilCommentaire=JAppelAdminProfilCommentaire.clone(true,true).text("Motif non renseigné");
+            $(this).append(JCloneAppelAdminProfilCommentaire);
+            $(this).data("statut","red");
             //todo envoyer la requete 
         }
 

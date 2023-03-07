@@ -1190,5 +1190,21 @@ function ListUser($div,$name,$idRole)
 }
 
 
+//PUT /users/ID/events/ID/calls 
 
-
+function ChangerUserPresence($uid,$aid){
+    var reason = "motif non renseigné";
+    $.ajax({
+        type: "PUT",
+        url: api + "/users/"+$uid+"/events/"+$aid+"/calls?present=0&reason="+reason,
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [],
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
+        },
+        success: function(oRep){
+            console.log(oRep); 
+        },
+        dataType: "json"
+    }); 
+}
