@@ -459,6 +459,33 @@ margin-right: 5%;
     
 }
 
+
+.divFormCréationCompte
+{
+    margin-top: 10%;
+    background-color: red;
+    height:80%;
+    padding:5%;
+    width:80%;
+    /*box-shadow: 0px 4px 10px darkred;*/
+    box-shadow: 0px 2px 10px rgb(78, 78, 78);
+    /*border-radius: 20px;*/
+    margin-left:10%;
+    margin-top:5%;
+    color:black;
+    
+}
+
+.Connexion-link
+{
+    display: block;
+    padding-bottom:5%;
+    color: whitesmoke;
+    font-size: 200%;
+    text-decoration: underline;
+    cursor: pointer;
+    
+}
 .Connexion-phone,.Connexion-Pwd
 {
     height:10%;
