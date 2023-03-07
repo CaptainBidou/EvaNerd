@@ -191,8 +191,10 @@ var JCréationCompteNom=$("<input>").addClass("text").addClass("form-control ").
 var JCréationComptePrenom=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Prénom").attr("id","Prénom");
 var JCréationCompteEtude=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Mes Etude").attr("id","Etudes");
 var JCréationCompteMail=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","ex: JohnSmith@gmail.com").attr("id","Mail");
-var JCréationCompteInstruments=$("<select>").addClass("select").addClass("form-control ").attr("placeholder","Etude").attr("id","Etudes");
-
+var JCréationCompteInstruments=$("<select>").addClass("select").addClass("form-control ").attr("placeholder","Instruments").attr("id","Instrument");
+var JCréationCompteGenre = $("<input>").attr("type","radio").attr("id","genre").addClass("genre");
+var JCréationCompteLabelGenre = $("<label>").addClass("labelCréationGenre");
+var JCréationCompteDivGenre = $("<div>").addClass("divGenre")
 
 //VARIABLES pour les comms des posts
 var JCommentaires = $("<div>").addClass("commentaires");
@@ -1352,7 +1354,9 @@ function JCreerInscription(){
 
     var JCloneCréationCompte = JCréationCompte.clone(true,true);
     var JCloneTitre = JCréationCompteTitre.clone(true,true).text("Inscrivez-vous");
-    
+
+    var JCloneLegendMail=JCréationCompteP.clone(true,true).text("Votre Adresse Mail");
+    var JCloneMail = JCréationCompteMail.clone(true,true);
 
     var JCloneCréationCompte = JCréationCompte.clone(true,true);
     var JCloneTitre = JCréationCompteTitre.clone(true,true).text("Inscrivez-vous");
@@ -1363,16 +1367,23 @@ function JCreerInscription(){
     var JCloneLegendPwd=JCréationCompteP.clone(true,true).text("Mot de Passe");
     var JClonePwd=JCréationComptePwd.clone(true,true);
 
-    var JCloneLegendPwd=JCréationCompteP.clone(true,true).text("Confirmer votre mot de passe");
-    var JClonePwd=JCréationComptePwd.clone(true,true).text("Confirmation du mot de passe");
+    var JCloneLegendPwdConf=JCréationCompteP.clone(true,true).text("Confirmer votre mot de passe");
+    var JClonePwdConf=JCréationComptePwd.clone(true,true).text("Confirmation du mot de passe");
 
+    var JCloneLegendGenre=JCréationCompteP.clone(true,true).text("Votre Genre");
+    var JCloneHomme = JCréationCompteGenre.clone(true,true).attr("value","Homme").attr("id","Homme").data("genre","Homme");
+    var JCloneFemme = JCréationCompteGenre.clone(true,true).attr("value","Femme").attr("id","Femme").data("genre","Femme");
+    var JCloneNeutre = JCréationCompteGenre.clone(true,true).attr("value","Neutre").attr("id","Neutre").data("genre","Neutre");
+    var JCloneLabelHomme = JCréationCompteLabelGenre.clone(true,true).attr("for","Homme").text("Homme");
+    var JCloneLabelFemme = JCréationCompteLabelGenre.clone(true,true).attr("for","Femme").text("Femme");
+    var JCloneLabelNeutre = JCréationCompteLabelGenre.clone(true,true).attr("for","Neutre").text("Neutre");
+    var JClone1DivGenre = JCréationCompteDivGenre.clone(true,true);
+    var JClone2DivGenre = JCréationCompteDivGenre.clone(true,true);
+    var JClone3DivGenre = JCréationCompteDivGenre.clone(true,true);
 
-
-
-
-
-
-
+    JClone1DivGenre.append([JCloneHomme,JCloneLabelHomme])
+    JClone2DivGenre.append([JCloneFemme,JCloneLabelFemme])
+    JClone2DivGenre.append([JCloneNeutre,JCloneLabelNeutre])
 
     JCloneCréationCompte.append([JCloneTitre,
         JCloneLegendNom,
@@ -1381,12 +1392,23 @@ function JCreerInscription(){
         JClonePrénom,
         JCloneLegendAge,
         JCloneAge,
+        JCloneLegendEtudes,
+        JCloneEtudes,
+        JCloneLegendInstruments,
+        JCloneInstruments,
         JCloneLegendTel,
         JCloneTelephone,
-
+        JCloneLegendMail,
+        JCloneMail,
         JCloneLegendPwd,
         JClonePwd,
-    ])
+        JCloneLegendPwdConf,
+        JClonePwdConf,
+        JCloneLegendGenre,
+        JClone1DivGenre,
+        JClone2DivGenre,
+        JClone1DivGenre
+    ]);
     $("#page").append(JCloneCréationCompte);
 }
 

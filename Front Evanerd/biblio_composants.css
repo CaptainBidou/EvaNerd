@@ -91,7 +91,7 @@
 .header-tag {
     background: darkred;
     height: 50%;
-    width: 20%;
+    width: 30%;
     font-size: 200%;
 }
 
@@ -466,14 +466,34 @@ margin-right: 5%;
     background-color: red;
     height:80%;
     padding:5%;
-    width:80%;
+    width:96%;
+    font-size: 110%;
     /*box-shadow: 0px 4px 10px darkred;*/
     box-shadow: 0px 2px 10px rgb(78, 78, 78);
     /*border-radius: 20px;*/
-    margin-left:10%;
+    margin-left : 2%;
+    margin-right : 2%;
     margin-top:5%;
     color:black;
     
+}
+
+.labelCréationGenre
+{
+}
+
+.labelCréationGenre
+{
+    size: 1000%;
+}
+
+.divgenre
+{
+    display: inline;
+    align-items:baseline;
+    font-size: 200%;
+    margin-left: 5%;
+    margin-right: 5%; 
 }
 
 .Connexion-link
@@ -927,16 +947,14 @@ margin-top:5%;
 
 .Categorie-Option
 {
-font-size: 200%;
-background-color: silver;
-border-radius: 10px;
-padding:5%;
-margin-top:5%;
-margin-top:5%;
-text-align: center;
-box-shadow: black 0px 0px 10px;
-
-
+    font-size: 190%;
+    background-color: silver;
+    border-radius: 10px;
+    padding:5%;
+    margin-top:5%;
+    margin-top:5%;
+    text-align: center;
+    box-shadow: black 0px 0px 10px;
 }
 
 

@@ -267,11 +267,14 @@ function AddserAchievement($aid){
     });   
 }
 
-/** Requête permettant de vérifier le mail */
-function VerifMail(){
+/**
+ * Donne un token de vérification. Renvoie soit l'User soit une erreur. 
+ * Passe l'activation du compte à 1.
+ */
+function VerifMail($token){
     $.ajax({
         type: "POST",
-        url: api + "/users/verify",
+        url: api + "/users/verify?token="+$token,
         headers: {"authToken":""}, // données dans les entetes 
         data: [],
         error : function(){
@@ -1184,10 +1187,6 @@ function ListUser($div,$name,$idRole)
         },
         dataType: "json"
     }); 
-
-
-
-
 }
 
 
