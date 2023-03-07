@@ -980,6 +980,9 @@ box-shadow: 10px 10px 10px gray;
     margin-right:5%;
     margin-top: 5%;
     margin-bottom: 5%;
+    overflow-y: scroll;
+    scrollbar-color: rebeccapurple green;
+    scroll-padding: 2%;
 
 }
 
@@ -1024,14 +1027,18 @@ margin-bottom: 7%;
 position:fixed;
 width:34.5%;
 background-color: darkgray;
+border-radius: 2%;
 top:7%;
-right:21.5%;
+right:20.3%;
 padding: 2%;
 }
 
 .Recherche-Profil-Div-User-Img
-{
-    width:25%;
+{   
+    
+    width:20%;
+    margin-bottom: auto;
+    margin-top: auto;
     float:left;
 }
 
@@ -1045,9 +1052,10 @@ font-size: 300%;
 .Recherche-Profil-Div-User
 {
     background-color: lightGray;
-    margin-top:1%;
+    margin-top:5%;
     border-radius: 5%;
     box-shadow: black 0px 0px 10px;
+    height:20%;
 }
 
 .ReglageAdmin
@@ -1112,4 +1120,58 @@ box-shadow: gray 10px 10px 10px;*/
 .divFormPostCheckBox 
 {
     height:6%;
+}
+
+
+
+
+.Conv-Creer-Titre
+{
+font-size: 180%;
+border-radius: 2%;
+}
+
+.Conv-Creer-Membre
+{
+    font-size:160%;
+    margin-bottom: 0%;
+    margin-left:5%;
+}
+
+.Conv-Creer-Membre-Div
+{
+    padding:2%;
+    border-radius: 2%;
+    background-color: lightgray;
+    margin-bottom: 2%;
+    margin-top: 0%;
+    margin-left:5%;
+    width:74.6%;
+    font-size: 50%;
+    box-shadow: black 0px 0px 10px;
+    overflow-y: scroll;
+scrollbar-color: rebeccapurple green;
+height:50%;
+}
+.ConvCreerTag
+{
+    font-size: 150%;
+    margin-left: 5%;
+    margin-bottom: 2%;
+    margin-top: 2%;
+}
+.Conv-Creer-Membre-Liste
+{
+    padding:2%;
+    border-radius: 2%;
+    background-color: lightgray;
+    margin-bottom: 2%;
+    margin-top: 0%;
+    margin-left:5%;
+    width:74.6%;
+    font-size: 50%;
+    box-shadow: black 0px 0px 10px;
+    overflow-y: scroll;
+scrollbar-color: rebeccapurple green;
+height:50%;  
 }

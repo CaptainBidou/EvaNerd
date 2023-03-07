@@ -42,7 +42,7 @@ var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon"
 var JHeaderTag=$("<button>").addClass(["btn btn-danger dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie").attr("id","dropdownMenuButton").attr("data-toggle","dropdown").attr("aria-haspopup","true").attr("aria-expanded","false").on("click",function(context){RolesMenu(context.target);});
 var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu').attr("aria-labelledby","dropdownMenuButton");
 var JHeaderItem=$("<a>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").data("type",'header_item').attr("href","#");
-var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher").on("keyup",function(context){if($(".header-search").val()==""){$(".Recherche-Profil").empty().hide();return;}ListUser($(".header-search").val(), $(".Categorie-Option:selected").data("id"));});
+var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher").on("keyup",function(context){if($(".header-search").val()==""){$(".Recherche-Profil").empty().hide();return;}ListUser($(".Recherche-Profil"),$(".header-search").val(), $(".Categorie-Option:selected").data("id"));});
 
 //variables pour les Convs
 var JConv =$("<nav>").addClass("navbar conversation").data("type","conv").on("click",function(context){JRecupMessages(context);});//TODO ICI TU APPELLE TA FONCTION
@@ -246,10 +246,11 @@ var JCreerConvImg=$("<img>").addClass(["Creer-Conv-Img","rounded-circle"]).attr(
 var JConvCreer = $("<div>").addClass("Conv-Creer");
 var JConvCreerTitreTitre=$("<h3>").addClass("Conv-Creer-Titre-Titre").html("Création de conversation");
 var JConvCreerTitre=$("<input>").attr("type","text").addClass("Conv-Creer-Titre").attr("placeholder","Titre de la conversation");
-var JConvCreerMembre=$("<input>").attr("type","text").addClass("Conv-Creer-Membre").attr("placeholder","Membre de la conversation");
+var JConvCreerMembre=$("<input>").attr("type","text").addClass("Conv-Creer-Membre").attr("placeholder","Membre de la conversation").on("keyup",function(context){if($(".Conv-Creer-Membre").val()==""){$(".Conv-Creer-Membre-Liste").hide().empty();return;}ListUser($(".Conv-Creer-Membre-Liste"),$(".Conv-Creer-Membre").val());});;
 var JConvCreerMembreSubmit=$("<button>").addClass("btn btn-danger Conv-Creer-Submit-Membre").html("Ajouter un membre").on("click",function(context){JAjouterUtilisateurConv($(this))});
 var JConvCreerSubmit=$("<button>").addClass("btn btn-danger Conv-Creer-Submit").html("Créer la conversation").on("click",function(context){JCreerCreerConvSubmit($(this))});
-
+var JConvCreerMembreDiv=$("<div>").addClass("Conv-Creer-Membre-Div");
+var JConvCreerMembreListe=$("<div>").addClass("Conv-Creer-Membre-Liste").data("div","liste");
 //variables pour la recherche de profil
 var JRechercheProfil=$("<div>").addClass("Recherche-Profil");
 
@@ -1820,11 +1821,12 @@ function JCreerEventPublier(target){
         var JCloneConvCreerTitreTitre=JConvCreerTitreTitre.clone(true,true);
         var JCloneConvCreerTitre = JConvCreerTitre.clone(true,true);
         var JCloneconvCreerMembreSubmit=JConvCreerMembreSubmit.clone(true,true);
+        var JCloneConvCreerMembreListe =JConvCreerMembreListe.clone(true,true).hide();
         var JCloneConvCreerMembre=JConvCreerMembre.clone(true,true);
         var JCloneConvCreerSubmit=JConvCreerSubmit.clone(true,true);
-
-
-        JCloneConvCreer.append([JCloneConvCreerTitreTitre,JCloneConvCreerTitre,JCloneConvCreerMembre,JCloneconvCreerMembreSubmit,JCloneConvCreerSubmit]);
+        var JCloneConvCreerMembreDiv=JConvCreerMembreDiv.clone(true,true).hide();
+        var JCloneConvCreerTag=$("<p>").text("Membres de la conversation :").addClass("ConvCreerTag").clone(true,true);
+        JCloneConvCreer.append([JCloneConvCreerTitreTitre,JCloneConvCreerTitre,JCloneConvCreerMembre,JCloneConvCreerMembreListe,JCloneConvCreerTag,JCloneConvCreerMembreDiv,JCloneConvCreerSubmit]);
         $("#page").append([JCloneConvCreer]);
 
         JCloneConvCreer.animate({top: '10%'});
@@ -1834,16 +1836,24 @@ function JCreerEventPublier(target){
 
 
 
-function JCreerProfilRecherche(Reponse){
+function JCreerProfilRecherche(div,Reponse){
 
+
+    
     console.log(Reponse);
-    var JCloneRechercheProfilDivUser=JRechercheProfilDivUser.clone().data("id-profile",Reponse.id).on("click",function(context){AfficherProfile(context.target);$(".Recherche-Profil").empty().hide();});
+    var JCloneRechercheProfilDivUser=JRechercheProfilDivUser.clone().data("id-profile",Reponse.id).on("click",function(context){AfficherProfile(context.target);$(div).empty().hide();});
     var JCloneRechercheProfilDivUserImg=JRechercheProfilDivUserImg.clone().attr("src",Reponse.photo).data("id-profile",Reponse.id);
     var JCloneRechercheProfilDivUserNom=JRechercheProfilDivUserNom.clone().text( Reponse.firstName+ " " +Reponse.lastName ).data("id-profile",Reponse.id);
     ajouterTextOverflow(JCloneRechercheProfilDivUserNom,70);
+    
+    if(div.data("div")==$(".Conv-Creer-Membre-Liste").data("div"))
+    {   JCloneRechercheProfilDivUser.off("click");
+         //annuler le click
+        JCloneRechercheProfilDivUser.on("click",function(){JCopierProfil($(".Conv-Creer-Membre-Div"),this);});}
 
     JCloneRechercheProfilDivUser.append([JCloneRechercheProfilDivUserImg,JCloneRechercheProfilDivUserNom]);
-    $(".Recherche-Profil").append(JCloneRechercheProfilDivUser);
+
+    $(div).append(JCloneRechercheProfilDivUser);
 
 
 }
@@ -1855,4 +1865,18 @@ function changerCategorie(context){
     $(context.target).attr('selected','selected'); 
     $("#dropdownMenuButton").attr("value",$(context.target).text());
     $("#dropdownMenuButton").text($(context.target).text());
+}
+
+function JCopierProfil(div,context)
+{
+var clone = $(context).clone(true,true);
+div.append(clone);
+div.show();
+
+}
+
+function JAjouterUtilisateurConv(context)
+{
+
+
 }

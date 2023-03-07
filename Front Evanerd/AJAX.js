@@ -1157,12 +1157,14 @@ function AddUserParticipation($id,$partcipe){
 /* PARTICIPATION END */
 
 
-function ListUser($name,$idRole)
+function ListUser($div,$name,$idRole)
 {
     console.log($idRole);
+    
     if($idRole == undefined){
         $idRole = "";
     }
+    
 
     $.ajax({
         type: "GET",
@@ -1174,9 +1176,9 @@ function ListUser($name,$idRole)
         },
         success: function(oRep){
             console.log(oRep); 
-            $(".Recherche-Profil").empty().show();
+            $($div).empty().show();
             for(var i = 0; i < oRep.users.length; i++){
-            JCreerProfilRecherche(oRep.users[i]);}
+            JCreerProfilRecherche($div,oRep.users[i]);}
 
 
         },
