@@ -976,7 +976,11 @@ function JCreerPostCreer(){
 
 
 function JCreerProfile(Reponse){
+    if(Reponse.id==user)
     var JCloneProfileReglage=JProfileReglage.clone(true,true);
+    else 
+    var JCloneProfileReglage=$("<div></div>");
+
     var JCloneProfileArrow=JProfileArrow.clone(true,true).on("click",function(){JRevenirProfile();});
     $("#page").append([JCloneProfileArrow,JCloneProfileReglage]);
 

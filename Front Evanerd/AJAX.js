@@ -318,6 +318,7 @@ function  ChargementInfosProfil($id){
             success: function(oRep){
                 console.log(oRep);
                 userProfile.instruments = oRep.instruments;
+                userProfile.userId=oRep.userId;
             },
             dataType: "json",
         }).done( function ListUserRoles(){
@@ -332,7 +333,7 @@ function  ChargementInfosProfil($id){
                 success: function(oRep){
                     console.log(oRep);
                     userProfile.Roles = oRep.roles
-                    AfficherProfilCharger();
+                    AfficherProfilCharger(oRep);
                 },
                 dataType: "json",
             });
