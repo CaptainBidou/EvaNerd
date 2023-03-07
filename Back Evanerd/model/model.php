@@ -30,6 +30,11 @@ function confirmToUser($confirmToken) {
     return $db->SQLGetChamp($sql,[$confirmToken]);
 }
 
+function resetToId($resetToken) {
+    $db = Config::getDatabase();
+    $sql = "SELECT Users.id FROM Users WHERE Users.resetToken = ?";
+    return $db->SQLGetChamp($sql,[$resetToken]);
+}
 function selectConfirmToken($uid) {
     $db = Config::getDatabase();
     $sql = "SELECT Users.confirmToken FROM Users WHERE Users.id = ?";
@@ -140,14 +145,15 @@ function selectUsers($idRole=false, $name=false){
     $joinStm = "";
     // Si on veut filtrer par role et par nom
     if($idRole && $name){
-        $joinStm = "JOIN User_Roles AS UR";
-        $whereStm = "WHERE U.id = UR.uid AND UR.rid = ? AND (U.firstName LIKE ? OR U.lastName LIKE ?)";
+        $joinStm = "JOIN User_Roles AS UR ON U.id = UR.uid AND UR.rid = ?";
+        $whereStm = "WHERE U.firstName LIKE ? OR U.lastName LIKE ?";
         $params = [$idRole, "%$name%", "%$name%"];
     }
     // Si on veut filtrer par role
     else if($idRole){
-        $joinStm = "JOIN User_Roles AS UR";
-        $whereStm = "WHERE U.id = UR.uid AND UR.rid = ?";
+        $joinStm = "JOIN User_Roles AS UR
+                    ON U.id = UR.uid";
+        $whereStm = "WHERE UR.rid = ?";
         $params = [$idRole];
     }
     // Si on veut filtrer par nom
@@ -864,4 +870,28 @@ function insertUserAchievement($uid, $aid) {
     return $db->SQLInsert($sql, [$uid, $aid]);
 }
 
+function selectCall($uid, $aeid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM Agenda_Event_Calls WHERE uid = ? AND aeid = ?";
+    return Database::parcoursRs($db->SQLSelect($sql, [$uid, $aeid]));
+}
+
+function updateCall($uid, $eid = null, $present = null, $reason_desc = null) {
+    $db = Config::getDatabase();
+    $sql = "UPDATE Agenda_Event_Calls SET ";
+    $params = [];
+    if($present !== null) {
+        $sql .= "present = ?,";
+        array_push($params, $present);
+    }
+    else $sql .= " present = present,";
+    if($reason_desc !== null) {
+        $sql .= "reason_desc = ?";
+        array_push($params, $reason_desc);
+    }
+    else $sql .= " reason_desc = reason_desc";
+    $sql .= " WHERE uid = ? AND aeid = ?";
+    array_push($params, $uid, $eid);
+    return $db->SQLUpdate($sql, $params);
+}
 ?>
