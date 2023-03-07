@@ -482,6 +482,25 @@ margin-right: 5%;
 {
 }
 
+.divCréaCompte
+{
+    padding-top: 5%;
+    align-items: center;
+}
+
+
+.button-Prev
+{
+    width: 30%;
+    height: 4%;
+    border-radius: 5%;
+    background-color: darkred;
+    border: 1px solid black;
+    color: whitesmoke;
+    font-size: 120%;
+    display: block;
+}
+
 .labelCréationGenre
 {
     size: 1000%;
