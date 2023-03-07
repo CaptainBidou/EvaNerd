@@ -45,11 +45,15 @@ switch($action) {
     case "GET /users/ID/roles":
         getUserRoles($data, $idTabs);
         break;
-    
+
+    case "PUT /users/ID/events/ID/calls":
+        putUserEventCall($data, $idTabs, $authKey, $queryString);
+        break;
+
     case "PUT /users/ID":
         putUser($data, $idTabs, $authKey, $queryString);
         break;
-
+    
     case "POST /users":
         postUser($data, $queryString);
         break;
@@ -64,6 +68,10 @@ switch($action) {
 
     case "POST /users/ID/roles":
         postUserRole($data, $idTabs, $authKey, $queryString);
+        break;
+    
+    case "POST /users/reset":
+        resetPassword($data, $queryString);
         break;
 
     case "POST /users/verify":

@@ -978,7 +978,11 @@ function JCreerPostCreer(){
 
 
 function JCreerProfile(Reponse){
+    if(Reponse.id==user)
     var JCloneProfileReglage=JProfileReglage.clone(true,true);
+    else 
+    var JCloneProfileReglage=$("<div></div>");
+
     var JCloneProfileArrow=JProfileArrow.clone(true,true).on("click",function(){JRevenirProfile();});
     $("#page").append([JCloneProfileArrow,JCloneProfileReglage]);
 
@@ -1920,16 +1924,28 @@ function JCreerCreerConvSubmit(context)
 {
 if($("Conv-Creer-Titre").val() == "" || $(".Conv-Creer-Membre-Div div").length == 0)
 {return;}
+var titre=$(".Conv-Creer-Titre").val();
+var info=[];
+info.titre=titre;
+info.image="";
+CreateConv(info);
 
 
 
-$(".Conv-Creer-Membre-Div div").each(function(){
 
+
+}
+
+function JAdduserGroupe(id){
+
+    $(".Conv-Creer-Membre-Div div").each(function(p){
+
+        AddUserConv(id, $(this).data("id-profile"));
     
+        console.log($(this).data("id-profile"));
+    
+    
+    });
 
-console.log($(this).data("id-profile"));
-
-
-});
-
+    AfficherMessagerie();
 }

@@ -318,6 +318,7 @@ function  ChargementInfosProfil($id){
             success: function(oRep){
                 console.log(oRep);
                 userProfile.instruments = oRep.instruments;
+                userProfile.userId=oRep.userId;
             },
             dataType: "json",
         }).done( function ListUserRoles(){
@@ -332,7 +333,7 @@ function  ChargementInfosProfil($id){
                 success: function(oRep){
                     console.log(oRep);
                     userProfile.Roles = oRep.roles
-                    AfficherProfilCharger();
+                    AfficherProfilCharger(oRep);
                 },
                 dataType: "json",
             });
@@ -658,22 +659,23 @@ function ListReactMsgConv($gid, $mid){
  * @param {*} $informations Donnée de l'image & Titre de la discu
  */
 function CreateConv($informations){
-    if($informations["image"])
-        $data["image"] = $informations["image"];
-    if($informations["titre"])
-        $data["titre"] = $informations["titre"];
+    var $data = {};
+    if($informations.image)
+        $data.image = $informations.image;
+    if($informations.titre)
+        $data.titre = $informations.titre;
 
     $.ajax({
         type:"POST",
-        url: api + "/groups",
-        headers:{"authToken" : ""},
+        url: api + "/groups?title=" + $informations.titre + "&image=" + $informations.image,
+        headers:{"authToken" : authcode},
         data: $data,
-        error: function(){
-            console.log("Une erreur s'est produite");
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
         },
         success : function(oRep){
             console.log(oRep);
-            //Fonction JCreerConv
+            return JAdduserGroupe(oRep.group.id);
         },
         dataType: "json"
     });
@@ -688,7 +690,7 @@ function AddUserConv($gid, $uid){
     $.ajax({
         type: "POST",
         url: api + "/groups/" + $gid + "/users/" + $uid,
-        headers: {"authToken" : ""},
+        headers: {"authToken" : authcode},
         data: [],
         error: function(){
             console.log("Une erreur s'est produite");
