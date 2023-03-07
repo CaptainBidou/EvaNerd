@@ -1913,18 +1913,24 @@ var titre=$(".Conv-Creer-Titre").val();
 var info=[];
 info.titre=titre;
 info.image="";
-var p=CreateConv(info);
-
-while(p == undefined)
+CreateConv(info);
 
 
-$(".Conv-Creer-Membre-Div div").each(function(p){
-
-    AddUserConv(p.group.id, $(this).data("id-profile"));
-
-    console.log($(this).data("id-profile"));
 
 
-});
 
+}
+
+function JAdduserGroupe(id){
+
+    $(".Conv-Creer-Membre-Div div").each(function(p){
+
+        AddUserConv(id, $(this).data("id-profile"));
+    
+        console.log($(this).data("id-profile"));
+    
+    
+    });
+
+    AfficherMessagerie();
 }

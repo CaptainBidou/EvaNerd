@@ -674,7 +674,7 @@ function CreateConv($informations){
         },
         success : function(oRep){
             console.log(oRep);
-            return oRep;
+            return JAdduserGroupe(oRep.group.id);
         },
         dataType: "json"
     });
@@ -689,7 +689,7 @@ function AddUserConv($gid, $uid){
     $.ajax({
         type: "POST",
         url: api + "/groups/" + $gid + "/users/" + $uid,
-        headers: {"authToken" : ""},
+        headers: {"authToken" : authcode},
         data: [],
         error: function(){
             console.log("Une erreur s'est produite");
