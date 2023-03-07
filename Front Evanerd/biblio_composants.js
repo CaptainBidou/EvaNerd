@@ -165,6 +165,7 @@ var JConnexionPwd=$("<input>").addClass("text").addClass("form-control Connexion
 var JConnexionSubmit=$("<button>").addClass("btn btn-danger Connexion-Submit").html("Se connecter").on("click",function(context){Connexion();});
 var JConnexionP=$("<p>").addClass("Connexion-p");
 var JConnexionTitre=$("<h1>").addClass("Connexion-titre");
+var JConnexionNewAccount=$("<a>").addClass("Connexion-link").on("click",function(){AfficherCréationAccount();});
 
 
 //variables pour les réglages des messages 
@@ -178,11 +179,22 @@ var JReglageMessagePerson=$("<input>").addClass("form-control Message-Personne-R
 var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Personne").on("click",function(context){AjouterUtilisateur($(this))});
 var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 
+// variables pour la création de compte
+var JCréationCompte = $("<div>").addClass("divFormCréationCompte");
+var JCréationCompteAge=$("<input>").addClass("form-control ").attr("placeholder","Age").attr("id","age").attr("type","number");
+var JCréationCompteTelephone=$("<input>").addClass("form-control ").attr("placeholder","Téléphone").attr("id","tel").attr("type","number");
+var JCréationComptePwd=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Mot de passe").attr("id","pwd").attr("type","password");
+var JCréationCompteSubmit=$("<button>").addClass("btn btn-danger").html("C'est parti !").on("click",function(){CreationCompte();});
+var JCréationCompteP=$("<p>").addClass("Connexion-p");
+var JCréationCompteTitre=$("<h1>").addClass("Connexion-titre");
+var JCréationCompteNom=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Nom").attr("id","Nom");
+var JCréationComptePrenom=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Prénom").attr("id","Prénom");
+var JCréationCompteEtude=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Mes Etude").attr("id","Etudes");
+var JCréationCompteMail=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","ex: JohnSmith@gmail.com").attr("id","Mail");
+var JCréationCompteInstruments=$("<select>").addClass("select").addClass("form-control ").attr("placeholder","Etude").attr("id","Etudes");
 
 
-
-
-//VARRIABLES pour les comms des posts
+//VARIABLES pour les comms des posts
 var JCommentaires = $("<div>").addClass("commentaires");
 var JCommentairesUp=$("<div>").addClass("commentaires-Up");
 var JCommentairesMiddle=$("<div>").addClass("commentaires-Mid");
@@ -1307,12 +1319,74 @@ function JCreerConnexion(){
     var JCloneConnexionTelephone= JConnexionTelephone.clone(true,true);
     var JCloneConnexionPwd=JConnexionPwd.clone(true,true);
     var JCloneConnexionSubmit=JConnexionSubmit.clone(true,true);
+    var JCloneConnexionNewAccount = JConnexionNewAccount.clone(true,true).text("Pas encore inscrit ?? Rejoignez-nous dès maintenant !!");
 
-    JCloneConnexion.append([JCloneTitre,JCloneLegendTel,JCloneConnexionTelephone,JCloneLegendPwd,JCloneConnexionPwd,JCloneConnexionSubmit]);
+    JCloneConnexion.append([JCloneTitre,JCloneLegendTel,JCloneConnexionTelephone,JCloneLegendPwd,JCloneConnexionPwd,JCloneConnexionNewAccount,JCloneConnexionSubmit]);
     JcreerHeader(null);
      $("#page").append(JCloneConnexion);
     
 
+}
+
+
+function JCreerInscription(){
+
+    var JCloneLegendNom=JCréationCompteP.clone(true,true).text("Nom");
+    var JCloneNom = JCréationCompteNom.clone(true,true);
+    
+    var JCloneLegendPrenom=JCréationCompteP.clone(true,true).text("Prénom");
+    var JClonePrénom = JCréationComptePrenom.clone(true,true);
+
+    var JCloneLegendAge=JCréationCompteP.clone(true,true).text("Votre Age");
+    var JCloneAge = JCréationCompteAge.clone(true,true);
+
+    var JCloneLegendPrenom=JCréationCompteP.clone(true,true).text("Prénom");
+    var JClonePrénom = JCréationComptePrenom.clone(true,true);
+
+    var JCloneLegendEtudes = JCréationCompteP.clone(true,true).text("Etudes");
+    var JCloneEtudes = JCréationCompteEtude.clone(true,true);
+    
+    var JCloneLegendInstruments = JCréationCompteP.clone(true,true).text("Mes Instruments");
+    var JCloneInstruments = JCréationCompteInstruments.clone(true,true);
+
+    var JCloneCréationCompte = JCréationCompte.clone(true,true);
+    var JCloneTitre = JCréationCompteTitre.clone(true,true).text("Inscrivez-vous");
+    
+
+    var JCloneCréationCompte = JCréationCompte.clone(true,true);
+    var JCloneTitre = JCréationCompteTitre.clone(true,true).text("Inscrivez-vous");
+    
+    var JCloneLegendTel=JCréationCompteP.clone(true,true).text("Téléphone");
+    var JCloneTelephone= JCréationCompteTelephone.clone(true,true);
+    
+    var JCloneLegendPwd=JCréationCompteP.clone(true,true).text("Mot de Passe");
+    var JClonePwd=JCréationComptePwd.clone(true,true);
+
+    var JCloneLegendPwd=JCréationCompteP.clone(true,true).text("Confirmer votre mot de passe");
+    var JClonePwd=JCréationComptePwd.clone(true,true).text("Confirmation du mot de passe");
+
+
+
+
+
+
+
+
+
+    JCloneCréationCompte.append([JCloneTitre,
+        JCloneLegendNom,
+        JCloneNom,
+        JCloneLegendPrenom,
+        JClonePrénom,
+        JCloneLegendAge,
+        JCloneAge,
+        JCloneLegendTel,
+        JCloneTelephone,
+
+        JCloneLegendPwd,
+        JClonePwd,
+    ])
+    $("#page").append(JCloneCréationCompte);
 }
 
 
