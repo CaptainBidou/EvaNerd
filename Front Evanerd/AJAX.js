@@ -658,22 +658,23 @@ function ListReactMsgConv($gid, $mid){
  * @param {*} $informations Donnée de l'image & Titre de la discu
  */
 function CreateConv($informations){
-    if($informations["image"])
-        $data["image"] = $informations["image"];
-    if($informations["titre"])
-        $data["titre"] = $informations["titre"];
+    var $data = {};
+    if($informations.image)
+        $data.image = $informations.image;
+    if($informations.titre)
+        $data.titre = $informations.titre;
 
     $.ajax({
         type:"POST",
-        url: api + "/groups",
-        headers:{"authToken" : ""},
+        url: api + "/groups?title=" + $informations.titre + "&image=" + $informations.image,
+        headers:{"authToken" : authcode},
         data: $data,
-        error: function(){
-            console.log("Une erreur s'est produite");
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
         },
         success : function(oRep){
             console.log(oRep);
-            //Fonction JCreerConv
+            return oRep;
         },
         dataType: "json"
     });

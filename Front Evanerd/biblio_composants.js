@@ -1909,14 +1909,20 @@ function JCreerCreerConvSubmit(context)
 {
 if($("Conv-Creer-Titre").val() == "" || $(".Conv-Creer-Membre-Div div").length == 0)
 {return;}
+var titre=$(".Conv-Creer-Titre").val();
+var info=[];
+info.titre=titre;
+info.image="";
+var p=CreateConv(info);
+
+while(p == undefined)
 
 
+$(".Conv-Creer-Membre-Div div").each(function(p){
 
-$(".Conv-Creer-Membre-Div div").each(function(){
+    AddUserConv(p.group.id, $(this).data("id-profile"));
 
-    
-
-console.log($(this).data("id-profile"));
+    console.log($(this).data("id-profile"));
 
 
 });
