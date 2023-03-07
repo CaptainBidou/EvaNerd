@@ -1138,9 +1138,11 @@ function AddUserParticipation($id,$partcipe){
 
 function ListUser($name,$idRole)
 {
+    console.log($idRole);
+    
     $.ajax({
         type: "GET",
-        url: api + "/users?name="+$name,
+        url: api + "/users?name="+$name+"&idRole="+$idRole,
         headers: {"authToken":""}, // données dans les entetes 
         data: [],
         error : function(){

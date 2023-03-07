@@ -42,7 +42,7 @@ var JHeaderProfile=$("<img>").addClass(["rounded-circle", "right", "header-icon"
 var JHeaderTag=$("<button>").addClass(["btn btn-danger dropdown-toggle header-tag"]).data("type","header_tag").attr("type","button").val("Categorie").html("Categorie").attr("id","dropdownMenuButton").attr("data-toggle","dropdown").attr("aria-haspopup","true").attr("aria-expanded","false").on("click",function(context){RolesMenu(context.target);});
 var JHeaderMenu=$("<div>").addClass("dropdown-menu").data("type",'header_menu').attr("aria-labelledby","dropdownMenuButton");
 var JHeaderItem=$("<a>").addClass("dropdown-item").text("dfhskldfjhksjdfhkjh").data("type",'header_item').attr("href","#");
-var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher").on("keyup",function(context){if($(".header-search").val()==""){$(".Recherche-Profil").empty().hide();return;}ListUser($(".header-search").val());});
+var JHeaderSearch=$("<input>").data("type","header_search").attr("type","text").addClass("form-control header-search").attr("placeholder","Rechercher").on("keyup",function(context){if($(".header-search").val()==""){$(".Recherche-Profil").empty().hide();return;}ListUser($(".header-search").val(), $(".Categorie-Option").data());});
 
 //variables pour les Convs
 var JConv =$("<nav>").addClass("navbar conversation").data("type","conv").on("click",function(context){JRecupMessages(context);});//TODO ICI TU APPELLE TA FONCTION
@@ -1533,7 +1533,6 @@ JCloneGreetings.animate({right: '25%'});
 
 function JClickHeaderMenu(Reponse){
 
-
 if($(".Categorie").attr("affichage")=="true")
 {
     $(".Categorie").attr("affichage","false");
@@ -1574,12 +1573,16 @@ function JAddOptionsCategorie(div,Reponse){
     var JCloneCategorieOption=JCategorieOption.clone(true,true).on("click",function(context){
         console.log($(context.target).data("selected"));
         if( $(context.target).data("selected") == "true")
-            {$(context.target).css("background-color","silver");
-            $(context.target).data("selected","false");}
-        else{$(context.target).css("background-color","gray");
-            $(context.target).data("selected","true");}
+        {
+            $(context.target).css("background-color","silver");
+            $(context.target).data("selected","false");
+        }
+        else{
+            $(context.target).css("background-color","gray");
+            $(context.target).data("selected","true");
+        }
         
-                                                            });
+});
 
 
     JCloneCategorieOption.text(Reponse.label);
