@@ -902,3 +902,44 @@ function postPostMessage($data, $idTabs, $authKey, $queryString) {
     }
     sendError("Vous ne pouvez pas envoyer un message vide ", HTTP_BAD_REQUEST);
 }
+
+function putUserEventCall($data, $idTabs, $authKey, $queryString) {
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $uid = $idTabs[0];
+    $eid = $idTabs[1];
+    $user = selectUser($uid);
+    if (!$user) sendError("Cet utilisateur n'existe pas !", HTTP_BAD_REQUEST);
+    $event = selectEvent($eid, "intra", $uidConn);
+    if (!$event) sendError("Cet évenement n'existe pas !", HTTP_BAD_REQUEST);
+    if (!$event[0]["write"]) sendError("Vous n'avez pas les droits !", HTTP_FORBIDDEN);
+    $present = valider("present", $queryString) ? 1 : 0;
+    $reason_desc = validString(valider("reason"), 180, 0, true);
+    if (!$present && !$reason_desc) sendError("Motif obligateur en cas d'absence !", HTTP_FORBIDDEN);
+    if ($present) $reason_desc = null;
+    $call = selectCall($uid, $eid);
+    if ($call) updateCall($uid, $eid, $present, $reason_desc);
+    $data["eventId"] = $eid;
+    $data["userId"] = $uid;
+    $data["call"] = ["user" => ["id" => $uid, "firstName" => $user[0]["firstName"], "lastName" => $user[0]["lastName"], "photo" => $user[0]["photo"]], "present" => $present, "reason_desc" => $reason_desc];
+    sendResponse($data, [getStatusHeader(HTTP_OK)]);
+}
+
+function resetPassword($data, $queryString) {
+    //TODO : modifier updateUser pour supprimer le resetToken à la fin
+    if($resetToken = valider("resetToken", $queryString)) {
+        $uid = resetToId($resetToken);
+        if(!$uid) sendError("Token invalide !", HTTP_UNAUTHORIZED);
+        if($plainPassword = validString(valider("password", $queryString), 70, 3)) {
+            $password = password_hash($plainPassword, PASSWORD_BCRYPT, ["cost"=>10]);
+            updateUser($uid, false, false, false, false, false, $password);
+            // Comme on vérifie l'uid avec le token, on peut se permettre de ne pas vérifier si la requête a bien été effectuée
+            $user = selectUser($uid, 1)[0];
+            $data["user"] = $user;
+            sendResponse($data, [getStatusHeader(HTTP_OK)]);
+        }
+        sendError("Le mot de passe doit faire entre 3 et 70 caractères !", HTTP_BAD_REQUEST);
+    }
+    sendError("Vous devez fournir un token de réinitialisation !", HTTP_BAD_REQUEST);
+}
+
