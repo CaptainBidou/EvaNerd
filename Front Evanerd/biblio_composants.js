@@ -1777,13 +1777,21 @@ function JCreerReactionLayout(Reponse){
     var JCloneBoutonEnvoyerReaction=$("<img>").addClass("Bouton-Envoyer-Reaction").attr("src","Ressources/Message/send.png").clone(true,true);
     var JDivReactionContainer=$("<div>").addClass("emoji-picker-container div-emoji").clone(true,true);
     var JInputReaction=$("<input>").addClass("emoji-input-select").attr("type","text").attr({"data-emojiable":"true","maxlength":1}).clone(true,true);
+   
+    var JCloneReactionDivBottom=$("<div>").addClass("div-bottom-reaction").clone(true,true);
+
+
+    JAddReactionLayout(JCloneReactionMiddle,Reponse);
+
+    
+    
 
     JDivReactionContainer.append(JInputReaction);
 
 
     
     JCloneReactionUp.append(JCloneReactionCroix);
-    JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle,JDivReactionContainer,JCloneBoutonEnvoyerReaction]);
+    JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle,JDivReactionContainer,JCloneBoutonEnvoyerReaction,JCloneReactionDivBottom]);
     JCloneReaction.hide();
 
   
@@ -1800,7 +1808,9 @@ function JCreerReactionLayout(Reponse){
 
 }
 
+function JAddReactionLayout(div,Reponse){
 
+}
 
 
 
