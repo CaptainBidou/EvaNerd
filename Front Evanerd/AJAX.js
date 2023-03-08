@@ -1194,11 +1194,11 @@ function ListUser($div,$name,$idRole)
 
 //PUT /users/ID/events/ID/calls 
 
-function ChangerUserPresence($uid,$aid){
-    var reason = "motif non renseigné";
+function ChangerUserPresence(reason,present,$uid,$aid){
+    
     $.ajax({
         type: "PUT",
-        url: api + "/users/"+$uid+"/events/"+$aid+"/calls?present=0&reason="+reason,
+        url: api + "/users/"+$uid+"/events/"+$aid+"/calls?present="+present+"&reason="+reason,
         headers: {"authToken":authcode}, // données dans les entetes 
         data: [],
         error: function( jqXhr, textStatus, errorThrown){

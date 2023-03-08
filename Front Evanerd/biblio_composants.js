@@ -694,10 +694,24 @@ if(present==0){present="red";comm=reason;}
             $(this).css("background-color","red");
             console.log($(this).data("id_event"));
             console.log($(this).data("id"));
-            ChangerUserPresence($(this).data("id"),$(this).data("id_event"));
+            ChangerUserPresence("Motif non renseigné",0,$(this).data("id"),$(this).data("id_event"));
             var JCloneAppelAdminProfilCommentaire=JAppelAdminProfilCommentaire.clone(true,true).text("Motif non renseigné");
             $(this).append(JCloneAppelAdminProfilCommentaire);
             $(this).data("statut","red");
+            return;
+            //todo envoyer la requete 
+        }
+
+        if( $(this).data("statut")=="red" ){
+            $(this).css("background-color","lightgreen");
+            console.log($(this).data("id_event"));
+            console.log($(this).data("id"));
+
+            ChangerUserPresence("",1,$(this).data("id"),$(this).data("id_event"));
+           /* var JCloneAppelAdminProfilCommentaire=JAppelAdminProfilCommentaire.clone(true,true).text("Motif non renseigné");
+            $(this).append(JCloneAppelAdminProfilCommentaire);*/
+            $(this).data("statut","lightgreen");
+            $(".Appel-Admin-Profil-Commentaire",this).remove();
             //todo envoyer la requete 
         }
 
