@@ -190,7 +190,7 @@ var ErrorMsg =  $("<p>")
 var JCréationCompte = $("<div>")
     .addClass("divFormCréationCompte");
 
-    var JCréationCompteAge= $("<input>")
+var JCréationCompteAge= $("<input>")
     .addClass("form-control ")
     .attr("placeholder","Age")
     .attr("id","Age")
