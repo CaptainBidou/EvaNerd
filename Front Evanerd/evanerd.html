@@ -154,6 +154,29 @@ function Connexion(){
     auth(tel,mdp);
 }
 
+function afficherListeInstruments(){
+    ListInstruments();
+
+}
+
+
+function CreateAccount(context) { 
+    
+
+    var json={
+            "Nom":$("#Nom").val(),
+            "date":$("#Prénom").val(),
+            "Age":$("#Age").val(),
+            "Password" : $("mdp1").val(),
+            "Téléphone" : $("#tel").val(),
+            "Etudes": $("#Etudes").val(),
+            "Mail": $("#Mail").val(),
+            "Genre": $(".selected").html(),
+            "instruments":$(".selectedInstruments").toArray().map(item => item.value)
+    }
+
+    console.log(json);
+ }
 
 function JRecupMessages(context){
     if($(context.target).attr("type")=="convp")
@@ -237,6 +260,8 @@ function CreerEvent(context){
 
 function AjouterUtilisateur(context){
     console.log(context);
+
+
     // TODO : Trouver l'utilisateur dans le champ à ajouter
     // Puis renvoyer son uid
     //AddUserConv(currentGroup,);

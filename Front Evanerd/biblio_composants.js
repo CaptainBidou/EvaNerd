@@ -180,23 +180,109 @@ var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-M
 var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 
 // variables pour la création de compte
-var JCréationCompte = $("<div>").addClass("divFormCréationCompte");
-var JCréationCompteAge=$("<input>").addClass("form-control ").attr("placeholder","Age").attr("id","age").attr("type","number");
-var JCréationCompteTelephone=$("<input>").addClass("form-control ").attr("placeholder","Téléphone").attr("id","tel").attr("type","number");
-var JCréationComptePwd=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Mot de passe").attr("type","password");
-var JCréationCompteSubmit=$("<button>").addClass("btn btn-danger").html("C'est parti !").on("click",function(){CreationCompte();});
-var JCréationCompteP=$("<p>").addClass("Connexion-p");
-var JCréationCompteTitre=$("<h1>").addClass("Connexion-titre");
-var JCréationCompteNom=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Nom").attr("id","Nom");
-var JCréationComptePrenom=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Prénom").attr("id","Prénom");
-var JCréationCompteEtude=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","Mes Etudes").attr("id","Etudes");
-var JCréationCompteMail=$("<input>").addClass("text").addClass("form-control ").attr("placeholder","ex: JohnSmith@gmail.com").attr("id","Mail");
-var JCréationCompteInstruments=$("<select>").addClass("select").addClass("form-control ").attr("placeholder","Instruments").attr("id","Instrument");
-var JCréationCompteGenre = $("<input>").attr("type","radio").attr("id","genre").addClass("genre");
-var JCréationCompteLabelGenre = $("<label>").addClass("labelCréationGenre");
-var JCréationCompteDiv = $("<div>").addClass("divCréaCompte");
 
-var JCréationComptePrevious = $("<button>").addClass("button-Prev").attr("id","previous").on("click",function(){ $("#page").html(""); ConnexionAuto(); })
+var ErrorMsg =  $("<p>")
+    .css("color","red")
+    .css("background-color","whitesmoke")
+
+
+var JCréationCompte = $("<div>")
+    .addClass("divFormCréationCompte");
+
+    var JCréationCompteAge= $("<input>")
+    .addClass("form-control ")
+    .attr("placeholder","Age")
+    .attr("id","Age")
+    .attr("type","number");
+
+var JCréationCompteTelephone= $("<input>")
+    .addClass("form-control ")
+    .attr("placeholder","Téléphone")
+    .attr("id","tel")
+    .attr("type","number");
+
+var JCréationComptePwd= $("<input>")
+    .addClass("text")
+    .addClass("form-control ")
+    .attr("placeholder","Mot de passe")
+    .attr("type","password");
+
+var JCréationCompteSubmit= $("<button>")
+    .addClass("btn btn-danger button-créa")
+    .attr("id","Submit")
+    .html("C'est parti !")
+    .on("click",function(context){
+        //console.log(verifPassword(context));
+        if (verifPassword(context) == 1)
+            CreationCompte();
+        else 
+        {
+            if (verifPassword(context) == 0)
+            {
+                var Error = ErrorMsg.clone(true,true)
+                    .text("Vérifiez que votre confirmation de mot de passe est identique au message précédement saisie")
+            }
+            else
+            {
+                var Error = ErrorMsg.clone(true,true)
+                    .text("Le mot de passe est vide !")
+            }
+            $("#titre").after(Error);
+        }
+    });
+
+var JCréationCompteP= $("<p>")
+    .addClass("Connexion-p");
+
+var JCréationCompteTitre= $("<h1>")
+    .addClass("Connexion-titre")
+    .attr("id","titre");
+
+var JCréationCompteNom = $("<input>").
+    addClass("text").
+    addClass("form-control ").
+    attr("placeholder","Nom").
+    attr("id","Nom");
+
+var JCréationComptePrenom= $("<input>")
+    .addClass("text")
+    .addClass("form-control ")
+    .attr("placeholder","Prénom")
+    .attr("id","Prénom");
+
+var JCréationCompteEtude= $("<input>")
+    .addClass("text")
+    .addClass("form-control ")
+    .attr("placeholder","Mes Etudes")
+    .attr("id","Etudes");
+
+var JCréationCompteMail= $("<input>")
+    .addClass("text")
+    .addClass("form-control ")
+    .attr("placeholder","ex: JohnSmith@gmail.com")
+    .attr("id","Mail");
+
+var JCréationCompteInstruments= $("<select>")
+    .addClass("select")
+    .addClass("form-control ")
+    .attr("placeholder","Instruments")
+    .attr("id","Instrument");
+
+var JCréationCompteLabelGenre = $("<label>")
+    .addClass("labelCréationGenre")
+    .on("click",function (context){
+        SelectGenre(context.target);
+    });
+
+var JCréationCompteDiv = $("<div>")
+    .addClass("divCréaCompte");
+
+var JCréationComptePrevious = $("<button>")
+    .addClass("button-Créa")
+    .attr("id","previous")
+    .on("click",function(){ 
+        $("#page").html(""); ConnexionAuto(); 
+    })
 
 //VARIABLES pour les comms des posts
 var JCommentaires = $("<div>").addClass("commentaires");
@@ -255,6 +341,8 @@ var JConvCreerMembreSubmit=$("<button>").addClass("btn btn-danger Conv-Creer-Sub
 var JConvCreerSubmit=$("<button>").addClass("btn btn-danger Conv-Creer-Submit").html("Créer la conversation").on("click",function(context){JCreerCreerConvSubmit($(this))});
 var JConvCreerMembreDiv=$("<div>").addClass("Conv-Creer-Membre-Div");
 var JConvCreerMembreListe=$("<div>").addClass("Conv-Creer-Membre-Liste").data("div","liste");
+
+
 //variables pour la recherche de profil
 var JRechercheProfil=$("<div>").addClass("Recherche-Profil");
 
@@ -1377,7 +1465,7 @@ function JCreerInscription(){
     var JCloneEtudes = JCréationCompteEtude.clone(true,true);
     
     var JCloneLegendInstruments = JCréationCompteP.clone(true,true).text("Mes Instruments");
-    var JCloneInstruments = JCréationCompteInstruments.clone(true,true);
+    var JCloneInstruments = JCréationCompteInstruments.clone(true,true).attr("multiple","multiple").css("height","20%").css("font-size","250%");
 
     var JCloneCréationCompte = JCréationCompte.clone(true,true);
     var JCloneTitre = JCréationCompteTitre.clone(true,true).text("Inscrivez-vous");
@@ -1395,30 +1483,27 @@ function JCreerInscription(){
     var JClonePwd=JCréationComptePwd.clone(true,true).attr("id","mdp1");
 
     var JCloneLegendPwdConf=JCréationCompteP.clone(true,true).text("Confirmer votre mot de passe");
-    var JClonePwdConf=JCréationComptePwd.clone(true,true).text("Confirmation du mot de passe").attr("id","mdp2");
+    var JClonePwdConf=JCréationComptePwd.clone(true,true)
+        .text("Confirmation du mot de passe")
+        .attr("id","mdp2")
+        .on("keydown",function (context){
+            verifPassword(context);
+        });
 
     var JCloneLegendGenre=JCréationCompteP.clone(true,true).text("Votre Genre");
-    var JCloneHomme = JCréationCompteGenre.clone(true,true).attr("value","Homme").attr("id","Homme").data("genre","Homme");
-    var JCloneFemme = JCréationCompteGenre.clone(true,true).attr("value","Femme").attr("id","Femme").data("genre","Femme");
-    var JCloneNeutre = JCréationCompteGenre.clone(true,true).attr("value","Neutre").attr("id","Neutre").data("genre","Neutre");
-    var JCloneLabelHomme = JCréationCompteLabelGenre.clone(true,true).attr("for","Homme").text("Homme");
-    var JCloneLabelFemme = JCréationCompteLabelGenre.clone(true,true).attr("for","Femme").text("Femme");
-    var JCloneLabelNeutre = JCréationCompteLabelGenre.clone(true,true).attr("for","Neutre").text("Neutre");
+    var JCloneLabelHomme = JCréationCompteLabelGenre.clone(true,true).text("Homme").data("genre","0");
+    var JCloneLabelFemme = JCréationCompteLabelGenre.clone(true,true).text("Femme").data("genre","1");
+    var JCloneLabelNeutre = JCréationCompteLabelGenre.clone(true,true).text("Neutre").data("genre","2");
     
-    var JClone1DivGenre = JCréationCompteDiv.clone(true,true).addClass("divgenre");
-    var JClone2DivGenre = JCréationCompteDiv.clone(true,true).addClass("divgenre");
-    var JClone3DivGenre = JCréationCompteDiv.clone(true,true).addClass("divgenre");
-
     var JClonePrevious = JCréationComptePrevious.clone(true,true).text("Revenir au formulaire de Connexion");
-
-    var JCloneDivButton = JCréationCompteDiv.clone(true,true)
-
-    JClone1DivGenre.append([JCloneHomme,JCloneLabelHomme])
-    JClone2DivGenre.append([JCloneFemme,JCloneLabelFemme])
-    JClone3DivGenre.append([JCloneNeutre,JCloneLabelNeutre]);
+    var JCloneSubmit = JCréationCompteSubmit.clone(true,true);
+    var JCloneDivButton = JCréationCompteDiv.clone(true,true).addClass("divbutton")
+    var JDiv = $("<div>").addClass("divbutton")
+    var JCloneImage = JCreerPostFormImage.clone(true,true);
 
 
-    JCloneDivButton.append([JClonePrevious])
+    JDiv.append([JClonePrevious,JCloneSubmit]);
+
 
     JCloneCréationCompte.append([JCloneTitre,
         JCloneLegendNom,
@@ -1430,7 +1515,12 @@ function JCreerInscription(){
         JCloneLegendEtudes,
         JCloneEtudes,
         JCloneLegendInstruments,
-        JCloneInstruments,
+        JCloneInstruments
+    ])
+
+    afficherListeInstruments();
+
+    JCloneCréationCompte.append([
         JCloneLegendTel,
         JCloneTelephone,
         JCloneLegendMail,
@@ -1440,16 +1530,50 @@ function JCreerInscription(){
         JCloneLegendPwdConf,
         JClonePwdConf,
         JCloneLegendGenre,
-        JClone1DivGenre,
-        JClone2DivGenre,
-        JClone3DivGenre,
-        JCloneDivButton
+        JCloneLabelHomme,
+        JCloneLabelFemme,
+        JCloneLabelNeutre,
+        JCloneImage,
+        JDiv
     ]);
     $("#page").append(JCloneCréationCompte);
 }
 
+function SelectGenre(Target)
+{
+    console.log(Target)
+    $(".labelCréationGenre").removeClass("selected")
+    $(Target).addClass("selected")
+}
 
 
+function verifPassword(context){
+    $("#Error").remove();
+    var mdp1 = $("#mdp1").val();
+    var mdp2 = $("#mdp2").val();
+    var ErrorMsg = $("<p>")
+        .html("Attention, le mot de passe est différent du premier saisi")
+        .attr("id","Error")
+        .css("color","red")
+        .css("background-color","whitesmoke");
+    //console.log(mdp1 + " " + mdp2)
+    if (mdp1 == "")
+    {
+        return 2;
+    }
+    if (mdp1 != mdp2){
+        $("#mdp2").css("border","red");
+        $("#mdp2").after(ErrorMsg);
+        return 0;
+    }
+    if (mdp1 == mdp2)
+    {
+        $("#Error").remove();
+        $("#mdp2").css("border","black");
+        return 1;
+    }
+
+}
 
 function JclickEpingle(target){
     
