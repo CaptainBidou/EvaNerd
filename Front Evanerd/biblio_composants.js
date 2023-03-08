@@ -493,7 +493,7 @@ console.log(Reponse.membre);
         JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);
         $("#footer").append(JCloneFooter);
         }
-    if(Reponse.membre==false)
+    if(Reponse.membre==false || Reponse.membre==0 || Reponse.membre==null)
         {
             JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAgenda).append(JCloneFooterMail);
             $("#footer").append(JCloneFooter);
@@ -1774,13 +1774,30 @@ function JCreerReactionLayout(Reponse){
     var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
     var JCloneReactionCroix=JReactionCroix.clone(true,true);
     var JCloneReaction =JReaction.clone(true,true);//emoji-wysiwyg-editor
+    var JCloneBoutonEnvoyerReaction=$("<img>").addClass("Bouton-Envoyer-Reaction").attr("src","Ressources/Message/send.png").clone(true,true);
+    var JDivReactionContainer=$("<div>").addClass("emoji-picker-container div-emoji").clone(true,true);
+    var JInputReaction=$("<input>").addClass("emoji-input-select").attr("type","text").attr({"data-emojiable":"true","maxlength":1}).clone(true,true);
 
-    JCloneReactionUp.append(JCloneReactionCroix);
-    JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle]);
-    JCloneReaction.hide();
+    JDivReactionContainer.append(JInputReaction);
+
+
     
+    JCloneReactionUp.append(JCloneReactionCroix);
+    JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle,JDivReactionContainer,JCloneBoutonEnvoyerReaction]);
+    JCloneReaction.hide();
+
+  
     $("#page").append(JCloneReaction);
     JCloneReaction.fadeIn(1000);
+
+    window.emojiPicker = new EmojiPicker({
+        emojiable_selector: '[data-emojiable=true]',
+        assetsPath: "Bootstrap/EmojiPicker/emoji-picker-text-fields/lib/img/",
+        popupButtonClasses: 'fa fa-smile-o', // far fa-smile if you're using FontAwesome 5
+      });
+      window.emojiPicker.discover();
+
+
 }
 
 
