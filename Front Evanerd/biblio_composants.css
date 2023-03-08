@@ -849,7 +849,7 @@ margin-top:5%;
     position: fixed;
     z-index: 10;
     background-color: gray;
-    height:60%;
+    height:40%;
     width:80%;
     top:20%;
     left:10%;
@@ -1242,12 +1242,22 @@ scrollbar-color: rebeccapurple green;
 height:50%;  
 }
 
-.emoji-Input
+
+.div-emoji
 {
-position:absolute;
-bottom:1%;
-width:80%;
-height:7%;
-font-size: 150%;
-margin-left:5%;
+
+position:absolute !important;
+bottom: 10%;
+width:50%;
+border-radius: 2%;
+background-color: whitesmoke;
+margin-left: 30%;
+zoom: 300%;
+z-index: 10;
+}
+.Bouton-Envoyer-Reaction{
+    position: absolute;
+    width:10%;
+    bottom: 17%;
+    right: 8%;
 }
