@@ -435,6 +435,17 @@ function ListInstruments(){
         },
         success: function(oRep){
             console.log(oRep); 
+            oRep.instruments.forEach(element => {
+                $("#Instrument").append($('<option>', {
+                    value: element.id,
+                    text: element.label,
+                }).on("click",function func(context){
+                    if (!$(context.target).hasClass("selectedInstruments"))
+                        $(context.target).addClass("selectedInstruments");
+                    else
+                        $(context.target).removeClass("selectedInstruments");
+                }));
+            })
         },
         dataType: "json"
     });   
