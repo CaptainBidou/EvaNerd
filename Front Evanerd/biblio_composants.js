@@ -344,7 +344,7 @@ var JConvCreerMembreListe=$("<div>").addClass("Conv-Creer-Membre-Liste").data("d
 
 
 //variables pour la recherche de profil
-var JRechercheProfil=$("<div>").addClass("Recherche-Profil");
+var JRechercheProfil=$("<div>").addClass("Recherche-Profil").data("div","liste");
 
 var JRechercheProfilDivUser=$("<div>").addClass("Recherche-Profil-Div-User");
 var JRechercheProfilDivUserImg=$("<img>").addClass(["Recherche-Profil-Div-User-Img","rounded-circle"]);
@@ -782,10 +782,24 @@ if(present==0){present="red";comm=reason;}
             $(this).css("background-color","red");
             console.log($(this).data("id_event"));
             console.log($(this).data("id"));
-            ChangerUserPresence($(this).data("id"),$(this).data("id_event"));
+            ChangerUserPresence("Motif non renseigné",0,$(this).data("id"),$(this).data("id_event"));
             var JCloneAppelAdminProfilCommentaire=JAppelAdminProfilCommentaire.clone(true,true).text("Motif non renseigné");
             $(this).append(JCloneAppelAdminProfilCommentaire);
             $(this).data("statut","red");
+            return;
+            //todo envoyer la requete 
+        }
+
+        if( $(this).data("statut")=="red" ){
+            $(this).css("background-color","lightgreen");
+            console.log($(this).data("id_event"));
+            console.log($(this).data("id"));
+
+            ChangerUserPresence("",1,$(this).data("id"),$(this).data("id_event"));
+           /* var JCloneAppelAdminProfilCommentaire=JAppelAdminProfilCommentaire.clone(true,true).text("Motif non renseigné");
+            $(this).append(JCloneAppelAdminProfilCommentaire);*/
+            $(this).data("statut","lightgreen");
+            $(".Appel-Admin-Profil-Commentaire",this).remove();
             //todo envoyer la requete 
         }
 
@@ -1759,11 +1773,12 @@ function JCreerReactionLayout(Reponse){
     var JCloneReactionUp=JReactionUp.clone(true,true);
     var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
     var JCloneReactionCroix=JReactionCroix.clone(true,true);
-    var JCloneReaction =JReaction.clone(true,true);
+    var JCloneReaction =JReaction.clone(true,true);//emoji-wysiwyg-editor
 
     JCloneReactionUp.append(JCloneReactionCroix);
     JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle]);
     JCloneReaction.hide();
+    
     $("#page").append(JCloneReaction);
     JCloneReaction.fadeIn(1000);
 }
@@ -2016,6 +2031,7 @@ function JCreerProfilRecherche(div,Reponse){
     
     if(div.data("div")==$(".Conv-Creer-Membre-Liste").data("div"))
     {   JCloneRechercheProfilDivUser.off("click");
+    console.log("on annule le click");
          //annuler le click
         JCloneRechercheProfilDivUser.on("click",function(){JCopierProfil($(".Conv-Creer-Membre-Div"),this);});}
 

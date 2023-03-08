@@ -477,7 +477,7 @@ margin-right: 5%;
     
 }
 
-.labelCréationGenre
+.labelCréationGenre/*??? */
 {
 }
 
@@ -1240,4 +1240,14 @@ height:50%;
     overflow-y: scroll;
 scrollbar-color: rebeccapurple green;
 height:50%;  
+}
+
+.emoji-Input
+{
+position:absolute;
+bottom:1%;
+width:80%;
+height:7%;
+font-size: 150%;
+margin-left:5%;
 }
