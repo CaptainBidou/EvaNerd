@@ -1774,10 +1774,11 @@ function JCreerReactionLayout(Reponse){
     var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
     var JCloneReactionCroix=JReactionCroix.clone(true,true);
     var JCloneReaction =JReaction.clone(true,true);
-
+    //<div class="emoji-wysiwyg-editor form-control" maxlength="10" data-id="1fc8062d-f493-42b7-a2d7-a1ab9fe70295" data-type="input" placeholder="Input with max length of 10" contenteditable="true" style="height: 37px;"></div>
     JCloneReactionUp.append(JCloneReactionCroix);
     JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle]);
     JCloneReaction.hide();
+    
     $("#page").append(JCloneReaction);
     JCloneReaction.fadeIn(1000);
 }
