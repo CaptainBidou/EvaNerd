@@ -344,7 +344,7 @@ var JConvCreerMembreListe=$("<div>").addClass("Conv-Creer-Membre-Liste").data("d
 
 
 //variables pour la recherche de profil
-var JRechercheProfil=$("<div>").addClass("Recherche-Profil");
+var JRechercheProfil=$("<div>").addClass("Recherche-Profil").data("div","liste");
 
 var JRechercheProfilDivUser=$("<div>").addClass("Recherche-Profil-Div-User");
 var JRechercheProfilDivUserImg=$("<img>").addClass(["Recherche-Profil-Div-User-Img","rounded-circle"]);
@@ -1773,8 +1773,8 @@ function JCreerReactionLayout(Reponse){
     var JCloneReactionUp=JReactionUp.clone(true,true);
     var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
     var JCloneReactionCroix=JReactionCroix.clone(true,true);
-    var JCloneReaction =JReaction.clone(true,true);
-    //<div class="emoji-wysiwyg-editor form-control" maxlength="10" data-id="1fc8062d-f493-42b7-a2d7-a1ab9fe70295" data-type="input" placeholder="Input with max length of 10" contenteditable="true" style="height: 37px;"></div>
+    var JCloneReaction =JReaction.clone(true,true);//emoji-wysiwyg-editor
+
     JCloneReactionUp.append(JCloneReactionCroix);
     JCloneReaction.append([JCloneReactionUp,JCloneReactionMiddle]);
     JCloneReaction.hide();
@@ -2031,6 +2031,7 @@ function JCreerProfilRecherche(div,Reponse){
     
     if(div.data("div")==$(".Conv-Creer-Membre-Liste").data("div"))
     {   JCloneRechercheProfilDivUser.off("click");
+    console.log("on annule le click");
          //annuler le click
         JCloneRechercheProfilDivUser.on("click",function(){JCopierProfil($(".Conv-Creer-Membre-Div"),this);});}
 
