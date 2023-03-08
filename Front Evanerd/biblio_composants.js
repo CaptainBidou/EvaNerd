@@ -491,7 +491,7 @@ console.log(Reponse.membre);
         JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAppel).append(JCloneFooterCreer).append(JCloneFooterAgenda).append(JCloneFooterMail);
         $("#footer").append(JCloneFooter);
         }
-    if(Reponse.membre==false)
+    if(Reponse.membre==false || Reponse.membre==0 || Reponse.membre==null)
         {
             JCloneFooter.append(JCloneFooterAcceuil).append(JCloneFooterAgenda).append(JCloneFooterMail);
             $("#footer").append(JCloneFooter);
