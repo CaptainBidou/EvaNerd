@@ -185,8 +185,8 @@ function CreateAccount(context) {
             "sex": $(".selected").data("genre"),
             "instruments":$(".selectedInstruments").toArray().map(item => item.value)
     }
-
     console.log(json);
+    CreateUser(json);
  }
 
 function JRecupMessages(context){
