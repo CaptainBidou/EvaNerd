@@ -145,7 +145,16 @@ function ModifyUser($informations,$uid){
 function CreateUser($informations){
     $.ajax({
         type: "POST",
-        url: api + "/users",
+        url: api + "/users?firstName=" + $informations["firstName"] 
+        + "&lastName=" + $informations["lastName"] 
+        +"&age=" + $informations["age"]
+        +"&sex=" + $informations["sex"]
+        +"&mail=" + $informations["mail"]
+        +"&tel=" + $informations["tel"]
+        +"&studies=" + $informations["studies"]
+        + "&password=" + $informations["password"]
+
+        ,
         headers: {"authToken":""}, // données dans les entetes 
         data: [
             {
@@ -181,8 +190,9 @@ function CreateUser($informations){
                 "value": $informations["password"]
             }
         ],
-        error : function(){
+        error : function(error){
             console.log("Une erreur s'est produite");
+            console.log(error);
         },
         success: function(oRep){
             console.log(oRep); 
