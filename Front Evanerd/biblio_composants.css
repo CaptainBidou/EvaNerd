@@ -639,7 +639,7 @@ margin-left:0%;
 }
 .Message-Epingle{
 
-    margin-right:15%;
+    margin-right:12%;
     width:10%;
 
 
@@ -1286,5 +1286,21 @@ z-index: 10;
 {
     width:10%;
     position:absolute;
-    right:30%;
+    right:25%;
+}
+
+
+.Message-List-User-Div
+{
+    width:30%;
+    position:absolute;
+    background-color: lightgray;
+    font-size: 30%;
+    padding:2%;
+    right:20%;
+    top:99%;
+    border-radius: 2%;
+ max-height:300%;
+ overflow-y: scroll;
+ scrollbar-color: rebeccapurple green;
 }

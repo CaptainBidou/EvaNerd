@@ -1229,22 +1229,33 @@ var j=0;
     //JCloneMessage.scrollTop = JCloneMessage.scrollHeight;
 }
 
-
+function JLayoutListMessagesEffacer(target){
+    $(".Message-List-User-Div").empty();
+    $(".Message-List-User-Div").hide();
+    $(target).off("click");
+    $(target).on("click",function(context){JLayoutListMessages(context.target)});
+    console.log("effacer")
+}
 
 
 function JLayoutListMessages(target){
+    $(target).off("click");
+    $(".Message-List-User-Div").show();
+    $(target).on("click",function(context){JLayoutListMessagesEffacer(context.target);});
+   
+
     console.log($(target).data("idConv"));
 
     ListUserConv($(".Message-List-User-Div"),$(target).data("idConv"));
 
-
+console.log("afficher")
 }
 
 
 function JCreerMessage(Reponse){
     var JCloneMessageHeader = JMessageHeader.clone(true,true);
     var JCloneMessageFleche =JMessageFleche.clone(true,true);
-    var JCloneMessageListUserDiv=JMessageListUserDiv.clone(true,true);
+    var JCloneMessageListUserDiv=JMessageListUserDiv.clone(true,true).hide().data("div","listdesConvUsers");
     var JCloneMessageReglage=JMessageReglage.clone(true,true);
     var JCloneMessageList=JMessageList.clone(true,true).data("idConv",Reponse.groupId);
     var JCloneMessageEpingle=JMessageEpingle.clone(true,true).show();
