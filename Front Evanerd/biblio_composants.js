@@ -2129,20 +2129,27 @@ function JAdduserGroupe(id){
 
 
 
-//C'est comme ça qu'on code dans notre projet web
-function JRecupMail(Nom,Prénom){
+//C'est comme ça qu'on code dans notre projet info
+function JRecupMail(Nom,Prenom){
+//tes composants tu les met tout en haut et tu COMMENTE !! ( respecte les conventions de nommages et pas d'accents !!!)
+//ex: var JRecupMailPrenom =$("<div>")addClass("RecupMailPrenom"); //c'est un div qui contient le prénom de l'utilisateur
+//fais bien attention à leur mettre des classe pour detail le css
 
-    //ici tu clone tes composants
+    //ici tu clone tes composants avec le .clone(true,true)
+    //ex: var JRecupMailPrenomClone = JRecupMailPrenom.clone(true,true);
 
+    //la je t'ai rajouté ta fonction qui lance le ajax 
         var url = $(location).attr("href");
         url = url.split("?token=");
-        token = url[1];
+        token = url[1]; //je pense pas que ce soit utile de faire ça car on stock le token dans les cookies 
+
         VerifMail(token);
 
 
-// ici tu met à jour tes composants ( nom prénom en fonction du json)
+// ici tu met à jour tes composants ( nom prénom en fonction du json) c pour ça justement que jquery est interessant 
+//ex: JRecupMailPrenomClone.text(Prenom);
 
-//ici tu append tes composants dans la page
 
-
+//ici tu append tes composants dans la page avex $("#page").append(LE NOM DE TES COMPOSANTS);
+//ex: $("#page").append(JRecupMailPrenomClone);
 }
