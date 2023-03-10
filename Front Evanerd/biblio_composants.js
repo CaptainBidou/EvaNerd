@@ -1783,7 +1783,8 @@ function JCreerReactionLayout(Reponse){
     var JCloneReactionDivBottom=$("<div>").addClass("div-bottom-reaction").clone(true,true);
 
 
-    JAddReactionLayout(JCloneReactionMiddle,Reponse);
+    for(var i=0;i<Reponse.reactions.length;i++)
+    {    JAddReactionLayout(JCloneReactionMiddle,Reponse.reactions[i]);}
 
     
     
@@ -1811,7 +1812,13 @@ function JCreerReactionLayout(Reponse){
 }
 
 function JAddReactionLayout(div,Reponse){
+var JCloneProfilReactionImage=$("<img>").addClass("Profil-Reaction").attr("src",Reponse.user.photo).clone(true,true);
+var JCloneReactionContent=$("<p>").addClass("Reaction-Content").text(Reponse.content).clone(true,true);
 
+var JCloneProfileReactionDiv=$("<div>").addClass("Profile-Reaction").append([JCloneProfilReactionImage,JCloneReactionContent]).clone(true,true);
+
+$(div).append(JCloneProfileReactionDiv);   
+ 
 }
 
 
