@@ -1868,6 +1868,7 @@ if($(".Reglage-Profil-Layout").attr("type-position")=="visible")
     {   
         
         $(".Reglage-Profil-Layout").animate({left: '100%'});
+        $(".profile-reglage").animate({right:'0%'});
         $(".Reglage-Profil-Layout").attr("type-position","hide");
         return;
     }
@@ -1875,6 +1876,7 @@ if($(".Reglage-Profil-Layout").attr("type-position")=="hide")
 {
 
     $(".Reglage-Profil-Layout").animate({left: '25%'});
+    $(".profile-reglage").animate({right:'76%'});
     $(".Reglage-Profil-Layout").attr("type-position","visible");
     return;
 
