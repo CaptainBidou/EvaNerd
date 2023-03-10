@@ -1300,6 +1300,7 @@ z-index: 10;
     right:20%;
     top:99%;
     border-radius: 2%;
+    height: 0%;
  max-height:300%;
  overflow-y: scroll;
  scrollbar-color: rebeccapurple green;

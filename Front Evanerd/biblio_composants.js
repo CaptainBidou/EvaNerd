@@ -10,7 +10,7 @@ src="evanerd.html";
 /************************************************************************/
 /*                 DECLARATION DES VARIABLES                           */
 /***********************************************************************/
-
+var couleurDesMessagesEnLocal;
 var scroll;
 var windowscroll;
 var nbmessages=0;
@@ -1230,11 +1230,15 @@ var j=0;
 }
 
 function JLayoutListMessagesEffacer(target){
-    $(".Message-List-User-Div").empty();
-    $(".Message-List-User-Div").hide();
+   
+    
     $(target).off("click");
     $(target).on("click",function(context){JLayoutListMessages(context.target)});
     console.log("effacer")
+    $(".Message-List-User-Div").empty();
+    $(".Message-List-User-Div").animate({height:0,});
+    
+    $(".Message-List-User-Div").hide();
 }
 
 
@@ -1247,7 +1251,7 @@ function JLayoutListMessages(target){
     console.log($(target).data("idConv"));
 
     ListUserConv($(".Message-List-User-Div"),$(target).data("idConv"));
-
+    $(".Message-List-User-Div").animate({height:400,});
 console.log("afficher")
 }
 
@@ -1386,6 +1390,8 @@ if(Comm==1)
 function JmodifCouleur(Reponse){
     $(".Actif-Div").css("background-color",Reponse);
     $(".reponse-message-linked").css("background-color","blueviolet");
+    couleurDesMessagesEnLocal=Reponse;
+    localStorage.setItem('Couleur',Reponse);
 }
 
 function JCreerMessageActif(Reponse,div,couleur,rep)
@@ -1397,7 +1403,7 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
     if(couleur==null)
         couleur="lightblue";
 
-    var JCloneMessageActifDiv=JMessageActifDiv.clone(true,true).css("background-color",couleur).attr("id",Reponse.id);
+    var JCloneMessageActifDiv=JMessageActifDiv.clone(true,true).css("background-color",couleurDesMessagesEnLocal).attr("id",Reponse.id);
     var JCloneMessageActifTitre=JMessageActifTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
     var JCloneMessageActifContent=JMessageActifContent.clone(true,true).text(Reponse.content);
     
