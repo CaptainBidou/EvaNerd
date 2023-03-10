@@ -1771,6 +1771,7 @@ function JClickLike(target){
 
 
 function JCreerReactionLayout(Reponse){
+
     $(".card").css("filter","blur(20px)")
     var JCloneReactionUp=JReactionUp.clone(true,true);
     var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
@@ -2124,4 +2125,24 @@ function JAdduserGroupe(id){
     });
 
     AfficherMessagerie();
+}
+
+
+
+//C'est comme ça qu'on code dans notre projet web
+function JRecupMail(Nom,Prénom){
+
+    //ici tu clone tes composants
+
+        var url = $(location).attr("href");
+        url = url.split("?token=");
+        token = url[1];
+        VerifMail(token);
+
+
+// ici tu met à jour tes composants ( nom prénom en fonction du json)
+
+//ici tu append tes composants dans la page
+
+
 }
