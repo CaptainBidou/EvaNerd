@@ -1904,7 +1904,7 @@ JCloneReglageProfile.append([JCloneReglageLabel,JCloneReglageChangerImage,JClone
 
 $("#page").append(JCloneReglageProfile);
 JCloneReglageProfile.animate({left: '25%'});
-
+$(".profile-reglage").animate({right:'76%'});
 
 }
 
