@@ -522,6 +522,7 @@ function JcreerHeader(Reponse){
     var JCloneHeaderSearch=JHeaderSearch.clone(true,true);
     var JCloneHeaderTag=JHeaderTag.clone(true,true);
     var JCloneHeaderMenu=JHeaderMenu.clone(true,true);
+    JCloneHeaderTag=ajouterTextOverflow(JCloneHeaderTag,20);
     var JCloneHeaderItem=JHeaderItem.clone(true,true).text("blabla");
     var JCloneRechercheProfil=JRechercheProfil.clone(true,true).hide();
     JCloneHeaderMenu.append(JCloneHeaderItem);
