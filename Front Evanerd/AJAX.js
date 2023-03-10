@@ -1240,8 +1240,8 @@ function ListUserConv(div,idConv){
         url: api + "/groups/"+idConv+"/users",
         headers: {"authToken":authcode}, // données dans les entetes 
         data: [],
-        error : function(){
-            console.log("Une erreur s'est produite");
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
         },
         success: function(oRep){
             console.log(oRep); 
