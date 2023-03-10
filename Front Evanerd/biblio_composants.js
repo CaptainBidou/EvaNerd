@@ -15,6 +15,7 @@ var scroll;
 var windowscroll;
 var nbmessages=0;
 var usersLocal;
+var Group;
 //variables pour les posts
 var JPost =$("<div>").addClass(["card", "post"]).data('type','post');
 var JPostTitre=$("<h2>").addClass(["post-titre","card-title"]).data('type','post_titre');//TODO :rajouter des données pour quand on clique
@@ -173,12 +174,12 @@ var JConnexionNewAccount=$("<a>").addClass("Connexion-link").on("click",function
 //variables pour les réglages des messages 
 var JReglageMessage=$("<div>").addClass("Reglage-Message-Layout").attr("type","divisionReglage");
 var JReglageMessageImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Message-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;});
-var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Image").on("click",function(context){});
+var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit ").html("Ajouter une Image").on("click",function(context){});
 var JReglageMessageColor=$("<input>").attr("type","color").addClass("Message-Personne-Color");
 var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Changer de couleur").on("click",function(context){ var couleur=$(".Message-Personne-Color").val();
                                                                                                                                                         JmodifCouleur(couleur);});
 var JReglageMessagePerson=$("<input>").addClass("form-control Message-Personne-Reglage").attr("type","text").attr("placeholder","Nom de la personne");
-var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Personne").on("click",function(context){AjouterUtilisateur($(this))});
+var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit Reglage-Personne").html("Ajouter une Personne").on("click",function(context){AddUserConv(Group,$(this).data("id"));$(this).hide();$(".Message-Personne-Reglage").show(); $(".Conv-Recherche-Profil").empty().hide();});
 var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 
 // variables pour la création de compte
@@ -1262,6 +1263,7 @@ function JCreerMessage(Reponse){
     var JCloneMessageListUserDiv=JMessageListUserDiv.clone(true,true).hide().data("div","listdesConvUsers");
     var JCloneMessageReglage=JMessageReglage.clone(true,true);
     var JCloneMessageList=JMessageList.clone(true,true).data("idConv",Reponse.groupId);
+    Group=Reponse.groupId;
     var JCloneMessageEpingle=JMessageEpingle.clone(true,true).show();
     var JCloneMessageLayout=JMessageLayout.clone(true,true);
 
@@ -1724,7 +1726,7 @@ function JReglageConv(){
                 {$(".Conv-Recherche-Profil").empty().hide();return;}
             ListUser($(".Conv-Recherche-Profil"),$(".Message-Personne-Reglage").val());
         });
-    var JCloneReglageMessagePersonSubmit=JReglageMessagePersonSubmit.clone(true,true);
+    var JCloneReglageMessagePersonSubmit=JReglageMessagePersonSubmit.clone(true,true).hide();
 
 
     JCloneReglageMessage.append([JLabelImage,JCloneReglageMessageImage,JCloneReglageMessageImageSubmit,JLabelColor,JCloneReglageMessageColor,JCloneReglageMessageColorSubmit,JLabelPerson,
@@ -2111,7 +2113,15 @@ function JCreerProfilRecherche(div,Reponse){
     if(div.data("div")=="ConvAjouterMembre")
     {
         JCloneRechercheProfilDivUser.off("click");
-        JCloneRechercheProfilDivUser.on("click",function(){$(".Message-Personne-Reglage").hide();});
+        JCloneRechercheProfilDivUser.on("click",function(){$(".Message-Personne-Reglage").hide();
+        
+       var clone= $(this).clone(true,true);
+
+        $(".Conv-Recherche-Profil").empty();
+        $(".Conv-Recherche-Profil").append(clone);
+        $(".Reglage-Personne").fadeIn().data("id",Reponse.id);
+    });
+
     }
 
 

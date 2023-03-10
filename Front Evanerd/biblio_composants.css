@@ -1312,8 +1312,9 @@ z-index: 10;
 .Conv-Recherche-Profil
 {
     padding:5%;
-    background-color: lightgray;
+    background-color: gray;
     overflow-y: scroll;
+    border-radius: 0 0 5px 5px;
     scrollbar-color: rebeccapurple green;
     max-height: 100%;
 }
@@ -1333,4 +1334,12 @@ padding-top: 1%;
     width:13%;
     margin-left: 2%;
     margin-right: 2%;
+}
+
+
+.Message-List-User-Div>div>img
+{
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
 }
