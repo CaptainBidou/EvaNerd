@@ -1716,13 +1716,19 @@ function JReglageConv(){
     var JLabelColor=JReglageMessageLabel.clone(true,true).text("Changer la couleur de message");
     var JCloneReglageMessageColor=JReglageMessageColor.clone(true,true);
     var JCloneReglageMessageColorSubmit=JReglageMessageColorSubmit.clone(true,true);
+    
     var JLabelPerson=JReglageMessageLabel.clone(true,true).text("Ajouter une personne");
-    var JCloneReglageMessagePerson=JReglageMessagePerson.clone(true,true);
+    var JCloneReglageMessagePersonList=$("<div>").addClass("Conv-Recherche-Profil").hide().data("div","ConvAjouterMembre");
+    var JCloneReglageMessagePerson=JReglageMessagePerson.clone(true,true).on("keyup",function(context){
+            if($(".Message-Personne-Reglage").val()=="")
+                {$(".Conv-Recherche-Profil").empty().hide();return;}
+            ListUser($(".Conv-Recherche-Profil"),$(".Message-Personne-Reglage").val());
+        });
     var JCloneReglageMessagePersonSubmit=JReglageMessagePersonSubmit.clone(true,true);
 
 
-    JCloneReglageMessage.append([ JLabelTitre,JLabelImage,JCloneReglageMessageImage,JCloneReglageMessageImageSubmit,JLabelColor,JCloneReglageMessageColor,JCloneReglageMessageColorSubmit,JLabelPerson,
-        JCloneReglageMessagePerson,JCloneReglageMessagePersonSubmit]);
+    JCloneReglageMessage.append([JLabelImage,JCloneReglageMessageImage,JCloneReglageMessageImageSubmit,JLabelColor,JCloneReglageMessageColor,JCloneReglageMessageColorSubmit,JLabelPerson,
+        JCloneReglageMessagePerson,JCloneReglageMessagePersonList,JCloneReglageMessagePersonSubmit]);
 
 $("#page").append(JCloneReglageMessage);
 $(".Reglage-Message-Layout").animate({left: '25%'});
@@ -2101,6 +2107,14 @@ function JCreerProfilRecherche(div,Reponse){
     console.log("on annule le click");
          //annuler le click
         JCloneRechercheProfilDivUser.on("click",function(){JCopierProfil($(".Conv-Creer-Membre-Div"),this);});}
+
+    if(div.data("div")=="ConvAjouterMembre")
+    {
+        JCloneRechercheProfilDivUser.off("click");
+        JCloneRechercheProfilDivUser.on("click",function(){$(".Message-Personne-Reglage").hide();});
+    }
+
+
 
     JCloneRechercheProfilDivUser.append([JCloneRechercheProfilDivUserImg,JCloneRechercheProfilDivUserNom]);
 

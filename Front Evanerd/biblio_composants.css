@@ -680,8 +680,8 @@ margin-left:0%;
 
 .Message-Layout
 {
-background-color: gray;
-box-shadow: 0px -2px 10px silver;
+background-color: silver;
+/*box-shadow: 0px -2px 10px silver;*/
 padding:1%;
 font-size: 30%;
 width:75%;
@@ -694,7 +694,7 @@ overflow-y: scroll;
 scrollbar-color: rebeccapurple green;
 margin-top: 2%;
 padding-bottom: 4%;
-z-index: 5;
+
 }
 
 
@@ -715,13 +715,14 @@ background-color: silver;
 position: fixed;
 overflow-y: scroll;
 scrollbar-color: rebeccapurple green;
-height: 100%;
+height: 67%;
 width:75%;
 padding:5%;
 border-radius: 20px 0px 0px 20px ;
 left:100%;
 top:15%;
 z-index: 8;
+margin-bottom: 20%;
 }
 
 .Reglage-Message-Image,.Message-Personne-Color
@@ -1306,4 +1307,30 @@ z-index: 10;
  max-height:300%;
  overflow-y: scroll;
  scrollbar-color: rebeccapurple green;
+}
+
+.Conv-Recherche-Profil
+{
+    padding:5%;
+    background-color: lightgray;
+    overflow-y: scroll;
+    scrollbar-color: rebeccapurple green;
+    max-height: 100%;
+}
+
+.Conv-Recherche-Profil>div
+{
+height:8%;
+padding-top: 1%;
+
+}
+
+.Conv-Recherche-Profil>div>p{
+    margin-top: 1%;
+}
+
+.Conv-Recherche-Profil>div>img{
+    width:13%;
+    margin-left: 2%;
+    margin-right: 2%;
 }
