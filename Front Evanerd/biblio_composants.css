@@ -1281,3 +1281,10 @@ z-index: 10;
 
 
 }
+
+.Message-List
+{
+    width:10%;
+    position:absolute;
+    right:30%;
+}

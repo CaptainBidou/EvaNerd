@@ -135,6 +135,7 @@ var JMessageHeader = $("<nav>").addClass("navbar MessageHeader");
 var JMessageFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addClass("Message-Fleche").on("click",function(){AfficherMessagerie();});
 var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addClass("Message-Reglage").on("click",function(){JReglageConv();});
 var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle").on("click",function(context){JLayoutPinnedMessages(context.target);});
+var JMessageList=$("<img>").attr("src","Ressources/Message/list.png").addClass("Message-List").on("click",function(context){JLayoutListMessages(context.target);});
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
 var JMessageLayout=$("<div>").addClass("Message-Layout scroller").data("type","layout");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
@@ -1230,12 +1231,20 @@ var j=0;
 
 
 
+function JLayoutListMessages(target){
+    console.log($(target).data("idConv"));
+var div;
+    ListUserConv(div,$(target).data("idConv"));
 
+
+}
 
 function JCreerMessage(Reponse){
     var JCloneMessageHeader = JMessageHeader.clone(true,true);
     var JCloneMessageFleche =JMessageFleche.clone(true,true);
+
     var JCloneMessageReglage=JMessageReglage.clone(true,true);
+    var JCloneMessageList=JMessageList.clone(true,true).data("idConv",Reponse.groupId);
     var JCloneMessageEpingle=JMessageEpingle.clone(true,true).show();
     var JCloneMessageLayout=JMessageLayout.clone(true,true);
 
@@ -1249,7 +1258,7 @@ function JCreerMessage(Reponse){
 
     JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,55);
     
-    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageReglage,JCloneMessageEpingle,JCloneMessageLayout]);
+    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageList,JCloneMessageReglage,JCloneMessageEpingle,JCloneMessageLayout]);
     $("#page").append(JCloneMessageHeader);
     $("#page").append(JCloneMessage);
     JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);

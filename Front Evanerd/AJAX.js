@@ -1231,3 +1231,26 @@ function ChangerUserPresence(reason,present,$uid,$aid){
         dataType: "json"
     }); 
 }
+
+
+function ListUserConv(div,idConv){
+
+    $.ajax({
+        type: "GET",
+        url: api + "/groups/"+idConv+"/users",
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            for(var i = 0; i < oRep.users.length; i++){
+            JCreerProfilRecherche(div,oRep.users[i]);}
+
+
+        },
+        dataType: "json"
+    }); 
+
+}
