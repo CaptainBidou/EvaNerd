@@ -190,7 +190,7 @@ var ErrorMsg =  $("<p>")
 var JCréationCompte = $("<div>")
     .addClass("divFormCréationCompte");
 
-    var JCréationCompteAge= $("<input>")
+var JCréationCompteAge= $("<input>")
     .addClass("form-control ")
     .attr("placeholder","Age")
     .attr("id","Age")
@@ -209,7 +209,7 @@ var JCréationComptePwd= $("<input>")
     .attr("type","password");
 
 var JCréationCompteSubmit= $("<button>")
-    .addClass("btn btn-danger button-créa")
+    .addClass("btn btn-danger")
     .attr("id","Submit")
     .html("C'est parti !")
     .on("click",function(context){
@@ -1020,6 +1020,7 @@ else
 
 
 function JCreerEvenementCreer(){
+    
     $("#popup").remove();
     $("#page").empty();
 
