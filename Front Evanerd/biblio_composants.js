@@ -175,7 +175,8 @@ var JConnexionNewAccount=$("<a>").addClass("Connexion-link").on("click",function
 var JReglageMessage=$("<div>").addClass("Reglage-Message-Layout").attr("type","divisionReglage");
 var JReglageMessageImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Message-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;});
 var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit ").html("Ajouter une Image").on("click",function(context){});
-var JReglageMessageColor=$("<input>").attr("type","color").addClass("Message-Personne-Color");
+var JReglageMessageColor=$("<input>").attr("type","color").addClass("Message-Personne-Color").on("change",function(context){ var couleur=$(".Message-Personne-Color").val();
+JmodifCouleur(couleur);});;
 var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Changer de couleur").on("click",function(context){ var couleur=$(".Message-Personne-Color").val();
                                                                                                                                                         JmodifCouleur(couleur);});
 var JReglageMessagePerson=$("<input>").addClass("form-control Message-Personne-Reglage").attr("type","text").attr("placeholder","Nom de la personne");
@@ -1729,7 +1730,7 @@ function JReglageConv(){
     var JCloneReglageMessagePersonSubmit=JReglageMessagePersonSubmit.clone(true,true).hide();
 
 
-    JCloneReglageMessage.append([JLabelImage,JCloneReglageMessageImage,JCloneReglageMessageImageSubmit,JLabelColor,JCloneReglageMessageColor,JCloneReglageMessageColorSubmit,JLabelPerson,
+    JCloneReglageMessage.append([JLabelImage,JCloneReglageMessageImage,JCloneReglageMessageImageSubmit,JLabelColor,JCloneReglageMessageColor,JLabelPerson,
         JCloneReglageMessagePerson,JCloneReglageMessagePersonList,JCloneReglageMessagePersonSubmit]);
 
 $("#page").append(JCloneReglageMessage);
