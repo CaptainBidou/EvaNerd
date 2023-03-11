@@ -931,4 +931,13 @@ function updateGroup($gid, $title = false, $image = false) {
     return $db->SQLUpdate($sql, $params);
 }
 
+function selectPostLikes($pid) {
+    $db = Config::getDatabase();
+    $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
+    $sql = "SELECT Users.id, Users.firstName, Users.lastName, $photo FROM Post_Likes
+            JOIN Users ON Users.id = Post_Likes.uid
+            WHERE pid = ? AND liked = 1;";
+    return Database::parcoursRs($db->SQLSelect($sql, [$pid]));
+}
+
 ?>
