@@ -176,7 +176,6 @@ function putUser($data, $idTabs, $authKey,$queryString) {
     if($authKey) {
         $uid = $idTabs[0];
         $uidConn = validUser(authToId($authKey));
-        $dir = DIR_USERS . $uid;
         if($uidConn != $uid && !searchRole("Membre du CA", selectUserRoles($uid))) 
             sendError("Vous n'avez pas la permissions !", HTTP_UNAUTHORIZED);
 
@@ -461,12 +460,18 @@ function createUserGroups($data, $authKey, $queryString) {
     $image = "default.png";
     if (!is_dir($dir)) mkdir($dir);
     if ($title = validString(valider("title", $queryString), 70, 3)) {
-        if (isset($_FILES["image"])) {
+        if (isset($_FILES["image"]) && $_FILES["image"]["size"] == 0) {
             $imageInfo = uploadImage("$dir/image", $_FILES["image"]);
             if ($imageInfo["code"] != 1) sendError($imageInfo["message"], HTTP_FORBIDDEN);
             $image = basename($imageInfo["filename"]);
         }
-        $gid = insertGroup($uidConn, $image, $title);
+        else {
+            // Copie l'image de profil de l'utilisateur
+            $path = glob(DIR_USERS . $uidConn . "/*");
+            if (count($path) > 0) copy($path[0], "$dir/" . basename($path[0]));
+            else sendError("Erreur lors de la création du groupe", HTTP_FORBIDDEN);
+        }
+        $gid = insertGroup($uidConn, basename($path[0]), $title);
         $data["group"] = selectGroup($gid)[0];
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
     } sendError("il faut spécifier un titre", HTTP_FORBIDDEN);
@@ -1027,4 +1032,17 @@ function postPostReactions($data, $idTabs, $authKey, $queryString) {
     deletePostReaction($pid, $uidConn, $emoji);
     $data["reaction"] = null;
     sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+}
+
+function putGroups($data, $idTabs, $authKey, $queryString) {
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $gid = $idTabs[0];
+    $group = selectGroup($gid, $uidConn);
+    if (!$group) sendError("Ce groupe n'existe pas !", HTTP_FORBIDDEN);
+    if(!haveGroupPermission($uidConn, $gid) && !isInGroup($uidConn, $gid)) sendError("Vous n'avez pas les droits !", HTTP_FORBIDDEN);
+    $title = validString(valider("title", $queryString), 70, 1, true);
+    updateGroup($gid, $title, false);
+    $data["group"] = selectGroup($gid, $uidConn)[0];
+    sendResponse($data, [getStatusHeader(HTTP_OK)]);
 }
