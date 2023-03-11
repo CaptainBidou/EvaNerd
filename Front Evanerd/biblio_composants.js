@@ -180,7 +180,7 @@ var JConnexionRecupAccount=$("<p>").addClass("Connexion-link").on("click",functi
 var JReglageMessage=$("<div>").addClass("Reglage-Message-Layout").attr("type","divisionReglage");
 var JReglageMessageImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Message-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;});
 var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit ").html("Ajouter une Image").on("click",function(context){
-    AddConvPicture(Group,$(".Reglage-Message-Image").val());
+    AddConvPicture(Group,$(".Reglage-Message-Image").prop("files")[0]);
     $(".Reglage-Message-Image").val("");
 
 
