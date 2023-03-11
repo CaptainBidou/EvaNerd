@@ -202,6 +202,11 @@ switch($action) {
     case "POST /posts/ID/likes":
         postPostLike($data, $idTabs, $authKey);
         break;
+    
+    
+    case "POST /posts/ID/reactions":
+        postPostReactions($data, $idTabs, $authKey, $queryString);
+    break;
 
     case "POST /posts/ID/messages":
         postPostMessage($data, $idTabs, $authKey, $queryString);
