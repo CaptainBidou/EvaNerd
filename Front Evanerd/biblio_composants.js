@@ -28,9 +28,9 @@ var JPostImage=$("<img>").addClass("card-img-top").data('type','post_image');
 var JPostDescription=$("<p>").addClass(["post-description", "card-text"]).data('type','post_text');
 var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle','profile']).on("click",function(context){AfficherProfile(context.target);}).data("type","post_profile");//TODO :rajouter des données pour quand on clique
 var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').on("click",function(context){JclickEpingle(context.target);});
-var JPostLike= $("<img>").addClass(" postLike").data("type","post_like").attr('src','Ressources/Accueil/like.png').on("click",function(context){JClickLike(context.target); var nblike=parseInt($(".Post-Nb-Likes", this.parentElement).text()); $(".Post-Nb-Likes", this.parentElement).text(nblike+1)});
+var JPostLike= $("<img>").addClass("postLike").data("type","post_like").attr('src','Ressources/Accueil/like.png').on("click",function(context){JClickLike(context.target); var nblike=parseInt($(".Post-Nb-Likes", this.parentElement).text()); $(".Post-Nb-Likes", this.parentElement).text(nblike+1)});
 var JPostReaction= $("<img>").addClass("icon-react").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png').on("click",function(context){GetReactionPost($(context.target).data("id"));});
-var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts(context.target);});
+var JPostCommentaire= $("<img>").addClass("icon-comm").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts(context.target);});
 
 //variables pour le footer
 var JFooter =$("<nav>").addClass(["footer","navbar"]).data("type","footer").on("click",function(context){JClickFooter(context);});
