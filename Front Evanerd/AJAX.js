@@ -1285,7 +1285,7 @@ function PostReactionPost(id,react)
 {
     $.ajax({
         type: "POST",
-        url: api + "/posts/"+id+"/emojis?emoji="+react,
+        url: api + "/posts/"+id+"/reactions?emoji="+react,
         headers: {"authToken":authcode}, // données dans les entetes 
         data: [],
         error: function( jqXhr, textStatus, errorThrown){

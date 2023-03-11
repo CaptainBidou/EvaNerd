@@ -1252,10 +1252,10 @@ position:absolute !important;
 bottom: 8%;
 width:50%;
 border-radius: 2%;
-background-color: whitesmoke;
+
 margin-left: 30%;
 padding: 2%;;
-/*zoom: 300%;*/
+zoom: 100%;
 z-index: 10;
 }
 
