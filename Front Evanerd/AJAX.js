@@ -394,6 +394,24 @@ function  ChargementInfosProfil($id){
     })})});
 }
 
+
+function Deconnexion(){
+    $.ajax({
+        type: "POST",
+        url: api + "/users/logout",
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            ConnexionAuto();
+        },
+        dataType: "json"
+    });   
+}
+
 /***** USERS END **********/
 
 /* ROLES AJAX FUNC */
@@ -818,6 +836,8 @@ function EpinglerMsgConv($mid, currentGroup, $authToken){
     });
 
 }
+
+
 
 
 
