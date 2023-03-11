@@ -150,7 +150,11 @@ var JMessageList=$("<img>").attr("src","Ressources/Message/list.png").addClass("
 var JMessageListUserDiv=$("<div>").addClass("Message-List-User-Div");
 var JMessageParticipant=$("<p>").addClass("Message-Participant")
 .on("click",function(context){
-var JMessageInputText=$("<input>").attr("type","text").addClass("Message-Input-Text-Titre").attr("placeholder","Votre message").clone(true,true);
+var JMessageInputText=$("<input>").attr("type","text").addClass("Message-Input-Text-Titre").attr("placeholder","Votre message").clone(true,true)
+.on("keyup",function(context){if (context.which==13){
+    ModifConvTitre($(this).val());
+    
+    $(".Message-Participant").text($(this).val()).show();$(this).remove();}});
 
 JMessageInputText.val($(this).hide().text());
 
