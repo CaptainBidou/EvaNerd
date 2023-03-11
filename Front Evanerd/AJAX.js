@@ -841,7 +841,10 @@ function ListPosts($authToken){
             oRep["posts"].sort(function compare(e1,e2) { return e2.pinned - e1.pinned });
             oRep["posts"].forEach(element => {
                 element["membre"] = 1;
-                JcreerPost(element,member,admin);
+                GetLikesPosts(element.id,element,member);
+
+                /*element["membre"] = 1;
+                JcreerPost(element,member,admin);*/
             });
 
         },
@@ -1397,4 +1400,27 @@ function AddUserPicture($img){
         },
         dataType: "json"
     });
+}
+
+function GetLikesPosts(idPost,post,membre)
+{
+
+    $.ajax({
+        type: "GET",
+        url: api + "/posts/"+idPost+"/likes",
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [],
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
+        },
+        success: function(oRep){
+            console.log(oRep);
+            post.likes=oRep.likes.length;
+            JcreerPost(post,membre,admin);
+        },
+        dataType: "json"
+    }); 
+
+
+
 }
