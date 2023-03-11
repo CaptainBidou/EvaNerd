@@ -1324,6 +1324,7 @@ scrollbar-color: rebeccapurple green;
 
 .Message-List-User-Div
 {
+
     width:30%;
     position:absolute;
     background-color: lightgray;
@@ -1332,10 +1333,10 @@ scrollbar-color: rebeccapurple green;
     right:20%;
     top:99%;
     border-radius: 2%;
-    height: 0%;
- max-height:300%;
- overflow-y: scroll;
- scrollbar-color: rebeccapurple green;
+    overflow-y: auto;
+
+ 
+
 }
 
 .Conv-Recherche-Profil

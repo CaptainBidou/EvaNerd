@@ -152,7 +152,7 @@ var JMessageParticipant=$("<p>").addClass("Message-Participant")
 .on("click",function(context){
 var JMessageInputText=$("<input>").attr("type","text").addClass("Message-Input-Text-Titre").attr("placeholder","Votre message").clone(true,true)
 .on("keyup",function(context){if (context.which==13){
-    ModifConvTitre($(this).val());
+    ModifConvTitre($(this).val(),Group);
     
     $(".Message-Participant").text($(this).val()).show();$(this).remove();}});
 
@@ -1319,6 +1319,7 @@ function JLayoutListMessages(target){
 
     ListUserConv($(".Message-List-User-Div"),$(target).data("idConv"));
     $(".Message-List-User-Div").animate({height:400,});
+   
 console.log("afficher")
 }
 
