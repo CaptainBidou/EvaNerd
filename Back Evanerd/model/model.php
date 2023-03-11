@@ -910,4 +910,25 @@ function selectGroupUsers($gid) {
     
     return Database::parcoursRs($db->SQLSelect($sql, [$gid]));
 }
+
+function updateGroup($gid, $title = false, $image = false) {
+    $db = Config::getDatabase();
+    $sql = "UPDATE Groups SET ";
+    $params = [];
+    if($title !== false) {
+        $sql .= "titre = ?,";
+        array_push($params, $title);
+    }
+    // TODO : changer le nom de l'attribut
+    else $sql .= " titre = titre,";
+    if($image !== false) {
+        $sql .= "image = ?";
+        array_push($params, $image);
+    }
+    else $sql .= " image = image";
+    $sql .= " WHERE id = ?";
+    array_push($params, $gid);
+    return $db->SQLUpdate($sql, $params);
+}
+
 ?>
