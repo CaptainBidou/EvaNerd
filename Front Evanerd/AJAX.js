@@ -99,21 +99,24 @@ function GETUsers(){
  */
 
 function ModifyUser($informations,$uid){
-    $data = [];
-    if ($informations["firstName"])
-        $data["firstname"] = $informations["firstName"];
-    if ($informations["lastName"])
-        $data["lastName"] = $informations["lastName"];
-    if ($informations["age"])
-        $data["age"] = $informations["age"];
-    if ($informations["sex"])
-        $data["sex"] = $informations["sex"];
-    if ($informations["mail"])
-        $data["mail"] = $informations["mail"];
-    if ($informations["tel"])
-        $data["tel"] = $informations["tel"];
-    if ($informations["studies"])
-        $data["studies"] = $informations["studies"];
+    $data = {};
+    if ($informations.firstName)
+        $data.firstName= $informations.firstName;
+    if ($informations.lastName)
+        $data.lastName = $informations.lastName;
+    if ($informations.age)
+        $data.age = $informations.age;
+    if ($informations.sex)
+        $data.sex = $informations.sex;
+    if ($informations.mail)
+        $data.mail = $informations.mail;
+    if ($informations.tel)
+        $data.tel = $informations.tel;
+    if ($informations.studies)
+        $data.studies = $informations.studies;
+ 
+
+
 
     $.ajax({
         type: "PUT",
