@@ -145,4 +145,23 @@ function caPicture($output, $image, $thickness = 10) {
     imagepng($im, $output);
     imagedestroy($im);
 }
+
+
+/**
+ * Transforme une image rectangulaire en carré en conservant les proportions
+ * @param string $output chemin de sortie de l'image
+ * @param string $image l'image à modifier
+ * @return void
+ */
+function squarePicture($output, $image) {
+    $im = genGDObject($image);
+    $width  = imagesx($im);
+    $newImage = imagecreatetruecolor($width, $width);
+    $bg = imagecolorallocate($newImage, 255, 255, 255);
+    imagefill($newImage, 0, 0, $bg);
+    imagecopyresampled($newImage, $im, 0, 0, 0, 0, $width, $width, $width, $width);
+    imagepng($newImage, $output);
+    imagedestroy($newImage);
+    imagedestroy($im);
+}
 ?>

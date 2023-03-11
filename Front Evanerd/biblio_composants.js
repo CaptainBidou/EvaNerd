@@ -148,7 +148,19 @@ var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addC
 var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle").on("click",function(context){JLayoutPinnedMessages(context.target);});
 var JMessageList=$("<img>").attr("src","Ressources/Message/list.png").addClass("Message-List").on("click",function(context){JLayoutListMessages(context.target);});
 var JMessageListUserDiv=$("<div>").addClass("Message-List-User-Div");
-var JMessageParticipant=$("<p>").addClass("Message-Participant");
+var JMessageParticipant=$("<p>").addClass("Message-Participant")
+.on("click",function(context){
+var JMessageInputText=$("<input>").attr("type","text").addClass("Message-Input-Text-Titre").attr("placeholder","Votre message").clone(true,true)
+.on("keyup",function(context){if (context.which==13){
+    ModifConvTitre($(this).val(),Group);
+    
+    $(".Message-Participant").text($(this).val()).show();$(this).remove();}});
+
+JMessageInputText.val($(this).hide().text());
+
+$(".MessageHeader").append(JMessageInputText);
+
+});
 var JMessageLayout=$("<div>").addClass("Message-Layout scroller").data("type","layout");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
 var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message").on("keyup",function(context){if (context.which==13){JEnvoyerMessage($(".Message-Send")[0]);}});
@@ -1307,6 +1319,7 @@ function JLayoutListMessages(target){
 
     ListUserConv($(".Message-List-User-Div"),$(target).data("idConv"));
     $(".Message-List-User-Div").animate({height:400,});
+   
 console.log("afficher")
 }
 
@@ -1905,7 +1918,7 @@ function JCreerReactionLayout(Reponse){
 
     });
     var JDivReactionContainer=$("<div>").addClass("emoji-picker-container div-emoji").clone(true,true);
-    var JInputReaction=$("<input>").addClass("emoji-input-select").attr("type","text").attr({"data-emojiable":"true"}).clone(true,true);
+    var JInputReaction=$("<input>").addClass("emoji-input-select").attr("type","text").attr({"data-emojiable":"true","maxlength":1}).clone(true,true);
    
 
     window.emojiPicker = new EmojiPicker({

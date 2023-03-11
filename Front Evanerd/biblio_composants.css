@@ -38,7 +38,7 @@
     position:absolute;
     right:18%;
     
-    bottom:8%;
+    bottom:3%;
 }
 
 .icon-comm
@@ -46,7 +46,7 @@
 position:absolute;
     width:12%;
     right:2%;
-bottom:5%;
+bottom:2%;
 }
 
 .Post-Reaction-Icon
@@ -1274,10 +1274,10 @@ position:absolute !important;
 bottom: 8%;
 width:50%;
 border-radius: 2%;
-
+background-color: whitesmoke;
 margin-left: 30%;
 padding: 2%;;
-zoom: 100%;
+zoom: 300%;
 z-index: 10;
 }
 
@@ -1324,6 +1324,7 @@ scrollbar-color: rebeccapurple green;
 
 .Message-List-User-Div
 {
+
     width:30%;
     position:absolute;
     background-color: lightgray;
@@ -1332,10 +1333,10 @@ scrollbar-color: rebeccapurple green;
     right:20%;
     top:99%;
     border-radius: 2%;
-    height: 0%;
- max-height:300%;
- overflow-y: scroll;
- scrollbar-color: rebeccapurple green;
+    overflow-y: auto;
+
+ 
+
 }
 
 .Conv-Recherche-Profil
@@ -1421,7 +1422,14 @@ font-size: 150%;
 .postLike
 {
     width: 12%;
+    margin-bottom: 2%;
     float: right;
     margin-right: 68%;
     
+}
+
+.Message-Input-Text-Titre{
+
+width:48%;
+margin-right:39%;
 }

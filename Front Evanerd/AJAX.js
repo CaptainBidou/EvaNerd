@@ -1436,3 +1436,31 @@ function GetLikesPosts(idPost,post,membre)
 
 
 }
+
+
+function ModifConvTitre(titre,id)
+{
+    
+    $.ajax({
+        type: "PUT",
+        url: api + "/groups/"+id+"?title="+titre,
+        headers: {"authToken":authcode}, // données dans les entetes
+        data:[],
+        processData: false,
+        contentType: false,
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+        },
+
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        },
+        dataType: "json"
+    });
+
+}
