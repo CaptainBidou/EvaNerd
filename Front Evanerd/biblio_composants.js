@@ -1867,7 +1867,17 @@ function JCreerReactionLayout(Reponse){
     var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
     var JCloneReactionCroix=JReactionCroix.clone(true,true);
     var JCloneReaction =JReaction.clone(true,true);//emoji-wysiwyg-editor
-    var JCloneBoutonEnvoyerReaction=$("<img>").addClass("Bouton-Envoyer-Reaction").attr("src","Ressources/Message/send.png").clone(true,true);
+    var JCloneBoutonEnvoyerReaction=$("<img>").addClass("Bouton-Envoyer-Reaction").attr("src","Ressources/Message/send.png").data("id",Reponse.postId)
+    .clone(true,true).on("click",function(){
+        console.log($(this).data("id"));
+        if($(".emoji-input-select").val()=="")
+        {return;}
+        var emojiData=$(".emoji-input-select").val();
+        PostReactionPost($(this).data("id"),emojiData);
+
+
+
+    });
     var JDivReactionContainer=$("<div>").addClass("emoji-picker-container div-emoji").clone(true,true).attr({"data-emojiable":"true","maxlength":1});
     var JInputReaction=$("<input>").addClass("emoji-input-select").attr("type","text").attr({"data-emojiable":"true","maxlength":1}).clone(true,true);
    
@@ -1897,14 +1907,14 @@ function JCreerReactionLayout(Reponse){
     $("#page").append(JCloneReaction);
     JCloneReaction.fadeIn(1000);
 
-
+/*
     window.emojiPicker = new EmojiPicker({
         emojiable_selector: '[data-emojiable=true]',
         assetsPath: "Bootstrap/EmojiPicker/emoji-picker-text-fields/lib/img/",
         popupButtonClasses: 'fa fa-smile-o', // far fa-smile if you're using FontAwesome 5
       });
       window.emojiPicker.discover();
-
+*/
 
 }
 
