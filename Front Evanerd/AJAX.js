@@ -181,6 +181,12 @@ function ModifyUser($informations,$uid){
  */
 
 function CreateUser($informations){
+    if ($informations["photo"]){
+        var formData = new FormData();
+        formData.append("image", $informations["photo"]);
+    }
+
+
     var url = api + "/users?firstName=" + $informations["firstName"] 
     +"&lastName=" + $informations["lastName"] 
     +"&age=" + $informations["age"]
@@ -197,39 +203,37 @@ function CreateUser($informations){
         url: url
         ,
         headers: {"authToken":""}, // données dans les entetes 
+        data: formData,
+        processData: false,
+        contentType : false,
+        error : function(error){
+            console.log("Une erreur s'est produite");
+            console.log(error);
+        },
+        success: function(oRep){
+            console.log(oRep); 
+
+        },
+        dataType: "json"
+    }).done(function myFunc(oRep) {
+        console.log( $informations.instruments);
+        //PostUserImage(oRep["user"].id);
+
+        /*$informations["instruments"].forEach(element => {
+            AddUserInstruments(element);
+        })*/
+    });
+    
+}
+
+function PostUserImage($uid){
+    $.ajax({
+        type: "POST",
+        url: api + "/users/" + $uid + "/image",
+        headers: {"authToken":""}, // données dans les entetes 
         data: [
             {
-                "key": "firstName",
-                "value": $informations["firstName"]
             },
-            {
-                "key": "lastName",
-                "value": $informations["lastName"]
-            },
-            {
-                "key": "age",
-                "value": $informations["age"]
-            },
-            {
-                "key": "sex",
-                "value": $informations["sex"]
-            },
-            {
-                "key": "mail",
-                "value": $informations["mail"]
-            },
-            {
-                "key": "tel",
-                "value": $informations["tel"]
-            },
-            {
-                "key": "studies",
-                "value": $informations["studies"]
-            },
-            {
-                "key": "password",
-                "value": $informations["password"]
-            }
         ],
         error : function(error){
             console.log("Une erreur s'est produite");
@@ -241,13 +245,8 @@ function CreateUser($informations){
 
         },
         dataType: "json"
-    }).done(function myFunc() {
-        console.log( $informations.instruments);
-        $informations["instruments"].forEach(element => {
-            AddUserInstruments(element);
-        })
-    });
-    
+    })
+
 }
 
 /**
@@ -361,41 +360,46 @@ function  ChargementInfosProfil($id){
             $id = oRep.user.id;
         },
         dataType: "json",
-    }).done(function ListUserInstruments(){
-        console.log($id);
-        $.ajax({
-            type: "GET",
-            url: api + "/users/" + $id + "/instruments",
-            headers: {"authToken" : ""},
-            data: [],
-            error : function(){
-                console.log("Une erreur s'est produite");
-            },
-            success: function(oRep){
-                console.log(oRep);
-                userProfile.instruments = oRep.instruments;
-                userProfile.userId=oRep.userId;
-            },
-            dataType: "json",
-        }).done( function ListUserRoles(){
-            $.ajax({
-                type: "GET",
-                url: api + "/users/" + $id + "/roles",
-                headers: {"authToken" : ""},
-                data: [],
-                error : function(){
-                    console.log("Une erreur s'est produite");
-                },
-                success: function(oRep){
-                    console.log(oRep);
-                    userProfile.Roles = oRep.roles
-                    AfficherProfilCharger(oRep);
-                },
-                dataType: "json",
-            });
-            });
-        })
-    }
+    }).done(ListUserInstruments($id))
+}
+
+function ListUserInstruments($id){
+    console.log($id);
+    $.ajax({
+        type: "GET",
+        url: api + "/users/" + $id + "/instruments",
+        headers: {"authToken" : ""},
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+            userProfile.instruments = oRep.instruments;
+            userProfile.userId=oRep.userId;
+        },
+        dataType: "json",
+    }).done(ListUserRoles($id))
+}
+
+
+function ListUserRoles($id){
+    $.ajax({
+        type: "GET",
+        url: api + "/users/" + $id + "/roles",
+        headers: {"authToken" : ""},
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+            userProfile.Roles = oRep.roles
+            AfficherProfilCharger(oRep);
+        },
+        dataType: "json",
+    });
+}
 
 /***** USERS END **********/
 
