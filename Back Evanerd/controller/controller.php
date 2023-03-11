@@ -546,7 +546,7 @@ function listPostReactions($data, $idTabs, $authKey) {
     $notAMember = searchRole("Non Membre", selectUserRoles($uidConn));
     $postData = selectPost($pid);
     if (!$postData) sendError("Ce post n'existe pas !", HTTP_BAD_REQUEST);
-    if ($notAMember && !$postData[0]["visible"]) sendError("VOus n'avez pas les permissions !", HTTP_FORBIDDEN);
+    if ($notAMember && !$postData[0]["visible"]) sendError("Vous n'avez pas les permissions !", HTTP_FORBIDDEN);
     $reactionData = groupby(selectPostReactions($pid), "emoji");
     $data["postId"] = $pid;
     $data["reactions"] = $reactionData;
@@ -587,6 +587,21 @@ function listPostsMessages($data, $idTabs, $authKey) {
     }
     sendResponse($data, getStatusHeader());
 
+}
+
+function listPostLikes($data, $idTabs, $authKey) {
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $pid = $idTabs[0];
+    $notAMember = searchRole("Non Membre", selectUserRoles($uidConn));
+    $postData = selectPost($pid);
+    if (!$postData) sendError("Ce post n'existe pas !", HTTP_BAD_REQUEST);
+    if ($notAMember && !$postData[0]["visible"]) sendError("Vous n'avez pas les permissions !", HTTP_FORBIDDEN);
+    $likeData = selectPostLikes($pid);
+    $data["postId"] = $pid;
+    $data["total"] = count($likeData);
+    $data["likes"] = $likeData;
+    sendResponse($data, [getStatusHeader(HTTP_OK)]);
 }
 
 function listAgendas($data, $queryString, $authKey) {
@@ -702,7 +717,7 @@ function postMessageReactions($data, $idTabs, $authKey, $queryString) {
     $msg = selectGroupMessage($mid, $gid);
     $reac = selectGroupReaction($mid, $uidConn, $emoji);
     $data["reaction"] = ["uid" => $uidConn, "mid" => $mid];
-    if (haveGroupPermission($uidConn, $gid)) sendError("VOus n'avez pas les permissions !", HTTP_FORBIDDEN);
+    if (haveGroupPermission($uidConn, $gid)) sendError("Vous n'avez pas les permissions !", HTTP_FORBIDDEN);
     if (!$msg) sendError("Ce message n'existe pas !", HTTP_BAD_REQUEST);
     $data["groupId"] = $gid;
     $data["messageId"] = $mid;
