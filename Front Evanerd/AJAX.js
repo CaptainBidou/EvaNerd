@@ -312,6 +312,7 @@ function VerifMail($token){
         },
         success: function(oRep){
             console.log(oRep); 
+            JVerifMail(oRep["user"]);
         },
         dataType: "json"
     });   
@@ -369,6 +370,24 @@ function  ChargementInfosProfil($id){
     })})});
 }
 
+
+function resetMDP(mdp,token){
+    $.ajax({
+        type: "POST",
+        url: api + "/users/reset?resetToken="+ token + "&password="+mdp,
+        headers: {}, // données dans les entetes 
+        data: [],
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            $("#page").html("");
+            ConnexionAuto();
+        },
+        dataType: "json"
+    });   
+}
 
 function Deconnexion(){
     $.ajax({
