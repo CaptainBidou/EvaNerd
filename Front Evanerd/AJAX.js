@@ -145,7 +145,16 @@ function ModifyUser($informations,$uid){
 function CreateUser($informations){
     $.ajax({
         type: "POST",
-        url: api + "/users",
+        url: api + "/users?firstName=" + $informations["firstName"] 
+        + "&lastName=" + $informations["lastName"] 
+        +"&age=" + $informations["age"]
+        +"&sex=" + $informations["sex"]
+        +"&mail=" + $informations["mail"]
+        +"&tel=" + $informations["tel"]
+        +"&studies=" + $informations["studies"]
+        + "&password=" + $informations["password"]
+
+        ,
         headers: {"authToken":""}, // données dans les entetes 
         data: [
             {
@@ -181,8 +190,9 @@ function CreateUser($informations){
                 "value": $informations["password"]
             }
         ],
-        error : function(){
+        error : function(error){
             console.log("Une erreur s'est produite");
+            console.log(error);
         },
         success: function(oRep){
             console.log(oRep); 
@@ -435,6 +445,17 @@ function ListInstruments(){
         },
         success: function(oRep){
             console.log(oRep); 
+            oRep.instruments.forEach(element => {
+                $("#Instrument").append($('<option>', {
+                    value: element.id,
+                    text: element.label,
+                }).on("click",function func(context){
+                    if (!$(context.target).hasClass("selectedInstruments"))
+                        $(context.target).addClass("selectedInstruments");
+                    else
+                        $(context.target).removeClass("selectedInstruments");
+                }));
+            })
         },
         dataType: "json"
     });   
@@ -1209,4 +1230,27 @@ function ChangerUserPresence(reason,present,$uid,$aid){
         },
         dataType: "json"
     }); 
+}
+
+
+function ListUserConv(div,idConv){
+
+    $.ajax({
+        type: "GET",
+        url: api + "/groups/"+idConv+"/users",
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [],
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            for(var i = 0; i < oRep.users.length; i++){
+            JCreerProfilRecherche(div,oRep.users[i]);}
+
+
+        },
+        dataType: "json"
+    }); 
+
 }

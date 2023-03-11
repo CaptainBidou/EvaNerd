@@ -377,6 +377,7 @@ width:10%;
 position:absolute;
 right:0;
 margin: 2%;
+z-index: 10;
 }
 .profile-arrow
 {
@@ -424,6 +425,7 @@ bottom:9%;
 width:100%;
 padding:1%;
 display: inline;
+z-index: 10;
 /*height:8%;*/
 }
 .Message-Input
@@ -475,10 +477,6 @@ margin-right: 5%;
     margin-top:5%;
     color:black;
     
-}
-
-.labelCréationGenre
-{
 }
 
 .divCréaCompte
@@ -643,7 +641,7 @@ margin-left:0%;
 }
 .Message-Epingle{
 
-    margin-right:15%;
+    margin-right:12%;
     width:10%;
 
 
@@ -651,7 +649,7 @@ margin-left:0%;
 
 .Message-Participant
 {
-    margin-right:30%;
+    margin-right:34%;
 }
 
 .reponse-message-linked
@@ -682,20 +680,21 @@ margin-left:0%;
 
 .Message-Layout
 {
-background-color: gray;
-box-shadow: 0px -2px 10px silver;
+background-color: silver;
+/*box-shadow: 0px -2px 10px silver;*/
 padding:1%;
 font-size: 30%;
 width:75%;
 position: absolute;
 left:100%;
-top:105%;
-height:780%;
-border-radius: 20px 0px 0px 20px ;
+top:80%;
+height:820%;
+/*border-radius: 20px 0px 0px 20px ;*/
 overflow-y: scroll;
 scrollbar-color: rebeccapurple green;
 margin-top: 2%;
-margin-bottom: 2%;
+padding-bottom: 4%;
+
 }
 
 
@@ -716,14 +715,14 @@ background-color: silver;
 position: fixed;
 overflow-y: scroll;
 scrollbar-color: rebeccapurple green;
-height: 63%;
+height: 67%;
 width:75%;
 padding:5%;
 border-radius: 20px 0px 0px 20px ;
 left:100%;
-top:19%;
-
-z-index: 10;
+top:15%;
+z-index: 8;
+margin-bottom: 20%;
 }
 
 .Reglage-Message-Image,.Message-Personne-Color
@@ -849,7 +848,7 @@ margin-top:5%;
     position: fixed;
     z-index: 10;
     background-color: gray;
-    height:60%;
+    height:40%;
     width:80%;
     top:20%;
     left:10%;
@@ -908,13 +907,13 @@ margin-top:5%;
     position: fixed;
     overflow-y: scroll;
     scrollbar-color: rebeccapurple green;
-    height: 63%;
+    height: 100%;
     width:75%;
     padding:5%;
     border-radius: 20px 0px 0px 20px ;
     left:100%;
-    top:19%;
-    z-index: 10;
+    top:9%;
+    z-index: 9;
     
    
   
@@ -1036,7 +1035,7 @@ box-shadow: 10px 10px 10px gray;
     top:100%;
     padding:5%;
     border-radius: 20px 20px 20px 20px ;
-    background-color: darkred;
+    background-color: silver;
     box-shadow: black 0px 0px 10px;
     z-index: 10;
     font-size: 200%;
@@ -1149,7 +1148,6 @@ padding-bottom: 7%;
 /*background-color: darkred;
 box-shadow: gray 10px 10px 10px;*/
 
-
 }
 
 .Appel-Admin-Profil
@@ -1240,4 +1238,108 @@ height:50%;
     overflow-y: scroll;
 scrollbar-color: rebeccapurple green;
 height:50%;  
+}
+
+
+.div-emoji
+{
+
+position:absolute !important;
+bottom: 8%;
+width:50%;
+border-radius: 2%;
+background-color: whitesmoke;
+margin-left: 30%;
+zoom: 300%;
+z-index: 10;
+}
+.Bouton-Envoyer-Reaction{
+    position: absolute;
+    width:10%;
+    bottom: 15%;
+    right: 8%;
+    z-index: 10;
+}
+
+.div-bottom-reaction
+{
+    position: absolute;
+    width:100%;
+    height:32%;
+    background-color: lightgray ;
+    bottom: 0%;
+    border-radius: 2%;
+    
+}
+
+.Reaction-Mid
+{
+    position: absolute;
+    width:100%;
+    height:52%;
+    bottom: 32%;
+    border-radius: 2%;
+    
+
+
+
+}
+
+.Message-List
+{
+    width:10%;
+    position:absolute;
+    right:25%;
+}
+
+
+.Message-List-User-Div
+{
+    width:30%;
+    position:absolute;
+    background-color: lightgray;
+    font-size: 30%;
+    padding:2%;
+    right:20%;
+    top:99%;
+    border-radius: 2%;
+    height: 0%;
+ max-height:300%;
+ overflow-y: scroll;
+ scrollbar-color: rebeccapurple green;
+}
+
+.Conv-Recherche-Profil
+{
+    padding:5%;
+    background-color: gray;
+    overflow-y: scroll;
+    border-radius: 0 0 5px 5px;
+    scrollbar-color: rebeccapurple green;
+    max-height: 100%;
+}
+
+.Conv-Recherche-Profil>div
+{
+height:8%;
+padding-top: 1%;
+
+}
+
+.Conv-Recherche-Profil>div>p{
+    margin-top: 1%;
+}
+
+.Conv-Recherche-Profil>div>img{
+    width:13%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+
+.Message-List-User-Div>div>img
+{
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
 }
