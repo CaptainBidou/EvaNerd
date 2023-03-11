@@ -24,8 +24,21 @@
 
 
 $(document).ready(function(){
-    ConnexionAuto(); // pour afficher la connexion
-    //AfficherAccueil();
+    var token = $(location).attr("href").split("?token=")[1];
+    var reset = $(location).attr("href").split("&reset=")[1];
+    console.log(reset);
+    if(token)
+    {
+        if (reset)
+            JChangerMDP(token)
+        else{
+            console.log(token);
+            VerifMail(token);
+        }
+    }
+    else
+        ConnexionAuto(); // pour afficher la connexion
+    //AfficherAccueil();*/
 });
 
 
