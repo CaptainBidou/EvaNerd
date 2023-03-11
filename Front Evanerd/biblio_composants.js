@@ -178,14 +178,14 @@ var JConnexionRecupAccount=$("<p>").addClass("Connexion-link").on("click",functi
 
 //variables pour les réglages des messages 
 var JReglageMessage=$("<div>").addClass("Reglage-Message-Layout").attr("type","divisionReglage");
-var JReglageMessageImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Message-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;});
-var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit ").html("Ajouter une Image").on("click",function(context){
+var JReglageMessageImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Message-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;}).on("change",function(context){$(".image-submit-reglage").fadeIn(1000);});;
+var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit image-submit-reglage").html("Ajouter une Image").on("click",function(context){
     AddConvPicture(Group,$(".Reglage-Message-Image").prop("files")[0]);
     $(".Reglage-Message-Image").val("");
 
 
 
-});
+}).hide();
 var JReglageMessageColor=$("<input>").attr("type","color").addClass("Message-Personne-Color").on("change",function(context){ var couleur=$(".Message-Personne-Color").val();
 JmodifCouleur(couleur);});;
 var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Changer de couleur").on("click",function(context){ var couleur=$(".Message-Personne-Color").val();
