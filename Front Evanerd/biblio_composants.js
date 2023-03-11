@@ -469,7 +469,7 @@ function JcreerPost(Reponse,membre,admin){
 
 
 
-    var jClonePostReact=JPostReaction.clone(true,true).data("id",Reponse.id);
+    var jClonePostReact=JPostReaction.clone(true,true).data("id",Reponse.id).addClass("Post-Reaction-Icon");
 
 
 
