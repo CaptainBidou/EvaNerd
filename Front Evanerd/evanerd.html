@@ -326,6 +326,11 @@ function AfficherCréationAccount(){
     JCreerInscription();
 }
 
+function RecupAccount(){
+    $("#page").html("");
+    JRecupAccount();
+}
+
 function EnvoyerJustif(context){
     $present = $(context).data("valeur");
     console.log($present);
