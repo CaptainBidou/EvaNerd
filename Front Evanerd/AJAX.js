@@ -181,17 +181,20 @@ function ModifyUser($informations,$uid){
  */
 
 function CreateUser($informations){
+    var url = api + "/users?firstName=" + $informations["firstName"] 
+    +"&lastName=" + $informations["lastName"] 
+    +"&age=" + $informations["age"]
+    +"&sex=" + $informations["sex"]
+    +"&mail=" + $informations["mail"]
+    +"&tel=" + $informations["tel"]
+    +"&password=" + $informations["password"];
+
+    if ($informations["studies"])
+    url += "&studies=" + $informations["studies"];
+
     $.ajax({
         type: "POST",
-        url: api + "/users?firstName=" + $informations["firstName"] 
-        + "&lastName=" + $informations["lastName"] 
-        +"&age=" + $informations["age"]
-        +"&sex=" + $informations["sex"]
-        +"&mail=" + $informations["mail"]
-        +"&tel=" + $informations["tel"]
-        +"&studies=" + $informations["studies"]
-        + "&password=" + $informations["password"]
-
+        url: url
         ,
         headers: {"authToken":""}, // données dans les entetes 
         data: [
@@ -238,6 +241,11 @@ function CreateUser($informations){
 
         },
         dataType: "json"
+    }).done(function myFunc() {
+        console.log( $informations.instruments);
+        $informations["instruments"].forEach(element => {
+            AddUserInstruments(element);
+        })
     });
     
 }
@@ -271,10 +279,10 @@ function AddUserRole($uid,$rid){
  * Requête permettant d'ajouter un instrument à un utilisateur
  * @param {*} $iid Identifiant d'instrument
  */
-function AddserInstruments($iid){
+function AddUserInstruments($iid){
     $.ajax({
         type: "POST",
-        url: api + "/users/instruments",
+        url: api + "/users/instruments?iid=" + $iid,
         headers: {"authToken":""}, // données dans les entetes 
         data: [     
             {
