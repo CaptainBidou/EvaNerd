@@ -31,18 +31,21 @@
     width: 15%;
 }
 .icon {
-
     width: 12%;
     margin-left: 8%;
 }
 .icon-react{
+    position:absolute;
     right:5%;
+    top:0%;
 }
 
 .icon-comm
 {
-
+position:absolute;
     width:12%;
+    right:0%;
+    top:0%;
 }
 
 .Post-Reaction-Icon
@@ -1411,15 +1414,12 @@ font-size: 150%;
 .Post-Nb-Likes
 {
     font-size: 500%;
-    position: absolute;
-    margin-bottom: 10%;
 
 }
 
 .postLike
 {
     width: 12%;
-    position: absolute;
-    left:0%;
+    float: right;
     
 }
