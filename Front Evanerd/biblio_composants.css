@@ -38,7 +38,7 @@
     position:absolute;
     right:18%;
     
-    bottom:8%;
+    bottom:3%;
 }
 
 .icon-comm
@@ -46,7 +46,7 @@
 position:absolute;
     width:12%;
     right:2%;
-bottom:5%;
+bottom:2%;
 }
 
 .Post-Reaction-Icon
@@ -1421,6 +1421,7 @@ font-size: 150%;
 .postLike
 {
     width: 12%;
+    margin-bottom: 2%;
     float: right;
     margin-right: 68%;
     
