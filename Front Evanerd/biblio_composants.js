@@ -1569,7 +1569,45 @@ function  JRecupAccount(){
         JCloneRécupCompteMail,
         JCloneRécupCompteSubmit
     ])
+    
     $("#page").append(JCloneRécupCompte);
+
+}
+
+function JChangerMDP(token) {
+
+    var JCloneLegendPwd=JCréationCompteP.clone(true,true).text("Nouveau mot de Passe *");
+    var JClonePwd=JCréationComptePwd.clone(true,true).attr("id","mdp1");
+
+    var JCloneLegendPwdConf=JCréationCompteP.clone(true,true).text("Confirmer votre nouveau mot de passe *");
+    var JClonePwdConf=JCréationComptePwd.clone(true,true)
+        .text("Confirmation du mot de passe")
+        .attr("id","mdp2")
+        .on("keydown",function (context){
+            verifPassword(context);
+    });
+
+    var JImageHeader =$("<img>").attr("src","Ressources/Header/logo.png").attr("alt","logo");
+    var JTitreHeader = $("<h3>").html("Recupération de mot de Passe");
+    var JHeaderVerif = $("<div>").addClass("header").append(
+        [JImageHeader,JTitreHeader]
+    );
+
+    var JContent = $("<div>").addClass("contenu").append([
+            JCloneLegendPwd,
+            JClonePwd,
+            JCloneLegendPwdConf,
+            JClonePwdConf
+    ]);
+
+    var JContentFooter = $("<p>").html("© 2022/2023 - Evanerd");
+    var JFooter = $("<div>").addClass("footer").append(JContentFooter);
+    var JValider = $("<button>").addClass("btn btn-danger Connexion-Submit").html("Connectez-vous").on("click",function(context){
+        if (verifPassword(context) == 1)  
+            resetMDP(JClonePwd.val(),token);
+        })
+    $("#page").append([JHeaderVerif,JContent,JValider,JFooter]);
+
 
 }
 
@@ -2311,27 +2349,19 @@ function JAdduserGroupe(id){
 
 
 
-//C'est comme ça qu'on code dans notre projet info
-function JRecupMail(Nom,Prenom){
-//tes composants tu les met tout en haut et tu COMMENTE !! ( respecte les conventions de nommages et pas d'accents !!!)
-//ex: var JRecupMailPrenom =$("<div>")addClass("RecupMailPrenom"); //c'est un div qui contient le prénom de l'utilisateur
-//fais bien attention à leur mettre des classe pour detail le css
-
-    //ici tu clone tes composants avec le .clone(true,true)
-    //ex: var JRecupMailPrenomClone = JRecupMailPrenom.clone(true,true);
-
-    //la je t'ai rajouté ta fonction qui lance le ajax 
-        var url = $(location).attr("href");
-        url = url.split("?token=");
-        token = url[1]; //je pense pas que ce soit utile de faire ça car on stock le token dans les cookies 
-
-        VerifMail(token);
-
-
-// ici tu met à jour tes composants ( nom prénom en fonction du json) c pour ça justement que jquery est interessant 
-//ex: JRecupMailPrenomClone.text(Prenom);
-
-
-//ici tu append tes composants dans la page avex $("#page").append(LE NOM DE TES COMPOSANTS);
-//ex: $("#page").append(JRecupMailPrenomClone);
+function JVerifMail(user){
+    var Prenom = user.firstName ; 
+    var Nom = user.lastName ; 
+    var JImageHeader =$("<img>").attr("src","Ressources/Header/logo.png").attr("alt","logo");
+    var JTitreHeader = $("<h3>").html("Email de confirmation de création de compte");
+    var JHeaderVerif = $("<div>").addClass("header").append(
+        [JImageHeader,JTitreHeader]
+    );
+    var JMessageRecupCompte = $("<p>").html(Prenom + " " + Nom + ", votre mail a bien été confirmé.");
+    var JContent = $("<div>").addClass("contenu").append(JMessageRecupCompte);
+    var JContentFooter = $("<p>").html("© 2022/2023 - Evanerd");
+    var JFooter = $("<div>").addClass("footer").append(JContentFooter);
+    var JgoToSite = $("<button>").addClass("btn btn-danger Connexion-Submit").html("Connectez-vous").on("click",function(context){$("#page").html("");ConnexionAuto();})
+    $("#page").append([JHeaderVerif,JContent,JFooter,JgoToSite]);
+    
 }
