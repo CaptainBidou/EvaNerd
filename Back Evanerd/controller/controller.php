@@ -943,3 +943,21 @@ function resetPassword($data, $queryString) {
     sendError("Vous devez fournir un token de réinitialisation !", HTTP_BAD_REQUEST);
 }
 
+function logout($data, $authKey) {
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $uid = validUser(authToId($authKey));
+    $data["user"] = selectUser($uid, 1)[0];
+    deleteAuth($uid);
+    sendResponse($data, [getStatusHeader(HTTP_OK)]);
+}
+
+function listGroupsUsers($data, $idTabs, $authKey) {
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $gid = $idTabs[0];
+    $group = selectGroup($gid, $uidConn);
+    if (!$group) sendError("Ce groupe n'existe pas !", HTTP_FORBIDDEN);
+    $users = selectGroupUsers($gid, $uidConn);
+    $data["users"] = $users;
+    sendResponse($data, [getStatusHeader()]);    
+}
