@@ -487,7 +487,7 @@ function JcreerPost(Reponse,membre,admin){
     if(membre==1)
     {
   
-    jClonePostBody.append(jClonePostComm).append(JCloneNBLikes).append(jClonePostLike).append(jClonePostReact);
+    jClonePostBody.append(jClonePostComm).append(jClonePostReact).append(JCloneNBLikes).append(jClonePostLike);
     }
 
     if(membre==0){

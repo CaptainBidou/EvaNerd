@@ -30,13 +30,22 @@
     float:left;
     width: 15%;
 }
-
-
 .icon {
     width: 12%;
     margin-left: 5%;
     float: right;
 }
+
+.Post-Reaction-Icon
+{
+    width: 12%;
+    margin-left: 50%;
+
+
+}
+
+
+
 
 #page
 {
