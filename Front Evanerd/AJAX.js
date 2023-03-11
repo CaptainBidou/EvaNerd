@@ -100,8 +100,15 @@ function GETUsers(){
 
 function ModifyUser($informations,$uid){
 
-    data = {};
-
+    data = {
+            "firstName":"",
+            "lastName":"",
+            "age":"",
+            "sex":"",
+            "mail":"",
+            "tel":"",
+            "studies":"",};
+        
     if ($informations.firstName)
         data.firstName= $informations.firstName;
     if ($informations.lastName)
@@ -117,45 +124,13 @@ function ModifyUser($informations,$uid){
     if ($informations.studies)
         data.studies = $informations.studies;
 
-
+        console.log($informations)
     $.ajax({
         type: "PUT",
-        url: api + "/users/"+$uid,
+        url: api + "/users/"+$uid+"?firstName=" + data.firstName+"&lastName="+data.lastName
+        +"&age="+data.age+"&sex="+data.sex+"&mail="+data.mail+"&tel="+data.tel+"&studies="+data.studies,
         headers: {"authToken":authcode}, // données dans les entetes 
-        data: [
-            {
-                "key": "firstName",
-                "value":data["firstName"]
-            },
-            {
-                "key": "lastName",
-                "value": data["lastName"]
-            },
-            {
-                "key": "age",
-                "value":data["age"]
-            },
-            {
-                "key": "sex",
-                "value": data["sex"]
-            },
-            {
-                "key": "mail",
-                "value": data["mail"]
-            },
-            {
-                "key": "tel",
-                "value": data["tel"]
-            },
-            {
-                "key": "studies",
-                "value": data["studies"]
-            },
-            {
-                "key": "password",
-                "value": data["password"]
-            }
-        ],
+        data: [],
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             console.log(textStatus);
