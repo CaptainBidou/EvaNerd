@@ -99,32 +99,70 @@ function GETUsers(){
  */
 
 function ModifyUser($informations,$uid){
-    $data = [];
-    if ($informations["firstName"])
-        $data["firstname"] = $informations["firstName"];
-    if ($informations["lastName"])
-        $data["lastName"] = $informations["lastName"];
-    if ($informations["age"])
-        $data["age"] = $informations["age"];
-    if ($informations["sex"])
-        $data["sex"] = $informations["sex"];
-    if ($informations["mail"])
-        $data["mail"] = $informations["mail"];
-    if ($informations["tel"])
-        $data["tel"] = $informations["tel"];
-    if ($informations["studies"])
-        $data["studies"] = $informations["studies"];
+
+    data = {};
+
+    if ($informations.firstName)
+        data.firstName= $informations.firstName;
+    if ($informations.lastName)
+        data.lastName = $informations.lastName;
+    if ($informations.age)
+        data.age = $informations.age;
+    if ($informations.sex)
+        data.sex = $informations.sex;
+    if ($informations.Mail)
+        data.mail = $informations.Mail;
+    if ($informations.Telephone)
+        data.tel = $informations.Telephone;
+    if ($informations.studies)
+        data.studies = $informations.studies;
+
 
     $.ajax({
         type: "PUT",
         url: api + "/users/"+$uid,
-        headers: {"authToken":""}, // données dans les entetes 
-        data: $data,
-        async: false,
-        error : function(){
-            console.log("Une erreur s'est produite : ERROR 403");
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [
+            {
+                "key": "firstName",
+                "value":data["firstName"]
+            },
+            {
+                "key": "lastName",
+                "value": data["lastName"]
+            },
+            {
+                "key": "age",
+                "value":data["age"]
+            },
+            {
+                "key": "sex",
+                "value": data["sex"]
+            },
+            {
+                "key": "mail",
+                "value": data["mail"]
+            },
+            {
+                "key": "tel",
+                "value": data["tel"]
+            },
+            {
+                "key": "studies",
+                "value": data["studies"]
+            },
+            {
+                "key": "password",
+                "value": data["password"]
+            }
+        ],
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
         },
         success: function(oRep){
+            console.log("modification réussie");
             console.log(oRep); 
             return oRep;
 
@@ -811,7 +849,10 @@ function ListPosts($authToken){
             oRep["posts"].sort(function compare(e1,e2) { return e2.pinned - e1.pinned });
             oRep["posts"].forEach(element => {
                 element["membre"] = 1;
-                JcreerPost(element,member,admin);
+                GetLikesPosts(element.id,element,member);
+
+                /*element["membre"] = 1;
+                JcreerPost(element,member,admin);*/
             });
 
         },
@@ -1260,5 +1301,134 @@ function ListUserConv(div,idConv){
         },
         dataType: "json"
     }); 
+
+}
+
+
+function GetReactionPost(id)
+{
+
+    $.ajax({
+        type: "GET",
+        url: api + "/posts/"+id+"/reactions",
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [],
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            JCreerReactionLayout(oRep);
+
+
+        },
+        dataType: "json"
+    }); 
+
+
+
+}
+
+
+function PostReactionPost(id,react)
+{
+    $.ajax({
+        type: "POST",
+        url: api + "/posts/"+id+"/reactions?emoji="+react,
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [],
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            GetReactionPost(id);
+
+
+        },
+        dataType: "json"
+    });
+
+}
+
+
+function AddConvPicture($idConv,$img){
+
+    var formData = new FormData();
+    formData.append("image", $img);
+    
+    $.ajax({
+        type: "POST",
+        url: api + "/groups/"+$idConv+"/image",
+        headers: {"authToken":authcode}, // données dans les entetes
+        data: formData,
+        processData: false,
+        contentType: false,
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+        },
+
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        },
+        dataType: "json"
+    });
+}
+
+function AddUserPicture($img){
+
+    var formData = new FormData();
+    formData.append("image", $img);
+    
+    $.ajax({
+        type: "POST",
+        url: api + "/users/"+user+"/image",
+        headers: {"authToken":authcode}, // données dans les entetes
+        data: formData,
+        processData: false,
+        contentType: false,
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+            ChargementInfosProfil(user);
+            
+        },
+
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        },
+        dataType: "json"
+    });
+}
+
+function GetLikesPosts(idPost,post,membre)
+{
+
+    $.ajax({
+        type: "GET",
+        url: api + "/posts/"+idPost+"/likes",
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [],
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
+        },
+        success: function(oRep){
+            console.log(oRep);
+            post.likes=oRep.likes.length;
+            JcreerPost(post,membre,admin);
+        },
+        dataType: "json"
+    }); 
+
+
 
 }

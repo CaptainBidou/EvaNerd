@@ -546,7 +546,7 @@ function listPostReactions($data, $idTabs, $authKey) {
     $notAMember = searchRole("Non Membre", selectUserRoles($uidConn));
     $postData = selectPost($pid);
     if (!$postData) sendError("Ce post n'existe pas !", HTTP_BAD_REQUEST);
-    if ($notAMember && !$postData[0]["visible"]) sendError("VOus n'avez pas les permissions !", HTTP_FORBIDDEN);
+    if ($notAMember && !$postData[0]["visible"]) sendError("Vous n'avez pas les permissions !", HTTP_FORBIDDEN);
     $reactionData = groupby(selectPostReactions($pid), "emoji");
     $data["postId"] = $pid;
     $data["reactions"] = $reactionData;
@@ -587,6 +587,21 @@ function listPostsMessages($data, $idTabs, $authKey) {
     }
     sendResponse($data, getStatusHeader());
 
+}
+
+function listPostLikes($data, $idTabs, $authKey) {
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $pid = $idTabs[0];
+    $notAMember = searchRole("Non Membre", selectUserRoles($uidConn));
+    $postData = selectPost($pid);
+    if (!$postData) sendError("Ce post n'existe pas !", HTTP_BAD_REQUEST);
+    if ($notAMember && !$postData[0]["visible"]) sendError("Vous n'avez pas les permissions !", HTTP_FORBIDDEN);
+    $likeData = selectPostLikes($pid);
+    $data["postId"] = $pid;
+    $data["total"] = count($likeData);
+    $data["likes"] = $likeData;
+    sendResponse($data, [getStatusHeader(HTTP_OK)]);
 }
 
 function listAgendas($data, $queryString, $authKey) {
@@ -675,11 +690,15 @@ function postImage($data, $idTabs,$authKey) {
     if (isset($_FILES["image"])) {
         // Récupération de l'ancienne image et des données de la nouvelle
         $oldImage = basename($user[0]["photo"]);
+        if(is_file("$dir/$oldImage")) rename("$dir/$oldImage", "$dir/$oldImage.tmp");
         $imageData = uploadImage($dir . "/image", $_FILES["image"]);
-        // Si l'image est pas correct, on envoie une erreur
-        if ($imageData["code"] != 1) sendError($imageData["message"], HTTP_BAD_REQUEST);
         $image = basename($imageData["filename"]);
-        unlink("$dir/$oldImage");
+        // Si l'image est pas correct, on envoie une erreur
+        if ($imageData["code"] != 1) {
+            sendError($imageData["message"], HTTP_BAD_REQUEST);
+            if(is_file("$dir/$oldImage.tmp")) rename("$dir/$oldImage.tmp", "$dir/$oldImage");
+        }
+        if(is_file("$dir/$oldImage.tmp")) unlink("$dir/$oldImage.tmp");
         updateUser($uid, false, false, false, false, $image);
         $data["user"] = $user[0];
         $data["user"]["photo"] = getBaseLink() . "/users/$uid/$image";
@@ -698,7 +717,7 @@ function postMessageReactions($data, $idTabs, $authKey, $queryString) {
     $msg = selectGroupMessage($mid, $gid);
     $reac = selectGroupReaction($mid, $uidConn, $emoji);
     $data["reaction"] = ["uid" => $uidConn, "mid" => $mid];
-    if (haveGroupPermission($uidConn, $gid)) sendError("VOus n'avez pas les permissions !", HTTP_FORBIDDEN);
+    if (haveGroupPermission($uidConn, $gid)) sendError("Vous n'avez pas les permissions !", HTTP_FORBIDDEN);
     if (!$msg) sendError("Ce message n'existe pas !", HTTP_BAD_REQUEST);
     $data["groupId"] = $gid;
     $data["messageId"] = $mid;
@@ -960,4 +979,52 @@ function listGroupsUsers($data, $idTabs, $authKey) {
     $users = selectGroupUsers($gid, $uidConn);
     $data["users"] = $users;
     sendResponse($data, [getStatusHeader()]);    
+}
+
+function postImageGroups($data, $idTabs, $authKey) {
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $uidConn = validUser(authToId($authKey));
+    $gid = $idTabs[0];
+    $group = selectGroup($gid, $uidConn);
+    $dir = DIR_GROUPS . $gid;
+    if (!$group) sendError("Ce groupe n'existe pas !", HTTP_FORBIDDEN);
+    if(!isInGroup($uidConn, $gid)&& !haveGroupPermission($uidConn, $gid)) sendError("Vous n'avez pas les droits !", HTTP_FORBIDDEN);
+    if (isset($_FILES["image"])) {
+        // Récupération de l'ancienne image et des données de la nouvelle
+        $oldImage = basename($group[0]["image"]);
+        if(is_file("$dir/$oldImage")) rename("$dir/$oldImage", "$dir/$oldImage.tmp");
+        $imageData = uploadImage($dir . "/image", $_FILES["image"]);
+        $image = basename($imageData["filename"]);
+        // Si l'image est pas correct, on envoie une erreur
+        if ($imageData["code"] != 1) {
+            sendError($imageData["message"], HTTP_BAD_REQUEST);
+            if(is_file("$dir/$oldImage.tmp")) rename("$dir/$oldImage.tmp", "$dir/$oldImage");
+        }
+        if(is_file("$dir/$oldImage.tmp")) unlink("$dir/$oldImage.tmp");
+        updateGroup($gid, false, $image);
+        $data["group"] = $group[0];
+        $data["group"]["image"] = getBaseLink() . "/groups/$gid/$image";
+        sendResponse($data, [getStatusHeader(HTTP_OK)]);
+    }
+    sendError("Vous devez fournir une image !", HTTP_BAD_REQUEST);
+}
+
+function postPostReactions($data, $idTabs, $authKey, $queryString) {
+    if(!$authKey) sendError("Vous devez être identifié", HTTP_UNAUTHORIZED);
+    if (!($emoji = valider("emoji", $queryString))) sendError("Vous devez saisir un emoji", HTTP_BAD_REQUEST);
+    $uidConn = validUser(authToId($authKey));
+    $pid = $idTabs[0];
+    $post = selectPost($pid,searchRole("Non Membre", selectUserRoles($uidConn)));
+    $reac = selectPostReaction($pid, $uidConn, $emoji);
+    $data["reaction"] = ["uid" => $uidConn];
+    if (!$post) sendError("Ce post n'existe pas !", HTTP_BAD_REQUEST);
+    $data["postId"] = $pid;
+    if (!$reac) {
+        insertPostReaction($pid, $uidConn, $emoji);
+        $data["reaction"] = $emoji;
+        sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
+    }
+    deletePostReaction($pid, $uidConn, $emoji);
+    $data["reaction"] = null;
+    sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
 }

@@ -910,4 +910,52 @@ function selectGroupUsers($gid) {
     
     return Database::parcoursRs($db->SQLSelect($sql, [$gid]));
 }
+
+function updateGroup($gid, $title = false, $image = false) {
+    $db = Config::getDatabase();
+    $sql = "UPDATE Groups SET ";
+    $params = [];
+    if($title !== false) {
+        $sql .= "titre = ?,";
+        array_push($params, $title);
+    }
+    // TODO : changer le nom de l'attribut
+    else $sql .= " titre = titre,";
+    if($image !== false) {
+        $sql .= "image = ?";
+        array_push($params, $image);
+    }
+    else $sql .= " image = image";
+    $sql .= " WHERE id = ?";
+    array_push($params, $gid);
+    return $db->SQLUpdate($sql, $params);
+}
+
+function selectPostLikes($pid) {
+    $db = Config::getDatabase();
+    $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
+    $sql = "SELECT Users.id, Users.firstName, Users.lastName, $photo FROM Post_Likes
+            JOIN Users ON Users.id = Post_Likes.uid
+            WHERE pid = ? AND liked = 1;";
+    return Database::parcoursRs($db->SQLSelect($sql, [$pid]));
+}
+
+
+function insertPostReaction($pid, $uid, $emoji) {
+    $db = Config::getDatabase();
+    $sql = "INSERT INTO Post_Reactions(pid, uid, emoji) VALUES (?,?,?)";
+    return $db->SQLInsert($sql, [$pid, $uid, $emoji]);
+}
+
+function deletePostReaction($pid, $uid, $emoji) {
+    $db = Config::getDatabase();
+    $sql = "DELETE FROM Post_Reactions WHERE pid = ? AND uid = ? AND emoji = ?";
+    return $db->SQLDelete($sql, [$pid, $uid, $emoji]);
+}
+
+function selectPostReaction($pid, $uid, $emoji) {
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM Post_Reactions WHERE pid = ? AND uid = ? AND emoji = ?";
+    return Database::parcoursRs($db->SQLSelect($sql, [$pid, $uid, $emoji]));
+}
 ?>

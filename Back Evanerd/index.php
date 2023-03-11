@@ -166,6 +166,10 @@ switch($action) {
         postMessagesGroups($data, $idTabs, $authKey, $queryString);
         break;
     
+    case "POST /groups/ID/image":
+        postImageGroups($data, $idTabs, $authKey);
+        break;
+
     case "POST /groups/ID/messages/ID/reactions":
         postMessageReactions($data, $idTabs, $authKey, $queryString);
         break;
@@ -187,6 +191,10 @@ switch($action) {
         listPostReactions($data, $idTabs, $authKey);
         break;
 
+    case "GET /posts/ID/likes":
+        listPostLikes($data, $idTabs, $authKey);
+        break;
+
     case "POST /posts":
         postPost($data, $authKey,$queryString);
         break;
@@ -194,6 +202,11 @@ switch($action) {
     case "POST /posts/ID/likes":
         postPostLike($data, $idTabs, $authKey);
         break;
+    
+    
+    case "POST /posts/ID/reactions":
+        postPostReactions($data, $idTabs, $authKey, $queryString);
+    break;
 
     case "POST /posts/ID/messages":
         postPostMessage($data, $idTabs, $authKey, $queryString);
