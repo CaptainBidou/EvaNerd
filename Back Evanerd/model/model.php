@@ -30,6 +30,12 @@ function confirmToUser($confirmToken) {
     return $db->SQLGetChamp($sql,[$confirmToken]);
 }
 
+function deleteAuth($uid) {
+    $db = Config::getDatabase();
+    $sql = "UPDATE Users SET authToken = null WHERE id = ?";
+    return $db->SQLUpdate($sql, [$uid]);
+}
+
 function resetToId($resetToken) {
     $db = Config::getDatabase();
     $sql = "SELECT Users.id FROM Users WHERE Users.resetToken = ?";
@@ -893,5 +899,15 @@ function updateCall($uid, $eid = null, $present = null, $reason_desc = null) {
     $sql .= " WHERE uid = ? AND aeid = ?";
     array_push($params, $uid, $eid);
     return $db->SQLUpdate($sql, $params);
+}
+
+function selectGroupUsers($gid) {
+    $db = Config::getDatabase();
+    $photo = "CONCAT(CONCAT(\"" . getBaseLink() . "/users/\"" . ", Users.id), CONCAT(\"/\", Users.photo)) AS photo";
+    $sql = "SELECT Users.firstName, Users.lastName, Users.id, $photo
+            FROM Users JOIN User_Groups ON User_Groups.uid = Users.id
+            WHERE User_Groups.gid = ?;"; 
+    
+    return Database::parcoursRs($db->SQLSelect($sql, [$gid]));
 }
 ?>
