@@ -374,6 +374,7 @@ var JReglageProfileSubmitTelMail=$("<button>").addClass("btn btn-danger Reglage-
    if($(".Reglage-Profil-Input-Tel-Mail").val()==""){return null;}
     var json = {};
     console.log($(".Reglage-Profil-Select-Tel-Mail").val());
+    console.log($(".Reglage-Profil-Input-Tel-Mail").val());
     json[$(".Reglage-Profil-Select-Tel-Mail").val()]=$(".Reglage-Profil-Input-Tel-Mail").val();
     ModifyUser(json,user);
 });
