@@ -10,11 +10,12 @@ src="evanerd.html";
 /************************************************************************/
 /*                 DECLARATION DES VARIABLES                           */
 /***********************************************************************/
-
+var couleurDesMessagesEnLocal;
 var scroll;
 var windowscroll;
 var nbmessages=0;
 var usersLocal;
+var Group;
 //variables pour les posts
 var JPost =$("<div>").addClass(["card", "post"]).data('type','post');
 var JPostTitre=$("<h2>").addClass(["post-titre","card-title"]).data('type','post_titre');//TODO :rajouter des données pour quand on clique
@@ -135,6 +136,8 @@ var JMessageHeader = $("<nav>").addClass("navbar MessageHeader");
 var JMessageFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addClass("Message-Fleche").on("click",function(){AfficherMessagerie();});
 var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addClass("Message-Reglage").on("click",function(){JReglageConv();});
 var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle").on("click",function(context){JLayoutPinnedMessages(context.target);});
+var JMessageList=$("<img>").attr("src","Ressources/Message/list.png").addClass("Message-List").on("click",function(context){JLayoutListMessages(context.target);});
+var JMessageListUserDiv=$("<div>").addClass("Message-List-User-Div");
 var JMessageParticipant=$("<p>").addClass("Message-Participant");
 var JMessageLayout=$("<div>").addClass("Message-Layout scroller").data("type","layout");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
@@ -171,12 +174,13 @@ var JConnexionNewAccount=$("<a>").addClass("Connexion-link").on("click",function
 //variables pour les réglages des messages 
 var JReglageMessage=$("<div>").addClass("Reglage-Message-Layout").attr("type","divisionReglage");
 var JReglageMessageImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Message-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;});
-var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Image").on("click",function(context){});
-var JReglageMessageColor=$("<input>").attr("type","color").addClass("Message-Personne-Color");
+var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit ").html("Ajouter une Image").on("click",function(context){});
+var JReglageMessageColor=$("<input>").attr("type","color").addClass("Message-Personne-Color").on("change",function(context){ var couleur=$(".Message-Personne-Color").val();
+JmodifCouleur(couleur);});;
 var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Changer de couleur").on("click",function(context){ var couleur=$(".Message-Personne-Color").val();
                                                                                                                                                         JmodifCouleur(couleur);});
 var JReglageMessagePerson=$("<input>").addClass("form-control Message-Personne-Reglage").attr("type","text").attr("placeholder","Nom de la personne");
-var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Ajouter une Personne").on("click",function(context){AjouterUtilisateur($(this))});
+var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit Reglage-Personne").html("Ajouter une Personne").on("click",function(context){AddUserConv(Group,$(this).data("id"));$(this).hide();$(".Message-Personne-Reglage").show(); $(".Conv-Recherche-Profil").empty().hide();});
 var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 
 // variables pour la création de compte
@@ -522,6 +526,7 @@ function JcreerHeader(Reponse){
     var JCloneHeaderSearch=JHeaderSearch.clone(true,true);
     var JCloneHeaderTag=JHeaderTag.clone(true,true);
     var JCloneHeaderMenu=JHeaderMenu.clone(true,true);
+    JCloneHeaderTag=ajouterTextOverflow(JCloneHeaderTag,20);
     var JCloneHeaderItem=JHeaderItem.clone(true,true).text("blabla");
     var JCloneRechercheProfil=JRechercheProfil.clone(true,true).hide();
     JCloneHeaderMenu.append(JCloneHeaderItem);
@@ -1226,15 +1231,40 @@ var j=0;
     //JCloneMessage.scrollTop = JCloneMessage.scrollHeight;
 }
 
+function JLayoutListMessagesEffacer(target){
+   
+    
+    $(target).off("click");
+    $(target).on("click",function(context){JLayoutListMessages(context.target)});
+    console.log("effacer")
+    $(".Message-List-User-Div").empty();
+    $(".Message-List-User-Div").animate({height:0,});
+    
+    $(".Message-List-User-Div").hide();
+}
 
 
+function JLayoutListMessages(target){
+    $(target).off("click");
+    $(".Message-List-User-Div").show();
+    $(target).on("click",function(context){JLayoutListMessagesEffacer(context.target);});
+   
 
+    console.log($(target).data("idConv"));
+
+    ListUserConv($(".Message-List-User-Div"),$(target).data("idConv"));
+    $(".Message-List-User-Div").animate({height:400,});
+console.log("afficher")
+}
 
 
 function JCreerMessage(Reponse){
     var JCloneMessageHeader = JMessageHeader.clone(true,true);
     var JCloneMessageFleche =JMessageFleche.clone(true,true);
+    var JCloneMessageListUserDiv=JMessageListUserDiv.clone(true,true).hide().data("div","listdesConvUsers");
     var JCloneMessageReglage=JMessageReglage.clone(true,true);
+    var JCloneMessageList=JMessageList.clone(true,true).data("idConv",Reponse.groupId);
+    Group=Reponse.groupId;
     var JCloneMessageEpingle=JMessageEpingle.clone(true,true).show();
     var JCloneMessageLayout=JMessageLayout.clone(true,true);
 
@@ -1248,7 +1278,7 @@ function JCreerMessage(Reponse){
 
     JCloneMessageParticipant=ajouterTextOverflow(JCloneMessageParticipant,55);
     
-    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageParticipant,JCloneMessageReglage,JCloneMessageEpingle,JCloneMessageLayout]);
+    $(JCloneMessageHeader).append([JCloneMessageFleche,JCloneMessageListUserDiv,JCloneMessageParticipant,JCloneMessageList,JCloneMessageReglage,JCloneMessageEpingle,JCloneMessageLayout]);
     $("#page").append(JCloneMessageHeader);
     $("#page").append(JCloneMessage);
     JCloneMessageDown.append([JCloneMessageSend,JCloneMessageInput]);
@@ -1363,6 +1393,8 @@ if(Comm==1)
 function JmodifCouleur(Reponse){
     $(".Actif-Div").css("background-color",Reponse);
     $(".reponse-message-linked").css("background-color","blueviolet");
+    couleurDesMessagesEnLocal=Reponse;
+    localStorage.setItem('Couleur',Reponse);
 }
 
 function JCreerMessageActif(Reponse,div,couleur,rep)
@@ -1374,7 +1406,7 @@ function JCreerMessageActif(Reponse,div,couleur,rep)
     if(couleur==null)
         couleur="lightblue";
 
-    var JCloneMessageActifDiv=JMessageActifDiv.clone(true,true).css("background-color",couleur).attr("id",Reponse.id);
+    var JCloneMessageActifDiv=JMessageActifDiv.clone(true,true).css("background-color",couleurDesMessagesEnLocal).attr("id",Reponse.id);
     var JCloneMessageActifTitre=JMessageActifTitre.clone(true,true).text(Reponse.author.firstName+ " "+Reponse.author.lastName);
     var JCloneMessageActifContent=JMessageActifContent.clone(true,true).text(Reponse.content);
     
@@ -1687,13 +1719,19 @@ function JReglageConv(){
     var JLabelColor=JReglageMessageLabel.clone(true,true).text("Changer la couleur de message");
     var JCloneReglageMessageColor=JReglageMessageColor.clone(true,true);
     var JCloneReglageMessageColorSubmit=JReglageMessageColorSubmit.clone(true,true);
+    
     var JLabelPerson=JReglageMessageLabel.clone(true,true).text("Ajouter une personne");
-    var JCloneReglageMessagePerson=JReglageMessagePerson.clone(true,true);
-    var JCloneReglageMessagePersonSubmit=JReglageMessagePersonSubmit.clone(true,true);
+    var JCloneReglageMessagePersonList=$("<div>").addClass("Conv-Recherche-Profil").hide().data("div","ConvAjouterMembre");
+    var JCloneReglageMessagePerson=JReglageMessagePerson.clone(true,true).on("keyup",function(context){
+            if($(".Message-Personne-Reglage").val()=="")
+                {$(".Conv-Recherche-Profil").empty().hide();return;}
+            ListUser($(".Conv-Recherche-Profil"),$(".Message-Personne-Reglage").val());
+        });
+    var JCloneReglageMessagePersonSubmit=JReglageMessagePersonSubmit.clone(true,true).hide();
 
 
-    JCloneReglageMessage.append([ JLabelTitre,JLabelImage,JCloneReglageMessageImage,JCloneReglageMessageImageSubmit,JLabelColor,JCloneReglageMessageColor,JCloneReglageMessageColorSubmit,JLabelPerson,
-        JCloneReglageMessagePerson,JCloneReglageMessagePersonSubmit]);
+    JCloneReglageMessage.append([JLabelImage,JCloneReglageMessageImage,JCloneReglageMessageImageSubmit,JLabelColor,JCloneReglageMessageColor,JLabelPerson,
+        JCloneReglageMessagePerson,JCloneReglageMessagePersonList,JCloneReglageMessagePersonSubmit]);
 
 $("#page").append(JCloneReglageMessage);
 $(".Reglage-Message-Layout").animate({left: '25%'});
@@ -1770,6 +1808,7 @@ function JClickLike(target){
 
 
 function JCreerReactionLayout(Reponse){
+
     $(".card").css("filter","blur(20px)")
     var JCloneReactionUp=JReactionUp.clone(true,true);
     var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
@@ -1782,7 +1821,8 @@ function JCreerReactionLayout(Reponse){
     var JCloneReactionDivBottom=$("<div>").addClass("div-bottom-reaction").clone(true,true);
 
 
-    JAddReactionLayout(JCloneReactionMiddle,Reponse);
+    for(var i=0;i<Reponse.reactions.length;i++)
+    {    JAddReactionLayout(JCloneReactionMiddle,Reponse.reactions[i]);}
 
     
     
@@ -1810,7 +1850,13 @@ function JCreerReactionLayout(Reponse){
 }
 
 function JAddReactionLayout(div,Reponse){
+var JCloneProfilReactionImage=$("<img>").addClass("Profil-Reaction").attr("src",Reponse.user.photo).clone(true,true);
+var JCloneReactionContent=$("<p>").addClass("Reaction-Content").text(Reponse.content).clone(true,true);
 
+var JCloneProfileReactionDiv=$("<div>").addClass("Profile-Reaction").append([JCloneProfilReactionImage,JCloneReactionContent]).clone(true,true);
+
+$(div).append(JCloneProfileReactionDiv);   
+ 
 }
 
 
@@ -1831,6 +1877,7 @@ if($(".Reglage-Profil-Layout").attr("type-position")=="visible")
     {   
         
         $(".Reglage-Profil-Layout").animate({left: '100%'});
+        $(".profile-reglage").animate({right:'0%'});
         $(".Reglage-Profil-Layout").attr("type-position","hide");
         return;
     }
@@ -1838,6 +1885,7 @@ if($(".Reglage-Profil-Layout").attr("type-position")=="hide")
 {
 
     $(".Reglage-Profil-Layout").animate({left: '25%'});
+    $(".profile-reglage").animate({right:'76%'});
     $(".Reglage-Profil-Layout").attr("type-position","visible");
     return;
 
@@ -1865,7 +1913,7 @@ JCloneReglageProfile.append([JCloneReglageLabel,JCloneReglageChangerImage,JClone
 
 $("#page").append(JCloneReglageProfile);
 JCloneReglageProfile.animate({left: '25%'});
-
+$(".profile-reglage").animate({right:'76%'});
 
 }
 
@@ -2063,6 +2111,22 @@ function JCreerProfilRecherche(div,Reponse){
          //annuler le click
         JCloneRechercheProfilDivUser.on("click",function(){JCopierProfil($(".Conv-Creer-Membre-Div"),this);});}
 
+    if(div.data("div")=="ConvAjouterMembre")
+    {
+        JCloneRechercheProfilDivUser.off("click");
+        JCloneRechercheProfilDivUser.on("click",function(){$(".Message-Personne-Reglage").hide();
+        
+       var clone= $(this).clone(true,true);
+
+        $(".Conv-Recherche-Profil").empty();
+        $(".Conv-Recherche-Profil").append(clone);
+        $(".Reglage-Personne").fadeIn().data("id",Reponse.id);
+    });
+
+    }
+
+
+
     JCloneRechercheProfilDivUser.append([JCloneRechercheProfilDivUserImg,JCloneRechercheProfilDivUserNom]);
 
     $(div).append(JCloneRechercheProfilDivUser);
@@ -2116,4 +2180,31 @@ function JAdduserGroupe(id){
     });
 
     AfficherMessagerie();
+}
+
+
+
+//C'est comme ça qu'on code dans notre projet info
+function JRecupMail(Nom,Prenom){
+//tes composants tu les met tout en haut et tu COMMENTE !! ( respecte les conventions de nommages et pas d'accents !!!)
+//ex: var JRecupMailPrenom =$("<div>")addClass("RecupMailPrenom"); //c'est un div qui contient le prénom de l'utilisateur
+//fais bien attention à leur mettre des classe pour detail le css
+
+    //ici tu clone tes composants avec le .clone(true,true)
+    //ex: var JRecupMailPrenomClone = JRecupMailPrenom.clone(true,true);
+
+    //la je t'ai rajouté ta fonction qui lance le ajax 
+        var url = $(location).attr("href");
+        url = url.split("?token=");
+        token = url[1]; //je pense pas que ce soit utile de faire ça car on stock le token dans les cookies 
+
+        VerifMail(token);
+
+
+// ici tu met à jour tes composants ( nom prénom en fonction du json) c pour ça justement que jquery est interessant 
+//ex: JRecupMailPrenomClone.text(Prenom);
+
+
+//ici tu append tes composants dans la page avex $("#page").append(LE NOM DE TES COMPOSANTS);
+//ex: $("#page").append(JRecupMailPrenomClone);
 }

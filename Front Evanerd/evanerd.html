@@ -288,6 +288,9 @@ function ConnexionAuto(){
     member = localStorage.getItem("member") == "true" ? true : false;
     pdp = localStorage.getItem("pdp");
     admin = localStorage.getItem("admin");
+    couleurDesMessagesEnLocal= localStorage.getItem("Couleur");
+    if (couleurDesMessagesEnLocal == undefined)
+        couleurDesMessagesEnLocal="lightblue";
     console.log("connexion auto");
     console.log(user);
     console.log(admin);
