@@ -1254,3 +1254,28 @@ function ListUserConv(div,idConv){
     }); 
 
 }
+
+
+function GetReactionPost(id)
+{
+
+    $.ajax({
+        type: "GET",
+        url: api + "/posts/"+id+"/reactions",
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [],
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            JCreerReactionLayout(oRep);
+
+
+        },
+        dataType: "json"
+    }); 
+
+
+
+}
