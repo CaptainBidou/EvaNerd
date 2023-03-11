@@ -1431,7 +1431,7 @@ function ModifConvTitre(titre,id)
     
     $.ajax({
         type: "PUT",
-        url: api + "/groups/"+id+"/title?title="+titre,
+        url: api + "/groups/"+id+"?title="+titre,
         headers: {"authToken":authcode}, // données dans les entetes
         data:[],
         processData: false,
