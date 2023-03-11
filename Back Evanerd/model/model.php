@@ -940,4 +940,22 @@ function selectPostLikes($pid) {
     return Database::parcoursRs($db->SQLSelect($sql, [$pid]));
 }
 
+
+function insertPostReaction($pid, $uid, $emoji) {
+    $db = Config::getDatabase();
+    $sql = "INSERT INTO Post_Reactions(pid, uid, emoji) VALUES (?,?,?)";
+    return $db->SQLInsert($sql, [$pid, $uid, $emoji]);
+}
+
+function deletePostReaction($pid, $uid, $emoji) {
+    $db = Config::getDatabase();
+    $sql = "DELETE FROM Post_Reactions WHERE pid = ? AND uid = ? AND emoji = ?";
+    return $db->SQLDelete($sql, [$pid, $uid, $emoji]);
+}
+
+function selectPostReaction($pid, $uid, $emoji) {
+    $db = Config::getDatabase();
+    $sql = "SELECT * FROM Post_Reactions WHERE pid = ? AND uid = ? AND emoji = ?";
+    return Database::parcoursRs($db->SQLSelect($sql, [$pid, $uid, $emoji]));
+}
 ?>
