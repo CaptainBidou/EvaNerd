@@ -140,6 +140,7 @@ var JProfileActiviteImage=$("<img>").addClass("activite-img");
 var JProfileReglage=$("<img>").attr("src","Ressources/Profile/reglage.png").addClass("profile-reglage").on("click",function(){JReglageProfile();});
 var JProfileDivActivite=$("<div>").addClass("div-profile-activite");
 var JProfileArrow=$("<img>").attr("src","Ressources/Profile/arrow.png").addClass("profile-arrow");
+var JProfileDeconnexion = $("<button>").addClass("btn btn-danger Connexion-Submit").html("Déconnexion").on("click",function(context){Deconnexion();})
 
 //variables pour la vue message
 var JMessageHeader = $("<nav>").addClass("navbar MessageHeader");
@@ -1165,8 +1166,7 @@ function JCreerProfile(Reponse){
     var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
     var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
     var JCloneProfileNom=JProfileNom.clone(true,true).text(Reponse.firstName +" "+ Reponse.lastName);  
-var JCloneProfileDivActivite=JProfileDivActivite.clone(true,true);
-
+    var JCloneProfileDivActivite=JProfileDivActivite.clone(true,true);
 
     if(Reponse.pourcentage<33)
             JCloneProfilePourcentage.css('background-color','red');
@@ -1185,7 +1185,6 @@ var JCloneProfileDivActivite=JProfileDivActivite.clone(true,true);
     var i;
     for(i=0;i<Reponse.tag.length;i++)
     JCreerProfileTag(Reponse.tag[i]);
-
 
     $("#page").append(JCloneProfileProgress.append(JCloneProfilePourcentage));
     $("#page").append(JCloneProfileDivActivite);
@@ -2032,10 +2031,10 @@ var JCloneReglageProfileSubmitTelMail=JReglageProfileSubmitTelMail.clone(true,tr
 var JCloneReglageLabelTag=JReglageProfileLabel.clone(true,true).text("Ajouter un Tag");
 var JCloneReglageProfileTagSelect=JReglageProfileTagSelect.clone(true,true);
 var JCloneReglageProfileTagSubmit=JReglageProfileTagSubmit.clone(true,true).hide();
+var JCloneProfileDeconnexion= JProfileDeconnexion.clone(true,true);
 
 
-
-JCloneReglageProfile.append([JCloneReglageLabel,JCloneReglageChangerImage,JCloneReglageProfileImage,JCloneReglageProfileImageSubmit,JCloneReglageLabelMailTel,JCloneReglageProfileSelectTelMail,JCloneReglageProfileInputTelMail,JCloneReglageProfileSubmitTelMail,JCloneReglageLabelTag,JCloneReglageProfileTagSelect,JCloneReglageProfileTagSubmit]);
+JCloneReglageProfile.append([JCloneReglageLabel,JCloneReglageChangerImage,JCloneReglageProfileImage,JCloneReglageProfileImageSubmit,JCloneReglageLabelMailTel,JCloneReglageProfileSelectTelMail,JCloneReglageProfileInputTelMail,JCloneReglageProfileSubmitTelMail,JCloneReglageLabelTag,JCloneReglageProfileTagSelect,JCloneReglageProfileTagSubmit, JCloneProfileDeconnexion]);
 
 
 $("#page").append(JCloneReglageProfile);
