@@ -1433,3 +1433,11 @@ font-size: 150%;
 width:48%;
 margin-right:39%;
 }
+
+.contenu {
+    margin-top: 100px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding : 3px;
+    text-align: center;
+}
