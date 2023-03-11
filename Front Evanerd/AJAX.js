@@ -124,8 +124,10 @@ function ModifyUser($informations,$uid){
         headers: {"authToken":""}, // données dans les entetes 
         data: $data,
         async: false,
-        error : function(){
-            console.log("Une erreur s'est produite : ERROR 403");
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
         },
         success: function(oRep){
             console.log(oRep); 
