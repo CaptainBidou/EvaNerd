@@ -182,7 +182,7 @@ function CreateAccount(context) {
             "tel" : $("#tel").val(),
             "studies": $("#Etudes").val(),
             "mail": $("#Mail").val(),
-            "photo": $(".form-control-file").val(),
+            "photo": $(".form-control-file").prop("files")[0],
             "sex": $(".selected").data("genre"),
             "instruments":$(".selectedInstruments").toArray().map(item => item.value)
     }
