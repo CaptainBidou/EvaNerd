@@ -444,6 +444,7 @@ function JcreerPost(Reponse,membre,admin){
     var jClonePost=JPost.clone(true,true);
     var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.author.firstName+" "+Reponse.author.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
     var jClonePostBody=JPostBody.clone(true,true);
+    var JCloneNBLikes=$("<p>").addClass("Post-Nb-Likes").text(Reponse.likes);
     var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner).attr("id-profile",Reponse.author.id);
     var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
     jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
@@ -486,7 +487,7 @@ function JcreerPost(Reponse,membre,admin){
     if(membre==1)
     {
   
-    jClonePostBody.append(jClonePostComm).append(jClonePostLike).append(jClonePostReact);
+    jClonePostBody.append(jClonePostComm).append(JCloneNBLikes).append(jClonePostLike).append(jClonePostReact);
     }
 
     if(membre==0){
