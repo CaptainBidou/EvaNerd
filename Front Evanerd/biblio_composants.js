@@ -168,7 +168,8 @@ var JConnexionPwd=$("<input>").addClass("text").addClass("form-control Connexion
 var JConnexionSubmit=$("<button>").addClass("btn btn-danger Connexion-Submit").html("Se connecter").on("click",function(context){Connexion();});
 var JConnexionP=$("<p>").addClass("Connexion-p");
 var JConnexionTitre=$("<h1>").addClass("Connexion-titre");
-var JConnexionNewAccount=$("<a>").addClass("Connexion-link").on("click",function(){AfficherCréationAccount();});
+var JConnexionNewAccount=$("<p>").addClass("Connexion-link").on("click",function(){AfficherCréationAccount();});
+var JConnexionRecupAccount=$("<p>").addClass("Connexion-link").on("click",function(){RecupAccount();});
 
 
 //variables pour les réglages des messages 
@@ -183,8 +184,8 @@ var JReglageMessagePerson=$("<input>").addClass("form-control Message-Personne-R
 var JReglageMessagePersonSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit Reglage-Personne").html("Ajouter une Personne").on("click",function(context){AddUserConv(Group,$(this).data("id"));$(this).hide();$(".Message-Personne-Reglage").show(); $(".Conv-Recherche-Profil").empty().hide();});
 var JReglageMessageLabel=$("<p>").addClass("Message-Reglage-label");
 
-// variables pour la création de compte
 
+// VARIABLES pour la création de compte
 var ErrorMsg =  $("<p>")
     .css("color","red")
     .css("background-color","whitesmoke")
@@ -289,6 +290,32 @@ var JCréationComptePrevious = $("<button>")
     .on("click",function(){ 
         $("#page").html(""); ConnexionAuto(); 
     })
+
+// VARIABLES pour la récup de compte 
+
+var JRécupCompteP= $("<p>")
+    .addClass("Connexion-p");
+
+var JRécupCompte = $("<div>")
+    .addClass("divFormConnexion");
+
+var JRécupCompteTitre= $("<h1>")
+    .addClass("Connexion-titre")
+    .attr("id","titre");
+
+var JRécupCompteMail= $("<input>")
+    .addClass("text")
+    .addClass("form-control ")
+    .attr("placeholder","ex: JohnSmith@gmail.com")
+    .attr("id","Mail");
+
+var JRécupCompteSubmit= $("<button>")
+    .addClass("btn btn-danger")
+    .attr("id","Submit")
+    .html("Récupérer mon compte")
+    .on("click",function(context){
+        EnvoyerMailRécup();
+    });
 
 //VARIABLES pour les comms des posts
 var JCommentaires = $("<div>").addClass("commentaires");
@@ -1399,10 +1426,6 @@ function JmodifCouleur(Reponse){
 
 function JCreerMessageActif(Reponse,div,couleur,rep)
 {
-
-    
-        
-
     if(couleur==null)
         couleur="lightblue";
 
@@ -1473,11 +1496,41 @@ function JCreerConnexion(){
     var JCloneConnexionPwd=JConnexionPwd.clone(true,true);
     var JCloneConnexionSubmit=JConnexionSubmit.clone(true,true);
     var JCloneConnexionNewAccount = JConnexionNewAccount.clone(true,true).text("Pas encore inscrit ?? Rejoignez-nous dès maintenant !!");
+    var JCloneConnexionRecupAccount = JConnexionRecupAccount.clone(true,true).text("J'ai oublié mon mot de passe")
 
-    JCloneConnexion.append([JCloneTitre,JCloneLegendTel,JCloneConnexionTelephone,JCloneLegendPwd,JCloneConnexionPwd,JCloneConnexionNewAccount,JCloneConnexionSubmit]);
+    JCloneConnexion.append([JCloneTitre,
+        JCloneLegendTel,
+        JCloneConnexionTelephone,
+        JCloneLegendPwd,
+        JCloneConnexionPwd,
+        JCloneConnexionRecupAccount,
+        JCloneConnexionNewAccount,
+        JCloneConnexionSubmit]);
     JcreerHeader(null);
      $("#page").append(JCloneConnexion);
     
+
+}
+
+function  JRecupAccount(){
+    
+    var JCloneRécupCompteP = JRécupCompteP.clone(true,true).html("Votre adresse mail")
+
+    var JCloneRécupCompte = JRécupCompte.clone(true,true)
+
+    var JCloneRécupCompteTitre = JRécupCompteTitre.clone(true,true).html("Récuperer votre compte dès maintenant")
+
+    var JCloneRécupCompteMail= JRécupCompteMail.clone(true,true)
+
+    var JCloneRécupCompteSubmit = JRécupCompteSubmit.clone(true,true);
+
+    JCloneRécupCompte.append([
+        JCloneRécupCompteTitre ,
+        JCloneRécupCompteP,
+        JCloneRécupCompteMail,
+        JCloneRécupCompteSubmit
+    ])
+    $("#page").append(JCloneRécupCompte);
 
 }
 
