@@ -1279,3 +1279,25 @@ function GetReactionPost(id)
 
 
 }
+
+
+function PostReactionPost(id,react)
+{
+    $.ajax({
+        type: "POST",
+        url: api + "/posts/"+id+"/emojis?emoji="+react,
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [],
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            GetReactionPost(id);
+
+
+        },
+        dataType: "json"
+    });
+
+}
