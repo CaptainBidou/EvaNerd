@@ -1254,3 +1254,79 @@ function ListUserConv(div,idConv){
     }); 
 
 }
+
+
+function GetReactionPost(id)
+{
+
+    $.ajax({
+        type: "GET",
+        url: api + "/posts/"+id+"/reactions",
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [],
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            JCreerReactionLayout(oRep);
+
+
+        },
+        dataType: "json"
+    }); 
+
+
+
+}
+
+
+function PostReactionPost(id,react)
+{
+    $.ajax({
+        type: "POST",
+        url: api + "/posts/"+id+"/reactions?emoji="+react,
+        headers: {"authToken":authcode}, // données dans les entetes 
+        data: [],
+        error: function( jqXhr, textStatus, errorThrown){
+            console.log(textStatus, errorThrown, jqXhr);
+        },
+        success: function(oRep){
+            console.log(oRep); 
+            GetReactionPost(id);
+
+
+        },
+        dataType: "json"
+    });
+
+}
+
+
+function AddConvPicture($idConv,$img){
+
+    var formData = new FormData();
+    formData.append("image", $img);
+    
+    $.ajax({
+        type: "POST",
+        url: api + "/groups/"+$idConv+"/image",
+        headers: {"authToken":authcode}, // données dans les entetes
+        data: formData,
+        processData: false,
+        contentType: false,
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+        },
+
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        },
+        dataType: "json"
+    });
+}

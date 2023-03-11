@@ -6,6 +6,10 @@ src="Bootstrap/js/bootstrap.min.js";
 src="Jquery/jquery-3.6.2.min.js";
 src="Jquery/jquery-ui.min.js";
 src="evanerd.html";
+src="Bootstrap/EmojiPicker/emoji-picker-text-fields/lib/js/config.min.js";
+src='Bootstrap/EmojiPicker/emoji-picker-text-fields/lib/js/util.min.js';
+src='Bootstrap/EmojiPicker/emoji-picker-text-fields/lib/js/jquery.emojiarea.min.js';
+src='Bootstrap/EmojiPicker/emoji-picker-text-fields/lib/js/emoji-picker.min.js';
 
 /************************************************************************/
 /*                 DECLARATION DES VARIABLES                           */
@@ -25,7 +29,7 @@ var JPostDescription=$("<p>").addClass(["post-description", "card-text"]).data('
 var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle','profile']).on("click",function(context){AfficherProfile(context.target);}).data("type","post_profile");//TODO :rajouter des données pour quand on clique
 var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').on("click",function(context){JclickEpingle(context.target);});
 var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png').on("click",function(context){JClickLike(context.target);});
-var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png').on("click",function(context){JCreerReactionLayout(context.target);});
+var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png').on("click",function(context){GetReactionPost($(context.target).data("id"));});
 var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts(context.target);});
 
 //variables pour le footer
@@ -175,7 +179,13 @@ var JConnexionRecupAccount=$("<p>").addClass("Connexion-link").on("click",functi
 //variables pour les réglages des messages 
 var JReglageMessage=$("<div>").addClass("Reglage-Message-Layout").attr("type","divisionReglage");
 var JReglageMessageImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Message-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;});
-var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit ").html("Ajouter une Image").on("click",function(context){});
+var JReglageMessageImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit ").html("Ajouter une Image").on("click",function(context){
+    AddConvPicture(Group,$(".Reglage-Message-Image").prop("files")[0]);
+    $(".Reglage-Message-Image").val("");
+
+
+
+});
 var JReglageMessageColor=$("<input>").attr("type","color").addClass("Message-Personne-Color").on("change",function(context){ var couleur=$(".Message-Personne-Color").val();
 JmodifCouleur(couleur);});;
 var JReglageMessageColorSubmit=$("<button>").addClass("btn btn-danger Reglage-Message-Submit").html("Changer de couleur").on("click",function(context){ var couleur=$(".Message-Personne-Color").val();
@@ -452,7 +462,7 @@ function JcreerPost(Reponse,membre,admin){
 
 
 
-    var jClonePostReact=JPostReaction.clone(true,true);
+    var jClonePostReact=JPostReaction.clone(true,true).data("id",Reponse.id);
 
 
 
@@ -1867,21 +1877,43 @@ function JCreerReactionLayout(Reponse){
     var JCloneReactionMiddle=JReactionMiddle.clone(true,true);
     var JCloneReactionCroix=JReactionCroix.clone(true,true);
     var JCloneReaction =JReaction.clone(true,true);//emoji-wysiwyg-editor
-    var JCloneBoutonEnvoyerReaction=$("<img>").addClass("Bouton-Envoyer-Reaction").attr("src","Ressources/Message/send.png").clone(true,true);
+    var JCloneBoutonEnvoyerReaction=$("<img>").addClass("Bouton-Envoyer-Reaction").attr("src","Ressources/Message/send.png").data("id",Reponse.postId)
+    .clone(true,true).on("click",function(){
+        console.log($(this).data("id"));
+        if($(".emoji-input-select").val()=="")
+        {return;}
+        var emojiData=$(".emoji-input-select").val();
+        PostReactionPost($(this).data("id"),emojiData);
+
+
+
+    });
     var JDivReactionContainer=$("<div>").addClass("emoji-picker-container div-emoji").clone(true,true);
-    var JInputReaction=$("<input>").addClass("emoji-input-select").attr("type","text").attr({"data-emojiable":"true","maxlength":1}).clone(true,true);
+    var JInputReaction=$("<input>").addClass("emoji-input-select").attr("type","text").attr({"data-emojiable":"true"}).clone(true,true);
    
+
+    window.emojiPicker = new EmojiPicker({
+        emojiable_selector: '[data-emojiable=true]',
+        assetsPath: "Bootstrap/EmojiPicker/emoji-picker-text-fields/lib/img/",
+        popupButtonClasses: 'fa fa-smile-o', // far fa-smile if you're using FontAwesome 5
+      });
+      window.emojiPicker.discover();
+
     var JCloneReactionDivBottom=$("<div>").addClass("div-bottom-reaction").clone(true,true);
 
+//console.log(Reponse.reactions.json_array_length());
+   /* for(var i=0;i<Reponse.reactions.length;i++)
+    {    JAddReactionLayout(JCloneReactionMiddle,Reponse.reactions[i]);}*/
 
-    for(var i=0;i<Reponse.reactions.length;i++)
-    {    JAddReactionLayout(JCloneReactionMiddle,Reponse.reactions[i]);}
-
+    for(emojiData in Reponse.reactions)
+   {console.log(emojiData); 
+    JAddReactionLayout(JCloneReactionMiddle,Reponse.reactions[emojiData],emojiData);}
+    /*Reponse.reactions.forEach(element => {
+        JAddReactionLayout(JCloneReactionMiddle,element);});*/
     
     
 
     JDivReactionContainer.append(JInputReaction);
-
 
     
     JCloneReactionUp.append(JCloneReactionCroix);
@@ -1892,23 +1924,36 @@ function JCreerReactionLayout(Reponse){
     $("#page").append(JCloneReaction);
     JCloneReaction.fadeIn(1000);
 
+
+ LoadChampTextEmoji();
+
+
+}
+
+function LoadChampTextEmoji(){
     window.emojiPicker = new EmojiPicker({
         emojiable_selector: '[data-emojiable=true]',
         assetsPath: "Bootstrap/EmojiPicker/emoji-picker-text-fields/lib/img/",
         popupButtonClasses: 'fa fa-smile-o', // far fa-smile if you're using FontAwesome 5
       });
       window.emojiPicker.discover();
-
-
 }
 
-function JAddReactionLayout(div,Reponse){
-var JCloneProfilReactionImage=$("<img>").addClass("Profil-Reaction").attr("src",Reponse.user.photo).clone(true,true);
-var JCloneReactionContent=$("<p>").addClass("Reaction-Content").text(Reponse.content).clone(true,true);
+function JAddReactionLayout(div,Reponse,emoji){
+    console.log(Reponse);
+    for(var i=0;i<Reponse.length;i++)
+    {console.log(Reponse[i]);
+        var JCloneProfilReactionImage=$("<img>").addClass("Profil-Reaction-Picture").attr("src",Reponse[i].photo).clone(true,true);
+        var JCloneReactionContent=$("<p>").addClass("Reaction-Content").text(emoji).clone(true,true);
+        var JCloneReactionName=$("<p>").addClass("Reaction-Name").text(Reponse[i].firstName+" "+Reponse[i].lastName).clone(true,true);
+        JCloneReactionName=ajouterTextOverflow(JCloneReactionName,50);
 
-var JCloneProfileReactionDiv=$("<div>").addClass("Profile-Reaction").append([JCloneProfilReactionImage,JCloneReactionContent]).clone(true,true);
-
-$(div).append(JCloneProfileReactionDiv);   
+        var JCloneProfileReactionDiv=$("<div>").addClass("Profile-Reaction").append([JCloneProfilReactionImage,JCloneReactionName,JCloneReactionContent]).clone(true,true);
+        
+        
+        $(div).append(JCloneProfileReactionDiv); 
+    }
+ 
  
 }
 

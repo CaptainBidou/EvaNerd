@@ -1096,6 +1096,10 @@ border-radius: 2%;
 top:7%;
 right:20.3%;
 padding: 2%;
+max-height: 30%;
+overflow-y: scroll;
+scrollbar-color: rebeccapurple green;
+scroll-padding: 2%;
 }
 
 .Recherche-Profil-Div-User-Img
@@ -1248,11 +1252,13 @@ position:absolute !important;
 bottom: 8%;
 width:50%;
 border-radius: 2%;
-background-color: whitesmoke;
+
 margin-left: 30%;
-zoom: 300%;
+padding: 2%;;
+zoom: 100%;
 z-index: 10;
 }
+
 .Bouton-Envoyer-Reaction{
     position: absolute;
     width:10%;
@@ -1280,7 +1286,8 @@ z-index: 10;
     bottom: 32%;
     border-radius: 2%;
     
-
+    overflow-y: scroll;
+scrollbar-color: rebeccapurple green;
 
 
 }
@@ -1342,4 +1349,43 @@ padding-top: 1%;
     margin-top: 5%;
     margin-left: 5%;
     margin-right: 5%;
+}
+
+
+.Profile-Reaction
+{
+background-color: lightgray;
+height:21%;
+margin:2%;
+border-radius: 2%;
+box-shadow: black 0px 0px 10px;
+padding-bottom: 5%;
+
+
+}
+
+
+.Reaction-Name
+{
+    position: absolute;
+    font-size: 150%;
+    margin-left: 10%;
+
+}
+
+.Profil-Reaction-Picture
+{
+    position: absolute;
+    margin-top: 1%;
+    margin-left: 1%;
+    width:8%;
+
+}
+
+.Reaction-Content
+{
+    position:absolute;
+   right:20%;
+font-size: 150%;
+
 }
