@@ -28,9 +28,15 @@ var JPostImage=$("<img>").addClass("card-img-top").data('type','post_image');
 var JPostDescription=$("<p>").addClass(["post-description", "card-text"]).data('type','post_text');
 var JPostProfile = $("<img>").addClass(["post-profile", 'rounded-circle','profile']).on("click",function(context){AfficherProfile(context.target);}).data("type","post_profile");//TODO :rajouter des données pour quand on clique
 var JPostEpingle= $("<img>").addClass("icon").data("type","post_epingle").attr('src','Ressources/Accueil/epingle.png').on("click",function(context){JclickEpingle(context.target);});
-var JPostLike= $("<img>").addClass("icon").data("type","post_like").attr('src','Ressources/Accueil/like.png').on("click",function(context){JClickLike(context.target);});
-var JPostReaction= $("<img>").addClass("icon").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png').on("click",function(context){GetReactionPost($(context.target).data("id"));});
-var JPostCommentaire= $("<img>").addClass("icon").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts(context.target);});
+var JPostLike= $("<img>").addClass("postLike").data("type","post_like").attr('src','Ressources/Accueil/like.png').on("click",function(context){JClickLike(context.target); var nblike=parseInt($(".Post-Nb-Likes", this.parentElement).text());
+if($(this).attr("src")=="Ressources/Accueil/like.png")
+var add=-1;
+else
+var add=1;
+
+$(".Post-Nb-Likes", this.parentElement).text(nblike+add)});
+var JPostReaction= $("<img>").addClass("icon-react").data("type","post_reaction").attr('src','Ressources/Accueil/reaction.png').on("click",function(context){GetReactionPost($(context.target).data("id"));});
+var JPostCommentaire= $("<img>").addClass("icon-comm").data("type","post_commentaire").attr('src','Ressources/Accueil/commentaire.png').css('margin-bottom','1%').on("click",function(context){CommentairesPosts(context.target);});
 
 //variables pour le footer
 var JFooter =$("<nav>").addClass(["footer","navbar"]).data("type","footer").on("click",function(context){JClickFooter(context);});
@@ -142,7 +148,19 @@ var JMessageReglage=$("<img>").attr("src","Ressources/Message/reglage.png").addC
 var JMessageEpingle=$("<img>").attr("src","Ressources/Message/epingle.png").addClass("Message-Epingle").on("click",function(context){JLayoutPinnedMessages(context.target);});
 var JMessageList=$("<img>").attr("src","Ressources/Message/list.png").addClass("Message-List").on("click",function(context){JLayoutListMessages(context.target);});
 var JMessageListUserDiv=$("<div>").addClass("Message-List-User-Div");
-var JMessageParticipant=$("<p>").addClass("Message-Participant");
+var JMessageParticipant=$("<p>").addClass("Message-Participant")
+.on("click",function(context){
+var JMessageInputText=$("<input>").attr("type","text").addClass("Message-Input-Text-Titre").attr("placeholder","Votre message").clone(true,true)
+.on("keyup",function(context){if (context.which==13){
+    ModifConvTitre($(this).val(),Group);
+    
+    $(".Message-Participant").text($(this).val()).show();$(this).remove();}});
+
+JMessageInputText.val($(this).hide().text());
+
+$(".MessageHeader").append(JMessageInputText);
+
+});
 var JMessageLayout=$("<div>").addClass("Message-Layout scroller").data("type","layout");
 var JMessage=$("<div>").addClass("Message").data("attribut","divMessage").attr("id","DivMessage");
 var JMessageInput=$("<textarea>").attr('type','text').addClass("form-control Message-Input").attr("placeholder","Votre message").on("keyup",function(context){if (context.which==13){JEnvoyerMessage($(".Message-Send")[0]);}});
@@ -350,9 +368,15 @@ var JReglageProfileLabel=$("<p>").addClass("Reglage-Profil-label");
 var JReglageProfileDiv=$("<div>").addClass("Reglage-Profil-Layout").attr("type","divisionReglage");
 var JReglageProfileImage=$("<input>").addClass("btn btn-danger form-control-file Reglage-Profil-Image").attr("type","file").text("Ajouter une image").on("click",function(){return null;}).on("change",function(context){$(".Submit-Image-profile").fadeIn(1000);});
 var JReglageProfileImageSubmit=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit Submit-Image-profile").html("Ajouter une Image").on("click",function(context){AddUserPicture($(".Reglage-Profil-Image")[0].files[0]);$(".Reglage-Profil-Image").val("")});
-var JReglageProfileSelectTelMail=$("<select>").addClass("form-control Reglage-Profil-Select-Tel-Mail").attr("id","exampleFormControlSelect1").append($("<option>").text("Mail").addClass("option")).append($("<option>").text("Telephone").addClass("option")).on("change",function(context){$(".Reglage-Profil-Input-Tel-Mail").fadeIn(1000);});;
+var JReglageProfileSelectTelMail=$("<select>").addClass("form-control Reglage-Profil-Select-Tel-Mail").attr("id","exampleFormControlSelect1").append($("<option>").text("Mail").addClass("option")).append($("<option>").text("Telephone").addClass("option")).on("click",function(context){$(".Reglage-Profil-Input-Tel-Mail").fadeIn(1000);});;
 var JReglageProfileInputTelMail=$("<input>").addClass("form-control Reglage-Profil-Input-Tel-Mail").attr("type","text").attr("placeholder","Mail ou Telephone").on("keypress",function(context){$(".Submit-Reglage-Profile-mailTel").fadeIn(1000);});
-var JReglageProfileSubmitTelMail=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit Submit-Reglage-Profile-mailTel").html("Ajouter un Mail ou un Telephone");
+var JReglageProfileSubmitTelMail=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit Submit-Reglage-Profile-mailTel").html("Ajouter un Mail ou un Telephone").on("click",function(){
+   if($(".Reglage-Profil-Input-Tel-Mail").val()==""){return null;}
+    var json = {};
+    console.log($(".Reglage-Profil-Select-Tel-Mail").val());
+    json[$(".Reglage-Profil-Select-Tel-Mail").val()]=$(".Reglage-Profil-Input-Tel-Mail").val();
+    ModifyUser(json,user);
+});
 var JReglageProfileTagSelect=$("<select>").addClass("form-control Reglage-Profil-Select-Tag").attr("id","exampleFormControlSelect1").append($("<option>").text("Tag").addClass("option")).on("change",function(context){$(".Reglage-Profil-Input-tag").fadeIn(1000);});
 var JReglageProfileTagSubmit=$("<button>").addClass("btn btn-danger Reglage-Profil-Submit Reglage-Profil-Input-tag").html("Ajouter un Tag").on("click",function(context){});
 
@@ -438,6 +462,10 @@ function JcreerPost(Reponse,membre,admin){
     var jClonePost=JPost.clone(true,true);
     var jClonePostTitre=JPostTitre.clone(true,true).text(Reponse.author.firstName+" "+Reponse.author.lastName).css("text-overflow","ellipsis").css("direction","ltr").css("width","60%").css("white-space","nowrap").css("overflow","hidden");
     var jClonePostBody=JPostBody.clone(true,true);
+    var JCloneNBLikes=$("<p>").addClass("Post-Nb-Likes").text(Reponse.likes);
+    JCloneNBLikes=ajouterTextOverflow(JCloneNBLikes,20);
+
+
     var jClonePostImage=JPostImage.clone(true,true).attr('src',Reponse.banner).attr("id-profile",Reponse.author.id);
     var jClonePostDescription=JPostDescription.clone(true,true).text(Reponse.content).on("click",function(context){afficherToutleText(context);});
     jClonePostDescription=ajouterTextOverflow(jClonePostDescription,100);
@@ -462,7 +490,7 @@ function JcreerPost(Reponse,membre,admin){
 
 
 
-    var jClonePostReact=JPostReaction.clone(true,true).data("id",Reponse.id);
+    var jClonePostReact=JPostReaction.clone(true,true).data("id",Reponse.id).addClass("Post-Reaction-Icon");
 
 
 
@@ -480,7 +508,7 @@ function JcreerPost(Reponse,membre,admin){
     if(membre==1)
     {
   
-    jClonePostBody.append(jClonePostComm).append(jClonePostLike).append(jClonePostReact);
+    jClonePostBody.append(jClonePostLike).append(JCloneNBLikes).append(jClonePostComm).append(jClonePostReact);
     }
 
     if(membre==0){
@@ -1291,6 +1319,7 @@ function JLayoutListMessages(target){
 
     ListUserConv($(".Message-List-User-Div"),$(target).data("idConv"));
     $(".Message-List-User-Div").animate({height:400,});
+   
 console.log("afficher")
 }
 

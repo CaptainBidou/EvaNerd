@@ -30,13 +30,35 @@
     float:left;
     width: 15%;
 }
-
-
 .icon {
     width: 12%;
-    margin-left: 5%;
-    float: right;
+    margin-left: 8%;
 }
+.icon-react{
+    position:absolute;
+    right:18%;
+    
+    bottom:3%;
+}
+
+.icon-comm
+{
+position:absolute;
+    width:12%;
+    right:2%;
+bottom:2%;
+}
+
+.Post-Reaction-Icon
+{
+    width: 12%;
+    margin-left: 50%;
+
+
+}
+
+
+
 
 #page
 {
@@ -1302,6 +1324,7 @@ scrollbar-color: rebeccapurple green;
 
 .Message-List-User-Div
 {
+
     width:30%;
     position:absolute;
     background-color: lightgray;
@@ -1310,10 +1333,10 @@ scrollbar-color: rebeccapurple green;
     right:20%;
     top:99%;
     border-radius: 2%;
-    height: 0%;
- max-height:300%;
- overflow-y: scroll;
- scrollbar-color: rebeccapurple green;
+    overflow-y: auto;
+
+ 
+
 }
 
 .Conv-Recherche-Profil
@@ -1388,4 +1411,25 @@ padding-bottom: 5%;
    right:20%;
 font-size: 150%;
 
+}
+
+.Post-Nb-Likes
+{
+    font-size: 500%;
+
+}
+
+.postLike
+{
+    width: 12%;
+    margin-bottom: 2%;
+    float: right;
+    margin-right: 68%;
+    
+}
+
+.Message-Input-Text-Titre{
+
+width:48%;
+margin-right:39%;
 }
