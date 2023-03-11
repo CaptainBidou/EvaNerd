@@ -1918,7 +1918,7 @@ function JCreerReactionLayout(Reponse){
 
     });
     var JDivReactionContainer=$("<div>").addClass("emoji-picker-container div-emoji").clone(true,true);
-    var JInputReaction=$("<input>").addClass("emoji-input-select").attr("type","text").attr({"data-emojiable":"true"}).clone(true,true);
+    var JInputReaction=$("<input>").addClass("emoji-input-select").attr("type","text").attr({"data-emojiable":"true","maxlength":1}).clone(true,true);
    
 
     window.emojiPicker = new EmojiPicker({
