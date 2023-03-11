@@ -78,6 +78,10 @@ switch($action) {
         verifMail($data, $queryString);
         break;
     
+    case "POST /users/logout":
+        logout($data, $authKey);
+        break;
+
     case "POST /users/ID/image":
         postImage($data, $idTabs, $authKey);
         break;
@@ -144,6 +148,10 @@ switch($action) {
     
     case "GET /groups/ID/messages/ID":
         listGroupsReacts($data, $idTabs, $authKey);
+        break;
+
+    case "GET /groups/ID/users":
+        listGroupsUsers($data, $idTabs, $authKey);
         break;
 
     case "POST /groups":
