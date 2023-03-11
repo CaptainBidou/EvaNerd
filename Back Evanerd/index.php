@@ -166,6 +166,10 @@ switch($action) {
         postMessagesGroups($data, $idTabs, $authKey, $queryString);
         break;
     
+    case "POST /groups/ID/image":
+        postImageGroups($data, $idTabs, $authKey);
+        break;
+        
     case "POST /groups/ID/messages/ID/reactions":
         postMessageReactions($data, $idTabs, $authKey, $queryString);
         break;
