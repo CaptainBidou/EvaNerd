@@ -177,7 +177,10 @@ switch($action) {
     case "PUT /groups/ID/messages/ID/pinned":
         putMessagePinned($data, $idTabs, $authKey);
         break;
-    
+
+    case "PUT /groups/ID":
+        putGroups($data, $idTabs, $authKey, $queryString);
+            break;    
     /* Posts */
     case "GET /posts":
         listPosts($data, $authKey);
