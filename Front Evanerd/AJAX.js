@@ -302,7 +302,7 @@ function AddUserInstruments($iid){
  * Requête permettant d'ajouter un achievement à un utilisateur
  * @param {*} $aid Identifiant d'achievement
  */
-function AddserAchievement($aid){
+function AddUserAchievement($aid){
     $.ajax({
         type: "POST",
         url: api + "/users/achievements",
@@ -360,10 +360,7 @@ function  ChargementInfosProfil($id){
             $id = oRep.user.id;
         },
         dataType: "json",
-    }).done(ListUserInstruments($id))
-}
-
-function ListUserInstruments($id){
+    }).done( function ListUserInstruments(){
     console.log($id);
     $.ajax({
         type: "GET",
@@ -379,11 +376,7 @@ function ListUserInstruments($id){
             userProfile.userId=oRep.userId;
         },
         dataType: "json",
-    }).done(ListUserRoles($id))
-}
-
-
-function ListUserRoles($id){
+    }).done( function ListUserRoles(){
     $.ajax({
         type: "GET",
         url: api + "/users/" + $id + "/roles",
@@ -398,7 +391,7 @@ function ListUserRoles($id){
             AfficherProfilCharger(oRep);
         },
         dataType: "json",
-    });
+    })})});
 }
 
 /***** USERS END **********/
