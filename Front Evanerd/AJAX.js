@@ -1301,3 +1301,32 @@ function PostReactionPost(id,react)
     });
 
 }
+
+
+function AddConvPicture($idConv,$img){
+
+    var formData = new FormData();
+    formData.append("image", $img);
+    
+    $.ajax({
+        type: "POST",
+        url: api + "/groups/"+$idConv+"/image",
+        headers: {"authToken":authcode}, // données dans les entetes
+        data: formData,
+        processData: false,
+        contentType: false,
+        error : function(){
+            console.log("Une erreur s'est produite");
+        },
+        success: function(oRep){
+            console.log(oRep);
+        },
+
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        },
+        dataType: "json"
+    });
+}
