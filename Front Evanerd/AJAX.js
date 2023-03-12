@@ -35,8 +35,9 @@ function auth($tel,$password){
             "key": "password",
             "value": $password
         },],
-        error : function(){
+        error : function(err){
             console.log("Une erreur s'est produite");
+            console.log(err);
             
         },
         success: function(oRep){
@@ -344,39 +345,54 @@ function  ChargementInfosProfil($id){
         },
         dataType: "json",
     }).done( function ListUserInstruments(){
-    console.log($id);
-    $.ajax({
-        type: "GET",
-        url: api + "/users/" + $id + "/instruments",
-        headers: {"authToken" : ""},
-        data: [],
-        error : function(){
-            console.log("Une erreur s'est produite");
-        },
-        success: function(oRep){
-            console.log(oRep);
-            userProfile.instruments = oRep.instruments;
-            userProfile.userId=oRep.userId;
-        },
-        dataType: "json",
-    }).done( function ListUserRoles(){
-    $.ajax({
-        type: "GET",
-        url: api + "/users/" + $id + "/roles",
-        headers: {"authToken" : ""},
-        data: [],
-        error : function(){
-            console.log("Une erreur s'est produite");
-        },
-        success: function(oRep){
-            console.log(oRep);
-            userProfile.Roles = oRep.roles
-            AfficherProfilCharger(oRep);
-        },
-        dataType: "json",
-    })})});
+        console.log($id);
+        $.ajax({
+            type: "GET",
+            url: api + "/users/" + $id + "/instruments",
+            headers: {"authToken" : ""},
+            data: [],
+            error : function(){
+                console.log("Une erreur s'est produite");
+            },
+            success: function(oRep){
+                console.log(oRep);
+                userProfile.instruments = oRep.instruments;
+                userProfile.userId=oRep.userId;
+            },
+            dataType: "json",
+        }).done( function ListUserRoles(){
+            $.ajax({
+                type: "GET",
+                url: api + "/users/" + $id + "/roles",
+                headers: {"authToken" : ""},
+                data: [],
+                error : function(){
+                    console.log("Une erreur s'est produite");
+                },
+                success: function(oRep){
+                    console.log(oRep);
+                    userProfile.Roles = oRep.roles
+                },
+                dataType: "json",
+            }).done(function getUserActivity($id){
+                $.ajax({
+                    type: "GET",
+                    url: api + "/users/" + $id + "/events/calls",
+                    headers: {"authToken" : ""},
+                    data: [],
+                    error : function(){
+                        console.log("Une erreur s'est produite");
+                    },
+                    success: function(oRep){
+                        console.log(oRep);
+                        AfficherProfilCharger(oRep);
+                    },
+                    dataType: "json",
+                })
+            })
+        })
+    })
 }
-
 
 function resetMDP(mdp,token){
     $.ajax({
