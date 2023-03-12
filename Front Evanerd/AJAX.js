@@ -173,7 +173,12 @@ function CreateUser($informations){
     +"&password=" + $informations["password"];
 
     if ($informations["studies"])
-    url += "&studies=" + $informations["studies"];
+        url += "&studies=" + $informations["studies"];
+
+    $informations["instruments"].forEach(function (element){
+        url += "&iid[]="+element;
+    })
+
 
     $.ajax({
         type: "POST",
