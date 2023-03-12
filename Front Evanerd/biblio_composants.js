@@ -1155,6 +1155,7 @@ function JCreerPostCreer(){
 
 
 function JCreerProfile(Reponse){
+    console.log(Reponse);
     if(Reponse.id==user)
     var JCloneProfileReglage=JProfileReglage.clone(true,true);
 
@@ -1173,7 +1174,8 @@ function JCreerProfile(Reponse){
     if(Reponse.id==user)
     {
 
-
+        var JCloneProfileTel=$("<p>").addClass("profileTel").text(Reponse.telephone);
+        var JCloneProfileMail=$("<p>").addClass("profileMail").text(Reponse.email);
 
         JCloneProfileNom.on("click",function(){
 
