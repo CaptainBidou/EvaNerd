@@ -1441,3 +1441,21 @@ margin-right:39%;
     padding : 3px;
     text-align: center;
 }
+
+
+.Prenom-input-profile,.Nom-input-profile
+{
+
+font-size: 200%;
+font-weight: bold;
+background-color: darkgray;
+margin-bottom: 5%;
+margin-top: 5%;
+text-align: center;
+
+}
+
+.Nom-input-profile
+{
+    margin-left:6%;
+}

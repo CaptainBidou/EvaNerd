@@ -1167,14 +1167,19 @@ function JCreerProfile(Reponse){
     var JCloneProfileProgress=JProfileProgress.clone(true,true);
     var JCloneProfileImage=JProfileImage.clone(true,true).attr("src",Reponse.photo);
     var JCloneProfilePourcentage=JProfilePourcentage.clone(true,true).data('aria-valuenow',Reponse.pourcentage+'%').css("width",Reponse.pourcentage+'%').html(Reponse.pourcentage+'%');
-    var JCloneProfileNom=JProfileNom.clone(true,true).text(Reponse.firstName +" "+ Reponse.lastName);  
+    var JCloneProfileNom=JProfileNom.clone(true,true).text(Reponse.firstName +" "+ Reponse.lastName);
+    var JCloneNomProfileInput=$("<input>").addClass("Nom-input-profile").attr("type","text").attr("placeholder","Nom").val(Reponse.firstName).hide();
+    var JClonePrenomProfileInput=$("<input>").addClass("Prenom-input-profile").attr("type","text").attr("placeholder","Prénom").val(Reponse.lastName).hide();          
     if(Reponse.id==user)
     {
 
 
 
         JCloneProfileNom.on("click",function(){
-            var JCloneNomProfileInput=$("<input>").addClass("Nom-input-profile").attr("type","text").attr("placeholder","Nom").val(Reponse.firstName);
+            $(this).hide();
+            console.log("azeaze");
+                $(".Nom-input-profile").show();
+                $(".Prenom-input-profile").show();
 
 
 
@@ -1202,7 +1207,7 @@ function JCreerProfile(Reponse){
         
 
     $("#page").append(JCloneProfileImage);
-    $("#page").append(JCloneProfileNom);
+    $("#page").append([JCloneProfileNom,JCloneNomProfileInput,JClonePrenomProfileInput]);
     var i;
     for(i=0;i<Reponse.tag.length;i++)
     JCreerProfileTag(Reponse.tag[i]);
