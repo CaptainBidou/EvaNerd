@@ -1176,10 +1176,20 @@ function JCreerProfile(Reponse){
 
 
         JCloneProfileNom.on("click",function(){
+
             $(this).hide();
             console.log("azeaze");
-                $(".Nom-input-profile").show();
-                $(".Prenom-input-profile").show();
+                $(".Nom-input-profile").show().data("id","firstName");
+                $(".Prenom-input-profile").show().data("id","lastName");
+
+                $(".Nom-input-profile").on("keyup",function(context){
+                    if (context.which==13){
+                        var json={};
+                        json[$(this).data("id")]=$(this).val();
+                        ModifyUser(json,user);
+                    }
+
+                });
 
 
 

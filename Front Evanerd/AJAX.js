@@ -123,7 +123,7 @@ function ModifyUser($informations,$uid){
         data.tel = $informations.Telephone;
     if ($informations.studies)
         data.studies = $informations.studies;
-
+        console.log(data);
         console.log($informations)
     $.ajax({
         type: "PUT",
