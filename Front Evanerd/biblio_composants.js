@@ -1186,7 +1186,24 @@ function JCreerProfile(Reponse){
                     if (context.which==13){
                         var json={};
                         json[$(this).data("id")]=$(this).val();
+                        json["lastName"]=$(".Prenom-input-profile").val();
                         ModifyUser(json,user);
+                        $(".Nom-input-profile").hide();
+                        $(".Prenom-input-profile").hide();
+                        $(".profileNom").show();
+                    }
+
+                });
+
+                $(".Prenom-input-profile").on("keyup",function(context){
+                    if (context.which==13){
+                        var json={};
+                        json[$(this).data("id")]=$(this).val();
+                        json["firstName"]=$(".Nom-input-profile").val();
+                        ModifyUser(json,user);
+                        $(".Nom-input-profile").hide();
+                        $(".Prenom-input-profile").hide();
+                        $(".profileNom").show();
                     }
 
                 });
