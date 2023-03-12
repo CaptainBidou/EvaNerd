@@ -139,7 +139,9 @@ function ModifyUser($informations,$uid){
         success: function(oRep){
             console.log("modification réussie");
             console.log(oRep); 
+            ChargementInfosProfil(user);
             return oRep;
+           
 
         },
         dataType: "json"
@@ -1408,7 +1410,9 @@ function AddUserPicture($img){
         },
         success: function(oRep){
             console.log(oRep);
-            ChargementInfosProfil(user);
+            $("#header").empty();
+            JcreerHeader({"photo" : oRep.user.photo,"id" : user,"member" : !member,"admin" : admin});
+            return $(".profileImage").attr("src",oRep.user.photo);
             
         },
 
