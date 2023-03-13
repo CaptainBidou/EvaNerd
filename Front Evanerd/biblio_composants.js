@@ -243,7 +243,7 @@ var JCréationComptePwd= $("<input>")
     .attr("type","password");
 
 var JCréationCompteSubmit= $("<button>")
-    .addClass("btn btn-danger")
+    .addClass("btn btn-danger CreerCompte-Submit")
     .attr("id","Submit")
     .html("C'est parti !")
     .on("click",function(context){
@@ -432,6 +432,11 @@ var JAppelAdminProfil=$("<div>").addClass("Appel-Admin-Profil");
 var JAppelAdminProfilImg=$("<img>").addClass(["Appel-Admin-Profil-Img","rounded-circle"]);
 var JAppelAdminProfilNom=$("<p>").addClass("Appel-Admin-Profil-Nom");
 var JAppelAdminProfilCommentaire=$("<p>").addClass("Appel-Admin-Profil-Commentaire");
+
+
+
+
+var JConnexionFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addClass("Message-Fleche").on("click",function(){ JCreerConnexion();});
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
@@ -1671,6 +1676,10 @@ function JChangerMDP(token) {
 
 
 function JCreerInscription(){
+    var JCloneConnexionFleche=JConnexionFleche.clone(true,true);
+$("#page").append(JCloneConnexionFleche);
+
+
 
     var JCloneLegendNom=JCréationCompteP.clone(true,true).text("Nom *");
     var JCloneNom = JCréationCompteNom.clone(true,true);
@@ -1679,7 +1688,7 @@ function JCreerInscription(){
     var JClonePrénom = JCréationComptePrenom.clone(true,true);
 
     var JCloneLegendAge=JCréationCompteP.clone(true,true).text("Votre Age *");
-    var JCloneAge = JCréationCompteAge.clone(true,true);
+    var JCloneAge = JCréationCompteAge.clone(true,true).addClass("form-Age-Creation");
 
     var JCloneLegendPrenom=JCréationCompteP.clone(true,true).text("Prénom *");
     var JClonePrénom = JCréationComptePrenom.clone(true,true);
@@ -1698,7 +1707,7 @@ function JCreerInscription(){
 
     
     var JCloneLegendTel=JCréationCompteP.clone(true,true).text("Téléphone *");
-    var JCloneTelephone= JCréationCompteTelephone.clone(true,true);
+    var JCloneTelephone= JCréationCompteTelephone.clone(true,true).addClass("form-Age-Creation");
     
     var JCloneLegendPwd=JCréationCompteP.clone(true,true).text("Mot de Passe *");
     var JClonePwd=JCréationComptePwd.clone(true,true).attr("id","mdp1");
@@ -1716,14 +1725,15 @@ function JCreerInscription(){
     var JCloneLabelFemme = JCréationCompteLabelGenre.clone(true,true).text("Femme").data("genre","1");
     var JCloneLabelNeutre = JCréationCompteLabelGenre.clone(true,true).text("Neutre").data("genre","2");
     
-    var JClonePrevious = JCréationComptePrevious.clone(true,true).text("Revenir au formulaire de Connexion");
+    var JClonePrevious = JCréationComptePrevious.clone(true,true).text("Revenir au formulaire de Connexion").addClass("btn btn-danger Connexion-Submit");
     var JCloneSubmit = JCréationCompteSubmit.clone(true,true);
         var JCloneDivButton = JCréationCompteDiv.clone(true,true).addClass("divbutton")
     var JDiv = $("<div>").addClass("divbutton")
     var JCloneImage = JCreerPostFormImage.clone(true,true);
 
 
-    JDiv.append([JClonePrevious,JCloneSubmit]);
+    JDiv.append([//JClonePrevious,
+    JCloneSubmit]);
 
 
     JCloneCréationCompte.append([JCloneTitre,

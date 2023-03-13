@@ -305,12 +305,20 @@ padding-right:10%;
 
 }
 
+.CreerCompte-Submit
+{
+    float: right;
+    margin-bottom: 20%;
+font-size: 180%;
+background-color: darkred;
 
+
+}
 .buttonAddImage
 {
-    font-size: 75%;
+    font-size: 180%;
     background-color: darkred;
-    width:80%;
+    
     margin-bottom: 5%;
 }
 
@@ -486,23 +494,34 @@ margin-right: 5%;
     margin-bottom: 5%;
     margin-top: 5%;
 }
+.button-Créa
+{
+    font-size: 300%;
+    background-color: darkred;
+
+
+}
+.form-Age-Creation
+{
+    font-size: 300%;
+}
 
 .divFormCréationCompte
 {
     margin-top: 10%;
     background-color: red;
-    height:120%;
     padding:5%;
     width:96%;
     font-size: 110%;
     position: absolute;
     /*box-shadow: 0px 4px 10px darkred;*/
     box-shadow: 10px 10px 20px 10px rgb(0, 0, 0);
-    height: 80%;
+    height: 60%;
     /*border-radius: 20px;*/
     margin-left : 2%;
     margin-right : 2%;
     margin-top:5%;
+    margin-bottom: 5%;
     border-radius: 10px;
     overflow-y: scroll;
 
@@ -519,23 +538,14 @@ margin-right: 5%;
 }
 
 
-.button-Créa
-{
-    width: 30%;
-    height: 4%;
-    border-radius: 5%;
-    background-color: darkred;
-    border: 1px solid black;
-    color: whitesmoke;
-}
+
 
 .labelCréationGenre
 {
     font-size: 100%;
     display: inline-block;
     margin: 5%;
-    border: 1px solid black;
-    border-radius: 60%;
+    border-radius: 5PX;
     background-color: darkred;
     color: whitesmoke;
     font-size: 200%;
