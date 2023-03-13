@@ -142,6 +142,7 @@ function ModifyUser($informations,$uid){
         success: function(oRep){
             console.log("modification réussie");
             console.log(oRep); 
+            $("#page").empty();
             ChargementInfosProfil(user);
             return oRep;
            
