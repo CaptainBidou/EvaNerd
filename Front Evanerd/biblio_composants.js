@@ -551,6 +551,7 @@ function JcreerPost(Reponse,membre,admin){
  * 
  */
 function JcreerFooter(Reponse){
+    console.log(Reponse);
     var JCloneFooter=JFooter.clone(true,true);
     var JCloneFooterAcceuil=JFooterAccueil.clone('true','true');
     var JCloneFooterAppel=JFooterAppel.clone('true','true');
@@ -1240,13 +1241,16 @@ function JCreerProfile(Reponse){
     var i;
     for(i=0;i<Reponse.tag.length;i++)
     JCreerProfileTag(Reponse.tag[i]);
-
+    if(Reponse.rh)
+    {
     $("#page").append(JCloneProfileProgress.append(JCloneProfilePourcentage));
-    $("#page").append(JCloneProfileDivActivite);
+    $("#page").append(JCloneProfileDivActivite);}
+
+    if(Reponse.rh){
     for(i=0;i<Reponse.activity.length;i++)
     {var activity = {"nom":Reponse.firstName,"prenom":Reponse.lastName,"activites":Reponse.activity[i],};
     JCreerProfileActivite(activity);
-    }
+    }}
 
 }
 

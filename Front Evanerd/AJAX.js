@@ -46,7 +46,8 @@ function auth($tel,$password){
            
             authcode = oRep.authToken;
            
-            
+            console.log(oRep["user"].noMember);
+
             member = !oRep["user"].noMember;
            
             pdp = oRep["user"].photo;
@@ -55,6 +56,7 @@ function auth($tel,$password){
             localStorage.setItem('admin',admin);
             localStorage.setItem('user',user);
             localStorage.setItem('authToken',authcode);
+            console.log(member);
             localStorage.setItem('member',member);
             localStorage.setItem('pdp',pdp);
         },
@@ -386,11 +388,13 @@ function  ChargementInfosProfil($id){
                     data: [],
                     error : function(error){
                         console.log(error);
+                        json.rh=0;
                         AfficherProfilCharger(json);
                     },
                     success: function(oRep){
                         console.log(oRep);
                         json.events = oRep;
+                        json.rh=1
                         AfficherProfilCharger(json);
                     },
                     dataType: "json",

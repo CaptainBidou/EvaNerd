@@ -65,10 +65,13 @@ function  AfficherProfilCharger(Reponse) {
     var json = {};
     console.log(Reponse);
     json.photo = Reponse.user.photo ;
+    if(Reponse.rh)
     json.pourcentage = Reponse.events.ratio * 100;
+
     json.firstName = Reponse.user.firstName;
     json.lastName = Reponse.user.lastName;
     json.id=Reponse.userId;
+    if(Reponse.rh)
     json.activity = Reponse.events.calls;
     json.tag = [];
     var tag = [];
@@ -88,7 +91,7 @@ function  AfficherProfilCharger(Reponse) {
         tag.push(temp);
         i++;
     }
-
+    json.rh=Reponse.rh;
     json.tag = tag; 
     console.log(json);
     JCreerProfile(json)
@@ -299,6 +302,7 @@ function ConnexionAuto(){
    
     authcode = localStorage.getItem("authToken");
     user = parseInt(localStorage.getItem("user"));
+    console.log(localStorage.getItem("member"));
     member = localStorage.getItem("member") == "true" ? true : false;
     pdp = localStorage.getItem("pdp");
     admin = localStorage.getItem("admin");
