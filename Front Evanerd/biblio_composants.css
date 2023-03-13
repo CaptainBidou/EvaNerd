@@ -473,6 +473,14 @@ margin-top: 3%;
 margin-right: 5%;
 }
 
+.submit-compte-recup
+{
+    font-size: 200%;
+
+
+}
+
+
 .divFormConnexion
 {
     margin-top: 10%;
@@ -515,7 +523,7 @@ margin-right: 5%;
     font-size: 110%;
     position: absolute;
     /*box-shadow: 0px 4px 10px darkred;*/
-    box-shadow: 10px 10px 20px 10px rgb(0, 0, 0);
+    box-shadow: 10px 10px 20px 10px gray;
     height: 60%;
     /*border-radius: 20px;*/
     margin-left : 2%;

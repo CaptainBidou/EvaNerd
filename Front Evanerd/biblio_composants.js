@@ -1615,16 +1615,18 @@ function JCreerConnexion(){
 }
 
 function  JRecupAccount(){
+    var JCloneFleche=JConnexionFleche.clone(true,true);
+    $("#page").append(JCloneFleche);
     
     var JCloneRécupCompteP = JRécupCompteP.clone(true,true).html("Votre adresse mail")
 
     var JCloneRécupCompte = JRécupCompte.clone(true,true)
 
-    var JCloneRécupCompteTitre = JRécupCompteTitre.clone(true,true).html("Récuperer votre compte dès maintenant")
+    var JCloneRécupCompteTitre = JRécupCompteTitre.clone(true,true).html("Récupérer votre compte dès maintenant")
 
     var JCloneRécupCompteMail= JRécupCompteMail.clone(true,true)
 
-    var JCloneRécupCompteSubmit = JRécupCompteSubmit.clone(true,true);
+    var JCloneRécupCompteSubmit = JRécupCompteSubmit.clone(true,true).addClass("submit-compte-recup");
 
     JCloneRécupCompte.append([
         JCloneRécupCompteTitre ,
