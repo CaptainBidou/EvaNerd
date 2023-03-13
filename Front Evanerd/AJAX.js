@@ -889,7 +889,7 @@ function ListPosts($authToken){
             JCreerConnexion();
         },
         success: function(oRep){
-            $("#page").html("");
+            
             console.log(oRep);
             oRep["posts"].sort(function compare(e1,e2) { return e2.pinned - e1.pinned });
             oRep["posts"].forEach(element => {
