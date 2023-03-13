@@ -436,7 +436,7 @@ var JAppelAdminProfilCommentaire=$("<p>").addClass("Appel-Admin-Profil-Commentai
 
 
 
-var JConnexionFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addClass("Message-Fleche").on("click",function(){ JCreerConnexion();});
+var JConnexionFleche =$("<img>").attr("src","Ressources/Message/arrow.png").addClass("Message-Fleche").on("click",function(){$("#page").empty(); $("#header").empty(); JCreerConnexion();});
 /************************************************************************/
 /*                 DECLARATION DES FONCTIONS                           */
 /***********************************************************************/
