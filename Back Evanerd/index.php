@@ -15,6 +15,7 @@ if($requestType == "OPTIONS") sendResponse($data, [getStatusHeader(HTTP_OK)]);
 
 $idTabs = array();
 
+
 if(isset($queryString["request"])) $request = $queryString["request"]; // rendre plus robuste
 else $request = false;
 
@@ -44,6 +45,10 @@ switch($action) {
 
     case "GET /users/ID/roles":
         getUserRoles($data, $idTabs);
+        break;
+
+    case "GET /users/ID/events/calls":
+        getUserCalls($data, $idTabs, $authKey);
         break;
 
     case "PUT /users/ID/events/ID/calls":
