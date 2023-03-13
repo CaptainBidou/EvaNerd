@@ -60,28 +60,31 @@ function AfficherProfile(context){
     ChargementInfosProfil($uid);
 }
 
-function  AfficherProfilCharger() { 
+function  AfficherProfilCharger(Reponse) { 
     var i = 0;
     var json = {};
-    console.log(userProfile);
-    json.photo = userProfile.user.photo ;
-    json.pourcentage = 90;
-    json.firstName = userProfile.user.firstName;
-    json.lastName = userProfile.user.lastName;
-    json.id=userProfile.userId;
-    json.activity = new Array();
+    console.log(Reponse);
+    json.photo = Reponse.user.photo ;
+    json.pourcentage = Reponse.events.ratio * 100;
+    json.firstName = Reponse.user.firstName;
+    json.lastName = Reponse.user.lastName;
+    json.id=Reponse.userId;
+    json.activity = Reponse.events.calls;
     json.tag = [];
     var tag = [];
     var temp = {};
+    var max = 10;
 
-    for (let index = 0; index < userProfile.Roles.length; index++) {
-        temp = {"nom" : userProfile.Roles[index].label,"couleur" : "red"}
+    var couleur=["coral","lightblue","lightgreen","yellow","orange","purple","pink","brown","grey","lightgray"]
+
+    for (let index = 0; index < Reponse.Roles.length; index++) {
+        temp = {"nom" : Reponse.Roles[index].label,"couleur" : couleur[Math.floor(Math.random() * max)]}
         tag.push(temp);
         i++;
     };
 
-    for (let index = 0; index < userProfile.instruments.length; index++) {
-        temp = {"nom" : userProfile.instruments[index].label,"couleur" : "blue"}
+    for (let index = 0; index < Reponse.instruments.length; index++) {
+        temp = {"nom" : Reponse.instruments[index].label,"couleur" : couleur[Math.floor(Math.random() * max)]}
         tag.push(temp);
         i++;
     }
@@ -89,8 +92,6 @@ function  AfficherProfilCharger() {
     json.tag = tag; 
     console.log(json);
     JCreerProfile(json)
-    userProfile = {};
-    console.log(userProfile);
     // TODO : Lister activité utilisateur
 }
 

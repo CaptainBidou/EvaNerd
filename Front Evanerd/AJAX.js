@@ -331,6 +331,7 @@ function VerifMail($token){
 /**  * @param $id Id de l'utilisateur */
 
 function  ChargementInfosProfil($id){
+    var json={};
     $.ajax({
         type: "GET",
         url: api + "/users/" + $id,
@@ -340,8 +341,11 @@ function  ChargementInfosProfil($id){
         },
         success: function(oRep){
             console.log(oRep); 
-            userProfile.user = oRep.user;
+            json.user=oRep.user;
+
+            //userProfile.user = oRep.user;
             $id = oRep.user.id;
+
         },
         dataType: "json",
     }).done( function ListUserInstruments(){
@@ -356,8 +360,8 @@ function  ChargementInfosProfil($id){
             },
             success: function(oRep){
                 console.log(oRep);
-                userProfile.instruments = oRep.instruments;
-                userProfile.userId=oRep.userId;
+                json.instruments = oRep.instruments;
+                json.userId=oRep.userId;
             },
             dataType: "json",
         }).done( function ListUserRoles(){
@@ -371,21 +375,23 @@ function  ChargementInfosProfil($id){
                 },
                 success: function(oRep){
                     console.log(oRep);
-                    userProfile.Roles = oRep.roles
+                    json.Roles = oRep.roles
                 },
                 dataType: "json",
             }).done(function getUserActivity($id){
                 $.ajax({
                     type: "GET",
-                    url: api + "/users/" + $id + "/events/calls",
+                    url: api + "/users/" + user + "/events/calls",
                     headers: {"authToken" :authcode},
                     data: [],
-                    error : function(){
-                        console.log("Une erreur s'est produite");
+                    error : function(error){
+                        console.log(error);
+                        AfficherProfilCharger(json);
                     },
                     success: function(oRep){
                         console.log(oRep);
-                        AfficherProfilCharger(oRep);
+                        json.events = oRep;
+                        AfficherProfilCharger(json);
                     },
                     dataType: "json",
                 })
