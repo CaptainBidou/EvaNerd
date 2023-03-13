@@ -1274,7 +1274,7 @@ function JCreerProfileTag(Reponse){
 function JCreerProfileActivite(Reponse){
     var JCloneProfileActivite=JProfileActivite.clone(true,true).css("background-color",JCouleur);
     var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true).attr("src","Ressources/Footer/calendrier.png");
-    var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.nom);
+    var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.event);
     JCloneProfileActiviteContent=ajouterTextOverflow(JCloneProfileActiviteContent,80);
     JCloneProfileActiviteContent.on("click",function(context){afficherToutleText(context);})
     JCloneProfileActivite.append([JCloneProfileActiviteContent,JCloneProfileActiviteImage]);
