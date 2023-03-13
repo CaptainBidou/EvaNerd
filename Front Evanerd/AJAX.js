@@ -35,8 +35,9 @@ function auth($tel,$password){
             "key": "password",
             "value": $password
         },],
-        error : function(){
+        error : function(err){
             console.log("Une erreur s'est produite");
+            console.log(err);
             
         },
         success: function(oRep){
@@ -45,7 +46,8 @@ function auth($tel,$password){
            
             authcode = oRep.authToken;
            
-            
+            console.log(oRep["user"].noMember);
+
             member = !oRep["user"].noMember;
            
             pdp = oRep["user"].photo;
@@ -54,6 +56,7 @@ function auth($tel,$password){
             localStorage.setItem('admin',admin);
             localStorage.setItem('user',user);
             localStorage.setItem('authToken',authcode);
+            console.log(member);
             localStorage.setItem('member',member);
             localStorage.setItem('pdp',pdp);
         },
@@ -139,6 +142,7 @@ function ModifyUser($informations,$uid){
         success: function(oRep){
             console.log("modification réussie");
             console.log(oRep); 
+            $("#page").empty();
             ChargementInfosProfil(user);
             return oRep;
            
@@ -330,53 +334,76 @@ function VerifMail($token){
 /**  * @param $id Id de l'utilisateur */
 
 function  ChargementInfosProfil($id){
+    var json={};
     $.ajax({
         type: "GET",
         url: api + "/users/" + $id,
-        headers: {"authToken":""}, // données dans les entetes 
+        headers: {"authToken":authcode}, // données dans les entetes 
         error : function(){
             console.log("Une erreur s'est produite");
         },
         success: function(oRep){
             console.log(oRep); 
-            userProfile.user = oRep.user;
+            json.user=oRep.user;
+
+            //userProfile.user = oRep.user;
             $id = oRep.user.id;
+
         },
         dataType: "json",
     }).done( function ListUserInstruments(){
-    console.log($id);
-    $.ajax({
-        type: "GET",
-        url: api + "/users/" + $id + "/instruments",
-        headers: {"authToken" : ""},
-        data: [],
-        error : function(){
-            console.log("Une erreur s'est produite");
-        },
-        success: function(oRep){
-            console.log(oRep);
-            userProfile.instruments = oRep.instruments;
-            userProfile.userId=oRep.userId;
-        },
-        dataType: "json",
-    }).done( function ListUserRoles(){
-    $.ajax({
-        type: "GET",
-        url: api + "/users/" + $id + "/roles",
-        headers: {"authToken" : ""},
-        data: [],
-        error : function(){
-            console.log("Une erreur s'est produite");
-        },
-        success: function(oRep){
-            console.log(oRep);
-            userProfile.Roles = oRep.roles
-            AfficherProfilCharger(oRep);
-        },
-        dataType: "json",
-    })})});
+        console.log($id);
+        $.ajax({
+            type: "GET",
+            url: api + "/users/" + $id + "/instruments",
+            headers: {"authToken" : authcode},
+            data: [],
+            error : function(){
+                console.log("Une erreur s'est produite");
+            },
+            success: function(oRep){
+                console.log(oRep);
+                json.instruments = oRep.instruments;
+                json.userId=oRep.userId;
+            },
+            dataType: "json",
+        }).done( function ListUserRoles(){
+            $.ajax({
+                type: "GET",
+                url: api + "/users/" + $id + "/roles",
+                headers: {"authToken" : authcode},
+                data: [],
+                error : function(){
+                    console.log("Une erreur s'est produite");
+                },
+                success: function(oRep){
+                    console.log(oRep);
+                    json.Roles = oRep.roles
+                },
+                dataType: "json",
+            }).done(function getUserActivity($id){
+                $.ajax({
+                    type: "GET",
+                    url: api + "/users/" + user + "/events/calls",
+                    headers: {"authToken" :authcode},
+                    data: [],
+                    error : function(error){
+                        console.log(error);
+                        json.rh=0;
+                        AfficherProfilCharger(json);
+                    },
+                    success: function(oRep){
+                        console.log(oRep);
+                        json.events = oRep;
+                        json.rh=1
+                        AfficherProfilCharger(json);
+                    },
+                    dataType: "json",
+                })
+            })
+        })
+    })
 }
-
 
 function resetMDP(mdp,token){
     $.ajax({

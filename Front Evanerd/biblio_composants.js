@@ -551,6 +551,7 @@ function JcreerPost(Reponse,membre,admin){
  * 
  */
 function JcreerFooter(Reponse){
+    console.log(Reponse);
     var JCloneFooter=JFooter.clone(true,true);
     var JCloneFooterAcceuil=JFooterAccueil.clone('true','true');
     var JCloneFooterAppel=JFooterAppel.clone('true','true');
@@ -1240,13 +1241,16 @@ function JCreerProfile(Reponse){
     var i;
     for(i=0;i<Reponse.tag.length;i++)
     JCreerProfileTag(Reponse.tag[i]);
-
+    if(Reponse.rh)
+    {
     $("#page").append(JCloneProfileProgress.append(JCloneProfilePourcentage));
-    $("#page").append(JCloneProfileDivActivite);
+    $("#page").append(JCloneProfileDivActivite);}
+
+    if(Reponse.rh){
     for(i=0;i<Reponse.activity.length;i++)
     {var activity = {"nom":Reponse.firstName,"prenom":Reponse.lastName,"activites":Reponse.activity[i],};
     JCreerProfileActivite(activity);
-    }
+    }}
 
 }
 
@@ -1274,7 +1278,7 @@ function JCreerProfileTag(Reponse){
 function JCreerProfileActivite(Reponse){
     var JCloneProfileActivite=JProfileActivite.clone(true,true).css("background-color",JCouleur);
     var JCloneProfileActiviteImage=JProfileActiviteImage.clone(true,true).attr("src","Ressources/Footer/calendrier.png");
-    var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.nom);
+    var JCloneProfileActiviteContent=JProfileActiviteContent.clone(true,true).text(Reponse.nom+" "+Reponse.prenom+" a participé à l'évènement "+Reponse.activites.event);
     JCloneProfileActiviteContent=ajouterTextOverflow(JCloneProfileActiviteContent,80);
     JCloneProfileActiviteContent.on("click",function(context){afficherToutleText(context);})
     JCloneProfileActivite.append([JCloneProfileActiviteContent,JCloneProfileActiviteImage]);
