@@ -191,7 +191,7 @@ function selectUser($idUser, $me = 0){
     return Database::parcoursRs($db->SQLSelect($sql, $params));
 }
 
-function updateUser($idUser,$mail = false,$tel = false,$age = false,$studies = false,$image = false,$password=false){
+function updateUser($idUser, $firstname = false, $lastName = false,$mail = false,$tel = false,$age = false,$studies = false,$image = false,$password=false){
     $db = Config::getDatabase();
     $params = [];
 
@@ -201,6 +201,8 @@ function updateUser($idUser,$mail = false,$tel = false,$age = false,$studies = f
     $sqlStudies = $studies ? "?" : "studies";
     $sqlPassword = $password ? "?" : "password";
     $sqlImage = $image ? "?": "photo";
+    $sqlFirstname = $firstname ? "?" : "firstName";
+    $sqlLastname = $lastName ? "?" : "lastName";
 
     if ($mail != false) array_push($params, $mail);
     if ($tel != false) array_push($params, $tel);
@@ -208,10 +210,12 @@ function updateUser($idUser,$mail = false,$tel = false,$age = false,$studies = f
     if ($studies != false) array_push($params, $studies);
     if ($password != false) array_push($params, $password);
     if ($image != false) array_push($params, $image);
+    if ($firstname != false) array_push($params, $firstname);
+    if ($lastName != false) array_push($params, $lastName);
     array_push($params,$idUser);
 
     if(count($params) == 1) return false;
-    $sql = "UPDATE Users SET mail=$sqlMail, tel=$sqlTel, age=$sqlAge, studies=$sqlStudies, password=$sqlPassword, photo=$sqlImage
+    $sql = "UPDATE Users SET mail=$sqlMail, tel=$sqlTel, age=$sqlAge, studies=$sqlStudies, password=$sqlPassword, photo=$sqlImage, firstName=$sqlFirstname, lastName=$sqlLastname
             WHERE id = ?";
             
     return $db->SQLUpdate($sql, $params);
@@ -958,4 +962,19 @@ function selectPostReaction($pid, $uid, $emoji) {
     $sql = "SELECT * FROM Post_Reactions WHERE pid = ? AND uid = ? AND emoji = ?";
     return Database::parcoursRs($db->SQLSelect($sql, [$pid, $uid, $emoji]));
 }
+
+function selectUserCalls($uid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT Agenda_Events.* FROM Agenda_Events
+            JOIN Agenda_Event_Calls ON Agenda_Event_Calls.aeid = Agenda_Events.id
+            WHERE Agenda_Event_Calls.uid = ? AND Agenda_Event_Calls.present=1;";
+    return Database::parcoursRs($db->SQLSelect($sql, [$uid]));
+}
+
+function countUserCall($uid) {
+    $db = Config::getDatabase();
+    $sql = "SELECT COUNT(*) AS `count` FROM Agenda_Event_Calls WHERE uid = ?";
+    return $db->SQLGetChamp($sql, [$uid]);
+}
+
 ?>

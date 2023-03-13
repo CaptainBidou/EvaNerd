@@ -24,7 +24,7 @@ function authUser($data, $queryString) {
             $data["authToken"] = generateAuthToken($tel);
             $data["user"] = updateAuthToken($uidConn, $data["authToken"])[0];
             $data["user"]["admin"] = searchRole("Membre du CA", $rolesConn);
-            $data["user"]["noMember"] = searchRole("Non membre", $rolesConn);
+            $data["user"]["noMember"] = searchRole("Non Membre", $rolesConn);
             sendResponse($data, [getStatusHeader()]);
         }
         sendError("identifiant invalide !", HTTP_UNAUTHORIZED);
@@ -106,7 +106,13 @@ function postUser($data, $queryString) {
         $body = fillTemplate(DIR_MAIL_TEMPLATES . "confirm_mail.html", ["LASTNAME" => $lastName, "FIRSTNAME" => $firstName, "TOKEN" => $token]);
         Config::getEmail()->sendMail($mail, "[OSET] Confirmation de votre compte", $body);
         // On envoie l'utilisateur créé
-        $data["user"] = selectUser($idUser)[0]; 
+        $data["user"] = selectUser($idUser)[0];
+
+        // On récupère les instruments de l'utilisateur
+        $instruments = valider("iid", $queryString);
+        for ($i = 0; $i < count($instruments); $i++) {
+            if (selectInstruments($instruments[$i])) insertUserInstrument($instruments[$i], $idUser);
+        }
         sendResponse($data, [getStatusHeader(HTTP_CREATED)]);
     }
     sendError("Requête Invalide",HTTP_BAD_REQUEST);
@@ -180,6 +186,8 @@ function putUser($data, $idTabs, $authKey,$queryString) {
             sendError("Vous n'avez pas la permissions !", HTTP_UNAUTHORIZED);
 
         // Récupération et validation des infos :
+        $firstName = validString(valider("firstName", $queryString), 50, 1, true);
+        $lastName = validString(valider("lastName", $queryString), 50, 1, true);
         $mail = isEmail((valider("mail", $queryString)));
         $tel = isPhoneNumber(valider("tel", $queryString));
         $plainPassword = validString(valider("password", $queryString), 70, 5);
@@ -189,7 +197,7 @@ function putUser($data, $idTabs, $authKey,$queryString) {
         if(phoneToUid($tel) !== false) sendError("Il y a déjà un compte avec ce numéro de téléphone !", HTTP_FORBIDDEN);
         // On hash le mot de passe avec l'algo bcrypt2 et avec un cout de 10
         $password = $plainPassword ? password_hash($plainPassword, PASSWORD_BCRYPT, ["cost"=>10]) : false;
-        updateUser($uid, $mail, $tel, $age, $studies,false,$password);
+        updateUser($uid, $firstName, $lastName, $mail, $tel, $age, $studies,false,$password);
         $data["user"] = selectUser($uidConn, 1);
         sendResponse($data, [getStatusHeader(HTTP_OK)]);
     }
@@ -704,7 +712,7 @@ function postImage($data, $idTabs,$authKey) {
             if(is_file("$dir/$oldImage.tmp")) rename("$dir/$oldImage.tmp", "$dir/$oldImage");
         }
         if(is_file("$dir/$oldImage.tmp")) unlink("$dir/$oldImage.tmp");
-        updateUser($uid, false, false, false, false, $image);
+        updateUser($uid, false, false, false, false, false, false, $image);
         $data["user"] = $user[0];
         $data["user"]["photo"] = getBaseLink() . "/users/$uid/$image";
         sendResponse($data, [getStatusHeader(HTTP_OK)]);
@@ -956,7 +964,7 @@ function resetPassword($data, $queryString) {
         if(!$uid) sendError("Token invalide !", HTTP_UNAUTHORIZED);
         if($plainPassword = validString(valider("password", $queryString), 70, 3)) {
             $password = password_hash($plainPassword, PASSWORD_BCRYPT, ["cost"=>10]);
-            updateUser($uid, false, false, false, false, false, $password);
+            updateUser($uid, false, false, false, false, false, false, false, $password);
             // Comme on vérifie l'uid avec le token, on peut se permettre de ne pas vérifier si la requête a bien été effectuée
             $user = selectUser($uid, 1)[0];
             $data["user"] = $user;
@@ -1045,4 +1053,17 @@ function putGroups($data, $idTabs, $authKey, $queryString) {
     updateGroup($gid, $title, false);
     $data["group"] = selectGroup($gid, $uidConn)[0];
     sendResponse($data, [getStatusHeader(HTTP_OK)]);
+}
+
+function getUserCalls($data, $idTabs, $authKey) {
+    if(!$authKey) sendError("Vous devez être identifié !", HTTP_UNAUTHORIZED);
+    $uid = $idTabs[0];
+    $uidConn = validUser(authToId($authKey));
+    $users = selectUser($uid);
+    if(!$users) sendError("Cet utilisateur n'existe pas !", HTTP_BAD_REQUEST);
+    if(!searchRole("Membre RH", selectUserRoles($uidConn))) sendError("Vous n'avez pas les droits !", HTTP_FORBIDDEN);
+    $data["calls"] = selectUserCalls($uid);
+    if(countUserCall($uid)) $data["ratio"] = count($data["calls"]) / countUserCall($uid);
+    else $data["ratio"] = 0;
+    sendResponse($data, [getStatusHeader()]);
 }
