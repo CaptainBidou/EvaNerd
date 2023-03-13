@@ -382,10 +382,12 @@ function  ChargementInfosProfil($id){
                     data: [],
                     error : function(){
                         console.log("Une erreur s'est produite");
+                        AfficherProfilCharger(userProfile);
                     },
                     success: function(oRep){
                         console.log(oRep);
-                        AfficherProfilCharger(oRep);
+                        userProfile.activity = oRep.activity;
+                        AfficherProfilCharger(userProfile);
                     },
                     dataType: "json",
                 })
