@@ -334,7 +334,7 @@ function  ChargementInfosProfil($id){
     $.ajax({
         type: "GET",
         url: api + "/users/" + $id,
-        headers: {"authToken":""}, // données dans les entetes 
+        headers: {"authToken":authcode}, // données dans les entetes 
         error : function(){
             console.log("Une erreur s'est produite");
         },
@@ -349,7 +349,7 @@ function  ChargementInfosProfil($id){
         $.ajax({
             type: "GET",
             url: api + "/users/" + $id + "/instruments",
-            headers: {"authToken" : ""},
+            headers: {"authToken" : authcode},
             data: [],
             error : function(){
                 console.log("Une erreur s'est produite");
@@ -364,7 +364,7 @@ function  ChargementInfosProfil($id){
             $.ajax({
                 type: "GET",
                 url: api + "/users/" + $id + "/roles",
-                headers: {"authToken" : ""},
+                headers: {"authToken" : authcode},
                 data: [],
                 error : function(){
                     console.log("Une erreur s'est produite");
@@ -378,7 +378,7 @@ function  ChargementInfosProfil($id){
                 $.ajax({
                     type: "GET",
                     url: api + "/users/" + $id + "/events/calls",
-                    headers: {"authToken" : ""},
+                    headers: {"authToken" :authcode},
                     data: [],
                     error : function(){
                         console.log("Une erreur s'est produite");
