@@ -1731,7 +1731,7 @@ $("#page").append(JCloneConnexionFleche);
     var JCloneSubmit = JCréationCompteSubmit.clone(true,true);
         var JCloneDivButton = JCréationCompteDiv.clone(true,true).addClass("divbutton")
     var JDiv = $("<div>").addClass("divbutton")
-    var JCloneImage = JCreerPostFormImage.clone(true,true);
+    var JCloneImage = JCreerPostFormImage.clone(true,true).addClass("Profil-Image-Creation");
 
 
     JDiv.append([//JClonePrevious,
